@@ -23,9 +23,11 @@ const navigationItems: NavItem[] = [
   { label: "Главная", href: "/", category: "general" },
   { label: "Юридические услуги", href: "/services/legal", category: "legal" },
   { label: "IT-решения", href: "/services/tech", category: "tech" },
+  { label: "Прайс", href: "/price", category: "general" },
   { label: "Кейсы", href: "/cases", category: "general" },
   { label: "Блог", href: "/blog", category: "general" },
-  { label: "Контакты", href: "/contact", category: "general" },
+  { label: "О компании", href: "/about", category: "general" },
+  { label: "Контакты", href: "/contacts", category: "general" },
 ];
 
 /**
@@ -73,7 +75,7 @@ export function Header() {
     <header
       className={cn(
         // Base styles
-        "fixed top-0 left-0 right-0 z-50",
+        "fixed top-0 right-0 left-0 z-50",
         "transition-all duration-[var(--transition-base)]",
         "select-none",
         // Scrolled state
@@ -87,12 +89,12 @@ export function Header() {
       )}
     >
       <Container size="2xl">
-        <nav className="flex items-center justify-between h-20" aria-label="Main navigation">
+        <nav className="flex h-20 items-center justify-between" aria-label="Main navigation">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 group">
+          <Link href="/" className="group flex items-center gap-2">
             <div
               className={cn(
-                "font-display font-bold text-2xl",
+                "font-display text-2xl font-bold",
                 "bg-gradient-to-r from-[var(--color-legal-primary)] to-[var(--color-tech-primary)]",
                 "bg-clip-text text-transparent",
                 "transition-all duration-[var(--transition-base)]",
@@ -104,16 +106,16 @@ export function Header() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-8">
+          <div className="hidden items-center gap-8 lg:flex">
             {navigationItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "text-[var(--color-text-primary)] font-medium",
+                  "font-medium text-[var(--color-text-primary)]",
                   "transition-colors duration-[var(--transition-base)]",
                   "hover:text-[var(--color-legal-primary)]",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-legal-primary)] rounded-sm px-2 py-1",
+                  "rounded-sm px-2 py-1 focus-visible:ring-2 focus-visible:ring-[var(--color-legal-primary)] focus-visible:outline-none",
                   item.category === "legal" && "hover:text-[var(--color-legal-primary)]",
                   item.category === "tech" && "hover:text-[var(--color-tech-primary)]"
                 )}
@@ -124,14 +126,12 @@ export function Header() {
           </div>
 
           {/* CTA Buttons - Desktop */}
-          <div className="hidden lg:flex items-center gap-3">
+          <div className="hidden items-center gap-3 lg:flex">
             <Button
               variant="outline-legal"
               size="sm"
               onClick={() => {
-                document
-                  .getElementById("contact")
-                  ?.scrollIntoView({ behavior: "smooth" });
+                document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
               }}
             >
               Legal
@@ -140,9 +140,7 @@ export function Header() {
               variant="primary-tech"
               size="sm"
               onClick={() => {
-                document
-                  .getElementById("contact")
-                  ?.scrollIntoView({ behavior: "smooth" });
+                document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
               }}
             >
               Tech
@@ -155,18 +153,18 @@ export function Header() {
             onClick={toggleMobileMenu}
             className={cn(
               "lg:hidden",
-              "p-2 rounded-lg",
+              "rounded-lg p-2",
               "text-[var(--color-text-primary)]",
               "hover:bg-[var(--color-background-secondary)]",
               "transition-colors duration-[var(--transition-base)]",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-legal-primary)]"
+              "focus-visible:ring-2 focus-visible:ring-[var(--color-legal-primary)] focus-visible:outline-none"
             )}
             aria-label="Toggle mobile menu"
             aria-expanded={mobileMenuOpen}
             aria-controls="mobile-menu"
           >
             <svg
-              className="w-6 h-6"
+              className="h-6 w-6"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
