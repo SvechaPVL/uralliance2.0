@@ -1,0 +1,181 @@
+openapi: 3.0.3
+info:
+  title: Uralliance Contact API
+  description: API для обработки контактных форм с отправкой в Telegram bot
+  version: 1.0.0
+  contact:
+    name: Uralliance Development Team
+servers:
+  - url: https://uralliance.ru/api
+    description: Production server
+  - url: http://localhost:3000/api
+    description: Local development server
+
+paths:
+  /contact:
+    post:
+      summary: Отправить контактную форму
+      description: |
+        Принимает данные из контактной формы, валидирует их,
+        проверяет honeypot поле для защиты от спама,
+        и отправляет сообщение в Telegram bot через Telegram Bot API.
+      operationId: submitContactForm
+      tags:
+        - Contact
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContactFormRequest'
+            examples:
+              legalConsultation:
+                summary: Запрос юридической консультации
+                value:
+                  name: "Иван Петров"
+                  email: "ivan@example.com"
+                  phone: "+79991234567"
+                  message: "Нужна консультация по арбитражному спору"
+                  service: "legal"
+                  honeypot: ""
+              techProject:
+                summary: Запрос IT-проекта
+                value:
+                  name: "Мария Сидорова"
+                  email: "maria@example.com"
+                  message: "Интересует интеграция CRM с 1С"
+                  service: "tech"
+                  honeypot: ""
+      responses:
+        '200':
+          description: Форма успешно отправлена в Telegram
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactFormSuccessResponse'
+              example:
+                success: true
+        '400':
+          description: Ошибка валидации или обнаружен спам
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactFormErrorResponse'
+              examples:
+                validationError:
+                  summary: Ошибка валидации полей
+                  value:
+                    success: false
+                    error: "Validation failed"
+                    details:
+                      - field: "email"
+                        message: "Некорректный email адрес"
+                      - field: "message"
+                        message: "Сообщение должно содержать минимум 10 символов"
+                spamDetected:
+                  summary: Обнаружен спам (honeypot заполнен)
+                  value:
+                    success: false
+                    error: "Spam detected"
+        '500':
+          description: Внутренняя ошибка сервера или ошибка Telegram API
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ContactFormErrorResponse'
+              example:
+                success: false
+                error: "Internal server error"
+
+components:
+  schemas:
+    ContactFormRequest:
+      type: object
+      required:
+        - name
+        - email
+        - message
+        - service
+        - honeypot
+      properties:
+        name:
+          type: string
+          minLength: 2
+          maxLength: 100
+          description: Имя отправителя
+          example: "Иван Петров"
+        email:
+          type: string
+          format: email
+          description: Email адрес отправителя
+          example: "ivan@example.com"
+        phone:
+          type: string
+          pattern: '^\+?[0-9\s\-()]+$'
+          description: Телефон отправителя (опционально)
+          example: "+79991234567"
+        message:
+          type: string
+          minLength: 10
+          maxLength: 1000
+          description: Текст сообщения
+          example: "Нужна консультация по арбитражному спору. Дело касается неисполнения договора поставки."
+        service:
+          type: string
+          enum:
+            - legal
+            - tech
+          description: Направление интереса (Юридические услуги или IT-решения)
+          example: "legal"
+        honeypot:
+          type: string
+          maxLength: 0
+          description: Скрытое поле для защиты от спама (должно быть пустым)
+          example: ""
+
+    ContactFormSuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          enum:
+            - true
+          description: Флаг успешной отправки
+          example: true
+
+    ContactFormErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          enum:
+            - false
+          description: Флаг неуспешной отправки
+          example: false
+        error:
+          type: string
+          description: Описание ошибки
+          example: "Validation failed"
+        details:
+          type: array
+          description: Детали ошибок валидации (опционально)
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                description: Поле с ошибкой
+                example: "email"
+              message:
+                type: string
+                description: Сообщение об ошибке
+                example: "Некорректный email адрес"
+
+  securitySchemes:
+    # API Route не требует аутентификации (публичный endpoint)
+    # Telegram Bot credentials хранятся в environment variables на сервере
+    # и не экспонируются в клиентский код
+
+tags:
+  - name: Contact
+    description: Операции с контактной формой

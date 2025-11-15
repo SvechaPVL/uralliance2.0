@@ -1,0 +1,267 @@
+import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { load } from "cheerio";
+import { Container } from "@/components/layout/Container";
+import { Badge } from "@/components/primitives/badge";
+import { getBlogPostBySlug, getRelatedPosts } from "@/lib/content";
+import { cn } from "@/lib/utils";
+
+interface BlogPostPageProps {
+  params: Promise<{
+    slug: string;
+  }>;
+}
+
+interface TocItem {
+  id: string;
+  text: string;
+  level: 2 | 3;
+}
+
+function extractToc(html: string): TocItem[] {
+  if (!html) {
+    return [];
+  }
+
+  const $ = load(html);
+  const items: TocItem[] = [];
+
+  $("h2[id], h3[id]").each((_, element) => {
+    const level = Number(element.tagName[1]) as 2 | 3;
+    const id = $(element).attr("id");
+    const text = $(element).text();
+
+    if (id && text) {
+      items.push({ id, text, level });
+    }
+  });
+
+  return items;
+}
+
+export async function generateStaticParams() {
+  // Blog posts live in content/blog. Filenames correspond to slugs.
+  // We can reuse filesystem reader from lib by scanning there,
+  // but to avoid duplicating logic we read via getBlogPostBySlug once.
+  // Instead of reading directory manually here (to keep FS logic centralized),
+  // we import fs lazily to list slugs.
+  const { readdir } = await import("node:fs/promises");
+  const { join } = await import("node:path");
+
+  const blogDir = join(process.cwd(), "content/blog");
+
+  try {
+    const files = (await readdir(blogDir)).filter((file) => file.endsWith(".md"));
+    return files.map((file) => ({ slug: file.replace(/\.md$/, "") }));
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") {
+      return [];
+    }
+    throw error;
+  }
+}
+
+export async function generateMetadata({ params }: BlogPostPageProps): Promise<Metadata> {
+  const { slug } = await params;
+
+  try {
+    const post = await getBlogPostBySlug(slug);
+    const { frontmatter } = post;
+
+    return {
+      title: `${frontmatter.title} — блог Uralliance`,
+      description: frontmatter.excerpt,
+      openGraph: {
+        title: frontmatter.title,
+        description: frontmatter.excerpt,
+        type: "article",
+        url: `https://www.uralliance.ru/blog/${slug}`,
+        images: [
+          {
+            url: frontmatter.image,
+            alt: frontmatter.title,
+          },
+        ],
+      },
+    };
+  } catch {
+    return {
+      title: "Статья не найдена",
+      description: "Похоже, материал был удалён или ещё не опубликован.",
+    };
+  }
+}
+
+export default async function BlogPostPage({ params }: BlogPostPageProps) {
+  const { slug } = await params;
+
+  let post;
+
+  try {
+    post = await getBlogPostBySlug(slug);
+  } catch {
+    notFound();
+  }
+
+  const { frontmatter, html, content } = post!;
+  const toc = extractToc(html ?? "");
+  const relatedPosts = await getRelatedPosts(frontmatter.relatedPosts ?? []);
+
+  const readingTime = Math.max(1, Math.round(content.split(/\s+/).length / 180));
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: frontmatter.title,
+    author: {
+      "@type": "Person",
+      name: frontmatter.author,
+    },
+    datePublished: frontmatter.date,
+    dateModified: frontmatter.updatedDate ?? frontmatter.date,
+    image: frontmatter.image,
+    keywords: frontmatter.keywords,
+    publisher: {
+      "@type": "Organization",
+      name: "Uralliance",
+      url: "https://www.uralliance.ru",
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://www.uralliance.ru/blog/${slug}`,
+    },
+    description: frontmatter.excerpt,
+  };
+
+  return (
+    <article id="top" className="pb-24 lg:pb-32">
+      <section className="relative isolate overflow-hidden bg-[var(--color-background-secondary)] py-24 lg:py-32">
+        <div className="absolute inset-0">
+          <Image
+            src={frontmatter.image}
+            alt={frontmatter.title}
+            fill
+            className="object-cover opacity-40"
+            sizes="100vw"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-black/40" />
+        </div>
+        <Container className="relative z-10 space-y-8">
+          <Badge variant="neutral" badgeStyle="subtle" className="bg-white/15 text-white">
+            {frontmatter.category}
+          </Badge>
+          <h1 className="text-4xl lg:text-5xl font-display font-semibold text-white">{frontmatter.title}</h1>
+          <p className="max-w-3xl text-lg text-white/80">{frontmatter.excerpt}</p>
+          <div className="flex flex-wrap gap-6 text-white/80 text-sm">
+            <div>
+              <p className="uppercase tracking-[0.3em] text-xs text-white/60">Автор</p>
+              <p className="mt-2 text-lg font-semibold text-white">{frontmatter.author}</p>
+            </div>
+            <div>
+              <p className="uppercase tracking-[0.3em] text-xs text-white/60">Опубликовано</p>
+              <p className="mt-2 text-lg font-semibold text-white">
+                {new Date(frontmatter.date).toLocaleDateString("ru-RU", {
+                  day: "numeric",
+                  month: "long",
+                  year: "numeric",
+                })}
+              </p>
+            </div>
+            <div>
+              <p className="uppercase tracking-[0.3em] text-xs text-white/60">Время чтения</p>
+              <p className="mt-2 text-lg font-semibold text-white">{readingTime} мин</p>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      <Container className="mt-16 grid gap-12 lg:grid-cols-[3fr,1fr]">
+        <div
+          className="space-y-6 text-lg leading-relaxed text-[var(--color-text-secondary)]"
+          dangerouslySetInnerHTML={{ __html: html ?? "" }}
+        />
+
+        <aside className="space-y-8">
+          {toc.length > 0 && (
+            <div className="rounded-3xl border border-[var(--color-border)] bg-[var(--color-card-bg)]/80 p-6">
+              <p className="text-xs uppercase tracking-[0.3em] text-[var(--color-text-muted)] mb-4">
+                Оглавление
+              </p>
+              <ul className="space-y-2 text-sm text-[var(--color-text-secondary)]">
+                {toc.map((item) => (
+                  <li
+                    key={item.id}
+                    className={cn(item.level === 3 && "pl-4 text-[var(--color-text-muted)]")}
+                  >
+                    <a href={`#${item.id}`} className="hover:text-[var(--color-tech-primary)] transition-colors">
+                      {item.text}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          <div className="rounded-3xl border border-[var(--color-border)] bg-[var(--color-card-bg)]/80 p-6">
+            <p className="text-xs uppercase tracking-[0.3em] text-[var(--color-text-muted)] mb-4">Навигация</p>
+            <div className="space-y-3 text-sm text-[var(--color-text-secondary)]">
+              <Link
+                href="/blog"
+                className="flex items-center gap-2 hover:text-[var(--color-tech-primary)] transition-colors"
+              >
+                ← Все статьи
+              </Link>
+              <a
+                href="#top"
+                className="flex items-center gap-2 hover:text-[var(--color-tech-primary)] transition-colors"
+              >
+                ↑ В начало
+              </a>
+            </div>
+          </div>
+        </aside>
+      </Container>
+
+      <Container className="mt-24 space-y-8">
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-semibold text-[var(--color-text-primary)]">Связанные материалы</h2>
+          <Link
+            href="/blog"
+            className="text-sm font-semibold text-[var(--color-tech-primary)] hover:text-white transition-colors"
+          >
+            Смотреть все →
+          </Link>
+        </div>
+
+        {relatedPosts.length === 0 ? (
+          <p className="text-[var(--color-text-secondary)]">
+            Мы подбираем материалы по этой теме. Загляните позже — скоро здесь появятся рекомендации.
+          </p>
+        ) : (
+          <div className="grid gap-6 md:grid-cols-2">
+            {relatedPosts.map((related) => (
+              <Link
+                key={related.slug}
+                href={`/blog/${related.slug}`}
+                className="rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-card-bg)]/80 p-6 hover:border-white/20 transition-colors"
+              >
+                <p className="text-xs uppercase tracking-[0.3em] text-[var(--color-text-muted)]">
+                  {related.frontmatter.category}
+                </p>
+                <p className="mt-3 text-lg font-semibold text-[var(--color-text-primary)]">
+                  {related.frontmatter.title}
+                </p>
+                <p className="mt-2 text-sm text-[var(--color-text-secondary)]">{related.frontmatter.excerpt}</p>
+              </Link>
+            ))}
+          </div>
+        )}
+      </Container>
+
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+    </article>
+  );
+}
