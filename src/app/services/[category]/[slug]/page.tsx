@@ -1,6 +1,7 @@
 import { getServiceBySlug, getAllServiceSlugs } from "@/lib/content";
 import { Container } from "@/components/layout/Container";
 import { Badge } from "@/components/primitives/badge";
+import { ServiceIcon } from "@/components/primitives/ServiceIcon";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -78,12 +79,16 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
           <div className="mx-auto max-w-4xl">
             {/* Category Badge */}
             <Badge variant={isLegal ? "legal" : "tech"} className="mb-6 px-4 py-2 text-base">
-              {isLegal ? "⚖️ Юридические услуги" : "💻 IT-услуги"}
+              {isLegal ? "Юридические услуги" : "IT-услуги"}
             </Badge>
 
             {/* Icon + Title */}
             <div className="mb-6 flex items-start gap-6">
-              <div className="text-6xl">{service.frontmatter.icon}</div>
+              <ServiceIcon
+                name={service.frontmatter.icon}
+                variant={isLegal ? "legal" : "tech"}
+                className="h-20 w-20"
+              />
               <div className="flex-1">
                 <h1 className="mb-4 text-4xl font-bold md:text-5xl">{service.frontmatter.title}</h1>
                 <p className="text-xl text-neutral-600 dark:text-neutral-400">

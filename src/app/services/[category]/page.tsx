@@ -2,6 +2,7 @@ import { getServicesByCategory } from "@/lib/content";
 import { Container } from "@/components/layout/Container";
 import { Card } from "@/components/primitives/card";
 import { Badge } from "@/components/primitives/badge";
+import { ServiceIcon } from "@/components/primitives/ServiceIcon";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -68,7 +69,7 @@ export default async function ServicesCategoryPage({ params }: ServicesCategoryP
         <Container>
           <div className="mx-auto max-w-3xl text-center">
             <Badge variant={isLegal ? "legal" : "tech"} className="mb-6 px-6 py-2 text-lg">
-              {isLegal ? "⚖️ Legal" : "💻 Tech"}
+              {isLegal ? "Legal" : "Tech"}
             </Badge>
 
             <h1 className="mb-6 text-5xl font-bold md:text-6xl">{categoryTitle}</h1>
@@ -90,7 +91,13 @@ export default async function ServicesCategoryPage({ params }: ServicesCategoryP
               >
                 <Card className="hover:border-legal-500 dark:hover:border-tech-400 h-full border-2 p-8 transition-all duration-300 hover:scale-105 hover:shadow-2xl">
                   {/* Icon */}
-                  <div className="mb-4 text-5xl">{service.frontmatter.icon}</div>
+                  <div className="mb-6">
+                    <ServiceIcon
+                      name={service.frontmatter.icon}
+                      variant={isLegal ? "legal" : "tech"}
+                      className="h-16 w-16"
+                    />
+                  </div>
 
                   {/* Title */}
                   <h2 className="group-hover:text-legal-500 dark:group-hover:text-tech-400 mb-3 text-2xl font-bold transition-colors">

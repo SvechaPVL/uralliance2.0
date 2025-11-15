@@ -2,7 +2,7 @@
 title: "Арбитражные споры"
 description: "Профессиональная защита интересов в арбитражных судах всех инстанций"
 price: "от 50 000 ₽"
-icon: "⚖️"
+icon: "Scale"
 category: "legal"
 order: 1
 seo:

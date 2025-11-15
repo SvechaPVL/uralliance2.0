@@ -85,7 +85,7 @@ export const CustomExample: Story = {
 
 ```tsx
 import type { Meta, StoryObj } from "@storybook/react";
-import Header from "../Header";
+import { Header } from "../Header";
 
 const meta = {
   title: "Layout/Header",
@@ -152,7 +152,7 @@ export const Default: Story = {};
 
 ```tsx
 import type { Meta, StoryObj } from "@storybook/react";
-import ContactForm from "../ContactForm";
+import { ContactForm } from "../ContactForm";
 
 const meta = {
   title: "Forms/ContactForm",
