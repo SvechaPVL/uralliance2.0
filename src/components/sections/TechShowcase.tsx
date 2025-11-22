@@ -159,7 +159,7 @@ export function TechShowcase() {
           </Text>
         </div>
 
-        <div className="mx-auto mt-4 max-w-[1500px] px-4 sm:mt-0 lg:px-12">
+        <div className="mx-auto mt-12 max-w-[1500px] px-4 sm:mt-0 lg:px-12">
           <BentoGrid items={bentoItems} rowHeight="minmax(260px, auto)" />
         </div>
       </Container>
