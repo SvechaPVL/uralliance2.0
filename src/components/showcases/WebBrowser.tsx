@@ -20,53 +20,56 @@ export function WebBrowserShowcase() {
   }, []);
 
   return (
-    <div className="relative flex w-full flex-col rounded-3xl border border-white/5 bg-[#05070c] p-3 text-white min-h-[360px] sm:p-4 sm:min-h-[420px] lg:p-6">
+    <div className="relative flex min-h-[200px] w-full flex-col rounded-3xl border border-white/5 bg-[#05070c] p-3 text-white sm:min-h-[360px] lg:min-h-[420px] lg:p-6">
       <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-white/5 bg-[#070a11] px-3 py-2 text-xs text-white/60 sm:gap-3 sm:px-4">
         <div className="flex gap-1">
           <span className="h-2 w-2 rounded-full bg-[#ef4444]" />
           <span className="h-2 w-2 rounded-full bg-[#f59e0b]" />
           <span className="h-2 w-2 rounded-full bg-[#10b981]" />
         </div>
-        <div className="flex-1 rounded-full bg-white/5 px-3 py-1 text-center text-[11px] tracking-wide text-white/70 min-w-[160px]">
+        <div className="min-w-[160px] flex-1 rounded-full bg-white/5 px-3 py-1 text-center text-[11px] tracking-wide text-white/70">
           autoservices.uralliance.ru
         </div>
       </div>
 
       <div className="mt-4 flex flex-1 flex-col gap-4 md:flex-row md:gap-6">
-        <div className="flex-1 rounded-2xl border border-white/5 bg-gradient-to-b from-white/15 via-transparent to-transparent p-4 sm:p-6">
+        <div className="flex-1 rounded-2xl border border-white/5 bg-gradient-to-b from-white/15 via-transparent to-transparent p-3 sm:p-4 lg:p-6">
           <motion.div
             key={active}
-            className="h-48 rounded-3xl bg-gradient-to-br from-[#0f172a] to-[#140c19]"
+            className="h-24 rounded-2xl bg-gradient-to-br from-[#0f172a] to-[#140c19] sm:h-32 sm:rounded-3xl lg:h-48"
             initial={{ opacity: 0.3, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6 }}
           />
-          <div className="mt-6 text-sm">
-            <div className="text-white/80">Что делаем</div>
-            <motion.ul className="mt-3 space-y-3 text-white/70" key={`list-${active}`}>
-              {cards.map((card, idx) => (
+          <div className="mt-3 text-sm sm:mt-4 lg:mt-6">
+            <div className="text-xs text-white/80 sm:text-sm">Что делаем</div>
+            <motion.ul
+              className="mt-2 space-y-2 text-white/70 sm:mt-3 sm:space-y-3"
+              key={`list-${active}`}
+            >
+              {cards.slice(0, 2).map((card, idx) => (
                 <motion.li
                   key={card.label}
-                  className="rounded-2xl border border-white/10 px-3 py-2"
+                  className="rounded-xl border border-white/10 px-2 py-1.5 sm:rounded-2xl sm:px-3 sm:py-2"
                   animate={{ opacity: idx === active ? 1 : 0.4, scale: idx === active ? 1.02 : 1 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <div className="font-semibold text-white">{card.label}</div>
-                  <p className="text-xs">{card.description}</p>
+                  <div className="text-xs font-semibold text-white sm:text-sm">{card.label}</div>
+                  <p className="text-[10px] sm:text-xs">{card.description}</p>
                 </motion.li>
               ))}
             </motion.ul>
           </div>
         </div>
 
-        <div className="w-full space-y-3 md:w-64">
+        <div className="hidden w-full space-y-3 md:block md:w-64">
           {["Калькулятор стоимости", "Онлайн-чат", "SEO-аудит"].map((title, idx) => (
             <motion.div
               key={title}
               className="rounded-2xl border border-white/5 bg-[#070a11]/80 px-4 py-4 text-sm"
               animate={{ opacity: idx === active ? 1 : 0.4 }}
             >
-              <div className="text-xs uppercase tracking-[0.3em] text-white/60">{title}</div>
+              <div className="text-xs tracking-[0.3em] text-white/60 uppercase">{title}</div>
               <div className="mt-2 text-lg font-semibold text-white/90">
                 {idx === 0 ? "Авто-каталог" : idx === 1 ? "Ответ 2 мин" : "95/100"}
               </div>
