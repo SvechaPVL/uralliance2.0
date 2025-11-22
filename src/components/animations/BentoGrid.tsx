@@ -88,9 +88,14 @@ export function BentoGrid({ items, className, rowHeight = "minmax(220px, auto)" 
       className={cn(
         "grid grid-cols-1 gap-8 sm:gap-10 lg:gap-12",
         "sm:grid-cols-2 lg:grid-cols-5",
+        // На мобилке карточки сами определяют высоту
+        "[grid-auto-rows:auto] lg:[grid-auto-rows:var(--row-height)]",
         className
       )}
-      style={{ gridAutoRows: rowHeight }}
+      style={{
+        // Передаём rowHeight как CSS переменную для десктопа
+        ["--row-height" as string]: rowHeight,
+      }}
     >
       {items.map((item, index) => {
         const cardContent = (
