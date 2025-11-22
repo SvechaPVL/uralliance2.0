@@ -12,10 +12,25 @@ interface LeadRow {
 }
 
 const rows: LeadRow[] = [
-  { company: "Aurum Logistics", channel: "Bitrix24 ↔ 1C", status: "Счет синхронизирован", synced: "10:32" },
-  { company: "Codex Media", channel: "amoCRM ↔ Telegram", status: "Лид квалифицирован", synced: "10:29" },
+  {
+    company: "Aurum Logistics",
+    channel: "Bitrix24 ↔ 1C",
+    status: "Счет синхронизирован",
+    synced: "10:32",
+  },
+  {
+    company: "Codex Media",
+    channel: "amoCRM ↔ Telegram",
+    status: "Лид квалифицирован",
+    synced: "10:29",
+  },
   { company: "Vega Retail", channel: "Asana ↔ 1C", status: "Задача обновлена", synced: "10:27" },
-  { company: "Nordic Metals", channel: "HubSpot ↔ SAP", status: "Контакт обогащен", synced: "10:24" },
+  {
+    company: "Nordic Metals",
+    channel: "HubSpot ↔ SAP",
+    status: "Контакт обогащен",
+    synced: "10:24",
+  },
 ];
 
 const statusPill = {
@@ -38,12 +53,12 @@ export function CrmMatrix() {
 
   return (
     <div className="flex h-full flex-col gap-4 rounded-2xl border border-white/5 bg-[#05070c] p-4 text-white">
-      <div className="flex items-center justify-between text-xs uppercase tracking-[0.3em] text-[#7c8da3]">
+      <div className="flex items-center justify-between text-xs tracking-[0.3em] text-[#7c8da3] uppercase">
         <span>Синхронизация</span>
         <span>{activeRow.synced}</span>
       </div>
 
-      <div className="space-y-3 text-sm text-white/80">
+      <div className="space-y-4 text-sm text-white/80">
         {rows.map((row, idx) => {
           const isActive = idx === activeIndex;
           return (

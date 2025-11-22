@@ -86,7 +86,7 @@ export function BentoGrid({ items, className, rowHeight = "minmax(220px, auto)" 
   return (
     <div
       className={cn(
-        "grid grid-cols-1 gap-6 sm:gap-8 lg:gap-12",
+        "grid grid-cols-1 gap-8 sm:gap-10 lg:gap-12",
         "sm:grid-cols-2 lg:grid-cols-5",
         className
       )}
@@ -97,7 +97,13 @@ export function BentoGrid({ items, className, rowHeight = "minmax(220px, auto)" 
           <div className="relative flex flex-col gap-3">
             {item.icon && <div className="text-[var(--color-tech-primary)]">{item.icon}</div>}
             {item.badge && (
-              <Label as="span" size="sm" spacing="wider" tone="muted" className="inline-flex w-fit items-center rounded-full border border-[var(--color-border-soft)] px-3 py-1">
+              <Label
+                as="span"
+                size="sm"
+                spacing="wider"
+                tone="muted"
+                className="inline-flex w-fit items-center rounded-full border border-[var(--color-border-soft)] px-3 py-1"
+              >
                 {item.badge}
               </Label>
             )}
@@ -106,7 +112,9 @@ export function BentoGrid({ items, className, rowHeight = "minmax(220px, auto)" 
             ) : (
               <>
                 {item.title && (
-                  <Heading as="h3" size="md" weight="semibold">{item.title}</Heading>
+                  <Heading as="h3" size="md" weight="semibold">
+                    {item.title}
+                  </Heading>
                 )}
                 {item.description && (
                   <p className="text-sm text-[var(--color-text-secondary)]">{item.description}</p>
@@ -131,24 +139,24 @@ export function BentoGrid({ items, className, rowHeight = "minmax(220px, auto)" 
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: prefersReducedMotion ? 0 : 0.5, delay: prefersReducedMotion ? 0 : index * 0.05 }}
-            className={cn(
-              colSpanMap[item.colSpan ?? 1],
-              rowSpanMap[item.rowSpan ?? 1]
-            )}
+            transition={{
+              duration: prefersReducedMotion ? 0 : 0.5,
+              delay: prefersReducedMotion ? 0 : index * 0.05,
+            }}
+            className={cn(colSpanMap[item.colSpan ?? 1], rowSpanMap[item.rowSpan ?? 1])}
           >
             {item.href ? (
               <Link href={item.href} className={cardClassName}>
                 {cardContent}
                 <div className="relative mt-6 inline-flex items-center gap-2 text-sm text-[var(--color-text-secondary)]">
                   Подробнее
-                  <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
+                  <span className="transition-transform duration-300 group-hover:translate-x-1">
+                    →
+                  </span>
                 </div>
               </Link>
             ) : (
-              <div className={cardClassName}>
-                {cardContent}
-              </div>
+              <div className={cardClassName}>{cardContent}</div>
             )}
           </motion.div>
         );
