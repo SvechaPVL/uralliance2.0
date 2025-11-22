@@ -61,7 +61,7 @@ const bentoItems: BentoGridItem[] = [
     className: "border-0 bg-transparent p-0 select-none",
     content: (
       <Card3D className="h-full rounded-3xl p-0">
-        <div className="flex h-full flex-col gap-4 p-6">
+        <div className="flex h-full flex-col gap-2 p-6 sm:gap-4">
           <div>
             <Label
               as="span"
@@ -93,7 +93,7 @@ const bentoItems: BentoGridItem[] = [
     className: "border-0 bg-transparent p-0 select-none",
     content: (
       <Card3D className="h-full rounded-3xl p-0">
-        <div className="flex h-full flex-col justify-between gap-4 p-6">
+        <div className="flex h-full flex-col justify-between gap-2 p-6 sm:gap-4">
           <Label as="span" size="sm" spacing="widest" tone="tech">
             {sectionsConfig.tech_showcase.cards.whatsapp.badge}
           </Label>
@@ -117,15 +117,10 @@ const bentoItems: BentoGridItem[] = [
     className: "border-0 bg-transparent p-0 select-none",
     content: (
       <Card3D className="h-full rounded-3xl p-0">
-        <div className="flex h-full flex-col justify-between gap-4 p-6">
-          <div className="flex items-center gap-4">
-            <div className="rounded-2xl border border-[var(--color-border-soft)] px-3 py-1 text-xs text-[var(--color-text-muted)]">
-              {sectionsConfig.tech_showcase.cards.web.badge}
-            </div>
-            <Label as="div" size="sm" spacing="widest" tone="muted">
-              {sectionsConfig.tech_showcase.cards.web.additionalBadge}
-            </Label>
-          </div>
+        <div className="flex h-full flex-col justify-between gap-2 p-6 sm:gap-4">
+          <Label as="div" size="sm" spacing="widest" tone="muted">
+            {sectionsConfig.tech_showcase.cards.web.additionalBadge}
+          </Label>
           <Heading as="h3" size="md" weight="semibold">
             {sectionsConfig.tech_showcase.cards.web.title}
           </Heading>
