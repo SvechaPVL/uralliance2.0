@@ -151,8 +151,8 @@ const bentoItems: BentoGridItem[] = [
 export function TechShowcase() {
   return (
     <Section spacing="xl">
-      <Container className="relative z-10 select-none">
-        <div className="mb-12 max-w-3xl">
+      <Container className="relative z-10 flex flex-col select-none">
+        <div className="mb-8 max-w-3xl sm:mb-12">
           <Label size="md" spacing="widest" tone="muted">
             {sectionsConfig.tech_showcase.label}
           </Label>
@@ -164,7 +164,7 @@ export function TechShowcase() {
           </Text>
         </div>
 
-        <div className="mx-auto max-w-[1500px] px-4 lg:px-12">
+        <div className="mx-auto mt-4 max-w-[1500px] px-4 sm:mt-0 lg:px-12">
           <BentoGrid items={bentoItems} rowHeight="minmax(260px, auto)" />
         </div>
       </Container>
