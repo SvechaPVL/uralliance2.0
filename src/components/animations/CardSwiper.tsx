@@ -179,8 +179,9 @@ export const CardSwiper: React.FC<CardSwiperProps> = ({
   return (
     <section
       className={cn(
-        "relative mx-auto flex items-center justify-center py-8 select-none",
-        "min-h-[380px]", // Резервируем место для компактных карточек
+        "relative mx-auto flex items-center justify-center select-none",
+        "pt-16 pb-8", // Больше отступ сверху чтобы карточки не вылезали
+        "min-h-[420px]", // Резервируем достаточно места
         // Уменьшаем showcase компоненты на мобилке
         "[&_.showcase-container]:origin-top [&_.showcase-container]:scale-75",
         className
