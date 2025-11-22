@@ -104,7 +104,22 @@ const bentoItems: BentoGridItem[] = [
             {sectionsConfig.tech_showcase.cards.whatsapp.description}
           </Text>
           <div className="showcase-container mt-2 flex-1">
-            <MobileCafeApp />
+            {/* Desktop: single phone */}
+            <div className="hidden sm:block">
+              <MobileCafeApp />
+            </div>
+            {/* Mobile: horizontal scroll with multiple phones */}
+            <div className="flex gap-4 overflow-x-auto [-webkit-overflow-scrolling:touch] [scrollbar-width:none] sm:hidden [&::-webkit-scrollbar]:hidden">
+              <div className="scale-90">
+                <MobileCafeApp />
+              </div>
+              <div className="scale-90">
+                <MobileCafeApp />
+              </div>
+              <div className="scale-90">
+                <MobileCafeApp />
+              </div>
+            </div>
           </div>
         </div>
       </Card3D>

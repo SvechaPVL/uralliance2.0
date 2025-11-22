@@ -1,5 +1,6 @@
 import { HTMLAttributes, forwardRef } from "react";
 import { cn } from "@/lib/utils";
+import { Particles } from "@/components/animations/Particles";
 
 export type CardVariant = "default" | "legal" | "tech" | "glass";
 
@@ -29,6 +30,12 @@ export interface CardProps extends HTMLAttributes<HTMLDivElement> {
    * @default false
    */
   brutal?: boolean;
+
+  /**
+   * Enable floating particles background
+   * @default false
+   */
+  withParticles?: boolean;
 }
 
 const baseCardClasses = cn(
@@ -50,9 +57,7 @@ const cardVariants: Record<CardVariant, string> = {
     "bg-gradient-to-br from-[var(--color-tech-surface)]/90 to-[var(--color-tech-surface-strong)]/90",
     "border-[var(--color-tech-border)]/50 text-[var(--color-text-primary)]"
   ),
-  glass: cn(
-    "bg-[var(--color-glass-strong)] border-white/15 backdrop-blur-[24px]"
-  ),
+  glass: cn("bg-[var(--color-glass-strong)] border-white/15 backdrop-blur-[24px]"),
 };
 
 const cardPaddings: Record<CardPadding, string> = {
@@ -100,7 +105,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
         className={cn(
           // Base styles
           baseCardClasses,
-          "motion-reduce:transition-none motion-reduce:transform-none",
+          "motion-reduce:transform-none motion-reduce:transition-none",
           // Variant styles
           cardVariants[variant],
           // Padding
@@ -121,7 +126,8 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
             cn(
               "border-2 border-[var(--color-text-primary)]",
               "shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]",
-              hoverable && "hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[-2px] hover:translate-y-[-2px]"
+              hoverable &&
+                "hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]"
             ),
           // Custom className
           className
@@ -146,7 +152,7 @@ export const CardHeader = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivEleme
     return (
       <div
         ref={ref}
-        className={cn("mb-4 pb-4 border-b border-[var(--color-border)]", className)}
+        className={cn("mb-4 border-b border-[var(--color-border)] pb-4", className)}
         {...props}
       >
         {children}
@@ -184,7 +190,7 @@ export const CardFooter = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivEleme
     return (
       <div
         ref={ref}
-        className={cn("mt-4 pt-4 border-t border-[var(--color-border)]", className)}
+        className={cn("mt-4 border-t border-[var(--color-border)] pt-4", className)}
         {...props}
       >
         {children}

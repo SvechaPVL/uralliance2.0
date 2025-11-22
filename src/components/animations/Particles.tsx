@@ -106,7 +106,7 @@ export function Particles({
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
-    const disableAnimation = prefersReducedMotion || isCoarsePointer;
+    const disableAnimation = prefersReducedMotion;
 
     // Set canvas size
     const resizeCanvas = () => {
@@ -200,10 +200,6 @@ export function Particles({
       window.removeEventListener("resize", handleResize);
     };
   }, [count, colors, sizeRange, speed, prefersReducedMotion, isCoarsePointer]);
-
-  if (isCoarsePointer) {
-    return null;
-  }
 
   return (
     <canvas
