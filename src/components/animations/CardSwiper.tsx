@@ -10,14 +10,12 @@ import type { BentoGridItem } from "./BentoGrid";
 interface CardSwiperProps {
   items: BentoGridItem[];
   cardWidth?: number;
-  cardHeight?: number;
   className?: string;
 }
 
 export const CardSwiper: React.FC<CardSwiperProps> = ({
   items,
   cardWidth = 320,
-  cardHeight = 420,
   className = "",
 }) => {
   const cardStackRef = useRef<HTMLDivElement>(null);
@@ -180,13 +178,15 @@ export const CardSwiper: React.FC<CardSwiperProps> = ({
 
   return (
     <section
-      className={cn("relative mx-auto flex items-center justify-center select-none", className)}
+      className={cn(
+        "relative mx-auto flex min-h-[480px] items-center justify-center select-none",
+        className
+      )}
       ref={cardStackRef}
       style={
         {
           width: "100%",
           maxWidth: cardWidth + 32,
-          height: cardHeight + 32,
           touchAction: "none",
           transformStyle: "preserve-3d",
           "--card-perspective": "700px",
@@ -200,7 +200,7 @@ export const CardSwiper: React.FC<CardSwiperProps> = ({
       {cardOrder.map((originalIndex, displayIndex) => {
         const item = items[originalIndex];
         const cardContent = (
-          <div className="relative flex h-full flex-col gap-3">
+          <div className="relative flex flex-col gap-3">
             {item.icon && <div className="text-[var(--color-tech-primary)]">{item.icon}</div>}
             {item.badge && (
               <Label
@@ -236,7 +236,7 @@ export const CardSwiper: React.FC<CardSwiperProps> = ({
           "rounded-3xl border border-[var(--color-border)]",
           "bg-[var(--color-card-bg)]/90 backdrop-blur-xl p-6",
           "shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)]",
-          "overflow-hidden will-change-transform",
+          "overflow-y-auto will-change-transform",
           item.className
         );
 
@@ -249,7 +249,7 @@ export const CardSwiper: React.FC<CardSwiperProps> = ({
                 "--i": (displayIndex + 1).toString(),
                 zIndex: items.length - displayIndex,
                 width: cardWidth,
-                height: cardHeight,
+                maxHeight: "90vh",
                 transform: `translate(-50%, -50%)
                            perspective(var(--card-perspective))
                            translateZ(calc(-1 * var(--card-z-offset) * var(--i)))
@@ -260,7 +260,7 @@ export const CardSwiper: React.FC<CardSwiperProps> = ({
             }
           >
             {item.href ? (
-              <Link href={item.href} className="flex h-full flex-col justify-between">
+              <Link href={item.href} className="flex flex-col">
                 {cardContent}
                 <div className="relative mt-6 inline-flex items-center gap-2 text-sm text-[var(--color-text-secondary)]">
                   Подробнее
