@@ -23,7 +23,13 @@ const bentoItems: BentoGridItem[] = [
       <Card3D className="h-full rounded-3xl p-0">
         <div className="relative flex h-full flex-col justify-between gap-6 p-6">
           <div>
-            <Label as="span" size="sm" spacing="wider" tone="tech" className="inline-flex items-center rounded-full border border-[var(--color-tech-border-soft)] px-3 py-1">
+            <Label
+              as="span"
+              size="sm"
+              spacing="wider"
+              tone="tech"
+              className="inline-flex items-center rounded-full border border-[var(--color-tech-border-soft)] px-3 py-1"
+            >
               {sectionsConfig.tech_showcase.cards.crm.badge}
             </Label>
             <Heading as="h3" size="lg" weight="semibold" className="mt-4">
@@ -41,7 +47,7 @@ const bentoItems: BentoGridItem[] = [
               </div>
             ))}
           </div>
-          <div className="mt-4 flex-1">
+          <div className="showcase-container mt-4 flex-1">
             <CrmMatrix />
           </div>
         </div>
@@ -57,15 +63,23 @@ const bentoItems: BentoGridItem[] = [
       <Card3D className="h-full rounded-3xl p-0">
         <div className="flex h-full flex-col gap-4 p-6">
           <div>
-            <Label as="span" size="sm" spacing="wider" tone="white" className="inline-flex items-center rounded-full border border-white/10 px-3 py-1 opacity-80">
+            <Label
+              as="span"
+              size="sm"
+              spacing="wider"
+              tone="white"
+              className="inline-flex items-center rounded-full border border-white/10 px-3 py-1 opacity-80"
+            >
               {sectionsConfig.tech_showcase.cards.bots.badge}
             </Label>
-            <Heading as="h3" size="md" weight="semibold" tone="white" className="mt-4">{sectionsConfig.tech_showcase.cards.bots.title}</Heading>
+            <Heading as="h3" size="md" weight="semibold" tone="white" className="mt-4">
+              {sectionsConfig.tech_showcase.cards.bots.title}
+            </Heading>
             <Text size="sm" className="mt-2 text-white/80">
               {sectionsConfig.tech_showcase.cards.bots.description}
             </Text>
           </div>
-          <div className="flex flex-1 items-center justify-center">
+          <div className="showcase-container flex flex-1 items-center justify-center">
             <TelegramChat />
           </div>
         </div>
@@ -83,11 +97,13 @@ const bentoItems: BentoGridItem[] = [
           <Label as="span" size="sm" spacing="widest" tone="tech">
             {sectionsConfig.tech_showcase.cards.whatsapp.badge}
           </Label>
-          <Heading as="h3" size="sm" weight="semibold">{sectionsConfig.tech_showcase.cards.whatsapp.title}</Heading>
+          <Heading as="h3" size="sm" weight="semibold">
+            {sectionsConfig.tech_showcase.cards.whatsapp.title}
+          </Heading>
           <Text size="sm" tone="secondary">
             {sectionsConfig.tech_showcase.cards.whatsapp.description}
           </Text>
-          <div className="mt-2 flex-1">
+          <div className="showcase-container mt-2 flex-1">
             <MobileCafeApp />
           </div>
         </div>
@@ -115,12 +131,15 @@ const bentoItems: BentoGridItem[] = [
           </Heading>
           <div className="flex flex-wrap gap-3 text-sm text-[var(--color-text-secondary)]">
             {sectionsConfig.tech_showcase.cards.web.features.map((item) => (
-              <span key={item} className="rounded-full border border-[var(--color-border-soft)] px-3 py-1">
+              <span
+                key={item}
+                className="rounded-full border border-[var(--color-border-soft)] px-3 py-1"
+              >
                 {item}
               </span>
             ))}
           </div>
-          <div className="flex-1 pt-4">
+          <div className="showcase-container flex-1 pt-4">
             <WebBrowserShowcase />
           </div>
         </div>
@@ -134,7 +153,9 @@ export function TechShowcase() {
     <Section spacing="xl">
       <Container className="relative z-10 select-none">
         <div className="mb-12 max-w-3xl">
-          <Label size="md" spacing="widest" tone="muted">{sectionsConfig.tech_showcase.label}</Label>
+          <Label size="md" spacing="widest" tone="muted">
+            {sectionsConfig.tech_showcase.label}
+          </Label>
           <Heading as="h2" size="2xl" weight="semibold" className="mt-4">
             {sectionsConfig.tech_showcase.heading}
           </Heading>

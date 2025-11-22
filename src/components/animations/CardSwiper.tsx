@@ -180,7 +180,9 @@ export const CardSwiper: React.FC<CardSwiperProps> = ({
     <section
       className={cn(
         "relative mx-auto flex items-center justify-center py-8 select-none",
-        "min-h-[600px]", // Резервируем место для карточек
+        "min-h-[420px]", // Резервируем место для карточек с showcase
+        // Уменьшаем showcase компоненты на мобилке
+        "[&_.showcase-container]:origin-top [&_.showcase-container]:scale-75",
         className
       )}
       ref={cardStackRef}

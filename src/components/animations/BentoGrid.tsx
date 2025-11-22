@@ -86,7 +86,7 @@ export function BentoGrid({ items, className, rowHeight = "minmax(220px, auto)" 
 
   return (
     <>
-      {/* Mobile: Card Swiper */}
+      {/* Mobile: Card Swiper (showcase компоненты внутри будут compact) */}
       <div className="block sm:hidden">
         <CardSwiper items={items} />
       </div>
