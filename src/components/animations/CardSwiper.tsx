@@ -180,11 +180,12 @@ export const CardSwiper: React.FC<CardSwiperProps> = ({
 
   return (
     <section
-      className={cn("relative grid place-content-center select-none", className)}
+      className={cn("relative mx-auto flex items-center justify-center select-none", className)}
       ref={cardStackRef}
       style={
         {
-          width: cardWidth + 32,
+          width: "100%",
+          maxWidth: cardWidth + 32,
           height: cardHeight + 32,
           touchAction: "none",
           transformStyle: "preserve-3d",
@@ -231,7 +232,8 @@ export const CardSwiper: React.FC<CardSwiperProps> = ({
 
         const cardClassName = cn(
           "swiper-card absolute cursor-grab active:cursor-grabbing",
-          "place-self-center rounded-3xl border border-[var(--color-border)]",
+          "left-1/2 top-1/2",
+          "rounded-3xl border border-[var(--color-border)]",
           "bg-[var(--color-card-bg)]/90 backdrop-blur-xl p-6",
           "shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)]",
           "overflow-hidden will-change-transform",
@@ -248,7 +250,8 @@ export const CardSwiper: React.FC<CardSwiperProps> = ({
                 zIndex: items.length - displayIndex,
                 width: cardWidth,
                 height: cardHeight,
-                transform: `perspective(var(--card-perspective))
+                transform: `translate(-50%, -50%)
+                           perspective(var(--card-perspective))
                            translateZ(calc(-1 * var(--card-z-offset) * var(--i)))
                            translateY(calc(var(--card-y-offset) * var(--i)))
                            translateX(var(--swipe-x, 0px))
