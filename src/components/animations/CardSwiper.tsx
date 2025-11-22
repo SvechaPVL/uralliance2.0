@@ -179,7 +179,7 @@ export const CardSwiper: React.FC<CardSwiperProps> = ({
   return (
     <section
       className={cn(
-        "relative mx-auto flex min-h-[480px] items-center justify-center select-none",
+        "relative mx-auto flex items-center justify-center py-8 select-none",
         className
       )}
       ref={cardStackRef}
@@ -236,7 +236,7 @@ export const CardSwiper: React.FC<CardSwiperProps> = ({
           "rounded-3xl border border-[var(--color-border)]",
           "bg-[var(--color-card-bg)]/90 backdrop-blur-xl p-6",
           "shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)]",
-          "overflow-y-auto will-change-transform",
+          "overflow-hidden will-change-transform",
           item.className
         );
 
@@ -249,7 +249,6 @@ export const CardSwiper: React.FC<CardSwiperProps> = ({
                 "--i": (displayIndex + 1).toString(),
                 zIndex: items.length - displayIndex,
                 width: cardWidth,
-                maxHeight: "90vh",
                 transform: `translate(-50%, -50%)
                            perspective(var(--card-perspective))
                            translateZ(calc(-1 * var(--card-z-offset) * var(--i)))
