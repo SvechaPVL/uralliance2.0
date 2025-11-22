@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
@@ -68,6 +68,21 @@ export function MagneticButton({
 }: MagneticButtonProps) {
   const ref = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+
+  // Detect touch devices
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const media = window.matchMedia("(pointer: coarse)");
+    const update = () => setIsTouchDevice(media.matches);
+    update();
+    if (typeof media.addEventListener === "function") {
+      media.addEventListener("change", update);
+      return () => media.removeEventListener("change", update);
+    }
+    media.addListener(update);
+    return () => media.removeListener(update);
+  }, []);
 
   const targetX = useMotionValue(0);
   const targetY = useMotionValue(0);
@@ -84,7 +99,7 @@ export function MagneticButton({
 
   // Handle mouse move within the button
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!ref.current || prefersReducedMotion) return;
+    if (!ref.current) return;
 
     const rect = ref.current.getBoundingClientRect();
     const centerX = rect.left + rect.width / 2;
@@ -109,19 +124,23 @@ export function MagneticButton({
     scaleTarget.set(1);
   };
 
+  // Disable effect on touch devices or reduced motion
+  if (isTouchDevice || prefersReducedMotion) {
+    return <div className={className}>{children}</div>;
+  }
+
   return (
     <motion.div
       ref={ref}
       onMouseMove={handleMouseMove}
       onMouseEnter={() => {
-        if (prefersReducedMotion) return;
         scaleTarget.set(1.03);
       }}
       onMouseLeave={handleMouseLeave}
       style={{
-        x: prefersReducedMotion ? 0 : x,
-        y: prefersReducedMotion ? 0 : y,
-        scale: prefersReducedMotion ? 1 : scale,
+        x,
+        y,
+        scale,
       }}
       className={className}
     >

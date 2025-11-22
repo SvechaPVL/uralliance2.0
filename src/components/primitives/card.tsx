@@ -95,6 +95,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
       brutal = false,
       className,
       children,
+      withParticles = false,
       ...props
     },
     ref
@@ -134,6 +135,20 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
         )}
         {...props}
       >
+        {withParticles && (
+          <Particles
+            count={15}
+            colors={
+              variant === "legal"
+                ? ["#D4AF37", "#F5E6D3"]
+                : variant === "tech"
+                  ? ["#06B6D4", "#22D3EE"]
+                  : ["#D4AF37", "#06B6D4"]
+            }
+            speed={0.25}
+            className="opacity-15"
+          />
+        )}
         {children}
       </div>
     );

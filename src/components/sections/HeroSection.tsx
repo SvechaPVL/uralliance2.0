@@ -6,7 +6,6 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/primitives/button";
 import { Card } from "@/components/primitives/card";
 import { MagneticButton } from "@/components/animations/MagneticButton";
-import { Particles } from "@/components/animations/Particles";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { Section } from "@/components/primitives/section";
 import { Heading } from "@/components/primitives/heading";
@@ -49,7 +48,6 @@ export function HeroSection() {
   const prefersReducedMotion = useReducedMotion();
   const legalTags = sectionsConfig.hero.legal.tags;
   const techFeatures = sectionsConfig.hero.tech.features;
-  const shouldRenderParticles = !prefersReducedMotion;
   const heroSectionRef = useRef<HTMLElement | null>(null);
   const { progress, setProgress } = useHeroProgress();
   useEffect(() => {
@@ -79,17 +77,20 @@ export function HeroSection() {
       if (raf) cancelAnimationFrame(raf);
     };
   }, [setProgress]);
-  const [desktopViewport, setDesktopViewport] = useState(false);
+  const [desktopViewport, setDesktopViewport] = useState(() => {
+    if (typeof window !== "undefined") {
+      return window.matchMedia("(min-width: 1024px)").matches;
+    }
+    return false;
+  });
   useEffect(() => {
     if (typeof window === "undefined") return;
     const mq = window.matchMedia("(min-width: 1024px)");
     const handleChange = (event: MediaQueryListEvent) => setDesktopViewport(event.matches);
-    setDesktopViewport(mq.matches);
     mq.addEventListener("change", handleChange);
     return () => mq.removeEventListener("change", handleChange);
   }, []);
   const shouldRenderThreeScene = !prefersReducedMotion && desktopViewport;
-  const heroProgress = useMemo(() => Math.min(Math.max(progress, 0), 1), [progress]);
 
   return (
     <Section
@@ -102,7 +103,7 @@ export function HeroSection() {
       {/* 3D Background Scene */}
       <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
         {shouldRenderThreeScene ? (
-          <ThreeScene className="w-full h-full" />
+          <ThreeScene className="h-full w-full" />
         ) : (
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(6,182,212,0.35),rgba(3,7,18,0.95))]" />
         )}
@@ -110,34 +111,35 @@ export function HeroSection() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.35),transparent_55%)]" />
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <header className="relative mb-12 text-center lg:text-left">
-          <Label as="span" size="sm" spacing="wider" tone="muted" className="inline-flex items-center gap-2 rounded-full border border-[var(--color-border-soft)] bg-[var(--color-card-bg)] px-4 py-2 backdrop-blur">
+          <Label
+            as="span"
+            size="sm"
+            spacing="wider"
+            tone="muted"
+            className="inline-flex items-center gap-2 rounded-full border border-[var(--color-border-soft)] bg-[var(--color-card-bg)] px-4 py-2 backdrop-blur"
+          >
             {sectionsConfig.hero.main.tagline}
           </Label>
-          <Text size="base" tone="secondary" maxWidth="3xl" className="mt-4 mx-auto lg:mx-0">
+          <Text size="base" tone="secondary" maxWidth="3xl" className="mx-auto mt-4 lg:mx-0">
             {sectionsConfig.hero.main.description}
           </Text>
         </header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch min-h-[calc(100vh-8rem)]">
+        <div className="grid min-h-[calc(100vh-8rem)] grid-cols-1 items-stretch gap-8 lg:grid-cols-2">
           {/* Legal Side Card */}
           <motion.div
             initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: prefersReducedMotion ? 0 : 0.8 }}
           >
-            <Card variant="legal" padding="lg" className="relative overflow-hidden">
-              {/* Particles Background */}
-              {shouldRenderParticles && (
-                <Particles count={18} colors={["#D4AF37", "#F5E6D3"]} speed={0.22} className="opacity-20" />
-              )}
-
+            <Card variant="legal" padding="lg" className="relative overflow-hidden" withParticles>
               {/* Content */}
               <div className="relative z-10">
                 {/* Badge */}
-                <div className="inline-flex items-center gap-2 px-4 py-2 mb-6 rounded-full bg-[var(--color-legal-badge)] border border-[var(--color-legal-border-soft)] backdrop-blur-sm">
-                  <span className="w-2 h-2 rounded-full bg-[var(--color-legal-primary)] animate-pulse" />
+                <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[var(--color-legal-border-soft)] bg-[var(--color-legal-badge)] px-4 py-2 backdrop-blur-sm">
+                  <span className="h-2 w-2 animate-pulse rounded-full bg-[var(--color-legal-primary)]" />
                   <span className="text-sm font-semibold text-[var(--color-legal-primary)]">
                     {sectionsConfig.hero.legal.badge}
                   </span>
@@ -154,7 +156,7 @@ export function HeroSection() {
                 </Text>
 
                 {/* Tags */}
-                <div className="grid grid-cols-2 gap-3 text-sm text-[var(--color-text-secondary)] mb-8">
+                <div className="mb-8 grid grid-cols-2 gap-3 text-sm text-[var(--color-text-secondary)]">
                   {legalTags.map((tag) => (
                     <div key={tag} className="flex items-center gap-2">
                       <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-legal-primary)] shadow-[0_0_12px_rgba(212,175,55,0.6)]" />
@@ -169,9 +171,7 @@ export function HeroSection() {
                     variant="primary-legal"
                     size="lg"
                     onClick={() => {
-                      document
-                        .getElementById("contact")
-                        ?.scrollIntoView({ behavior: "smooth" });
+                      document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
                     }}
                   >
                     {sectionsConfig.hero.legal.cta.label}
@@ -185,19 +185,17 @@ export function HeroSection() {
           <motion.div
             initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: prefersReducedMotion ? 0 : 0.8, delay: prefersReducedMotion ? 0 : 0.1 }}
+            transition={{
+              duration: prefersReducedMotion ? 0 : 0.8,
+              delay: prefersReducedMotion ? 0 : 0.1,
+            }}
           >
-            <Card variant="tech" padding="lg" className="relative overflow-hidden">
-              {/* Particles Background */}
-              {shouldRenderParticles && (
-                <Particles count={20} colors={["#06B6D4", "#22D3EE"]} speed={0.3} className="opacity-25" />
-              )}
-
+            <Card variant="tech" padding="lg" className="relative overflow-hidden" withParticles>
               {/* Content */}
               <div className="relative z-10">
                 {/* Badge */}
-                <div className="inline-flex items-center gap-2 px-4 py-2 mb-6 rounded-full bg-[var(--color-tech-badge)] border border-[var(--color-tech-border-soft)] backdrop-blur-sm">
-                  <span className="w-2 h-2 rounded-full bg-[var(--color-tech-primary)] animate-pulse" />
+                <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[var(--color-tech-border-soft)] bg-[var(--color-tech-badge)] px-4 py-2 backdrop-blur-sm">
+                  <span className="h-2 w-2 animate-pulse rounded-full bg-[var(--color-tech-primary)]" />
                   <span className="text-sm font-semibold text-[var(--color-tech-primary)]">
                     {sectionsConfig.hero.tech.badge}
                   </span>
@@ -214,7 +212,7 @@ export function HeroSection() {
                 </Text>
 
                 {/* Feature list */}
-                <div className="grid grid-cols-2 gap-3 text-sm text-[var(--color-text-secondary)] mb-8">
+                <div className="mb-8 grid grid-cols-2 gap-3 text-sm text-[var(--color-text-secondary)]">
                   {techFeatures.map((feature) => (
                     <div key={feature} className="flex items-center gap-2">
                       <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-tech-primary)] shadow-[0_0_12px_rgba(6,182,212,0.6)]" />
@@ -224,20 +222,22 @@ export function HeroSection() {
                 </div>
 
                 {/* CTA */}
-                <div className="flex gap-3 flex-wrap">
-                  <Button asChild variant={sectionsConfig.hero.tech.cta[0].variant as any} size="lg">
+                <div className="flex flex-wrap gap-3">
+                  <Button
+                    asChild
+                    variant={sectionsConfig.hero.tech.cta[0].variant as "secondary-tech"}
+                    size="lg"
+                  >
                     <a href={sectionsConfig.hero.tech.cta[0].href}>
                       {sectionsConfig.hero.tech.cta[0].label}
                     </a>
                   </Button>
                   <MagneticButton strength={20}>
                     <Button
-                      variant={sectionsConfig.hero.tech.cta[1].variant as any}
+                      variant={sectionsConfig.hero.tech.cta[1].variant as "primary-tech"}
                       size="lg"
                       onClick={() => {
-                        document
-                          .getElementById("contact")
-                          ?.scrollIntoView({ behavior: "smooth" });
+                        document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
                       }}
                     >
                       {sectionsConfig.hero.tech.cta[1].label}
@@ -250,12 +250,18 @@ export function HeroSection() {
         </div>
 
         {/* Bottom hint */}
-        <div className="mt-12 flex flex-col items-center gap-4 text-[var(--color-text-muted)] sm:flex-row sm:gap-6 sm:justify-center lg:justify-start">
-          <div className="hidden sm:block h-px w-16 bg-[var(--color-border)]/70" />
-          <Label as="span" size="xs" spacing="widest" tone="muted" className="text-center sm:text-left">
+        <div className="mt-12 flex flex-col items-center gap-4 text-[var(--color-text-muted)] sm:flex-row sm:justify-center sm:gap-6 lg:justify-start">
+          <div className="hidden h-px w-16 bg-[var(--color-border)]/70 sm:block" />
+          <Label
+            as="span"
+            size="xs"
+            spacing="widest"
+            tone="muted"
+            className="text-center sm:text-left"
+          >
             {sectionsConfig.hero.main.bottomHint}
           </Label>
-          <div className="hidden sm:block h-px w-16 bg-[var(--color-border)]/70" />
+          <div className="hidden h-px w-16 bg-[var(--color-border)]/70 sm:block" />
         </div>
       </div>
     </Section>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 /**
@@ -48,6 +48,12 @@ interface ParticlesProps {
    * Additional className for container
    */
   className?: string;
+
+  /**
+   * Disable all pointer events (mobile touch fix)
+   * @default true
+   */
+  disableInteraction?: boolean;
 }
 
 /**
@@ -84,20 +90,6 @@ export function Particles({
   const particlesRef = useRef<Particle[]>([]);
   const animationFrameRef = useRef<number | undefined>(undefined);
   const prefersReducedMotion = useReducedMotion();
-  const [isCoarsePointer, setIsCoarsePointer] = useState(false);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const media = window.matchMedia("(pointer: coarse)");
-    const update = () => setIsCoarsePointer(media.matches);
-    update();
-    if (typeof media.addEventListener === "function") {
-      media.addEventListener("change", update);
-      return () => media.removeEventListener("change", update);
-    }
-    media.addListener(update);
-    return () => media.removeListener(update);
-  }, []);
 
   // Setup canvas and start animation
   useEffect(() => {
@@ -199,7 +191,7 @@ export function Particles({
       }
       window.removeEventListener("resize", handleResize);
     };
-  }, [count, colors, sizeRange, speed, prefersReducedMotion, isCoarsePointer]);
+  }, [count, colors, sizeRange, speed, prefersReducedMotion]);
 
   return (
     <canvas
@@ -209,6 +201,8 @@ export function Particles({
       style={{
         width: "100%",
         height: "100%",
+        touchAction: "none",
+        userSelect: "none",
       }}
     />
   );

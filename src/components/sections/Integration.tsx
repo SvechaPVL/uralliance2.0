@@ -24,16 +24,20 @@ const connections = [
 export function Integration() {
   return (
     <Section spacing="lg">
-      <div className="max-w-5xl mx-auto px-4">
+      <div className="mx-auto max-w-5xl px-4">
         <div className="mb-12 text-center">
-          <Label size="sm" spacing="wider" tone="muted">{sectionsConfig.integration.heading}</Label>
-          <Heading as="h3" size="xl" weight="semibold" className="mt-4">{integrationsConfig.title}</Heading>
+          <Label size="sm" spacing="wider" tone="muted">
+            {sectionsConfig.integration.heading}
+          </Label>
+          <Heading as="h3" size="xl" weight="semibold" className="mt-4">
+            {integrationsConfig.title}
+          </Heading>
           <p className="mt-3 text-[var(--color-text-secondary)]">
             {integrationsConfig.description}
           </p>
         </div>
 
-        <div className="relative h-[420px] overflow-hidden rounded-3xl border border-white/5 bg-[#05070c]">
+        <div className="relative h-[320px] overflow-hidden rounded-3xl border border-white/5 bg-[#05070c] sm:h-[420px]">
           <svg className="absolute inset-0 h-full w-full">
             {connections.map((conn, idx) => (
               <motion.line
@@ -67,15 +71,15 @@ export function Integration() {
               whileHover={{ scale: 1.1 }}
             >
               <div
-                className="rounded-2xl border bg-gradient-to-b from-white/10 to-white/5 backdrop-blur-sm px-6 py-4 shadow-lg"
+                className="rounded-xl border bg-gradient-to-b from-white/10 to-white/5 px-3 py-2 shadow-lg backdrop-blur-sm sm:rounded-2xl sm:px-6 sm:py-4"
                 style={{
                   transform: "translate(-50%, -50%)",
                   borderColor: `${icon.color}40`,
-                  boxShadow: `0 0 30px ${icon.color}20`
+                  boxShadow: `0 0 30px ${icon.color}20`,
                 }}
               >
                 <span
-                  className="block text-center text-lg font-bold tracking-tight whitespace-nowrap"
+                  className="block text-center text-xs font-bold tracking-tight whitespace-nowrap sm:text-lg"
                   style={{ color: icon.color }}
                 >
                   {icon.label}

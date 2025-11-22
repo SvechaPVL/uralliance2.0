@@ -192,7 +192,7 @@
   "mobile_apps": {
     "label": "Приложения",
     "heading": "Мобильные приложения для вашего бизнеса",
-    "technologies": ["iPhone", "Android", "Универсальные приложения"]
+    "technologies": ["iPhone", "Android"]
   },
   "price_preview": {
     "heading": "Понятные цены",

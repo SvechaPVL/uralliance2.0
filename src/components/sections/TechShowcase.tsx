@@ -110,13 +110,13 @@ const bentoItems: BentoGridItem[] = [
             </div>
             {/* Mobile: horizontal scroll with multiple phones */}
             <div className="flex gap-4 overflow-x-auto [-webkit-overflow-scrolling:touch] [scrollbar-width:none] sm:hidden [&::-webkit-scrollbar]:hidden">
-              <div className="scale-90">
+              <div className="flex-shrink-0 scale-90">
                 <MobileCafeApp />
               </div>
-              <div className="scale-90">
+              <div className="flex-shrink-0 scale-90">
                 <MobileCafeApp />
               </div>
-              <div className="scale-90">
+              <div className="flex-shrink-0 scale-90">
                 <MobileCafeApp />
               </div>
             </div>

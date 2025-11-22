@@ -39,31 +39,11 @@ interface PriceCard {
 export function PricePreview() {
   const priceCards = pricePreviewData as PriceCard[];
 
-  // Helper function to get gradient classes based on practice
-  const getGradientClasses = (practice: string) => {
-    if (practice === "both") {
-      return {
-        bgGradient: "from-legal-500/10 via-tech-500/10 to-legal-500/5",
-        textGradient: "from-legal-500 via-tech-500 to-legal-600",
-      };
-    }
-    if (practice === "tech") {
-      return {
-        bgGradient: "from-tech-500/10 to-tech-500/5",
-        textGradient: "from-tech-500 to-tech-600",
-      };
-    }
-    return {
-      bgGradient: "from-legal-500/10 to-legal-500/5",
-      textGradient: "from-legal-500 to-legal-600",
-    };
-  };
-
   return (
     <Section spacing="lg" background="gradient-light">
       <Container>
         {/* Section header */}
-        <div className="text-center mb-16">
+        <div className="mb-16 text-center">
           <Heading as="h2" size="2xl" weight="bold" className="mb-4">
             {sectionsConfig.price_preview.heading}
           </Heading>
@@ -73,10 +53,8 @@ export function PricePreview() {
         </div>
 
         {/* Price cards grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+        <div className="mb-12 grid grid-cols-1 gap-8 md:grid-cols-3">
           {priceCards.map((card, index) => {
-            const gradientClasses = getGradientClasses(card.practice);
-            const isLegal = card.practice === "legal";
             const isTech = card.practice === "tech" || card.featured;
 
             return (
@@ -96,20 +74,12 @@ export function PricePreview() {
                   variant={isTech ? "tech" : "legal"}
                   padding="lg"
                   hoverable
-                  className="h-full relative overflow-hidden"
+                  className="relative h-full overflow-hidden"
                 >
-                  {/* Background gradient */}
-                  <div
-                    className={`absolute inset-0 bg-gradient-to-br ${gradientClasses.bgGradient} opacity-50 pointer-events-none`}
-                  />
-
                   {/* Content */}
-                  <div className="relative z-10 flex flex-col h-full">
+                  <div className="relative flex h-full flex-col">
                     {/* Badge */}
-                    <Badge
-                      variant={isTech ? "tech" : "legal"}
-                      className="text-xs mb-4 w-fit"
-                    >
+                    <Badge variant={isTech ? "tech" : "legal"} className="mb-4 w-fit text-xs">
                       {card.badge}
                     </Badge>
 
@@ -130,7 +100,9 @@ export function PricePreview() {
                           {card.priceFrom ? "от " : ""}
                           {card.price.toLocaleString("ru-RU")}
                         </span>
-                        <Text size="xl" tone="muted">{card.unit}</Text>
+                        <Text size="xl" tone="muted">
+                          {card.unit}
+                        </Text>
                       </div>
                     </div>
 
@@ -147,11 +119,7 @@ export function PricePreview() {
                     </List>
 
                     {/* CTA */}
-                    <Button
-                      variant={isTech ? "primary-tech" : "primary-legal"}
-                      size="md"
-                      fullWidth
-                    >
+                    <Button variant={isTech ? "primary-tech" : "primary-legal"} size="md" fullWidth>
                       {sectionsConfig.price_preview.button}
                     </Button>
                   </div>
@@ -165,7 +133,7 @@ export function PricePreview() {
         <div className="text-center">
           <Link
             href={sectionsConfig.price_preview.cta.href}
-            className="inline-flex items-center gap-2 text-lg font-semibold text-neutral-700 dark:text-neutral-300 hover:text-tech-500 dark:hover:text-tech-400 transition-colors duration-300"
+            className="hover:text-tech-500 dark:hover:text-tech-400 inline-flex items-center gap-2 text-lg font-semibold text-neutral-700 transition-colors duration-300 dark:text-neutral-300"
           >
             {sectionsConfig.price_preview.cta.label}
             <span className="text-xl">→</span>
