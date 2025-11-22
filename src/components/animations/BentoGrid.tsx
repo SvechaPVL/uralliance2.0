@@ -86,10 +86,13 @@ export function BentoGrid({ items, className, rowHeight = "minmax(220px, auto)" 
   return (
     <div
       className={cn(
-        "grid grid-cols-1 gap-8 sm:gap-10 lg:gap-12",
-        "sm:grid-cols-2 lg:grid-cols-5",
-        // На мобилке карточки сами определяют высоту
-        "[grid-auto-rows:auto] lg:[grid-auto-rows:var(--row-height)]",
+        // На мобилке используем flexbox для надёжного layout
+        "flex flex-col gap-8",
+        // На планшете и выше - grid
+        "sm:grid sm:grid-cols-2 sm:gap-10",
+        "lg:grid-cols-5 lg:gap-12",
+        // Grid-auto-rows только для десктопа
+        "lg:[grid-auto-rows:var(--row-height)]",
         className
       )}
       style={{
