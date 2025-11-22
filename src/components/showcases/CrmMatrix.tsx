@@ -52,47 +52,47 @@ export function CrmMatrix() {
   const activeRow = useMemo(() => rows[activeIndex], [activeIndex]);
 
   return (
-    <div className="flex h-full flex-col gap-4 rounded-2xl border border-white/5 bg-[#05070c] p-4 text-white">
-      <div className="flex items-center justify-between text-xs tracking-[0.3em] text-[#7c8da3] uppercase">
+    <div className="flex h-full flex-col gap-3 rounded-2xl border border-white/5 bg-[#05070c] p-3 text-white sm:gap-4 sm:p-4">
+      <div className="flex items-center justify-between text-[10px] tracking-[0.3em] text-[#7c8da3] uppercase sm:text-xs">
         <span>Синхронизация</span>
         <span>{activeRow.synced}</span>
       </div>
 
-      <div className="space-y-4 text-sm text-white/80">
-        {rows.map((row, idx) => {
+      <div className="space-y-2 text-sm text-white/80 sm:space-y-3">
+        {rows.slice(0, 2).map((row, idx) => {
           const isActive = idx === activeIndex;
           return (
             <div
               key={row.company}
               className={cn(
-                "rounded-2xl border border-white/5 px-4 py-3 transition-colors",
+                "rounded-xl border border-white/5 px-3 py-2 transition-colors sm:rounded-2xl sm:px-4 sm:py-3",
                 isActive ? "bg-white/5" : "bg-transparent"
               )}
             >
-              <div className="flex items-center justify-between text-xs text-[#94a3b8]">
+              <div className="flex items-center justify-between text-[10px] text-[#94a3b8] sm:text-xs">
                 <span>{row.channel}</span>
                 <span>{row.synced}</span>
               </div>
-              <div className="mt-2 flex items-center justify-between">
-                <p className="text-base font-medium text-white">{row.company}</p>
+              <div className="mt-1.5 flex items-center justify-between sm:mt-2">
+                <p className="text-sm font-medium text-white sm:text-base">{row.company}</p>
                 <AnimatePresence mode="wait">
                   {isActive && (
                     <motion.span
                       {...statusPill}
-                      className="rounded-full border border-[#0ea5e9]/40 bg-[#0f8ab1]/20 px-3 py-1 text-xs text-[#7dd3fc]"
+                      className="rounded-full border border-[#0ea5e9]/40 bg-[#0f8ab1]/20 px-2 py-0.5 text-[10px] text-[#7dd3fc] sm:px-3 sm:py-1 sm:text-xs"
                     >
                       LIVE
                     </motion.span>
                   )}
                 </AnimatePresence>
               </div>
-              <p className="mt-1 text-sm text-[#cbd5f5]">{row.status}</p>
+              <p className="mt-0.5 text-xs text-[#cbd5f5] sm:mt-1 sm:text-sm">{row.status}</p>
             </div>
           );
         })}
       </div>
 
-      <div className="rounded-2xl border border-white/5 bg-[#07090f] p-4">
+      <div className="hidden rounded-2xl border border-white/5 bg-[#07090f] p-4 sm:block">
         <div className="flex items-center justify-between text-xs text-[#94a3b8]">
           <span>Интеграции</span>
           <span>Статус</span>
