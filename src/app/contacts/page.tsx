@@ -1,306 +1,266 @@
-"use client";
-
+import Script from "next/script";
+import Link from "next/link";
+import type { Metadata } from "next";
 import { Container } from "@/components/layout/Container";
 import { Card } from "@/components/primitives/card";
 import { Badge } from "@/components/primitives/badge";
 import { Button } from "@/components/primitives/button";
-import { Input } from "@/components/primitives/input";
-import { MapPin, Phone, Mail, Clock, MessageSquare, Send } from "lucide-react";
-import { useState } from "react";
-import type { Metadata } from "next";
+import { ContactForm } from "@/components/forms/ContactForm";
+import { Spotlight } from "@/components/animations/Spotlight";
+import { MapWrapper } from "@/components/animations/MapWrapper";
+import { generateLocalBusinessSchema, generateOrganizationSchema } from "@/lib/seo";
+import { generateTelegramLink, generateWhatsAppLink } from "@/lib/messenger";
+import { MapPin, Phone, Mail, Clock, MessageSquare, Navigation } from "lucide-react";
+import { Section } from "@/components/primitives/section";
+import { Heading } from "@/components/primitives/heading";
+import { Label } from "@/components/primitives/label";
+import { Text } from "@/components/primitives/text";
+import { List } from "@/components/primitives/list";
+import pagesConfig from "@/content/pages.json";
+import contactsConfig from "@/content/contacts.json";
 
-/**
- * Contacts Page
- *
- * Contact information, map, and contact form
- */
+export const metadata: Metadata = {
+  title: pagesConfig.contacts.title,
+  description: pagesConfig.contacts.description,
+  keywords: pagesConfig.contacts.keywords,
+};
 
-const contactInfo = [
+const ORGANIZATION_SCHEMA = generateOrganizationSchema();
+const LOCAL_BUSINESS_SCHEMA = generateLocalBusinessSchema();
+
+const CONTACT_DETAILS = [
   {
     icon: MapPin,
-    title: "Адрес офиса",
-    value: "г. Екатеринбург, ул. Малышева, 51",
-    color: "legal" as const,
+    label: pagesConfig.contacts.details.labels.office,
+    value: contactsConfig.office.address,
+    href: contactsConfig.office.mapLink,
   },
   {
     icon: Phone,
-    title: "Телефон",
-    value: "+7 (343) 123-45-67",
-    href: "tel:+73431234567",
-    color: "tech" as const,
+    label: pagesConfig.contacts.details.labels.phone,
+    value: contactsConfig.phone.display,
+    href: contactsConfig.phone.link,
   },
   {
     icon: Mail,
-    title: "Email",
-    value: "info@uralliance.ru",
-    href: "mailto:info@uralliance.ru",
-    color: "legal" as const,
+    label: pagesConfig.contacts.details.labels.email,
+    value: contactsConfig.email.display,
+    href: contactsConfig.email.link,
   },
   {
     icon: Clock,
-    title: "Режим работы",
-    value: "Пн-Пт: 9:00 - 18:00",
-    color: "tech" as const,
+    label: pagesConfig.contacts.details.labels.schedule,
+    value: pagesConfig.contacts.details.schedule,
   },
 ];
 
-const messengers = [
+const MESSENGERS = [
   {
-    name: "Telegram",
-    url: "https://t.me/uralliance",
-    color: "from-[#0088cc] to-[#0088cc]",
+    label: pagesConfig.contacts.hero.messengers.telegram,
+    href: generateTelegramLink(
+      contactsConfig.messengers.telegram.username,
+      contactsConfig.messengers.telegram.defaultMessage
+    ),
+    variant: "outline-telegram" as const,
   },
   {
-    name: "WhatsApp",
-    url: "https://wa.me/79000000000",
-    color: "from-[#25D366] to-[#128C7E]",
+    label: pagesConfig.contacts.hero.messengers.whatsapp,
+    href: generateWhatsAppLink(
+      contactsConfig.messengers.whatsapp.number,
+      contactsConfig.messengers.whatsapp.defaultMessage
+    ),
+    variant: "outline-whatsapp" as const,
   },
 ];
+
+const responseHighlights = pagesConfig.contacts.responseHighlights.items;
 
 export default function ContactsPage() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    message: "",
-  });
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // TODO: Implement form submission
-    console.log("Form submitted:", formData);
-  };
-
   return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-b from-neutral-50 to-white py-24 dark:from-neutral-900 dark:to-neutral-950">
-        <Container>
-          <div className="mx-auto max-w-4xl text-center">
-            <h1 className="mb-6 text-5xl font-bold md:text-6xl">Контакты</h1>
-            <p className="text-xl text-neutral-600 dark:text-neutral-400">
-              Свяжитесь с нами удобным способом — мы всегда на связи и готовы помочь
-            </p>
-          </div>
-        </Container>
-      </section>
+    <>
+      <Script
+        id="ld-json-organization-contact"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(ORGANIZATION_SCHEMA) }}
+      />
+      <Script
+        id="ld-json-local-business"
+        type="application/ld+json"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(LOCAL_BUSINESS_SCHEMA) }}
+      />
 
-      {/* Contact Info Grid */}
-      <section className="py-16">
-        <Container>
-          <div className="mb-16 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-            {contactInfo.map((info, index) => {
-              const Icon = info.icon;
-              const content = (
-                <Card
-                  className={`group h-full border-2 p-8 text-center transition-all duration-300 hover:scale-105 hover:shadow-2xl ${
-                    info.color === "legal"
-                      ? "hover:border-legal-500 dark:hover:border-legal-400"
-                      : "hover:border-tech-500 dark:hover:border-tech-400"
-                  }`}
-                >
-                  <div className="mb-4 flex justify-center">
-                    <Icon
-                      className={`h-12 w-12 ${
-                        info.color === "legal"
-                          ? "text-legal-500 dark:text-legal-400"
-                          : "text-tech-500 dark:text-tech-400"
-                      }`}
-                    />
-                  </div>
-                  <h3 className="mb-2 font-semibold text-neutral-600 dark:text-neutral-400">
-                    {info.title}
-                  </h3>
-                  <p className="text-lg font-medium">{info.value}</p>
-                </Card>
-              );
-
-              return info.href ? (
-                <a key={index} href={info.href} className="block transition-transform">
-                  {content}
-                </a>
-              ) : (
-                <div key={index}>{content}</div>
-              );
-            })}
-          </div>
-
-          {/* Messengers */}
-          <div className="mb-16 text-center">
-            <h2 className="mb-6 text-2xl font-bold">Напишите нам в мессенджер</h2>
-            <div className="flex flex-wrap justify-center gap-4">
-              {messengers.map((messenger, index) => (
-                <a
-                  key={index}
-                  href={messenger.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`inline-flex items-center gap-2 rounded-lg bg-gradient-to-r ${messenger.color} px-6 py-3 font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-xl`}
-                >
-                  <MessageSquare className="h-5 w-5" />
-                  {messenger.name}
-                </a>
-              ))}
-            </div>
-          </div>
-        </Container>
-      </section>
-
-      {/* Map Section */}
-      <section className="bg-neutral-100 py-16 dark:bg-neutral-900">
-        <Container>
-          <h2 className="mb-8 text-center text-3xl font-bold">Как нас найти</h2>
-          <Card className="overflow-hidden border-2 p-0">
-            {/* Yandex Maps Embed */}
-            <div className="relative h-[500px] w-full">
-              <iframe
-                src="https://yandex.ru/map-widget/v1/?ll=60.597474%2C56.838011&z=17&l=map&pt=60.597474,56.838011,pm2rdl"
-                width="100%"
-                height="100%"
-                frameBorder="0"
-                allowFullScreen
-                className="rounded-lg"
-                title="Карта офиса Uralliance"
-              />
-            </div>
-          </Card>
-          <p className="mt-4 text-center text-neutral-600 dark:text-neutral-400">
-            г. Екатеринбург, ул. Малышева, 51 (БЦ «Высоцкий», 5 этаж)
-          </p>
-        </Container>
-      </section>
-
-      {/* Contact Form Section */}
-      <section className="py-16">
-        <Container>
-          <div className="mx-auto max-w-3xl">
-            <div className="mb-8 text-center">
-              <h2 className="mb-4 text-3xl font-bold md:text-4xl">Напишите нам</h2>
-              <p className="text-xl text-neutral-600 dark:text-neutral-400">
-                Заполните форму, и мы свяжемся с вами в ближайшее время
-              </p>
-            </div>
-
-            <Card className="border-2 p-8 md:p-12">
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                  <div>
-                    <label
-                      htmlFor="name"
-                      className="mb-2 block font-semibold text-neutral-700 dark:text-neutral-300"
-                    >
-                      Ваше имя <span className="text-red-500">*</span>
-                    </label>
-                    <Input
-                      id="name"
-                      type="text"
-                      required
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      placeholder="Иван Иванов"
-                      className="border-2"
-                    />
-                  </div>
-
-                  <div>
-                    <label
-                      htmlFor="phone"
-                      className="mb-2 block font-semibold text-neutral-700 dark:text-neutral-300"
-                    >
-                      Телефон <span className="text-red-500">*</span>
-                    </label>
-                    <Input
-                      id="phone"
-                      type="tel"
-                      required
-                      value={formData.phone}
-                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                      placeholder="+7 (900) 000-00-00"
-                      className="border-2"
-                    />
-                  </div>
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="email"
-                    className="mb-2 block font-semibold text-neutral-700 dark:text-neutral-300"
-                  >
-                    Email <span className="text-red-500">*</span>
-                  </label>
-                  <Input
-                    id="email"
-                    type="email"
-                    required
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    placeholder="your@email.com"
-                    className="border-2"
-                  />
-                </div>
-
-                <div>
-                  <label
-                    htmlFor="message"
-                    className="mb-2 block font-semibold text-neutral-700 dark:text-neutral-300"
-                  >
-                    Сообщение <span className="text-red-500">*</span>
-                  </label>
-                  <textarea
-                    id="message"
-                    required
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    placeholder="Расскажите о вашей задаче..."
-                    rows={6}
-                    className="focus:border-legal-500 dark:focus:border-tech-400 w-full rounded-lg border-2 border-neutral-300 px-4 py-3 transition-colors focus:outline-none dark:border-neutral-700 dark:bg-neutral-900"
-                  />
-                </div>
-
-                <div className="text-center">
+      <div className="bg-[var(--color-background)] text-[var(--color-text-primary)]">
+        {/* Hero */}
+        <Section spacing="lg" isolate overflow="hidden">
+          <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(6,182,212,0.2),_transparent_55%)]" />
+          <Container className="space-y-10">
+            <div className="space-y-6 text-center">
+              <Badge variant="tech" badgeStyle="subtle">
+                {pagesConfig.contacts.hero.badges.support}
+              </Badge>
+              <Heading as="h1" size="2xl" weight="semibold">
+                {pagesConfig.contacts.hero.heading}
+              </Heading>
+              <Text size="lg" tone="secondary" className="sm:text-xl">
+                {pagesConfig.contacts.hero.description}
+              </Text>
+              <div className="flex flex-wrap justify-center gap-4">
+                {MESSENGERS.map((messenger) => (
                   <Button
-                    type="submit"
-                    className="from-legal-500 to-tech-500 hover:from-legal-600 hover:to-tech-600 inline-flex items-center gap-2 rounded-lg bg-gradient-to-r px-8 py-4 font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                    key={messenger.label}
+                    asChild
+                    variant={messenger.variant}
+                    size="md"
+                    icon={<MessageSquare className="h-5 w-5" />}
                   >
-                    <Send className="h-5 w-5" />
-                    Отправить сообщение
+                    <a href={messenger.href} target="_blank" rel="noopener noreferrer">
+                      {messenger.label}
+                    </a>
                   </Button>
-                </div>
-
-                <p className="text-center text-sm text-neutral-500 dark:text-neutral-500">
-                  Нажимая кнопку, вы соглашаетесь с{" "}
-                  <a href="/privacy" className="text-legal-500 dark:text-tech-400 hover:underline">
-                    политикой конфиденциальности
-                  </a>
-                </p>
-              </form>
-            </Card>
-          </div>
-        </Container>
-      </section>
-
-      {/* CTA Section */}
-      <section className="bg-gradient-to-b from-neutral-50 to-white py-16 dark:from-neutral-900 dark:to-neutral-950">
-        <Container>
-          <div className="mx-auto max-w-2xl text-center">
-            <div className="mb-6 flex justify-center gap-2">
-              <Badge variant="legal">Legal</Badge>
-              <Badge variant="tech">Tech</Badge>
+                ))}
+              </div>
             </div>
-            <h2 className="mb-4 text-2xl font-bold">Предпочитаете личную встречу?</h2>
-            <p className="mb-6 text-neutral-600 dark:text-neutral-400">
-              Приходите в наш офис в центре Екатеринбурга для бесплатной консультации
-            </p>
-            <a
-              href="tel:+73431234567"
-              className="border-legal-500 hover:bg-legal-500 dark:border-tech-400 dark:hover:bg-tech-400 inline-flex items-center gap-2 rounded-lg border-2 px-6 py-3 font-semibold transition-all duration-300 hover:text-white"
-            >
-              <Phone className="h-5 w-5" />
-              Позвонить и записаться
-            </a>
-          </div>
-        </Container>
-      </section>
-    </div>
+          </Container>
+        </Section>
+
+        {/* Contact info */}
+        <Section spacing="md" className="pb-16 pt-4">
+          <Container className="space-y-8">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+              {CONTACT_DETAILS.map((detail) => {
+                const content = (
+                  <Card
+                    key={detail.label}
+                    variant="glass"
+                    className="h-full space-y-3 p-6 hover:shadow-[0_20px_45px_-30px_rgba(0,0,0,0.75)]"
+                    hoverable
+                  >
+                    <Label size="md" spacing="wider" tone="muted">
+                      {detail.label}
+                    </Label>
+                    <Text size="lg" weight="semibold">{detail.value}</Text>
+                  </Card>
+                );
+
+                if (!detail.href) {
+                  return content;
+                }
+
+                const external = detail.href.startsWith("http");
+
+                return (
+                  <a
+                    key={detail.label}
+                    href={detail.href}
+                    className="block"
+                    {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                  >
+                    {content}
+                  </a>
+                );
+              })}
+            </div>
+          </Container>
+        </Section>
+
+        {/* Form + details */}
+        <Section spacing="md">
+          <Container className="grid gap-10 lg:grid-cols-[1.05fr,0.95fr]">
+            <Spotlight className="border border-[var(--color-border-soft)] bg-[var(--color-card-bg)]/80 p-6 shadow-[0_30px_80px_rgba(0,0,0,0.35)]">
+              <div className="rounded-3xl border border-white/5 bg-[var(--color-background)]/90 p-6 sm:p-8 max-w-3xl mx-auto">
+                <div className="mb-8 space-y-3">
+                  <Badge variant="tech" badgeStyle="subtle" size="sm">
+                    {pagesConfig.contacts.form.badge}
+                  </Badge>
+                  <Heading as="h2" size="xl" weight="semibold">{pagesConfig.contacts.form.heading}</Heading>
+                  <Text size="lg" tone="secondary">
+                    {pagesConfig.contacts.form.description}
+                  </Text>
+                </div>
+                <ContactForm />
+              </div>
+            </Spotlight>
+
+            <div className="space-y-6">
+              <Card variant="glass" className="space-y-4 p-6">
+                <Label size="md" spacing="wider" tone="muted">
+                  {pagesConfig.contacts.responseHighlights.label}
+                </Label>
+                <List variant="feature" spacing="md" className="text-sm text-[var(--color-text-secondary)]">
+                  {responseHighlights.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </List>
+                <div className="rounded-2xl border border-dashed border-[var(--color-border)] px-4 py-3 text-sm text-[var(--color-text-secondary)]">
+                  {pagesConfig.contacts.responseHighlights.note}
+                </div>
+              </Card>
+              <Card variant="glass" className="space-y-4 p-6">
+                <Label size="md" spacing="wider" tone="muted">
+                  {pagesConfig.contacts.meeting.label}
+                </Label>
+                <div className="space-y-4 text-sm text-[var(--color-text-secondary)]">
+                  <p>{pagesConfig.contacts.meeting.description}</p>
+                  <div className="flex flex-wrap gap-3">
+                    <Button asChild variant="primary-tech" size="sm">
+                      <Link href={contactsConfig.phone.link}>{pagesConfig.contacts.meeting.buttons.call}</Link>
+                    </Button>
+                    <Button asChild variant="ghost" size="sm" className="border border-[var(--color-border)]">
+                      <Link href={contactsConfig.email.link}>{pagesConfig.contacts.meeting.buttons.email}</Link>
+                    </Button>
+                  </div>
+                </div>
+              </Card>
+            </div>
+          </Container>
+        </Section>
+
+        {/* Map */}
+        <Section spacing="md" background="secondary">
+          <Container className="space-y-6">
+            <div className="flex items-center gap-3">
+              <Navigation className="h-10 w-10 rounded-2xl bg-[var(--color-card-bg)] p-2" />
+              <div>
+                <Text size="xl" weight="semibold">{pagesConfig.contacts.map.label}</Text>
+              </div>
+            </div>
+            <Card variant="glass" className="overflow-hidden p-0">
+              <MapWrapper
+                lat={contactsConfig.office.coordinates.lat}
+                lng={contactsConfig.office.coordinates.lng}
+                zoom={17}
+                height="420px"
+                markerTitle={pagesConfig.contacts.map.iframeTitle}
+                mapUrl={contactsConfig.office.mapLink}
+              />
+            </Card>
+          </Container>
+        </Section>
+
+        {/* CTA */}
+        <Section spacing="md">
+          <Container>
+            <Card variant="glass" padding="lg" className="text-center">
+              <Label size="md" spacing="wider" tone="muted">
+                {pagesConfig.contacts.cta.label}
+              </Label>
+              <Heading as="h3" size="lg" weight="semibold">
+                {pagesConfig.contacts.cta.heading}
+              </Heading>
+              <div className="mt-8 flex flex-wrap justify-center gap-4">
+                <Button asChild variant="primary-legal" size="md">
+                  <Link href={pagesConfig.contacts.cta.buttons.price.href}>{pagesConfig.contacts.cta.buttons.price.label}</Link>
+                </Button>
+                <Button asChild variant="outline" size="md">
+                  <Link href={pagesConfig.contacts.cta.buttons.email.href}>{pagesConfig.contacts.cta.buttons.email.label}</Link>
+                </Button>
+              </div>
+            </Card>
+          </Container>
+        </Section>
+      </div>
+    </>
   );
 }

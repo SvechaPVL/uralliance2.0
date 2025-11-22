@@ -103,16 +103,31 @@ export interface Service {
 /**
  * Price Item
  *
- * Individual pricing entry for services
+ * Individual pricing entry for the Offer Catalog
  */
 export interface PriceItem {
   /**
-   * Service name
+   * Unique identifier (kebab-case)
    */
-  name: string;
+  id: string;
 
   /**
-   * Service description
+   * High-level direction for filtering (legal | tech)
+   */
+  practice: "legal" | "tech";
+
+  /**
+   * Thematic category displayed to users (e.g., Арбитраж, CRM)
+   */
+  category: string;
+
+  /**
+   * Public title
+   */
+  title: string;
+
+  /**
+   * Short description of the deliverable
    */
   description: string;
 
@@ -122,24 +137,24 @@ export interface PriceItem {
   price: number;
 
   /**
-   * Price unit (e.g., "за консультацию", "в месяц")
+   * Whether the price is the starting point ("от")
+   */
+  priceFrom: boolean;
+
+  /**
+   * Unit of measurement (дело, проект, консультация, месяц)
    */
   unit: string;
 
   /**
-   * Service category: legal or tech
-   */
-  category: "legal" | "tech";
-
-  /**
-   * Optional features included
+   * Optional list of bullet features
    */
   features?: string[];
 
   /**
-   * Highlight this pricing option
+   * Highlight card in UI
    */
-  highlighted?: boolean;
+  featured?: boolean;
 }
 
 /**
@@ -260,6 +275,11 @@ export interface BlogPostFrontmatter extends BaseFrontmatter {
  * Complete Blog Post object with content
  */
 export interface BlogPost {
+  /**
+   * URL slug for the post
+   */
+  slug: string;
+
   /**
    * Frontmatter metadata
    */

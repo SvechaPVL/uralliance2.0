@@ -1,0 +1,105 @@
+<svg width="393" height="852" viewBox="0 0 393 852" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="393" height="852" fill="#FAFAFA"/>
+
+  <!-- Header -->
+  <rect y="60" width="393" height="80" fill="#FFFFFF"/>
+  <text x="20" y="100" fill="#1F2937" font-size="28" font-weight="bold" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Голодны?</text>
+  <text x="20" y="125" fill="#6B7280" font-size="14" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Заказ из 500+ ресторанов</text>
+
+  <!-- Search Bar -->
+  <rect x="20" y="155" width="353" height="48" rx="24" fill="#F3F4F6"/>
+  <circle cx="45" cy="179" r="8" fill="#9CA3AF"/>
+  <text x="65" y="185" fill="#9CA3AF" font-size="14" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Поиск еды...</text>
+
+  <!-- Categories -->
+  <g>
+    <rect x="20" y="225" width="80" height="90" rx="12" fill="#FEF3C7"/>
+    <circle cx="60" cy="255" r="18" fill="#F59E0B"/>
+    <text x="60" y="295" fill="#78350F" font-size="12" font-weight="600" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Пицца</text>
+
+    <rect x="115" y="225" width="80" height="90" rx="12" fill="#DBEAFE"/>
+    <circle cx="155" cy="255" r="18" fill="#3B82F6"/>
+    <text x="155" y="295" fill="#1E3A8A" font-size="12" font-weight="600" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Суши</text>
+
+    <rect x="210" y="225" width="80" height="90" rx="12" fill="#DCFCE7"/>
+    <circle cx="250" cy="255" r="18" fill="#22C55E"/>
+    <text x="250" y="295" fill="#14532D" font-size="12" font-weight="600" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Салаты</text>
+
+    <rect x="305" y="225" width="68" height="90" rx="12" fill="#FCE7F3"/>
+    <circle cx="339" cy="255" r="18" fill="#EC4899"/>
+    <text x="339" y="295" fill="#831843" font-size="12" font-weight="600" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Десерты</text>
+  </g>
+
+  <!-- Popular Now -->
+  <text x="20" y="355" fill="#1F2937" font-size="18" font-weight="bold" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Популярное сейчас</text>
+
+  <!-- Restaurant Cards -->
+  <g>
+    <!-- Card 1 -->
+    <rect x="20" y="375" width="353" height="120" rx="16" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1"/>
+    <rect x="30" y="385" width="100" height="100" rx="12" fill="#FEF3C7"/>
+    <circle cx="80" cy="435" r="25" fill="#F59E0B" opacity="0.6"/>
+
+    <text x="145" y="400" fill="#1F2937" font-size="16" font-weight="bold" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Белла Италия</text>
+    <text x="145" y="420" fill="#6B7280" font-size="12" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Итальянская • Пицца • Паста</text>
+
+    <!-- Rating -->
+    <circle cx="145" cy="445" r="6" fill="#FCD34D"/>
+    <text x="157" y="450" fill="#1F2937" font-size="13" font-weight="600" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">4.8</text>
+    <text x="185" y="450" fill="#9CA3AF" font-size="12" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">• 25-30 мин</text>
+
+    <text x="145" y="475" fill="#EF4444" font-size="14" font-weight="600" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Бесплатная доставка</text>
+
+    <!-- Card 2 -->
+    <rect x="20" y="510" width="353" height="120" rx="16" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1"/>
+    <rect x="30" y="520" width="100" height="100" rx="12" fill="#DBEAFE"/>
+    <circle cx="80" cy="570" r="25" fill="#3B82F6" opacity="0.6"/>
+
+    <text x="145" y="535" fill="#1F2937" font-size="16" font-weight="bold" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Токио Суши Бар</text>
+    <text x="145" y="555" fill="#6B7280" font-size="12" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Японская • Суши • Рамен</text>
+
+    <circle cx="145" cy="580" r="6" fill="#FCD34D"/>
+    <text x="157" y="585" fill="#1F2937" font-size="13" font-weight="600" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">4.9</text>
+    <text x="185" y="585" fill="#9CA3AF" font-size="12" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">• 20-25 мин</text>
+
+    <text x="145" y="610" fill="#10B981" font-size="14" font-weight="600" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Скидка 20%</text>
+
+    <!-- Card 3 -->
+    <rect x="20" y="645" width="353" height="120" rx="16" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1"/>
+    <rect x="30" y="655" width="100" height="100" rx="12" fill="#DCFCE7"/>
+    <circle cx="80" cy="705" r="25" fill="#22C55E" opacity="0.6"/>
+
+    <text x="145" y="670" fill="#1F2937" font-size="16" font-weight="bold" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Зеленая Чаша</text>
+    <text x="145" y="690" fill="#6B7280" font-size="12" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Здоровая еда • Салаты • Смузи</text>
+
+    <circle cx="145" cy="715" r="6" fill="#FCD34D"/>
+    <text x="157" y="720" fill="#1F2937" font-size="13" font-weight="600" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">4.7</text>
+    <text x="185" y="720" fill="#9CA3AF" font-size="12" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">• 15-20 мин</text>
+
+    <text x="145" y="745" fill="#6366F1" font-size="14" font-weight="600" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Новинка!</text>
+  </g>
+
+  <!-- Bottom Navigation -->
+  <rect y="782" width="393" height="70" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1"/>
+
+  <g>
+    <circle cx="59" cy="810" r="12" fill="#EF4444"/>
+    <text x="59" y="835" fill="#EF4444" font-size="11" font-weight="600" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Главная</text>
+  </g>
+
+  <g>
+    <circle cx="157" cy="810" r="12" fill="#D1D5DB"/>
+    <text x="157" y="835" fill="#6B7280" font-size="11" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Поиск</text>
+  </g>
+
+  <g>
+    <circle cx="255" cy="810" r="12" fill="#D1D5DB"/>
+    <text x="255" y="835" fill="#6B7280" font-size="11" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Заказы</text>
+  </g>
+
+  <g>
+    <circle cx="334" cy="810" r="12" fill="#D1D5DB"/>
+    <text x="334" y="835" fill="#6B7280" font-size="11" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Профиль</text>
+  </g>
+</svg>

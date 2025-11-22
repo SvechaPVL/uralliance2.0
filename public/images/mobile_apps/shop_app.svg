@@ -1,0 +1,113 @@
+<svg width="393" height="852" viewBox="0 0 393 852" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="393" height="852" fill="#FFFFFF"/>
+
+  <!-- Header -->
+  <rect y="50" width="393" height="70" fill="#FFFFFF"/>
+  <text x="20" y="85" fill="#111827" font-size="28" font-weight="bold" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Магазин</text>
+
+  <!-- Cart Icon -->
+  <circle cx="350" cy="75" r="20" fill="#F3F4F6"/>
+  <circle cx="358" cy="68" r="6" fill="#EF4444"/>
+  <text x="358" y="72" fill="#FFFFFF" font-size="10" font-weight="bold" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">3</text>
+
+  <!-- Search Bar -->
+  <rect x="20" y="130" width="353" height="48" rx="24" fill="#F9FAFB" stroke="#E5E7EB" stroke-width="1"/>
+  <circle cx="45" cy="154" r="8" fill="#9CA3AF"/>
+  <text x="65" y="160" fill="#9CA3AF" font-size="14" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Поиск товаров...</text>
+
+  <!-- Categories Tabs -->
+  <g>
+    <rect x="20" y="200" width="80" height="36" rx="18" fill="#111827"/>
+    <text x="60" y="223" fill="#FFFFFF" font-size="13" font-weight="600" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Все</text>
+
+    <rect x="110" y="200" width="90" height="36" rx="18" fill="#F3F4F6"/>
+    <text x="155" y="223" fill="#6B7280" font-size="13" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Одежда</text>
+
+    <rect x="210" y="200" width="80" height="36" rx="18" fill="#F3F4F6"/>
+    <text x="250" y="223" fill="#6B7280" font-size="13" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Обувь</text>
+
+    <rect x="300" y="200" width="73" height="36" rx="18" fill="#F3F4F6"/>
+    <text x="336.5" y="223" fill="#6B7280" font-size="13" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Сумки</text>
+  </g>
+
+  <!-- Featured Section -->
+  <text x="20" y="270" fill="#111827" font-size="18" font-weight="bold" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Избранное</text>
+
+  <!-- Featured Card -->
+  <rect x="20" y="285" width="353" height="200" rx="20" fill="#FEF3C7"/>
+
+  <!-- Product Image Placeholder -->
+  <circle cx="196.5" cy="350" r="60" fill="#F59E0B" opacity="0.3"/>
+  <circle cx="170" cy="330" r="35" fill="#F59E0B" opacity="0.5"/>
+  <circle cx="220" cy="365" r="45" fill="#F59E0B" opacity="0.4"/>
+
+  <text x="196.5" y="440" fill="#78350F" font-size="20" font-weight="bold" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Летняя коллекция</text>
+  <text x="196.5" y="465" fill="#92400E" font-size="14" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Скидка до 50%</text>
+
+  <!-- Products Grid -->
+  <text x="20" y="525" fill="#111827" font-size="18" font-weight="bold" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Новинки</text>
+
+  <!-- Product Grid -->
+  <g>
+    <!-- Product 1 -->
+    <rect x="20" y="545" width="170" height="260" rx="16" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1"/>
+    <rect x="30" y="555" width="150" height="150" rx="12" fill="#F3F4F6"/>
+    <circle cx="105" cy="630" r="40" fill="#3B82F6" opacity="0.3"/>
+
+    <!-- Heart Icon -->
+    <circle cx="165" cy="570" r="12" fill="#FFFFFF"/>
+    <circle cx="165" cy="570" r="5" fill="#EF4444"/>
+
+    <text x="30" y="730" fill="#111827" font-size="14" font-weight="600"
+          font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Кроссовки</text>
+    <text x="30" y="748" fill="#6B7280" font-size="12" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Nike Air Max</text>
+
+    <!-- Price -->
+    <text x="30" y="775" fill="#111827" font-size="18" font-weight="bold" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">12 990₽</text>
+    <text x="120" y="775" fill="#9CA3AF" font-size="14" text-decoration="line-through"
+          font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">18 990₽</text>
+
+    <!-- Product 2 -->
+    <rect x="203" y="545" width="170" height="260" rx="16" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1"/>
+    <rect x="213" y="555" width="150" height="150" rx="12" fill="#F3F4F6"/>
+    <circle cx="288" cy="630" r="40" fill="#EC4899" opacity="0.3"/>
+
+    <!-- Heart Icon -->
+    <circle cx="348" cy="570" r="12" fill="#FFFFFF"/>
+
+    <text x="213" y="730" fill="#111827" font-size="14" font-weight="600" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Дизайнерская сумка</text>
+    <text x="213" y="748" fill="#6B7280" font-size="12" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Натуральная кожа</text>
+
+    <!-- Price -->
+    <text x="213" y="775" fill="#111827" font-size="18" font-weight="bold" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">24 990₽</text>
+
+    <!-- New Badge -->
+    <rect x="300" y="760" width="50" height="15" rx="7" fill="#10B981"/>
+    <text x="325" y="771" fill="#FFFFFF" font-size="10" font-weight="600" text-anchor="middle"
+          font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">новинка</text>
+  </g>
+
+  <!-- Bottom Navigation -->
+  <rect y="782" width="393" height="70" fill="#FFFFFF" stroke="#E5E7EB" stroke-width="1"/>
+
+  <g>
+    <circle cx="59" cy="810" r="12" fill="#111827"/>
+    <text x="59" y="835" fill="#111827" font-size="11" font-weight="600" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Главная</text>
+  </g>
+
+  <g>
+    <circle cx="157" cy="810" r="12" fill="#D1D5DB"/>
+    <text x="157" y="835" fill="#6B7280" font-size="11" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Поиск</text>
+  </g>
+
+  <g>
+    <circle cx="255" cy="810" r="12" fill="#D1D5DB"/>
+    <text x="255" y="835" fill="#6B7280" font-size="11" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Избранное</text>
+  </g>
+
+  <g>
+    <circle cx="334" cy="810" r="12" fill="#D1D5DB"/>
+    <text x="334" y="835" fill="#6B7280" font-size="11" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Аккаунт</text>
+  </g>
+</svg>

@@ -2,7 +2,11 @@
 
 import { Timeline } from "@/components/animations/Timeline";
 import { Container } from "@/components/layout/Container";
+import { Button } from "@/components/primitives/button";
 import { Search, Ruler, Settings, Rocket } from "lucide-react";
+import { Section } from "@/components/primitives/section";
+import { Heading } from "@/components/primitives/heading";
+import sectionsConfig from "@/content/sections.json";
 
 /**
  * ProcessTimeline Section
@@ -13,41 +17,29 @@ import { Search, Ruler, Settings, Rocket } from "lucide-react";
  * Steps: Analysis → Prototype → Development → Launch
  */
 export function ProcessTimeline() {
-  const steps = [
-    {
-      title: "Анализ",
-      description:
-        "Погружаемся в специфику вашего бизнеса, изучаем задачи и определяем оптимальное решение",
-      icon: <Search className="text-legal-500 dark:text-legal-400 h-8 w-8" />,
-    },
-    {
-      title: "Прототип",
-      description:
-        "Создаем детальную концепцию проекта: прототипы интерфейсов, архитектуру решения, план реализации",
-      icon: <Ruler className="text-tech-500 dark:text-tech-400 h-8 w-8" />,
-    },
-    {
-      title: "Разработка",
-      description:
-        "Реализуем проект с использованием современных технологий, регулярно предоставляем промежуточные результаты",
-      icon: <Settings className="text-legal-500 dark:text-legal-400 h-8 w-8" />,
-    },
-    {
-      title: "Запуск",
-      description:
-        "Внедряем решение, обучаем команду, обеспечиваем техническую поддержку и сопровождение",
-      icon: <Rocket className="text-tech-500 dark:text-tech-400 h-8 w-8" />,
-    },
-  ];
+  // Icon mapping
+  const iconMap: Record<string, React.ReactElement> = {
+    Search: <Search className="text-legal-500 dark:text-legal-400 h-8 w-8" />,
+    Ruler: <Ruler className="text-tech-500 dark:text-tech-400 h-8 w-8" />,
+    Settings: <Settings className="text-legal-500 dark:text-legal-400 h-8 w-8" />,
+    Rocket: <Rocket className="text-tech-500 dark:text-tech-400 h-8 w-8" />,
+  };
+
+  const steps = sectionsConfig.process.steps.map((step) => ({
+    ...step,
+    icon: iconMap[step.icon],
+  }));
 
   return (
-    <section className="bg-gradient-to-b from-white via-neutral-50 to-white py-24 dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-950">
+    <Section spacing="lg" background="gradient-light">
       <Container>
         {/* Section header */}
         <div className="mb-16 text-center">
-          <h2 className="mb-4 text-4xl font-bold md:text-5xl">Как мы работаем</h2>
+          <Heading as="h2" size="2xl" weight="bold" className="mb-4">
+            {sectionsConfig.process.heading}
+          </Heading>
           <p className="mx-auto max-w-2xl text-xl text-neutral-600 dark:text-neutral-400">
-            Проверенный процесс от анализа до запуска — каждый этап нацелен на результат
+            {sectionsConfig.process.description}
           </p>
         </div>
 
@@ -58,18 +50,14 @@ export function ProcessTimeline() {
 
         {/* CTA */}
         <div className="mt-16 text-center">
-          <p className="mb-6 text-lg text-neutral-600 dark:text-neutral-400">
-            Готовы начать работу над проектом?
-          </p>
-          <a
-            href="#contact"
-            className="from-legal-500 to-tech-500 inline-flex items-center gap-2 rounded-lg bg-gradient-to-r px-8 py-4 font-semibold text-white transition-all duration-300 hover:scale-105 hover:shadow-xl"
-          >
-            Обсудить проект
-            <span className="text-xl">→</span>
-          </a>
+          <Button asChild variant={sectionsConfig.process.cta.variant as any} size="lg">
+            <a href={sectionsConfig.process.cta.href}>
+              {sectionsConfig.process.cta.label}
+              <span className="text-xl">→</span>
+            </a>
+          </Button>
         </div>
       </Container>
-    </section>
+    </Section>
   );
 }

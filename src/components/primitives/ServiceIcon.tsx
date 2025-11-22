@@ -9,6 +9,10 @@ import {
   Shield,
   Code,
   Smartphone,
+  PenTool,
+  Gavel,
+  BarChart,
+  Headphones,
   LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -27,6 +31,10 @@ const iconMap: Record<string, LucideIcon> = {
   Shield,
   Code,
   Smartphone,
+  PenTool,
+  Gavel,
+  BarChart,
+  Headphones,
 };
 
 interface ServiceIconProps {

@@ -1,13 +1,19 @@
 "use client";
 
+import { useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import { motion } from "framer-motion";
 import { Button } from "@/components/primitives/button";
 import { Card } from "@/components/primitives/card";
 import { MagneticButton } from "@/components/animations/MagneticButton";
 import { Particles } from "@/components/animations/Particles";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { Section } from "@/components/primitives/section";
+import { Heading } from "@/components/primitives/heading";
+import { Label } from "@/components/primitives/label";
+import { Text } from "@/components/primitives/text";
+import { useHeroProgress } from "@/context/HeroProgressContext";
+import sectionsConfig from "@/content/sections.json";
 
 // Dynamic import ThreeScene with SSR disabled (Next.js recommended approach)
 const ThreeScene = dynamic(
@@ -41,46 +47,77 @@ const ThreeScene = dynamic(
  */
 export function HeroSection() {
   const prefersReducedMotion = useReducedMotion();
-  const legalTags = ["Корпоративные споры", "Недвижимость", "Договоры"];
-  const techFeatures = ["Чат-боты", "PWA и сайты", "API", "1С интеграции"];
-  const techSceneRef = useRef<HTMLDivElement>(null);
-  const techSceneInView = useInView(techSceneRef, { amount: 0.3 });
-  const shouldRenderThreeScene = !prefersReducedMotion && techSceneInView;
+  const legalTags = sectionsConfig.hero.legal.tags;
+  const techFeatures = sectionsConfig.hero.tech.features;
   const shouldRenderParticles = !prefersReducedMotion;
+  const heroSectionRef = useRef<HTMLElement | null>(null);
+  const { progress, setProgress } = useHeroProgress();
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!heroSectionRef.current) return;
+      const rect = heroSectionRef.current.getBoundingClientRect();
+      const clampedHeight = Math.max(rect.height, 1);
+      const rawProgress = -rect.top / clampedHeight;
+      const nextProgress = Math.min(Math.max(rawProgress, 0), 1);
+      setProgress(nextProgress);
+    };
+
+    handleScroll();
+
+    let raf = 0;
+    const schedule = () => {
+      if (raf) cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(handleScroll);
+    };
+
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+
+    return () => {
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, [setProgress]);
+  const [desktopViewport, setDesktopViewport] = useState(false);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const handleChange = (event: MediaQueryListEvent) => setDesktopViewport(event.matches);
+    setDesktopViewport(mq.matches);
+    mq.addEventListener("change", handleChange);
+    return () => mq.removeEventListener("change", handleChange);
+  }, []);
+  const shouldRenderThreeScene = !prefersReducedMotion && desktopViewport;
+  const heroProgress = useMemo(() => Math.min(Math.max(progress, 0), 1), [progress]);
 
   return (
-    <section
-      className="relative min-h-screen overflow-hidden select-none pt-24"
+    <Section
+      variant="hero"
+      overflow="hidden"
+      className="select-none"
       aria-label="Hero section"
+      ref={heroSectionRef}
     >
-      {/* Gradient backgrounds */}
-      <div
-        className="pointer-events-none absolute inset-y-0 left-0 w-full lg:w-1/2 gradient-legal"
-        aria-hidden="true"
-      />
-      <div
-        className="pointer-events-none absolute inset-y-0 right-0 w-full lg:w-1/2 gradient-tech"
-        aria-hidden="true"
-      />
-
       {/* 3D Background Scene */}
-      <div
-        ref={techSceneRef}
-        className="pointer-events-none absolute inset-y-0 right-0 hidden md:block w-3/4 lg:w-1/2 opacity-25"
-        aria-hidden="true"
-      >
-        {shouldRenderThreeScene && <ThreeScene className="w-full h-full" />}
+      <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
+        {shouldRenderThreeScene ? (
+          <ThreeScene className="w-full h-full" />
+        ) : (
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(6,182,212,0.35),rgba(3,7,18,0.95))]" />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-b from-[rgba(0,0,0,0.65)] via-[rgba(0,0,0,0.6)] to-[rgba(0,0,0,0.85)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.35),transparent_55%)]" />
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <header className="relative mb-12 text-center lg:text-left">
-          <span className="inline-flex items-center gap-2 rounded-full border border-[var(--color-border-soft)] bg-[var(--color-card-bg)] px-4 py-2 text-xs uppercase tracking-[0.3em] text-[var(--color-text-muted)] backdrop-blur">
-            Legal × Tech Studio
-          </span>
-          <p className="mt-4 text-base text-[var(--color-text-secondary)] max-w-3xl mx-auto lg:mx-0">
-            Премиальная связка юристов и инженеров: одна команда закрывает договоры, сделки и
-            цифровые продукты, чтобы бизнес рос уверенно и без бюрократии.
-          </p>
+          <Label as="span" size="sm" spacing="wider" tone="muted" className="inline-flex items-center gap-2 rounded-full border border-[var(--color-border-soft)] bg-[var(--color-card-bg)] px-4 py-2 backdrop-blur">
+            {sectionsConfig.hero.main.tagline}
+          </Label>
+          <Text size="base" tone="secondary" maxWidth="3xl" className="mt-4 mx-auto lg:mx-0">
+            {sectionsConfig.hero.main.description}
+          </Text>
         </header>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch min-h-[calc(100vh-8rem)]">
@@ -102,25 +139,19 @@ export function HeroSection() {
                 <div className="inline-flex items-center gap-2 px-4 py-2 mb-6 rounded-full bg-[var(--color-legal-badge)] border border-[var(--color-legal-border-soft)] backdrop-blur-sm">
                   <span className="w-2 h-2 rounded-full bg-[var(--color-legal-primary)] animate-pulse" />
                   <span className="text-sm font-semibold text-[var(--color-legal-primary)]">
-                    Юридические услуги
+                    {sectionsConfig.hero.legal.badge}
                   </span>
                 </div>
 
                 {/* Heading */}
-                <h1 className="font-display font-bold text-4xl lg:text-5xl mb-6 text-[var(--color-text-primary)]">
-                  Правовая поддержка{" "}
-                  <span className="text-gradient">
-                    бизнеса
-                  </span>
-                  <br />
-                  без бюрократии
-                </h1>
+                <Heading as="h1" size="2xl" weight="bold" tone="primary" display className="mb-6">
+                  {sectionsConfig.hero.legal.title}
+                </Heading>
 
                 {/* Description */}
-                <p className="text-lg text-[var(--color-text-secondary)] mb-6 leading-relaxed">
-                  Корпоративное право, договоры, интеллектуальная собственность. Профессионально,
-                  надёжно, результативно.
-                </p>
+                <Text size="lg" tone="secondary" leading="relaxed" className="mb-6">
+                  {sectionsConfig.hero.legal.description}
+                </Text>
 
                 {/* Tags */}
                 <div className="grid grid-cols-2 gap-3 text-sm text-[var(--color-text-secondary)] mb-8">
@@ -143,7 +174,7 @@ export function HeroSection() {
                         ?.scrollIntoView({ behavior: "smooth" });
                     }}
                   >
-                    Консультация юриста
+                    {sectionsConfig.hero.legal.cta.label}
                   </Button>
                 </MagneticButton>
               </div>
@@ -168,25 +199,19 @@ export function HeroSection() {
                 <div className="inline-flex items-center gap-2 px-4 py-2 mb-6 rounded-full bg-[var(--color-tech-badge)] border border-[var(--color-tech-border-soft)] backdrop-blur-sm">
                   <span className="w-2 h-2 rounded-full bg-[var(--color-tech-primary)] animate-pulse" />
                   <span className="text-sm font-semibold text-[var(--color-tech-primary)]">
-                    IT-решения
+                    {sectionsConfig.hero.tech.badge}
                   </span>
                 </div>
 
                 {/* Heading */}
-                <h2 className="font-display font-bold text-4xl lg:text-5xl mb-6 text-[var(--color-text-primary)]">
-                  IT-решения{" "}
-                  <span className="text-gradient">
-                    и интеграции
-                  </span>
-                  <br />
-                  для роста и контроля
-                </h2>
+                <Heading as="h2" size="2xl" weight="bold" tone="primary" display className="mb-6">
+                  {sectionsConfig.hero.tech.title}
+                </Heading>
 
                 {/* Description */}
-                <p className="text-lg text-[var(--color-text-secondary)] mb-6 leading-relaxed">
-                  Веб-разработка, мобильные приложения, Telegram боты, CRM интеграции. Современно,
-                  масштабируемо, эффективно.
-                </p>
+                <Text size="lg" tone="secondary" leading="relaxed" className="mb-6">
+                  {sectionsConfig.hero.tech.description}
+                </Text>
 
                 {/* Feature list */}
                 <div className="grid grid-cols-2 gap-3 text-sm text-[var(--color-text-secondary)] mb-8">
@@ -200,15 +225,14 @@ export function HeroSection() {
 
                 {/* CTA */}
                 <div className="flex gap-3 flex-wrap">
-                  <a
-                    href="#services"
-                    className="inline-flex items-center justify-center rounded-lg border border-[var(--color-tech-border-soft)] bg-[var(--color-tech-surface)] px-6 py-3 font-semibold tracking-tight text-[var(--color-text-primary)] transition-colors hover:bg-[var(--color-tech-surface-strong)]"
-                  >
-                    Смотреть услуги
-                  </a>
+                  <Button asChild variant={sectionsConfig.hero.tech.cta[0].variant as any} size="lg">
+                    <a href={sectionsConfig.hero.tech.cta[0].href}>
+                      {sectionsConfig.hero.tech.cta[0].label}
+                    </a>
+                  </Button>
                   <MagneticButton strength={20}>
                     <Button
-                      variant="primary-tech"
+                      variant={sectionsConfig.hero.tech.cta[1].variant as any}
                       size="lg"
                       onClick={() => {
                         document
@@ -216,7 +240,7 @@ export function HeroSection() {
                           ?.scrollIntoView({ behavior: "smooth" });
                       }}
                     >
-                      Обсудить проект
+                      {sectionsConfig.hero.tech.cta[1].label}
                     </Button>
                   </MagneticButton>
                 </div>
@@ -228,12 +252,12 @@ export function HeroSection() {
         {/* Bottom hint */}
         <div className="mt-12 flex flex-col items-center gap-4 text-[var(--color-text-muted)] sm:flex-row sm:gap-6 sm:justify-center lg:justify-start">
           <div className="hidden sm:block h-px w-16 bg-[var(--color-border)]/70" />
-          <span className="text-center text-[0.7rem] uppercase tracking-[0.4em] sm:text-left">
-            Мы защищаем и ускоряем ваш бизнес
-          </span>
+          <Label as="span" size="xs" spacing="widest" tone="muted" className="text-center sm:text-left">
+            {sectionsConfig.hero.main.bottomHint}
+          </Label>
           <div className="hidden sm:block h-px w-16 bg-[var(--color-border)]/70" />
         </div>
       </div>
-    </section>
+    </Section>
   );
 }

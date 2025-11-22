@@ -1,10 +1,10 @@
 import { z } from "zod";
 
 /**
- * Regular expression for validating phone numbers.
- * Allows digits, spaces, parentheses, dashes, and optional leading plus.
+ * Regular expression for validating Russian phone numbers.
+ * Format: +7 (XXX) XXX-XX-XX
  */
-const phoneRegex = /^\+?[0-9\s\-()]+$/;
+const russianPhoneRegex = /^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/;
 
 /**
  * Schema describing the expected payload of the contact form.
@@ -19,19 +19,24 @@ export const contactFormSchema = z.object({
   email: z.string().email("Укажите корректный email"),
   phone: z
     .string()
-    .optional()
     .transform((value) => value?.trim() || "")
     .refine(
-      (value) => !value || phoneRegex.test(value),
-      "Телефон может содержать только цифры, пробелы, +, -, ()"
+      (value) => {
+        // Пустое значение разрешено
+        if (!value) return true;
+        // Проверяем что это полный российский номер
+        // и не содержит символов маски "_"
+        return russianPhoneRegex.test(value) && !value.includes("_");
+      },
+      "Введите полный номер телефона в формате +7 (XXX) XXX-XX-XX"
     ),
   message: z
     .string()
     .min(10, "Сообщение должно содержать минимум 10 символов")
     .max(1000, "Сообщение не должно превышать 1000 символов")
     .trim(),
-  service: z.enum(["legal", "tech"], {
-    required_error: "Выберите направление",
+  service: z.enum(["legal", "tech"] as const, {
+    message: "Выберите направление",
   }),
   /**
    * Honeypot field for spam protection.

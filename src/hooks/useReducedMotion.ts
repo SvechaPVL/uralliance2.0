@@ -72,9 +72,9 @@ const subscribe = (callback: () => void) => {
     };
   }
 
-  mediaQuery.addListener(handler);
+  (mediaQuery as any).addListener(handler);
   return () => {
-    mediaQuery.removeListener(handler);
+    (mediaQuery as any).removeListener(handler);
   };
 };
 

@@ -6,6 +6,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/primitives/button";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import navigationConfig from "@/content/navigation.json";
+import contactsConfig from "@/content/contacts.json";
 
 /**
  * Navigation Item Interface
@@ -156,7 +158,7 @@ export function MobileMenu({ isOpen, onClose, navigationItems }: MobileMenuProps
                   "bg-clip-text text-transparent"
                 )}
               >
-                Uralliance
+                {contactsConfig.company}
               </div>
               <button
                 type="button"
@@ -222,32 +224,19 @@ export function MobileMenu({ isOpen, onClose, navigationItems }: MobileMenuProps
                 variants={itemVariants}
                 className="mt-8 space-y-3"
               >
-                <Button
-                  variant="outline-legal"
-                  size="lg"
-                  fullWidth
-                  onClick={() => {
-                    onClose();
-                    document
-                      .getElementById("contact")
-                      ?.scrollIntoView({ behavior: "smooth" });
-                  }}
-                >
-                  Юридические услуги
-                </Button>
-                <Button
-                  variant="primary-tech"
-                  size="lg"
-                  fullWidth
-                  onClick={() => {
-                    onClose();
-                    document
-                      .getElementById("contact")
-                      ?.scrollIntoView({ behavior: "smooth" });
-                  }}
-                >
-                  IT-решения
-                </Button>
+                {navigationConfig.mobile.ctaButtons.map((button) => (
+                  <Button
+                    key={button.label}
+                    variant={button.variant as any}
+                    size="lg"
+                    fullWidth
+                    asChild
+                  >
+                    <Link href={button.href} onClick={onClose}>
+                      {button.label}
+                    </Link>
+                  </Button>
+                ))}
               </motion.div>
 
               {/* Contact Info */}
@@ -256,11 +245,11 @@ export function MobileMenu({ isOpen, onClose, navigationItems }: MobileMenuProps
                 className="mt-8 pt-8 border-t border-[var(--color-border)]"
               >
                 <p className="text-sm text-[var(--color-text-secondary)] mb-4">
-                  Свяжитесь с нами:
+                  {navigationConfig.mobile.contactHint}
                 </p>
                 <div className="space-y-3">
                   <a
-                    href="tel:+79000000000"
+                    href={contactsConfig.phone.link}
                     className={cn(
                       "flex items-center gap-3",
                       "text-[var(--color-text-primary)]",
@@ -283,10 +272,10 @@ export function MobileMenu({ isOpen, onClose, navigationItems }: MobileMenuProps
                         d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
                       />
                     </svg>
-                    <span>+7 (900) 000-00-00</span>
+                    <span>{contactsConfig.phone.display}</span>
                   </a>
                   <a
-                    href="mailto:info@uralliance.ru"
+                    href={contactsConfig.email.link}
                     className={cn(
                       "flex items-center gap-3",
                       "text-[var(--color-text-primary)]",
@@ -309,7 +298,7 @@ export function MobileMenu({ isOpen, onClose, navigationItems }: MobileMenuProps
                         d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                       />
                     </svg>
-                    <span>info@uralliance.ru</span>
+                    <span>{contactsConfig.email.display}</span>
                   </a>
                 </div>
               </motion.div>

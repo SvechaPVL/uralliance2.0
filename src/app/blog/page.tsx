@@ -5,6 +5,10 @@ import { Container } from "@/components/layout/Container";
 import { Badge } from "@/components/primitives/badge";
 import { getAllBlogPosts } from "@/lib/content";
 import { cn } from "@/lib/utils";
+import { Section } from "@/components/primitives/section";
+import { Heading } from "@/components/primitives/heading";
+import { Label } from "@/components/primitives/label";
+import { Text } from "@/components/primitives/text";
 
 export const metadata: Metadata = {
   title: "Блог Uralliance — Legal & Tech экспертиза",
@@ -22,26 +26,26 @@ export default async function BlogPage() {
   const posts = await getAllBlogPosts();
 
   return (
-    <section className="py-24 lg:py-32">
+    <Section spacing="xl">
       <Container className="space-y-16">
         <header className="space-y-6 text-center max-w-3xl mx-auto">
-          <p className="text-xs uppercase tracking-[0.35em] text-[var(--color-text-muted)]">Insights</p>
+          <Label size="sm" spacing="wider" tone="muted">Insights</Label>
           <div className="space-y-4">
-            <h1 className="text-4xl lg:text-5xl font-display font-semibold text-[var(--color-text-primary)]">
+            <Heading as="h1" size="2xl" weight="semibold" display>
               Блог о Legal &amp; Tech
-            </h1>
-            <p className="text-lg text-[var(--color-text-secondary)]">
+            </Heading>
+            <Text size="lg" tone="secondary">
               Делимся стратегиями, которые помогают клиентам выигрывать суды, запускать LegalTech и масштабировать
               продукты без хаоса.
-            </p>
+            </Text>
           </div>
         </header>
 
         {posts.length === 0 ? (
           <div className="rounded-3xl border border-dashed border-[var(--color-border)] p-12 text-center">
-            <p className="text-lg text-[var(--color-text-secondary)]">
+            <Text size="lg" tone="secondary">
               Мы готовим первые материалы. Подпишитесь на Telegram, чтобы узнать о запуске первыми.
-            </p>
+            </Text>
           </div>
         ) : (
           <div className="grid gap-10 md:grid-cols-2">
@@ -72,24 +76,24 @@ export default async function BlogPage() {
                     </div>
                   </div>
                   <div className="p-6 space-y-4">
-                    <div className="flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-[var(--color-text-muted)]">
-                      <span>
+                    <div className="flex items-center gap-3">
+                      <Label as="span" size="sm" spacing="wider" tone="muted">
                         {new Date(post.frontmatter.date).toLocaleDateString("ru-RU", {
                           day: "2-digit",
                           month: "short",
                           year: "numeric",
                         })}
-                      </span>
+                      </Label>
                       <span className="h-1 w-1 rounded-full bg-[var(--color-border)]" />
-                      <span>{post.frontmatter.author}</span>
+                      <Label as="span" size="sm" spacing="wider" tone="muted">{post.frontmatter.author}</Label>
                     </div>
-                    <h2 className="text-2xl font-semibold text-[var(--color-text-primary)]">
+                    <Heading as="h2" size="lg" weight="semibold">
                       {post.frontmatter.title}
-                    </h2>
-                    <p className="text-base text-[var(--color-text-secondary)]">
+                    </Heading>
+                    <Text size="base" tone="secondary">
                       {post.frontmatter.excerpt}
-                    </p>
-                    <p className="text-sm font-semibold text-[var(--color-tech-primary)]">Читать статью →</p>
+                    </Text>
+                    <Text size="sm" weight="semibold" tone="tech">Читать статью →</Text>
                   </div>
                 </Link>
               </article>
@@ -97,6 +101,6 @@ export default async function BlogPage() {
           </div>
         )}
       </Container>
-    </section>
+    </Section>
   );
 }

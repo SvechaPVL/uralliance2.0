@@ -31,28 +31,27 @@ export interface CardProps extends HTMLAttributes<HTMLDivElement> {
   brutal?: boolean;
 }
 
+const baseCardClasses = cn(
+  "group/card rounded-[28px] relative overflow-hidden border border-white/10",
+  "bg-[var(--color-card-bg)]/75 backdrop-blur-[18px]",
+  "shadow-[0_25px_70px_-35px_rgba(0,0,0,0.65)]",
+  "transform-gpu transition duration-[360ms] ease-[cubic-bezier(0.25,0.8,0.25,1)]",
+  "before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:border before:border-white/10 before:opacity-40 before:content-['']",
+  "after:pointer-events-none after:absolute after:inset-x-8 after:top-0 after:h-[2px] after:bg-white/30 after:opacity-60 after:blur-[2px] after:content-['']"
+);
+
 const cardVariants: Record<CardVariant, string> = {
-  default: cn(
-    "bg-[var(--color-card-bg)] backdrop-blur-[14px] border border-[var(--color-border-soft)]",
-    "shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]"
-  ),
+  default: "",
   legal: cn(
-    "bg-[var(--color-legal-surface)] backdrop-blur-[16px]",
-    "border border-[var(--color-legal-border-soft)]",
-    "shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]",
-    "hover:shadow-[0_18px_40px_-30px_rgba(212,175,55,0.35)]"
+    "bg-gradient-to-br from-[var(--color-legal-surface)]/90 to-[var(--color-legal-surface-strong)]/90",
+    "border-[var(--color-legal-border)]/50 text-[var(--color-text-primary)]"
   ),
   tech: cn(
-    "bg-[var(--color-tech-surface)] backdrop-blur-[16px]",
-    "border border-[var(--color-tech-border-soft)]",
-    "shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]",
-    "hover:shadow-[0_18px_40px_-30px_rgba(6,182,212,0.35)]"
+    "bg-gradient-to-br from-[var(--color-tech-surface)]/90 to-[var(--color-tech-surface-strong)]/90",
+    "border-[var(--color-tech-border)]/50 text-[var(--color-text-primary)]"
   ),
   glass: cn(
-    // Enhanced glassmorphism effect
-    "bg-[var(--color-glass-strong)] backdrop-blur-[18px]",
-    "border border-[var(--color-border-soft)]",
-    "shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]"
+    "bg-[var(--color-glass-strong)] border-white/15 backdrop-blur-[24px]"
   ),
 };
 
@@ -77,7 +76,7 @@ const cardPaddings: Record<CardPadding, string> = {
  * </Card>
  *
  * <Card variant="glass" brutal>
- *   <CardHeader>Premium Feature</CardHeader>
+ *   <CardHeader>Главная фича</CardHeader>
  *   <CardContent>...</CardContent>
  * </Card>
  * ```
@@ -100,7 +99,8 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
         ref={ref}
         className={cn(
           // Base styles
-          "rounded-3xl transition-all duration-[var(--transition-base)]",
+          baseCardClasses,
+          "motion-reduce:transition-none motion-reduce:transform-none",
           // Variant styles
           cardVariants[variant],
           // Padding
@@ -109,10 +109,12 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
           hoverable &&
             cn(
               "cursor-pointer",
-              "hover:scale-[1.01]",
-              variant === "legal" && "hover:border-[var(--color-legal-primary)]/40",
-              variant === "tech" && "hover:border-[var(--color-tech-primary)]/40",
-              variant === "glass" && "hover:bg-[var(--color-glass)]"
+              "hover:-translate-y-[3px] hover:shadow-[0_25px_55px_-30px_rgba(0,0,0,0.55)]",
+              "motion-reduce:hover:translate-y-0 motion-reduce:hover:shadow-none",
+              "hover:border-white/20",
+              variant === "legal" && "hover:border-[var(--color-legal-primary)]/35",
+              variant === "tech" && "hover:border-[var(--color-tech-primary)]/35",
+              variant === "glass" && "hover:bg-[var(--color-glass)]/90"
             ),
           // Neobrutalist style
           brutal &&

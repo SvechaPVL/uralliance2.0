@@ -7,6 +7,9 @@ import { Container } from "@/components/layout/Container";
 import { Badge } from "@/components/primitives/badge";
 import { getBlogPostBySlug, getRelatedPosts } from "@/lib/content";
 import { cn } from "@/lib/utils";
+import { Section } from "@/components/primitives/section";
+import { Heading } from "@/components/primitives/heading";
+import { Label } from "@/components/primitives/label";
 
 interface BlogPostPageProps {
   params: Promise<{
@@ -137,7 +140,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
   return (
     <article id="top" className="pb-24 lg:pb-32">
-      <section className="relative isolate overflow-hidden bg-[var(--color-background-secondary)] py-24 lg:py-32">
+      <Section background="secondary" spacing="xl" isolate overflow="hidden">
         <div className="absolute inset-0">
           <Image
             src={frontmatter.image}
@@ -153,15 +156,15 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           <Badge variant="neutral" badgeStyle="subtle" className="bg-white/15 text-white">
             {frontmatter.category}
           </Badge>
-          <h1 className="text-4xl lg:text-5xl font-display font-semibold text-white">{frontmatter.title}</h1>
+          <Heading as="h1" size="2xl" weight="semibold" display tone="white">{frontmatter.title}</Heading>
           <p className="max-w-3xl text-lg text-white/80">{frontmatter.excerpt}</p>
           <div className="flex flex-wrap gap-6 text-white/80 text-sm">
             <div>
-              <p className="uppercase tracking-[0.3em] text-xs text-white/60">Автор</p>
+              <Label size="sm" spacing="wider" tone="white" className="opacity-60">Автор</Label>
               <p className="mt-2 text-lg font-semibold text-white">{frontmatter.author}</p>
             </div>
             <div>
-              <p className="uppercase tracking-[0.3em] text-xs text-white/60">Опубликовано</p>
+              <Label size="sm" spacing="wider" tone="white" className="opacity-60">Опубликовано</Label>
               <p className="mt-2 text-lg font-semibold text-white">
                 {new Date(frontmatter.date).toLocaleDateString("ru-RU", {
                   day: "numeric",
@@ -171,12 +174,12 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               </p>
             </div>
             <div>
-              <p className="uppercase tracking-[0.3em] text-xs text-white/60">Время чтения</p>
+              <Label size="sm" spacing="wider" tone="white" className="opacity-60">Время чтения</Label>
               <p className="mt-2 text-lg font-semibold text-white">{readingTime} мин</p>
             </div>
           </div>
         </Container>
-      </section>
+      </Section>
 
       <Container className="mt-16 grid gap-12 lg:grid-cols-[3fr,1fr]">
         <div
@@ -187,9 +190,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         <aside className="space-y-8">
           {toc.length > 0 && (
             <div className="rounded-3xl border border-[var(--color-border)] bg-[var(--color-card-bg)]/80 p-6">
-              <p className="text-xs uppercase tracking-[0.3em] text-[var(--color-text-muted)] mb-4">
+              <Label size="sm" spacing="wider" tone="muted" className="mb-4">
                 Оглавление
-              </p>
+              </Label>
               <ul className="space-y-2 text-sm text-[var(--color-text-secondary)]">
                 {toc.map((item) => (
                   <li
@@ -206,7 +209,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           )}
 
           <div className="rounded-3xl border border-[var(--color-border)] bg-[var(--color-card-bg)]/80 p-6">
-            <p className="text-xs uppercase tracking-[0.3em] text-[var(--color-text-muted)] mb-4">Навигация</p>
+            <Label size="sm" spacing="wider" tone="muted" className="mb-4">Навигация</Label>
             <div className="space-y-3 text-sm text-[var(--color-text-secondary)]">
               <Link
                 href="/blog"
@@ -227,7 +230,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
 
       <Container className="mt-24 space-y-8">
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-semibold text-[var(--color-text-primary)]">Связанные материалы</h2>
+          <Heading as="h2" size="lg" weight="semibold">Связанные материалы</Heading>
           <Link
             href="/blog"
             className="text-sm font-semibold text-[var(--color-tech-primary)] hover:text-white transition-colors"
@@ -248,9 +251,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
                 href={`/blog/${related.slug}`}
                 className="rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-card-bg)]/80 p-6 hover:border-white/20 transition-colors"
               >
-                <p className="text-xs uppercase tracking-[0.3em] text-[var(--color-text-muted)]">
+                <Label size="sm" spacing="wider" tone="muted">
                   {related.frontmatter.category}
-                </p>
+                </Label>
                 <p className="mt-3 text-lg font-semibold text-[var(--color-text-primary)]">
                   {related.frontmatter.title}
                 </p>

@@ -1,0 +1,62 @@
+{
+  "legal": [
+    {
+      "id": "corporate",
+      "title": "Регистрация и налоги",
+      "description": "Регистрация бизнеса, работа с налоговой, помощь малому и среднему бизнесу.",
+      "icon": "Building2",
+      "slug": "corporate"
+    },
+    {
+      "id": "contracts",
+      "title": "Договоры",
+      "description": "Составление договоров, проверка, защита при спорах.",
+      "icon": "FileText",
+      "slug": "contracts"
+    },
+    {
+      "id": "real-estate",
+      "title": "Недвижимость",
+      "description": "Проверка перед покупкой, помощь со сделками.",
+      "icon": "Home",
+      "slug": "real-estate"
+    },
+    {
+      "id": "compliance",
+      "title": "Правила и безопасность",
+      "description": "Правила работы компании, защита данных клиентов.",
+      "icon": "Shield",
+      "slug": "compliance"
+    }
+  ],
+  "tech": [
+    {
+      "id": "integrations",
+      "title": "Связь с 1С и программами учёта",
+      "description": "Автоматический обмен данными между программами.",
+      "icon": "Workflow",
+      "slug": "crm"
+    },
+    {
+      "id": "pwa-web",
+      "title": "Сайты и веб-приложения",
+      "description": "Сайты, личные кабинеты, магазины, продвижение в поиске.",
+      "icon": "Globe",
+      "slug": "web"
+    },
+    {
+      "id": "bots",
+      "title": "Чат-боты",
+      "description": "Telegram/WhatsApp, приём оплаты, автоматические ответы.",
+      "icon": "MessageSquare",
+      "slug": "bots"
+    },
+    {
+      "id": "ai",
+      "title": "Умные помощники и автоматизация",
+      "description": "Умные помощники, автоматическая сортировка и обработка данных.",
+      "icon": "Sparkles",
+      "slug": "ai"
+    }
+  ]
+}

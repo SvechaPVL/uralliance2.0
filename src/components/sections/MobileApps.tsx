@@ -1,21 +1,24 @@
 "use client";
 
 import { Container } from "@/components/layout/Container";
-import { PhoneMockup } from "@/components/mockups/PhoneMockup";
-import { TabletMockup } from "@/components/mockups/TabletMockup";
+import { IPhoneMockup } from "@/components/animations/IPhoneMockup";
 import { motion } from "framer-motion";
+import { Section } from "@/components/primitives/section";
+import { Heading } from "@/components/primitives/heading";
+import { Label } from "@/components/primitives/label";
+import sectionsConfig from "@/content/sections.json";
 
 export function MobileApps() {
   return (
-    <section className="relative py-24">
+    <Section spacing="lg">
       <Container>
         <div className="text-center mb-12">
-          <p className="text-xs uppercase tracking-[0.3em] text-[var(--color-text-muted)]">Mobile Apps</p>
-          <h3 className="mt-4 text-3xl font-semibold text-[var(--color-text-primary)]">
-            Мобильные приложения любой сложности
-          </h3>
+          <Label size="sm" spacing="wider" tone="muted">{sectionsConfig.mobile_apps.label}</Label>
+          <Heading as="h3" size="xl" weight="semibold" className="mt-4">
+            {sectionsConfig.mobile_apps.heading}
+          </Heading>
           <div className="mt-4 flex justify-center gap-3 text-xs">
-            {["Swift", "Kotlin", "React Native", "Flutter"].map((tech) => (
+            {sectionsConfig.mobile_apps.technologies.map((tech) => (
               <span key={tech} className="rounded-full border border-[var(--color-border-soft)] px-3 py-1 text-[var(--color-text-secondary)]">
                 {tech}
               </span>
@@ -25,22 +28,37 @@ export function MobileApps() {
 
         <div className="mt-10 flex flex-wrap items-end justify-center gap-6">
           <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <PhoneMockup>
-              <div className="h-full w-full bg-gradient-to-b from-[#0f172a] to-[#0b0f19]" />
-            </PhoneMockup>
+            <IPhoneMockup
+              model="15-pro"
+              color="space-black"
+              scale={0.85}
+              wallpaper="/images/mobile_apps/food_delivery_app.svg"
+              wallpaperFit="cover"
+              wallpaperPosition="top center"
+            />
           </motion.div>
           <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.1 }}>
-            <TabletMockup>
-              <div className="h-full w-full bg-gradient-to-b from-[#141821] to-[#0a0d13]" />
-            </TabletMockup>
+            <IPhoneMockup
+              model="15"
+              color="midnight"
+              scale={0.85}
+              wallpaper="/images/mobile_apps/fitness_app.svg"
+              wallpaperFit="cover"
+              wallpaperPosition="top center"
+            />
           </motion.div>
           <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: 0.2 }}>
-            <PhoneMockup variant="android">
-              <div className="h-full w-full bg-gradient-to-b from-[#050708] to-[#0d1119]" />
-            </PhoneMockup>
+            <IPhoneMockup
+              model="15-pro"
+              color="natural-titanium"
+              scale={0.85}
+              wallpaper="/images/mobile_apps/shop_app.svg"
+              wallpaperFit="cover"
+              wallpaperPosition="top center"
+            />
           </motion.div>
         </div>
       </Container>
-    </section>
+    </Section>
   );
 }

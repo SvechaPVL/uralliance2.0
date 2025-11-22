@@ -1,0 +1,150 @@
+{
+  "header": {
+    "logo": {
+      "text": "Uralliance",
+      "href": "/"
+    },
+    "items": [
+      {
+        "label": "Главная",
+        "href": "/",
+        "category": "general"
+      },
+      {
+        "label": "Юридические услуги",
+        "href": "/services/legal",
+        "category": "legal"
+      },
+      {
+        "label": "IT-решения",
+        "href": "/services/tech",
+        "category": "tech"
+      },
+      {
+        "label": "Прайс",
+        "href": "/price",
+        "category": "general"
+      },
+      {
+        "label": "О компании",
+        "href": "/about",
+        "category": "general"
+      },
+      {
+        "label": "Контакты",
+        "href": "/contacts",
+        "category": "general"
+      }
+    ],
+    "ctaButtons": [
+      {
+        "label": "Legal",
+        "href": "/services/legal",
+        "variant": "outline-legal"
+      },
+      {
+        "label": "Tech",
+        "href": "/services/tech",
+        "variant": "primary-tech"
+      }
+    ]
+  },
+  "footer": {
+    "tagline": "Защищаем и ускоряем ваш бизнес",
+    "copyright": "Uralliance. Все права защищены.",
+    "columns": [
+      {
+        "title": "Юридические услуги",
+        "category": "legal",
+        "links": [
+          {
+            "label": "Корпоративное право",
+            "href": "/services/legal/corporate"
+          },
+          {
+            "label": "Договорное право",
+            "href": "/services/legal/contracts"
+          },
+          {
+            "label": "Интеллектуальная собственность",
+            "href": "/services/legal/ip"
+          },
+          {
+            "label": "Судебная защита",
+            "href": "/services/legal/arbitrazh"
+          }
+        ]
+      },
+      {
+        "title": "IT-решения",
+        "category": "tech",
+        "links": [
+          {
+            "label": "Веб-разработка",
+            "href": "/services/tech/web"
+          },
+          {
+            "label": "Мобильные приложения",
+            "href": "/services/tech/mobile"
+          },
+          {
+            "label": "CRM и интеграции",
+            "href": "/services/tech/crm"
+          },
+          {
+            "label": "Telegram боты",
+            "href": "/services/tech/bots"
+          }
+        ]
+      },
+      {
+        "title": "Компания",
+        "category": "general",
+        "links": [
+          {
+            "label": "О нас",
+            "href": "/about"
+          },
+          {
+            "label": "Прайс",
+            "href": "/price"
+          },
+          {
+            "label": "Контакты",
+            "href": "/contacts"
+          }
+        ]
+      }
+    ],
+    "legal": [
+      {
+        "label": "Политика конфиденциальности",
+        "href": "/privacy"
+      },
+      {
+        "label": "Условия использования",
+        "href": "/terms"
+      }
+    ]
+  },
+  "mobile": {
+    "menuTitle": "Меню",
+    "contactHint": "Свяжитесь с нами:",
+    "ctaButtons": [
+      {
+        "label": "Юридические услуги",
+        "href": "/services/legal",
+        "variant": "outline-legal"
+      },
+      {
+        "label": "IT-решения",
+        "href": "/services/tech",
+        "variant": "primary-tech"
+      }
+    ]
+  },
+  "breadcrumbs": {
+    "home": "Главная",
+    "separator": "/"
+  }
+}

@@ -3,6 +3,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import { cn } from "@/lib/utils";
+import { Heading } from "@/components/primitives/heading";
 
 /**
  * Timeline Props
@@ -84,7 +85,7 @@ export function Timeline({ steps, className }: TimelineProps) {
 
             {/* Step content */}
             <div className="flex-1 pt-2">
-              <h3 className="text-xl font-bold mb-2">{step.title}</h3>
+              <Heading as="h3" size="md" weight="bold" className="mb-2">{step.title}</Heading>
               <p className="text-neutral-600 dark:text-neutral-400">
                 {step.description}
               </p>

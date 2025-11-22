@@ -1,0 +1,48 @@
+{
+  "company": "Uralliance",
+  "tagline": "Legal × Tech Studio",
+  "phone": {
+    "display": "+7 (423) 202-88-78",
+    "link": "tel:+74232028878"
+  },
+  "email": {
+    "display": "info@uralliance.ru",
+    "link": "mailto:info@uralliance.ru"
+  },
+  "office": {
+    "address": "Владивосток, ул. Суханова, 11, Офис 77",
+    "city": "Владивосток",
+    "description": "Офис находится на ул. Суханова, удобный подъезд и парковка",
+    "mapLink": "https://yandex.ru/maps/org/yuralyans/1042696498/",
+    "coordinates": {
+      "lat": 43.118425,
+      "lng": 131.894770
+    }
+  },
+  "messengers": {
+    "whatsapp": {
+      "number": "+79147054713",
+      "link": "https://wa.me/79147054713",
+      "defaultMessage": "Здравствуйте! Я с сайта Uralliance и хочу обсудить проект."
+    },
+    "telegram": {
+      "username": "svechapvl",
+      "link": "https://t.me/svechapvl",
+      "defaultMessage": "Здравствуйте! Нужна консультация Uralliance."
+    }
+  },
+  "workingHours": {
+    "weekdays": "Пн-Пт: 9:00 - 18:00",
+    "weekend": "Сб-Вс: Выходной",
+    "timezone": "МСК+7 (Владивосток)"
+  },
+  "responseTime": {
+    "business": "1 рабочий день",
+    "urgent": "в течение 2 часов"
+  },
+  "legal": {
+    "fullName": "ООО \"Уральянс\"",
+    "inn": "6658123456",
+    "ogrn": "1166658012345"
+  }
+}

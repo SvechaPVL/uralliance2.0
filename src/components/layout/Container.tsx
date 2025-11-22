@@ -73,8 +73,9 @@ export const Container = forwardRef<HTMLDivElement, ContainerProps>(
     },
     ref
   ) => {
+    const Comp = Component as any;
     return (
-      <Component
+      <Comp
         ref={ref}
         className={cn(
           // Max width
@@ -89,7 +90,7 @@ export const Container = forwardRef<HTMLDivElement, ContainerProps>(
         {...props}
       >
         {children}
-      </Component>
+      </Comp>
     );
   }
 );

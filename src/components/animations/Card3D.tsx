@@ -4,7 +4,10 @@ import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
-export interface Card3DProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface Card3DProps extends Omit<
+  React.HTMLAttributes<HTMLDivElement>,
+  'onDrag' | 'onDragStart' | 'onDragEnd' | 'onAnimationStart' | 'onAnimationEnd'
+> {
   /**
    * Maximum rotation in degrees
    * @default 6

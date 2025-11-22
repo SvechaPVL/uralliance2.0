@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ReactNode, useRef } from "react";
+import { ReactNode, useMemo, useRef } from "react";
 
 interface HeroParallaxProps {
   children: ReactNode;
@@ -16,9 +16,13 @@ export function HeroParallax({ children, className }: HeroParallaxProps) {
   });
   const x = useTransform(scrollYProgress, [0, 1], ["-5%", "5%"]);
   const y = useTransform(scrollYProgress, [0, 1], ["5%", "-5%"]);
+  const combinedClassName = useMemo(
+    () => ["relative", className].filter(Boolean).join(" "),
+    [className]
+  );
 
   return (
-    <motion.div ref={ref} className={className} style={{ x, y }}>
+    <motion.div ref={ref} className={combinedClassName} style={{ x, y }}>
       {children}
     </motion.div>
   );

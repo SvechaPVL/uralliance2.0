@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { Heading } from "@/components/primitives/heading";
+import { Label } from "@/components/primitives/label";
 
 export type BentoGridItem = {
   /**
@@ -91,8 +93,36 @@ export function BentoGrid({ items, className, rowHeight = "minmax(220px, auto)" 
       style={{ gridAutoRows: rowHeight }}
     >
       {items.map((item, index) => {
-        const Component = item.href ? Link : "div";
-        const componentProps = item.href ? { href: item.href } : {};
+        const cardContent = (
+          <div className="relative flex flex-col gap-3">
+            {item.icon && <div className="text-[var(--color-tech-primary)]">{item.icon}</div>}
+            {item.badge && (
+              <Label as="span" size="sm" spacing="wider" tone="muted" className="inline-flex w-fit items-center rounded-full border border-[var(--color-border-soft)] px-3 py-1">
+                {item.badge}
+              </Label>
+            )}
+            {item.content ? (
+              item.content
+            ) : (
+              <>
+                {item.title && (
+                  <Heading as="h3" size="md" weight="semibold">{item.title}</Heading>
+                )}
+                {item.description && (
+                  <p className="text-sm text-[var(--color-text-secondary)]">{item.description}</p>
+                )}
+              </>
+            )}
+          </div>
+        );
+
+        const cardClassName = cn(
+          "group relative flex h-full flex-col justify-between rounded-3xl border border-[var(--color-border)]",
+          "bg-[var(--color-card-bg)]/70 backdrop-blur-xl p-6 transition-all duration-500",
+          "hover:-translate-y-0.5 hover:border-[var(--color-border-soft)]",
+          "focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-tech-primary)]",
+          item.className
+        );
 
         return (
           <motion.div
@@ -107,44 +137,19 @@ export function BentoGrid({ items, className, rowHeight = "minmax(220px, auto)" 
               rowSpanMap[item.rowSpan ?? 1]
             )}
           >
-            <Component
-              {...componentProps}
-              className={cn(
-                "group relative flex h-full flex-col justify-between rounded-3xl border border-[var(--color-border)]",
-                "bg-[var(--color-card-bg)]/70 backdrop-blur-xl p-6 transition-all duration-500",
-                "hover:-translate-y-0.5 hover:border-[var(--color-border-soft)]",
-                "focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-tech-primary)]",
-                item.className
-              )}
-            >
-              <div className="relative flex flex-col gap-3">
-                {item.icon && <div className="text-[var(--color-tech-primary)]">{item.icon}</div>}
-                {item.badge && (
-                  <span className="inline-flex w-fit items-center rounded-full border border-[var(--color-border-soft)] px-3 py-1 text-xs uppercase tracking-[0.3em] text-[var(--color-text-muted)]">
-                    {item.badge}
-                  </span>
-                )}
-                {item.content ? (
-                  item.content
-                ) : (
-                  <>
-                    {item.title && (
-                      <h3 className="text-xl font-semibold text-[var(--color-text-primary)]">{item.title}</h3>
-                    )}
-                    {item.description && (
-                      <p className="text-sm text-[var(--color-text-secondary)]">{item.description}</p>
-                    )}
-                  </>
-                )}
-              </div>
-
-              {item.href && (
+            {item.href ? (
+              <Link href={item.href} className={cardClassName}>
+                {cardContent}
                 <div className="relative mt-6 inline-flex items-center gap-2 text-sm text-[var(--color-text-secondary)]">
                   Подробнее
                   <span className="transition-transform duration-300 group-hover:translate-x-1">→</span>
                 </div>
-              )}
-            </Component>
+              </Link>
+            ) : (
+              <div className={cardClassName}>
+                {cardContent}
+              </div>
+            )}
           </motion.div>
         );
       })}

@@ -42,7 +42,7 @@ export const Legal: Story = {
   args: {
     variant: "legal",
     badgeStyle: "filled",
-    children: "Premium",
+    children: "Highlight",
   },
 };
 

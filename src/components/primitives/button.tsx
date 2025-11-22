@@ -1,4 +1,5 @@
-import { ButtonHTMLAttributes, forwardRef } from "react";
+import { ButtonHTMLAttributes, CSSProperties, forwardRef } from "react";
+import { Slot } from "@radix-ui/react-slot";
 import { cn } from "@/lib/utils";
 
 /**
@@ -11,7 +12,10 @@ export type ButtonVariant =
   | "secondary-tech"
   | "outline-legal"
   | "outline-tech"
-  | "ghost";
+  | "outline"
+  | "ghost"
+  | "outline-telegram"
+  | "outline-whatsapp";
 
 export type ButtonSize = "sm" | "md" | "lg";
 
@@ -48,6 +52,13 @@ export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
    * @default "left"
    */
   iconPosition?: "left" | "right";
+
+  /**
+   * Change the default rendered element for the one passed as a child,
+   * merging their props and behavior. Use when you need to render a Link or other element as a button
+   * @default false
+   */
+  asChild?: boolean;
 }
 
 const buttonVariants: Record<ButtonVariant, string> = {
@@ -87,9 +98,27 @@ const buttonVariants: Record<ButtonVariant, string> = {
     "active:scale-95",
     "disabled:opacity-50 disabled:cursor-not-allowed"
   ),
+  outline: cn(
+    "border border-[var(--color-border)] text-[var(--color-text-primary)] bg-transparent",
+    "hover:bg-[var(--color-background-secondary)] hover:border-[var(--color-text-primary)]",
+    "active:scale-95",
+    "disabled:opacity-50 disabled:cursor-not-allowed"
+  ),
   ghost: cn(
     "text-[var(--color-text-primary)] bg-transparent",
     "hover:bg-[var(--color-background-secondary)]",
+    "active:scale-95",
+    "disabled:opacity-50 disabled:cursor-not-allowed"
+  ),
+  "outline-telegram": cn(
+    "border-2 border-[#229ED9] text-[#229ED9]",
+    "hover:bg-[#229ED9]/10 hover:text-white hover:border-[#8fd9ff]",
+    "active:scale-95",
+    "disabled:opacity-50 disabled:cursor-not-allowed"
+  ),
+  "outline-whatsapp": cn(
+    "border-2 border-[#25D366] text-[#25D366]",
+    "hover:bg-[#25D366]/10 hover:text-white hover:border-[#7ef0a9]",
     "active:scale-95",
     "disabled:opacity-50 disabled:cursor-not-allowed"
   ),
@@ -100,6 +129,31 @@ const buttonSizes: Record<ButtonSize, string> = {
   md: "px-6 py-3 text-base h-11",
   lg: "px-8 py-4 text-lg h-14",
 };
+
+function getUnderlineGradients(variant: ButtonVariant) {
+  if (variant === "outline-telegram") {
+    return {
+      solid: "linear-gradient(to right, transparent, #229ED9, transparent)",
+      blur: "linear-gradient(to right, transparent, #8fd9ff, transparent)",
+    };
+  }
+
+  if (variant === "outline-whatsapp") {
+    return {
+      solid: "linear-gradient(to right, transparent, #25D366, transparent)",
+      blur: "linear-gradient(to right, transparent, #7ef0a9, transparent)",
+    };
+  }
+
+  const isLegal = variant.includes("legal");
+  const mainColor = isLegal ? "var(--color-tech-primary)" : "var(--color-legal-primary)";
+  const secondaryColor = isLegal ? "var(--color-tech-dark)" : "var(--color-legal-dark)";
+
+  return {
+    solid: `linear-gradient(to right, transparent, ${mainColor}, transparent)`,
+    blur: `linear-gradient(to right, transparent, ${secondaryColor}, transparent)`,
+  };
+}
 
 /**
  * Button Component
@@ -127,39 +181,45 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       fullWidth = false,
       icon,
       iconPosition = "left",
+      asChild = false,
       className,
       children,
       disabled,
+      style,
       ...props
     },
     ref
   ) => {
     const isDisabled = disabled || isLoading;
+    const underline = getUnderlineGradients(variant);
+    const combinedStyle = {
+      ...(style ?? {}),
+      "--btn-underline-solid": underline.solid,
+      "--btn-underline-blur": underline.blur,
+    } as CSSProperties;
+    const classes = cn(
+      "relative group/btn overflow-visible isolate btn-underline",
+      "inline-flex items-center justify-center gap-2",
+      "font-semibold rounded-lg",
+      "transition-all duration-[var(--transition-base)]",
+      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+      variant === "primary-legal" || variant === "secondary-legal" || variant === "outline-legal"
+        ? "focus-visible:ring-[var(--color-legal-primary)]"
+        : variant === "outline" || variant === "ghost"
+        ? "focus-visible:ring-[var(--color-text-primary)]"
+        : variant === "outline-telegram"
+        ? "focus-visible:ring-[#229ED9]"
+        : variant === "outline-whatsapp"
+        ? "focus-visible:ring-[#25D366]"
+        : "focus-visible:ring-[var(--color-tech-primary)]",
+      buttonVariants[variant],
+      buttonSizes[size],
+      fullWidth && "w-full",
+      className
+    );
 
-    return (
-      <button
-        ref={ref}
-        disabled={isDisabled}
-        className={cn(
-          // Base styles
-          "inline-flex items-center justify-center gap-2",
-          "font-semibold rounded-lg",
-          "transition-all duration-[var(--transition-base)]",
-          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-          variant === "primary-legal" || variant === "secondary-legal" || variant === "outline-legal"
-            ? "focus-visible:ring-[var(--color-legal-primary)]"
-            : "focus-visible:ring-[var(--color-tech-primary)]",
-          // Variant styles
-          buttonVariants[variant],
-          // Size styles
-          buttonSizes[size],
-          // Full width
-          fullWidth && "w-full",
-          // Custom className
-          className
-        )}
-        {...props}
-      >
+    const content = (
+      <>
         {isLoading && (
           <svg
             className="animate-spin h-4 w-4"
@@ -194,6 +254,33 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
             {icon}
           </span>
         )}
+      </>
+    );
+
+    if (asChild) {
+      return (
+        <Slot
+          ref={ref}
+          className={classes}
+          aria-disabled={isDisabled}
+          data-disabled={isDisabled ? "true" : undefined}
+          style={combinedStyle}
+          {...props}
+        >
+          {children}
+        </Slot>
+      );
+    }
+
+    return (
+      <button
+        ref={ref}
+        disabled={isDisabled}
+        className={classes}
+        style={combinedStyle}
+        {...props}
+      >
+        {content}
       </button>
     );
   }

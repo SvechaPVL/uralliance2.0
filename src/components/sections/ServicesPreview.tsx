@@ -4,21 +4,12 @@ import { motion } from "framer-motion";
 import { Container } from "@/components/layout/Container";
 import { Card } from "@/components/primitives/card";
 import { Button } from "@/components/primitives/button";
-
-const services = {
-  legal: [
-    { title: "Корпоративные сделки", description: "M&A, опционы, сопровождение инвестиций." },
-    { title: "Договорная работа", description: "Конструкторы, аудит, претензионная защита." },
-    { title: "Недвижимость", description: "Due diligence объектов, сопровождение сделок." },
-    { title: "Комплаенс и ИБ", description: "Политики, персональные данные, регламенты." },
-  ],
-  tech: [
-    { title: "Интеграции 1С / CRM", description: "Сквозные процессы, обмен данными, API." },
-    { title: "PWA и веб-платформы", description: "Лендинги, кабинеты, маркетплейсы, SEO." },
-    { title: "Чат-боты и мессенджеры", description: "Telegram/WhatsApp, платежи, омниканал." },
-    { title: "ИИ и автоматизация", description: "RAG-ассистенты, классификация, обработка." },
-  ],
-};
+import { Section } from "@/components/primitives/section";
+import { Heading } from "@/components/primitives/heading";
+import { Label } from "@/components/primitives/label";
+import { Text } from "@/components/primitives/text";
+import servicesConfig from "@/content/services-preview.json";
+import sectionsConfig from "@/content/sections.json";
 
 const columnVariants = {
   hidden: { opacity: 0, y: 24 },
@@ -36,27 +27,29 @@ const itemVariants = {
 
 export function ServicesPreview() {
   return (
-    <section className="relative py-20 sm:py-24">
+    <Section spacing="lg">
       <Container className="relative z-10">
         <div className="mb-12 max-w-3xl">
-          <motion.p
-            className="text-sm uppercase tracking-[0.4em] text-[var(--color-text-muted)]"
+          <motion.div
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            Legal × Tech
-          </motion.p>
-          <motion.h2
-            className="mt-4 text-3xl font-semibold text-[var(--color-text-primary)] sm:text-4xl lg:text-5xl"
+            <Label size="md" spacing="widest" tone="muted">
+              {sectionsConfig.services_preview.label}
+            </Label>
+          </motion.div>
+          <motion.div
             initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
             viewport={{ once: true }}
           >
-            Две практики, один партнер: закрываем юридические вопросы и цифровые продукты в связке.
-          </motion.h2>
+            <Heading as="h2" size="2xl" weight="semibold" className="mt-4">
+              {sectionsConfig.services_preview.heading}
+            </Heading>
+          </motion.div>
         </div>
 
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -70,18 +63,18 @@ export function ServicesPreview() {
           >
             <Card variant="legal" padding="lg" className="h-full">
               <div className="mb-6 select-none">
-                <p className="text-xs uppercase tracking-[0.4em] text-[var(--color-legal-dark)] opacity-80">
-                  Legal Studio
-                </p>
-                <h3 className="mt-4 text-2xl font-semibold text-[var(--color-text-primary)]">
-                  Юридическое сопровождение
-                </h3>
-                <p className="mt-2 text-[var(--color-text-secondary)]">
-                  Корпоративные, договорные и комплаенс-задачи в одной плоскости.
-                </p>
+                <Label size="sm" spacing="widest" tone="legal" className="opacity-80">
+                  {sectionsConfig.services_preview.legal.studioLabel}
+                </Label>
+                <Heading as="h3" size="lg" weight="semibold" className="mt-4">
+                  {sectionsConfig.services_preview.legal.heading}
+                </Heading>
+                <Text size="base" tone="secondary" className="mt-2">
+                  {sectionsConfig.services_preview.legal.description}
+                </Text>
               </div>
               <motion.ul variants={listVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-                {services.legal.map((service) => (
+                {servicesConfig.legal.map((service) => (
                   <motion.li key={service.title} variants={itemVariants}>
                     <Card
                       variant="glass"
@@ -97,8 +90,8 @@ export function ServicesPreview() {
                       />
                       <div className="relative flex items-start justify-between gap-2 select-none">
                         <div>
-                          <h4 className="text-lg font-semibold text-[var(--color-text-primary)]">{service.title}</h4>
-                          <p className="mt-1 text-sm text-[var(--color-text-secondary)]">{service.description}</p>
+                          <Heading as="h4" size="sm" weight="semibold">{service.title}</Heading>
+                          <Text size="sm" tone="secondary" className="mt-1">{service.description}</Text>
                         </div>
                       </div>
                     </Card>
@@ -106,7 +99,7 @@ export function ServicesPreview() {
                 ))}
               </motion.ul>
               <Button variant="primary-legal" size="md" className="mt-4">
-                Все legal-услуги
+                {sectionsConfig.services_preview.legal.ctaLabel}
               </Button>
             </Card>
           </motion.div>
@@ -122,18 +115,18 @@ export function ServicesPreview() {
           >
             <Card variant="tech" padding="lg" className="h-full">
               <div className="mb-6 select-none">
-                <p className="text-xs uppercase tracking-[0.4em] text-[var(--color-tech-primary)] opacity-80">
-                  Tech Studio
-                </p>
-                <h3 className="mt-4 text-2xl font-semibold text-[var(--color-text-primary)]">
-                  IT и цифровые сервисы
-                </h3>
-                <p className="mt-2 text-[var(--color-text-secondary)]">
-                  Интеграции, продукты и AI-решения с плотной связкой с бизнес-процессами.
-                </p>
+                <Label size="sm" spacing="widest" tone="tech" className="opacity-80">
+                  {sectionsConfig.services_preview.tech.studioLabel}
+                </Label>
+                <Heading as="h3" size="lg" weight="semibold" className="mt-4">
+                  {sectionsConfig.services_preview.tech.heading}
+                </Heading>
+                <Text size="base" tone="secondary" className="mt-2">
+                  {sectionsConfig.services_preview.tech.description}
+                </Text>
               </div>
               <motion.ul variants={listVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-                {services.tech.map((service) => (
+                {servicesConfig.tech.map((service) => (
                   <motion.li key={service.title} variants={itemVariants}>
                     <Card
                       variant="glass"
@@ -149,8 +142,8 @@ export function ServicesPreview() {
                       />
                       <div className="relative flex items-start justify-between gap-2 select-none">
                         <div>
-                          <h4 className="text-lg font-semibold text-[var(--color-text-primary)]">{service.title}</h4>
-                          <p className="mt-1 text-sm text-[var(--color-text-secondary)]">{service.description}</p>
+                          <Heading as="h4" size="sm" weight="semibold">{service.title}</Heading>
+                          <Text size="sm" tone="secondary" className="mt-1">{service.description}</Text>
                         </div>
                       </div>
                     </Card>
@@ -158,12 +151,12 @@ export function ServicesPreview() {
                 ))}
               </motion.ul>
               <Button variant="primary-tech" size="md" className="mt-4">
-                Все tech-услуги
+                {sectionsConfig.services_preview.tech.ctaLabel}
               </Button>
             </Card>
           </motion.div>
         </div>
       </Container>
-    </section>
+    </Section>
   );
 }

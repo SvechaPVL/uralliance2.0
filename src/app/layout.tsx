@@ -3,6 +3,9 @@ import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { OverlayScrollbar } from "@/components/system/OverlayScrollbar";
+import { HeroProgressProvider } from "@/context/HeroProgressContext";
+import pagesConfig from "@/content/pages.json";
 
 const inter = Inter({
   subsets: ["latin", "cyrillic"],
@@ -18,8 +21,8 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Uralliance - Юридические услуги и IT-решения",
-  description: "Premium корпоративный сайт - объединяем Legal и Tech для успеха вашего бизнеса",
+  title: pagesConfig.home.title,
+  description: pagesConfig.home.description,
 };
 
 export default function RootLayout({
@@ -30,9 +33,12 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <body className={`${inter.variable} ${poppins.variable} antialiased`}>
-        <Header />
-        <main className="min-h-screen">{children}</main>
-        <Footer />
+        <HeroProgressProvider>
+          <Header />
+          <main className="min-h-screen">{children}</main>
+          <Footer />
+          <OverlayScrollbar />
+        </HeroProgressProvider>
       </body>
     </html>
   );

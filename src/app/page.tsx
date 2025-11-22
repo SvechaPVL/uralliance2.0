@@ -5,7 +5,6 @@ import { TechShowcase } from "@/components/sections/TechShowcase";
 import { WebProjects } from "@/components/sections/WebProjects";
 import { MobileApps } from "@/components/sections/MobileApps";
 import { Integration } from "@/components/sections/Integration";
-import { CasesPreview } from "@/components/sections/CasesPreview";
 import { ProcessTimeline } from "@/components/sections/ProcessTimeline";
 import { PricePreview } from "@/components/sections/PricePreview";
 import { ContactCTA } from "@/components/sections/ContactCTA";
@@ -39,9 +38,6 @@ export default function Home() {
 
       {/* Integration Ecosystem - US2 */}
       <Integration />
-
-      {/* Cases Preview - US2 */}
-      <CasesPreview />
 
       {/* Process Timeline - US2 */}
       <ProcessTimeline />

@@ -1,10 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/primitives/button";
 import { Input } from "@/components/primitives/input";
+import { PhoneInput } from "@/components/primitives/phone-input";
+import { Select, SelectItem } from "@/components/primitives/select";
+import { Textarea } from "@/components/primitives/textarea";
 import { cn } from "@/lib/utils";
 import type {
   ContactFormErrorResponse,
@@ -12,18 +15,16 @@ import type {
   ContactFormValues,
 } from "@/types/forms";
 import { contactFormSchema } from "@/types/forms";
+import formConfig from "@/content/form-config.json";
 
-const SERVICE_OPTIONS = [
-  { label: "Юридическая задача", value: "legal" },
-  { label: "IT-проект", value: "tech" },
-] as const;
+const SERVICE_OPTIONS = formConfig.contact.fields.service.options;
 
 const defaultValues: ContactFormValues = {
   name: "",
   email: "",
   phone: "",
   message: "",
-  service: "legal",
+  service: SERVICE_OPTIONS[0].value as "legal" | "tech",
   honeypot: "",
 };
 
@@ -41,6 +42,7 @@ export function ContactForm() {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<ContactFormValues>({
     resolver: zodResolver(contactFormSchema),
@@ -67,17 +69,17 @@ export function ContactForm() {
         setServerMessage(
           "error" in result && result.error
             ? result.error
-            : "Не удалось отправить заявку. Попробуйте позже."
+            : formConfig.contact.messages.error
         );
         return;
       }
 
       setStatus("success");
-      setServerMessage("Спасибо! Мы свяжемся с вами в течение рабочего дня.");
+      setServerMessage(formConfig.contact.messages.success);
       reset({ ...defaultValues });
     } catch {
       setStatus("error");
-      setServerMessage("Произошла ошибка. Попробуйте еще раз чуть позже.");
+      setServerMessage(formConfig.contact.messages.networkError);
     }
   };
 
@@ -85,7 +87,7 @@ export function ContactForm() {
     <form className="space-y-6" onSubmit={handleSubmit(onSubmit)} noValidate>
       {/* Invisible honeypot field */}
       <div className="sr-only" aria-hidden="true">
-        <label htmlFor="company-field">Ваша компания</label>
+        <label htmlFor="company-field">{formConfig.contact.honeypot.label}</label>
         <input
           id="company-field"
           type="text"
@@ -97,112 +99,95 @@ export function ContactForm() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Input
-          label="Имя"
-          placeholder="Как к вам обращаться?"
-          variant="legal"
+          label={formConfig.contact.fields.name.label}
+          placeholder={formConfig.contact.fields.name.placeholder}
+          variant={formConfig.contact.fields.name.variant as any}
           fullWidth
-          required
+          required={formConfig.contact.fields.name.required}
           {...register("name")}
           error={!!errors.name}
           errorMessage={errors.name?.message}
         />
         <Input
-          label="Email"
+          label={formConfig.contact.fields.email.label}
           type="email"
-          placeholder="you@example.com"
-          variant="tech"
+          placeholder={formConfig.contact.fields.email.placeholder}
+          variant={formConfig.contact.fields.email.variant as any}
           fullWidth
-          required
+          required={formConfig.contact.fields.email.required}
           autoComplete="email"
           {...register("email")}
           error={!!errors.email}
           errorMessage={errors.email?.message}
         />
-        <Input
-          label="Телефон"
-          type="tel"
-          placeholder="+7 (900) 000-00-00"
-          variant="legal"
-          fullWidth
-          autoComplete="tel"
-          {...register("phone")}
-          error={!!errors.phone}
-          errorMessage={errors.phone?.message}
-        />
-        <div className="flex flex-col gap-1.5">
-          <label
-            htmlFor="contact-service"
-            className="text-sm font-medium text-[var(--color-text-primary)]"
-          >
-            Направление
-          </label>
-          <select
-            id="contact-service"
-            required
-            aria-invalid={!!errors.service}
-            aria-describedby={errors.service ? "contact-service-error" : undefined}
-            className={cn(
-              "w-full rounded-lg border bg-[var(--color-background)] px-4 py-3 text-base",
-              "text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)]",
-              "focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--color-tech-primary)]",
-              errors.service
-                ? "border-[var(--color-error)] bg-[var(--color-error)]/5"
-                : "border-[var(--color-border)] hover:border-[var(--color-text-muted)]"
-            )}
-            {...register("service")}
-          >
-            {SERVICE_OPTIONS.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
-          {errors.service && (
-            <p id="contact-service-error" className="text-sm text-[var(--color-error)]">
-              {errors.service.message}
-            </p>
+        <Controller
+          name="phone"
+          control={control}
+          render={({ field }) => (
+            <PhoneInput
+              label={formConfig.contact.fields.phone.label}
+              placeholder={formConfig.contact.fields.phone.placeholder}
+              variant={formConfig.contact.fields.phone.variant as any}
+              fullWidth
+              required={formConfig.contact.fields.phone.required}
+              autoComplete="tel"
+              value={field.value}
+              onChange={field.onChange}
+              onBlur={field.onBlur}
+              name={field.name}
+              error={!!errors.phone}
+              errorMessage={errors.phone?.message}
+            />
           )}
-        </div>
+        />
+        <Controller
+          name="service"
+          control={control}
+          render={({ field }) => (
+            <Select
+              label={formConfig.contact.fields.service.label}
+              variant={formConfig.contact.fields.service.variant as any}
+              fullWidth
+              required={formConfig.contact.fields.service.required}
+              value={field.value}
+              onValueChange={field.onChange}
+              error={!!errors.service}
+              errorMessage={errors.service?.message}
+            >
+              {SERVICE_OPTIONS.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </Select>
+          )}
+        />
       </div>
 
-      <div className="flex flex-col gap-1.5">
-        <label
-          htmlFor="contact-message"
-          className="text-sm font-medium text-[var(--color-text-primary)]"
-        >
-          Сообщение
-        </label>
-        <textarea
-          id="contact-message"
-          rows={5}
-          maxLength={1000}
-          required
-          aria-invalid={!!errors.message}
-          aria-describedby={errors.message ? "contact-message-error" : undefined}
-          placeholder="Опишите задачу или идею проекта..."
-          className={cn(
-            "w-full rounded-lg border bg-[var(--color-background)] px-4 py-3 text-base",
-            "text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)]",
-            "focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--color-legal-primary)]",
-            errors.message
-              ? "border-[var(--color-error)] bg-[var(--color-error)]/5"
-              : "border-[var(--color-border)] hover:border-[var(--color-text-muted)]"
-          )}
-          {...register("message")}
-        />
-        {errors.message && (
-          <p id="contact-message-error" className="text-sm text-[var(--color-error)]">
-            {errors.message.message}
-          </p>
-        )}
-      </div>
+      <Textarea
+        label={formConfig.contact.fields.message.label}
+        variant={formConfig.contact.fields.message.variant as any}
+        fullWidth
+        required={formConfig.contact.fields.message.required}
+        rows={5}
+        maxLength={1000}
+        placeholder={formConfig.contact.fields.message.placeholder}
+        {...register("message")}
+        error={!!errors.message}
+        errorMessage={errors.message?.message}
+      />
 
       <div className="space-y-3">
-        <Button type="submit" variant="primary-tech" fullWidth isLoading={isSubmitting}>
-          Отправить заявку
+        <Button
+          type="submit"
+          variant={formConfig.contact.button.variant as any}
+          fullWidth
+          isLoading={isSubmitting}
+        >
+          {isSubmitting ? formConfig.contact.button.loadingLabel : formConfig.contact.button.label}
         </Button>
         <p className="text-sm text-[var(--color-text-muted)]">
-          Отвечаем в течение рабочего дня. Все данные передаются по защищенному каналу.
+          {formConfig.contact.hint}
         </p>
         {serverMessage && (
           <p

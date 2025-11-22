@@ -119,6 +119,7 @@ export const Hoverable: Story = {
     variant: "legal",
     padding: "lg",
     hoverable: true,
+    style: { transitionDuration: "0.6s" },
     children: (
       <div>
         <h3 className="mb-2 text-xl font-bold">Hover Me!</h3>
@@ -176,7 +177,7 @@ export const WithSections: Story = {
   render: () => (
     <Card variant="legal" padding="none" style={{ width: "400px" }}>
       <CardHeader className="px-6 pt-6">
-        <h3 className="text-2xl font-bold">Premium Plan</h3>
+        <h3 className="text-2xl font-bold">Pro Plan</h3>
         <p className="text-[var(--color-text-secondary)]">Everything you need</p>
       </CardHeader>
       <CardContent className="px-6 py-4">

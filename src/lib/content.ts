@@ -6,10 +6,9 @@ import remarkRehype from "remark-rehype";
 import rehypeHighlight from "rehype-highlight";
 import rehypeStringify from "rehype-stringify";
 import rehypeSlug from "rehype-slug";
-import type { BlogPost, CaseStudy, Service } from "@/types/content";
+import type { BlogPost, Service } from "@/types/content";
 
 const ROOT_DIR = process.cwd();
-const CASES_DIR = path.join(ROOT_DIR, "content/cases");
 const BLOG_DIR = path.join(ROOT_DIR, "content/blog");
 const SERVICES_DIR = path.join(ROOT_DIR, "content/services");
 
@@ -27,7 +26,7 @@ async function parseMarkdownFile(filePath: string, options?: MarkdownOptions) {
   const processor = remark().use(remarkRehype).use(rehypeSlug);
 
   if (options?.highlight) {
-    processor.use(rehypeHighlight, { ignoreMissing: true });
+    processor.use(rehypeHighlight as any, { ignoreMissing: true });
   }
 
   processor.use(rehypeStringify);
@@ -51,41 +50,6 @@ async function listMarkdownFiles(directory: string) {
     }
     throw error;
   }
-}
-
-/**
- * Get case study by slug (filename)
- */
-export async function getCaseBySlug(slug: string): Promise<CaseStudy> {
-  const filePath = path.join(CASES_DIR, `${slug}.md`);
-  const { data, content, htmlContent } = await parseMarkdownFile(filePath);
-
-  return {
-    slug,
-    frontmatter: data as CaseStudy["frontmatter"],
-    content,
-    html: htmlContent,
-  };
-}
-
-/**
- * Get all case studies sorted by date (newest first)
- */
-export async function getAllCases(): Promise<CaseStudy[]> {
-  const caseFiles = await listMarkdownFiles(CASES_DIR);
-  const cases = await Promise.all(caseFiles.map(async (file) => getCaseBySlug(file.replace(/\.md$/, ""))));
-
-  return cases.sort(
-    (a, b) => new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime()
-  );
-}
-
-/**
- * Filter cases by service type (legal / tech)
- */
-export async function getCasesByServiceType(serviceType: "legal" | "tech") {
-  const cases = await getAllCases();
-  return cases.filter((caseStudy) => caseStudy.frontmatter.serviceType === serviceType);
 }
 
 /**

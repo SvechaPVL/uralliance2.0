@@ -2,41 +2,48 @@ import { ContactForm } from "@/components/forms/ContactForm";
 import { Container } from "@/components/layout/Container";
 import { Spotlight } from "@/components/animations/Spotlight";
 import { Badge } from "@/components/primitives/badge";
+import { Button } from "@/components/primitives/button";
 import { generateTelegramLink, generateWhatsAppLink } from "@/lib/messenger";
 import { cn } from "@/lib/utils";
+import { Section } from "@/components/primitives/section";
+import { Heading } from "@/components/primitives/heading";
+import { Label } from "@/components/primitives/label";
+import { Text } from "@/components/primitives/text";
+import contactsData from "@/content/contacts.json";
+import sectionsConfig from "@/content/sections.json";
 
 const CONTACT_DETAILS = [
   {
-    label: "Телефон",
-    value: "+7 (343) 123-45-67",
-    href: "tel:+73431234567",
+    label: sectionsConfig.contact_cta.contactDetails.phone,
+    value: contactsData.phone.display,
+    href: contactsData.phone.link,
   },
   {
-    label: "Email",
-    value: "info@uralliance.ru",
-    href: "mailto:info@uralliance.ru",
+    label: sectionsConfig.contact_cta.contactDetails.email,
+    value: contactsData.email.display,
+    href: contactsData.email.link,
   },
   {
-    label: "Офис",
-    value: "Екатеринбург, ул. Бориса Ельцина, 3",
-    href: "https://yandex.ru/maps/-/CDBF54~m",
+    label: sectionsConfig.contact_cta.contactDetails.office,
+    value: contactsData.office.address,
+    href: contactsData.office.mapLink,
   },
 ] as const;
 
 const messengerActions = [
   {
-    label: "Написать в WhatsApp",
+    label: sectionsConfig.contact_cta.messengers.whatsapp,
     href: generateWhatsAppLink(
-      undefined,
-      "Здравствуйте! Я с сайта Uralliance и хочу обсудить проект."
+      contactsData.messengers.whatsapp.number,
+      contactsData.messengers.whatsapp.defaultMessage
     ),
     style: "legal" as const,
   },
   {
-    label: "Написать в Telegram",
+    label: sectionsConfig.contact_cta.messengers.telegram,
     href: generateTelegramLink(
-      undefined,
-      "Здравствуйте! Нужна консультация Uralliance."
+      contactsData.messengers.telegram.username,
+      contactsData.messengers.telegram.defaultMessage
     ),
     style: "tech" as const,
   },
@@ -50,26 +57,27 @@ const messengerActions = [
  */
 export function ContactCTA() {
   return (
-    <section id="contact" aria-labelledby="contact-heading" className="py-24 lg:py-32">
+    <Section id="contact" aria-labelledby="contact-heading" spacing="xl">
       <Container className="max-w-6xl">
         <Spotlight className="border border-[var(--color-border)] bg-[var(--color-card-bg)]/80 backdrop-blur-2xl px-6 py-8 sm:px-10 sm:py-12 lg:px-14 lg:py-16 shadow-[0_30px_80px_rgba(0,0,0,0.35)]">
-          <div className="grid gap-10 lg:grid-cols-[1.05fr,0.95fr]">
-            <div className="space-y-8">
+          <div className="flex flex-col lg:flex-row gap-10 lg:items-start lg:justify-between">
+            <div className="space-y-8 lg:flex-1 lg:max-w-xl">
               <Badge variant="tech" badgeStyle="subtle" size="sm" className="uppercase tracking-[0.35em]">
-                Ответ за 1 рабочий день
+                {sectionsConfig.contact_cta.badge}
               </Badge>
 
               <div className="space-y-4">
-                <h2
+                <Heading
+                  as="h2"
                   id="contact-heading"
-                  className="text-3xl lg:text-4xl font-display font-semibold text-[var(--color-text-primary)]"
+                  size="lg"
+                  weight="semibold"
                 >
-                  Готовы начать?
-                </h2>
-                <p className="text-lg text-[var(--color-text-secondary)]">
-                  Заполните форму или выберите удобный способ связи. Команда Uralliance подключится к
-                  вашему проекту и предложит следующий шаг в течение одного рабочего дня.
-                </p>
+                  {sectionsConfig.contact_cta.heading}
+                </Heading>
+                <Text size="lg" tone="secondary">
+                  {sectionsConfig.contact_cta.description}
+                </Text>
               </div>
 
               <div className="grid gap-4 sm:grid-cols-2">
@@ -83,40 +91,40 @@ export function ContactCTA() {
                       "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-tech-primary)]"
                     )}
                   >
-                    <p className="text-xs uppercase tracking-[0.35em] text-[var(--color-text-muted)]">
+                    <Label as="p" size="sm" spacing="wider" tone="muted">
                       {item.label}
-                    </p>
-                    <p className="mt-2 text-base font-semibold text-white">{item.value}</p>
+                    </Label>
+                    <Text size="base" weight="semibold" tone="white" className="mt-2">{item.value}</Text>
                   </a>
                 ))}
               </div>
 
               <div className="flex flex-wrap gap-3">
                 {messengerActions.map((action) => (
-                  <a
+                  <Button
                     key={action.label}
-                    href={action.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={cn(
-                      "inline-flex items-center justify-center rounded-full px-5 py-2.5 text-sm font-semibold transition-all duration-200",
-                      action.style === "legal"
-                        ? "bg-[var(--color-legal-primary)] text-[#0b0f19] hover:-translate-y-0.5"
-                        : "bg-[var(--color-tech-primary)] text-[#03121d] hover:-translate-y-0.5"
-                    )}
+                    asChild
+                    variant={action.style === "legal" ? "primary-legal" : "primary-tech"}
+                    size="sm"
                   >
-                    {action.label}
-                  </a>
+                    <a
+                      href={action.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {action.label}
+                    </a>
+                  </Button>
                 ))}
               </div>
             </div>
 
-            <div className="rounded-3xl border border-white/10 bg-[var(--color-background)]/90 p-6 lg:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.35)]">
+            <div className="rounded-3xl border border-white/10 bg-[var(--color-background)]/90 p-6 lg:p-8 shadow-[0_20px_60px_rgba(0,0,0,0.35)] w-full lg:w-auto lg:min-w-[420px] lg:max-w-[480px]">
               <ContactForm />
             </div>
           </div>
         </Spotlight>
       </Container>
-    </section>
+    </Section>
   );
 }

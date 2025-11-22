@@ -2,6 +2,8 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Container } from "@/components/layout/Container";
 import { generateWhatsAppLink, generateTelegramLink } from "@/lib/messenger";
+import navigationConfig from "@/content/navigation.json";
+import contactsConfig from "@/content/contacts.json";
 
 /**
  * Footer Link Interface
@@ -21,40 +23,9 @@ interface FooterColumn {
 }
 
 /**
- * Footer Columns Configuration
+ * Footer Columns Configuration - loaded from config
  */
-const footerColumns: FooterColumn[] = [
-  {
-    title: "Юридические услуги",
-    category: "legal",
-    links: [
-      { label: "Корпоративное право", href: "/services/legal/corporate" },
-      { label: "Договорное право", href: "/services/legal/contracts" },
-      { label: "Интеллектуальная собственность", href: "/services/legal/ip" },
-      { label: "Судебная защита", href: "/services/legal/litigation" },
-    ],
-  },
-  {
-    title: "IT-решения",
-    category: "tech",
-    links: [
-      { label: "Разработка сайтов", href: "/services/tech/web" },
-      { label: "Мобильные приложения", href: "/services/tech/mobile" },
-      { label: "Telegram боты", href: "/services/tech/bots" },
-      { label: "CRM интеграции", href: "/services/tech/integrations" },
-    ],
-  },
-  {
-    title: "Компания",
-    category: "company",
-    links: [
-      { label: "О нас", href: "/about" },
-      { label: "Кейсы", href: "/cases" },
-      { label: "Блог", href: "/blog" },
-      { label: "Контакты", href: "/contact" },
-    ],
-  },
-];
+const footerColumns: FooterColumn[] = navigationConfig.footer.columns as FooterColumn[];
 
 /**
  * Generate social/messenger links with pre-filled messages
@@ -80,7 +51,7 @@ const getSocialLinks = () => [
   },
   {
     name: "Email",
-    href: "mailto:info@uralliance.ru",
+    href: contactsConfig.email.link,
     icon: (
       <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
         <path
@@ -126,11 +97,11 @@ export function Footer() {
                   "bg-clip-text text-transparent"
                 )}
               >
-                Uralliance
+                {contactsConfig.company}
               </div>
             </Link>
             <p className="text-[var(--color-text-secondary)] text-sm mb-6">
-              Premium корпоративный сайт — объединяем Legal и Tech для успеха вашего бизнеса
+              {navigationConfig.footer.tagline}
             </p>
 
             {/* Social Links */}
@@ -196,31 +167,23 @@ export function Footer() {
         <div className="mt-12 pt-8 border-t border-[var(--color-border)]">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-[var(--color-text-muted)] text-sm">
-              © {currentYear} Uralliance. Все права защищены.
+              © {currentYear} {navigationConfig.footer.copyright}
             </p>
             <div className="flex items-center gap-6">
-              <Link
-                href="/privacy"
-                className={cn(
-                  "text-[var(--color-text-muted)] text-sm",
-                  "hover:text-[var(--color-text-primary)]",
-                  "transition-colors duration-[var(--transition-base)]",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-legal-primary)] rounded-sm"
-                )}
-              >
-                Политика конфиденциальности
-              </Link>
-              <Link
-                href="/terms"
-                className={cn(
-                  "text-[var(--color-text-muted)] text-sm",
-                  "hover:text-[var(--color-text-primary)]",
-                  "transition-colors duration-[var(--transition-base)]",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-legal-primary)] rounded-sm"
-                )}
-              >
-                Условия использования
-              </Link>
+              {navigationConfig.footer.legal.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    "text-[var(--color-text-muted)] text-sm",
+                    "hover:text-[var(--color-text-primary)]",
+                    "transition-colors duration-[var(--transition-base)]",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-legal-primary)] rounded-sm"
+                  )}
+                >
+                  {link.label}
+                </Link>
+              ))}
             </div>
           </div>
         </div>

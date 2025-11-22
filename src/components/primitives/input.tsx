@@ -138,7 +138,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             )}
           >
             {label}
-            {isRequired && <span className="text-[var(--color-error)] ml-1">*</span>}
+            {isRequired && <span className="text-[var(--color-tech-primary)] ml-1">*</span>}
           </label>
         )}
 

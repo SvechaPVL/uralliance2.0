@@ -7,6 +7,11 @@ import { TelegramChat } from "@/components/showcases/TelegramChat";
 import { CrmMatrix } from "@/components/showcases/CrmMatrix";
 import { WebBrowserShowcase } from "@/components/showcases/WebBrowser";
 import { MobileCafeApp } from "@/components/showcases/MobileCafeApp";
+import { Section } from "@/components/primitives/section";
+import { Heading } from "@/components/primitives/heading";
+import { Label } from "@/components/primitives/label";
+import { Text } from "@/components/primitives/text";
+import sectionsConfig from "@/content/sections.json";
 
 const bentoItems: BentoGridItem[] = [
   {
@@ -18,19 +23,18 @@ const bentoItems: BentoGridItem[] = [
       <Card3D className="h-full rounded-3xl p-0">
         <div className="relative flex h-full flex-col justify-between gap-6 p-6">
           <div>
-            <span className="inline-flex items-center rounded-full border border-[var(--color-tech-border-soft)] px-3 py-1 text-xs uppercase tracking-[0.3em] text-[var(--color-tech-primary)]">
-              CRM интеграции
-            </span>
-            <h3 className="mt-4 text-2xl font-semibold text-[var(--color-text-primary)]">
-              Единый контур продаж и операций
-            </h3>
-            <p className="mt-3 text-[var(--color-text-secondary)]">
-              Синхронизируем 1С, Bitrix24, Telegram и внутренние сервисы, чтобы заявки не терялись,
-              а менеджеры видели полный контекст.
-            </p>
+            <Label as="span" size="sm" spacing="wider" tone="tech" className="inline-flex items-center rounded-full border border-[var(--color-tech-border-soft)] px-3 py-1">
+              {sectionsConfig.tech_showcase.cards.crm.badge}
+            </Label>
+            <Heading as="h3" size="lg" weight="semibold" className="mt-4">
+              {sectionsConfig.tech_showcase.cards.crm.title}
+            </Heading>
+            <Text size="base" tone="secondary" className="mt-3">
+              {sectionsConfig.tech_showcase.cards.crm.description}
+            </Text>
           </div>
           <div className="grid grid-cols-2 gap-3 text-sm text-[var(--color-text-secondary)]">
-            {["1С + CRM", "Webhook шины", "ETL пайплайны", "Роли и права"].map((item) => (
+            {sectionsConfig.tech_showcase.cards.crm.features.map((item) => (
               <div key={item} className="flex items-center gap-2">
                 <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-tech-primary)] shadow-[0_0_12px_rgba(6,182,212,0.6)]" />
                 {item}
@@ -53,13 +57,13 @@ const bentoItems: BentoGridItem[] = [
       <Card3D className="h-full rounded-3xl p-0">
         <div className="flex h-full flex-col gap-4 p-6">
           <div>
-            <span className="inline-flex items-center rounded-full border border-white/10 px-3 py-1 text-xs uppercase tracking-[0.3em] text-white/80">
-              Telegram / WhatsApp
-            </span>
-            <h3 className="mt-4 text-xl font-semibold text-white">Чат-боты и омниканал</h3>
-            <p className="mt-2 text-sm text-white/80">
-              Платежи, воронки, подключение операторов и интеграция с CRM.
-            </p>
+            <Label as="span" size="sm" spacing="wider" tone="white" className="inline-flex items-center rounded-full border border-white/10 px-3 py-1 opacity-80">
+              {sectionsConfig.tech_showcase.cards.bots.badge}
+            </Label>
+            <Heading as="h3" size="md" weight="semibold" tone="white" className="mt-4">{sectionsConfig.tech_showcase.cards.bots.title}</Heading>
+            <Text size="sm" className="mt-2 text-white/80">
+              {sectionsConfig.tech_showcase.cards.bots.description}
+            </Text>
           </div>
           <div className="flex flex-1 items-center justify-center">
             <TelegramChat />
@@ -76,13 +80,13 @@ const bentoItems: BentoGridItem[] = [
     content: (
       <Card3D className="h-full rounded-3xl p-0">
         <div className="flex h-full flex-col justify-between gap-4 p-6">
-          <span className="text-xs uppercase tracking-[0.4em] text-[var(--color-tech-primary)]">
-            WhatsApp API
-          </span>
-          <h3 className="text-lg font-semibold text-[var(--color-text-primary)]">Мобильные приложения под бренд</h3>
-          <p className="text-sm text-[var(--color-text-secondary)]">
-            Напоминания, статусы заказов и платежи прямо в мессенджере.
-          </p>
+          <Label as="span" size="sm" spacing="widest" tone="tech">
+            {sectionsConfig.tech_showcase.cards.whatsapp.badge}
+          </Label>
+          <Heading as="h3" size="sm" weight="semibold">{sectionsConfig.tech_showcase.cards.whatsapp.title}</Heading>
+          <Text size="sm" tone="secondary">
+            {sectionsConfig.tech_showcase.cards.whatsapp.description}
+          </Text>
           <div className="mt-2 flex-1">
             <MobileCafeApp />
           </div>
@@ -100,17 +104,17 @@ const bentoItems: BentoGridItem[] = [
         <div className="flex h-full flex-col justify-between gap-4 p-6">
           <div className="flex items-center gap-4">
             <div className="rounded-2xl border border-[var(--color-border-soft)] px-3 py-1 text-xs text-[var(--color-text-muted)]">
-              Web / PWA
+              {sectionsConfig.tech_showcase.cards.web.badge}
             </div>
-            <div className="text-xs uppercase tracking-[0.4em] text-[var(--color-text-muted)]">
-              Lighthouse 95+
-            </div>
+            <Label as="div" size="sm" spacing="widest" tone="muted">
+              {sectionsConfig.tech_showcase.cards.web.additionalBadge}
+            </Label>
           </div>
-          <h3 className="text-xl font-semibold text-[var(--color-text-primary)]">
-            Сайты и личные кабинеты, которые продают
-          </h3>
+          <Heading as="h3" size="md" weight="semibold">
+            {sectionsConfig.tech_showcase.cards.web.title}
+          </Heading>
           <div className="flex flex-wrap gap-3 text-sm text-[var(--color-text-secondary)]">
-            {["SEO + контент", "Адаптив 360°", "CMS / headless", "A/B тесты"].map((item) => (
+            {sectionsConfig.tech_showcase.cards.web.features.map((item) => (
               <span key={item} className="rounded-full border border-[var(--color-border-soft)] px-3 py-1">
                 {item}
               </span>
@@ -127,16 +131,16 @@ const bentoItems: BentoGridItem[] = [
 
 export function TechShowcase() {
   return (
-    <section className="relative py-28 sm:py-32">
+    <Section spacing="xl">
       <Container className="relative z-10 select-none">
         <div className="mb-12 max-w-3xl">
-          <p className="text-sm uppercase tracking-[0.4em] text-[var(--color-text-muted)]">Tech Stack</p>
-          <h2 className="mt-4 text-3xl font-semibold text-[var(--color-text-primary)] sm:text-4xl lg:text-5xl">
-            Внедряем продукты полного цикла — от интеграций до персональных AI-ботов.
-          </h2>
-          <p className="mt-3 text-[var(--color-text-secondary)]">
-            Переосмысливаем процессы через связку CRM, мессенджеров, веб-платформ и аналитики.
-          </p>
+          <Label size="md" spacing="widest" tone="muted">{sectionsConfig.tech_showcase.label}</Label>
+          <Heading as="h2" size="2xl" weight="semibold" className="mt-4">
+            {sectionsConfig.tech_showcase.heading}
+          </Heading>
+          <Text size="base" tone="secondary" className="mt-3">
+            {sectionsConfig.tech_showcase.description}
+          </Text>
         </div>
 
         <div className="mx-auto max-w-[1500px] px-4 lg:px-12">
@@ -147,6 +151,6 @@ export function TechShowcase() {
       <div className="pointer-events-none absolute inset-x-0 top-10 opacity-40">
         <div className="mx-auto h-72 w-72 rounded-full bg-gradient-to-br from-[var(--color-tech-surface-strong)] to-transparent blur-3xl" />
       </div>
-    </section>
+    </Section>
   );
 }

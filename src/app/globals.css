@@ -2,12 +2,18 @@
 @import "../../styles/design-tokens.css";
 
 @theme {
-  /* Legal Colors */
+  /* Legal Color Palette */
+  --color-legal-400: #f5e6d3;      /* Светлое золото */
+  --color-legal-500: #d4af37;      /* Золото (primary) */
+  --color-legal-600: #a68b2c;      /* Темное золото */
   --color-legal: var(--color-legal-primary);
   --color-legal-accent: var(--color-legal-accent);
   --color-legal-dark: var(--color-legal-dark);
 
-  /* Tech Colors */
+  /* Tech Color Palette */
+  --color-tech-400: #22d3ee;       /* Яркий cyan */
+  --color-tech-500: #06b6d4;       /* Cyan (primary) */
+  --color-tech-600: #0891b2;       /* Темный cyan */
   --color-tech: var(--color-tech-primary);
   --color-tech-accent: var(--color-tech-accent);
   --color-tech-dark: var(--color-tech-dark);
@@ -25,14 +31,90 @@
 
   /* Container */
   --container-2xl: var(--container-2xl);
+
+  /* Radix UI Color Mappings for Tailwind v4 */
+  --color-input: var(--color-border);
+  --color-ring: var(--color-tech-primary);
+  --color-foreground: var(--color-text-primary);
+  --color-popover: var(--color-background-secondary);
+  --color-popover-foreground: var(--color-text-primary);
+  --color-accent: var(--color-tech-surface);
+  --color-accent-foreground: var(--color-text-primary);
+  --color-muted-foreground: var(--color-text-muted);
+  --color-border: var(--color-border);
+}
+
+html {
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 body {
+  overflow-x: hidden;
   background: var(--color-background);
   color: var(--color-text-primary);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+/* Разрешаем выделение только для интерактивных элементов */
+input,
+textarea,
+[contenteditable="true"] {
+  user-select: text;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+}
+
+@media (pointer: fine) {
+  html {
+    scrollbar-width: none;
+  }
+
+  body::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.overlay-scrollbar {
+  position: fixed;
+  top: 16px;
+  bottom: 16px;
+  right: 12px;
+  width: 12px;
+  border-radius: var(--radius-full);
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.05) 50%, transparent 100%);
+  display: flex;
+  justify-content: center;
+  pointer-events: auto;
+  z-index: 9999;
+}
+
+.overlay-scrollbar__thumb {
+  width: 100%;
+  border-radius: inherit;
+  background: rgba(6, 182, 212, 0.25);
+  box-shadow: 0 4px 12px rgba(2, 6, 23, 0.4);
+  pointer-events: auto;
+  cursor: grab;
+  transition: background var(--transition-base);
+}
+
+.overlay-scrollbar__thumb:active {
+  cursor: grabbing;
+  background: rgba(6, 182, 212, 0.5);
+}
+
+@media (pointer: coarse), (hover: none) {
+  .overlay-scrollbar {
+    display: none;
+  }
 }
 
 /* Glassmorphism utilities */
@@ -58,4 +140,45 @@ body {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+}
+
+.btn-underline {
+  position: relative;
+  isolation: isolate;
+}
+
+.btn-underline::before,
+.btn-underline::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+
+.btn-underline::before {
+  background-image: var(--btn-underline-solid, linear-gradient(to right, transparent, rgba(255, 255, 255, 0.6), transparent));
+}
+
+.btn-underline::after {
+  left: 25%;
+  right: 25%;
+  filter: blur(2px);
+  background-image: var(--btn-underline-blur, linear-gradient(to right, transparent, rgba(255, 255, 255, 0.4), transparent));
+}
+
+.btn-underline:hover::before,
+.btn-underline:hover::after {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-underline::before,
+  .btn-underline::after {
+    transition: none;
+  }
 }

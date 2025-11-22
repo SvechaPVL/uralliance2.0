@@ -2,10 +2,16 @@ import { getServicesByCategory } from "@/lib/content";
 import { Container } from "@/components/layout/Container";
 import { Card } from "@/components/primitives/card";
 import { Badge } from "@/components/primitives/badge";
+import { Button } from "@/components/primitives/button";
 import { ServiceIcon } from "@/components/primitives/ServiceIcon";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { Section } from "@/components/primitives/section";
+import { Heading } from "@/components/primitives/heading";
+import { Label } from "@/components/primitives/label";
+import { Text } from "@/components/primitives/text";
+import { List } from "@/components/primitives/list";
 
 /**
  * Services Category Page
@@ -46,6 +52,57 @@ export async function generateMetadata({ params }: ServicesCategoryPageProps): P
   };
 }
 
+const HERO_CONFIG = {
+  legal: {
+    eyebrow: "Legal Practice",
+    title: "Юридические услуги Uralliance",
+    description:
+      "Представляем бизнес в арбитражных судах, решаем налоговые вопросы, регистрируем юрлица и сопровождаем бухгалтерию как официальный представитель «Вестника государственной регистрации» во Владивостоке.",
+    primaryCta: { href: "/#contact", label: "Запросить правовой аудит" },
+    highlights: [
+      { label: "Арбитражная практика", value: "15+ лет" },
+      { label: "Налоговые споры", value: "50+/год" },
+      { label: "Вестник Госрегистрации", value: "Официальный представитель" },
+    ],
+    supporting: [
+      "Представляем в арбитраже и судах общей юрисдикции от претензии до исполнительного производства.",
+      "Готовим к камеральным и выездным налоговым проверкам, сопровождаем коммуникацию с ФНС и обжалования.",
+      "Регистрируем и реорганизуем юридические лица, готовим публикации и изменения в ЕГРЮЛ.",
+      "Ведём бухгалтерское обслуживание и работаем как официальные представители «Вестника государственной регистрации» во Владивостоке.",
+    ],
+  },
+  tech: {
+    eyebrow: "Tech Practice",
+    title: "Digital-решения Uralliance",
+    description:
+      "Разрабатываем сайты на Next.js, внедряем CRM, строим ботов и интеграции для ускорения продаж и сервисов.",
+    primaryCta: { href: "/#contact", label: "Получить план работ" },
+    highlights: [
+      { label: "Срок запуска", value: "до 30 дней" },
+      { label: "Интеграций 1С/CRM", value: "30+" },
+      { label: "Поддержка", value: "24/7" },
+    ],
+    supporting: [
+      "Проводим диагностическую сессию и описываем требования простым языком.",
+      "Используем современные технологии: Next.js, Telegram API, WhatsApp, Bitrix24, 1С.",
+      "Передаём инструкции, обучаем команду и показываем прогресс каждую неделю.",
+    ],
+  },
+} as const;
+
+const SERVICE_BULLETS = {
+  legal: [
+    "Представительство в арбитражных судах и сопровождение исполнения решений",
+    "Налоговая защита бизнеса и поддержка во время проверок",
+    "Регистрация юрлиц, бухгалтерское обслуживание и публикации в «Вестнике государственной регистрации»",
+  ],
+  tech: [
+    "Сайты, CRM и клиентские порталы",
+    "Интеграции с 1С, мессенджерами и BI",
+    "Автоматизация процессов продаж",
+  ],
+} as const;
+
 export default async function ServicesCategoryPage({ params }: ServicesCategoryPageProps) {
   const { category } = await params;
 
@@ -55,105 +112,186 @@ export default async function ServicesCategoryPage({ params }: ServicesCategoryP
   }
 
   const services = await getServicesByCategory(category);
-
   const isLegal = category === "legal";
-  const categoryTitle = isLegal ? "Юридические услуги" : "IT-услуги";
-  const categoryDescription = isLegal
-    ? "Защита бизнеса на всех этапах — от консультации до суда"
-    : "Современные технологии для роста вашего бизнеса";
+  const hero = HERO_CONFIG[category];
 
   return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-b from-neutral-50 to-white py-24 dark:from-neutral-900 dark:to-neutral-950">
-        <Container>
-          <div className="mx-auto max-w-3xl text-center">
-            <Badge variant={isLegal ? "legal" : "tech"} className="mb-6 px-6 py-2 text-lg">
-              {isLegal ? "Legal" : "Tech"}
-            </Badge>
-
-            <h1 className="mb-6 text-5xl font-bold md:text-6xl">{categoryTitle}</h1>
-
-            <p className="text-xl text-neutral-600 dark:text-neutral-400">{categoryDescription}</p>
+    <>
+      {/* Hero */}
+      <Section spacing="md" isolate overflow="hidden">
+        <Container className="space-y-12">
+          <div className="grid gap-10 lg:grid-cols-[1.15fr,0.85fr]">
+            <div className="space-y-6">
+              <Badge variant={isLegal ? "legal" : "tech"} badgeStyle="subtle" size="sm">
+                {hero.eyebrow}
+              </Badge>
+              <Heading as="h1" size="2xl" weight="semibold">
+                {hero.title}
+              </Heading>
+              <Text size="lg" tone="secondary" className="sm:text-xl">
+                {hero.description}
+              </Text>
+              <div className="flex flex-wrap gap-4">
+                <Button
+                  asChild
+                  variant={isLegal ? "primary-legal" : "primary-tech"}
+                  size="md"
+                >
+                  <Link href={hero.primaryCta.href}>{hero.primaryCta.label}</Link>
+                </Button>
+              </div>
+              <div className="grid gap-4 sm:grid-cols-3">
+                {hero.highlights.map((highlight) => (
+                  <Card key={highlight.label} variant="glass" className="p-5 text-center">
+                    <Text size="2xl" weight="semibold" className="text-3xl">{highlight.value}</Text>
+                    <Text size="sm" tone="secondary" className="mt-1">
+                      {highlight.label}
+                    </Text>
+                  </Card>
+                ))}
+              </div>
+            </div>
+            <Card variant="glass" className="space-y-4 p-8">
+              <Heading as="h2" size="lg" weight="semibold">
+                {isLegal ? "Юридическое сопровождение" : "Цифровая реализация"}
+              </Heading>
+              <List variant="feature" spacing="md" className="text-sm text-[var(--color-text-secondary)]">
+                {hero.supporting.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </List>
+              <Card variant="glass" className="border-dashed p-4">
+                <Text size="sm" tone="secondary">
+                  {isLegal
+                    ? "Фиксируем условия договором и защищаем результаты юридически на каждом этапе."
+                    : "Выделяем отдельную команду, ведём понятный список задач и синхронизируемся каждую неделю."}
+                </Text>
+              </Card>
+            </Card>
           </div>
         </Container>
-      </section>
+      </Section>
 
-      {/* Services Grid */}
-      <section className="py-16">
-        <Container>
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+      {/* Highlights */}
+      <Section spacing="sm" background="secondary" bordered>
+        <Container className="grid gap-6 md:grid-cols-3">
+          {SERVICE_BULLETS[category].map((bullet) => (
+            <Card key={bullet} variant="glass" className="p-6">
+              <Label size="md" spacing="wider" tone="muted">
+                {isLegal ? "Юридический фокус" : "Цифровой фокус"}
+              </Label>
+              <Text size="lg" weight="semibold" className="mt-2">{bullet}</Text>
+            </Card>
+          ))}
+        </Container>
+      </Section>
+
+      {/* Services grid */}
+      <Section spacing="md">
+        <Container className="space-y-10">
+          <div className="space-y-4 text-center">
+            <Heading as="h2" size="2xl" weight="semibold">
+              {isLegal ? "Комплексные юридические решения" : "Решения для цифровой трансформации"}
+            </Heading>
+            <Text size="lg" tone="secondary">
+              Подберите услугу и получите расширенный бриф. Каждое направление ведет выделенная
+              команда.
+            </Text>
+          </div>
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {services.map((service) => (
-              <Link
+              <Card
                 key={service.slug}
-                href={`/services/${category}/${service.slug}`}
-                className="group"
+                variant="glass"
+                hoverable
+                className="flex h-full flex-col gap-6 p-6"
               >
-                <Card className="hover:border-legal-500 dark:hover:border-tech-400 h-full border-2 p-8 transition-all duration-300 hover:scale-105 hover:shadow-2xl">
-                  {/* Icon */}
-                  <div className="mb-6">
+                <div className="flex items-center justify-between">
+                  <Badge
+                    variant={isLegal ? "legal" : "tech"}
+                    badgeStyle="subtle"
+                    size="sm"
+                    className="uppercase tracking-[0.2em]"
+                  >
+                    {isLegal ? "Legal" : "Tech"}
+                  </Badge>
+                  <Link
+                    href="/contacts"
+                    className="text-sm font-semibold text-[var(--color-tech-primary)] transition-colors hover:text-white"
+                  >
+                    Узнать стоимость →
+                  </Link>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-2xl bg-white/10">
                     <ServiceIcon
                       name={service.frontmatter.icon}
                       variant={isLegal ? "legal" : "tech"}
-                      className="h-16 w-16"
+                      className="h-6 w-6 text-white"
                     />
                   </div>
-
-                  {/* Title */}
-                  <h2 className="group-hover:text-legal-500 dark:group-hover:text-tech-400 mb-3 text-2xl font-bold transition-colors">
-                    {service.frontmatter.title}
-                  </h2>
-
-                  {/* Description */}
-                  <p className="mb-6 line-clamp-3 text-neutral-600 dark:text-neutral-400">
-                    {service.frontmatter.description}
-                  </p>
-
-                  {/* Price */}
-                  <div className="mb-6">
-                    <span
-                      className={`bg-gradient-to-r text-lg font-semibold ${
-                        isLegal ? "from-legal-500 to-legal-600" : "from-tech-500 to-tech-600"
-                      } bg-clip-text text-transparent`}
-                    >
+                  <div className="space-y-2">
+                    <Heading as="h3" size="lg" weight="semibold">{service.frontmatter.title}</Heading>
+                    <Text size="sm" tone="secondary">
+                      {service.frontmatter.description}
+                    </Text>
+                  </div>
+                </div>
+                <div className="space-y-3">
+                  <div className="space-y-1">
+                    <Label size="sm" spacing="wider" tone="muted">
+                      Базовый бюджет
+                    </Label>
+                    <Text size="lg" weight="semibold" tone="primary">
                       {service.frontmatter.price}
-                    </span>
+                    </Text>
                   </div>
-
-                  {/* CTA */}
-                  <div className="text-legal-500 dark:text-tech-400 flex items-center gap-2 font-semibold transition-all group-hover:gap-4">
-                    Подробнее
-                    <span className="text-xl">→</span>
-                  </div>
-                </Card>
-              </Link>
+                  <List variant="checkmark" spacing="sm" className="text-sm text-[var(--color-text-secondary)]">
+                    <li>Ведение команды {isLegal ? "юристов" : "разработчиков"}</li>
+                    <li>Промежуточные отчёты каждую неделю</li>
+                  </List>
+                </div>
+                <div className="mt-auto flex justify-between items-center pt-2">
+                  <Link
+                    href={`/services/${category}/${service.slug}`}
+                    className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--color-text-secondary)] transition-colors hover:text-white"
+                  >
+                    Подробнее о пакете
+                    <span aria-hidden="true">→</span>
+                  </Link>
+                </div>
+              </Card>
             ))}
           </div>
         </Container>
-      </section>
+      </Section>
 
-      {/* CTA Section */}
-      <section className="bg-gradient-to-b from-white to-neutral-50 py-24 dark:from-neutral-950 dark:to-neutral-900">
+      {/* CTA */}
+      <Section spacing="md" className="pb-20 pt-0">
         <Container>
-          <div className="mx-auto max-w-2xl text-center">
-            <h2 className="mb-6 text-3xl font-bold md:text-4xl">Нужна консультация?</h2>
-            <p className="mb-8 text-xl text-neutral-600 dark:text-neutral-400">
-              Свяжитесь с нами и получите бесплатную консультацию по вашему вопросу
-            </p>
-            <Link
-              href="/#contact"
-              className={`inline-flex items-center gap-2 rounded-lg px-8 py-4 font-semibold transition-all duration-300 hover:scale-105 hover:shadow-xl ${
-                isLegal
-                  ? "from-legal-500 to-legal-600 bg-gradient-to-r text-white"
-                  : "from-tech-500 to-tech-600 bg-gradient-to-r text-white"
-              }`}
-            >
-              Связаться с нами
-              <span className="text-xl">→</span>
-            </Link>
-          </div>
+          <Card variant="glass" padding="lg" className="text-center">
+            <div className="space-y-6">
+              <Label size="md" spacing="wider" tone="muted">
+                Следующий шаг
+              </Label>
+              <Heading as="h3" size="lg" weight="semibold">
+                Получите персональную консультацию
+              </Heading>
+              <Text size="lg" tone="secondary">
+                Расскажите о задаче — соберем команду, подготовим бэклог и бюджет за два рабочих дня.
+              </Text>
+              <div className="flex flex-wrap justify-center gap-4">
+                <Button asChild variant="primary-tech" size="md">
+                  <Link href="/contacts">Связаться</Link>
+                </Button>
+                <Button asChild variant="outline" size="md">
+                  <Link href="/price">Прайс-лист</Link>
+                </Button>
+              </div>
+            </div>
+          </Card>
         </Container>
-      </section>
-    </div>
+      </Section>
+    </>
   );
 }

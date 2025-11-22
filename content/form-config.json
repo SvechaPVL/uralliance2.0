@@ -1,0 +1,79 @@
+{
+  "contact": {
+    "title": "Обсудить проект",
+    "description": "Заполните форму, и мы свяжемся с вами в течение рабочего дня",
+    "honeypot": {
+      "label": "Ваша компания"
+    },
+    "fields": {
+      "name": {
+        "label": "Имя",
+        "placeholder": "Как к вам обращаться?",
+        "variant": "legal",
+        "required": true,
+        "validation": {
+          "minLength": 2,
+          "errorMessage": "Имя должно содержать минимум 2 символа"
+        }
+      },
+      "email": {
+        "label": "Email",
+        "placeholder": "you@example.com",
+        "variant": "tech",
+        "required": true,
+        "validation": {
+          "pattern": "email",
+          "errorMessage": "Введите корректный email"
+        }
+      },
+      "phone": {
+        "label": "Телефон",
+        "placeholder": "+7 (900) 000-00-00",
+        "variant": "legal",
+        "required": false,
+        "validation": {
+          "pattern": "phone",
+          "errorMessage": "Введите корректный номер телефона"
+        }
+      },
+      "service": {
+        "label": "Что вам нужно",
+        "variant": "tech",
+        "required": true,
+        "options": [
+          {
+            "label": "Помощь юриста",
+            "value": "legal"
+          },
+          {
+            "label": "Сайт или программа",
+            "value": "tech"
+          }
+        ]
+      },
+      "message": {
+        "label": "Сообщение",
+        "placeholder": "Опишите вашу задачу...",
+        "variant": "legal",
+        "required": true,
+        "validation": {
+          "minLength": 10,
+          "errorMessage": "Напишите хотя бы 10 символов"
+        }
+      }
+    },
+    "button": {
+      "label": "Отправить заявку",
+      "loadingLabel": "Отправка...",
+      "variant": "primary-tech"
+    },
+    "messages": {
+      "success": "Спасибо! Ответим в течение рабочего дня.",
+      "error": "Не удалось отправить. Попробуйте позже.",
+      "networkError": "Проблема с интернетом. Попробуйте ещё раз.",
+      "validationError": "Проверьте правильность заполнения полей"
+    },
+    "hint": "Ответим в течение рабочего дня. Все данные защищены.",
+    "privacy": "Нажимая кнопку, вы соглашаетесь с политикой конфиденциальности"
+  }
+}

@@ -4,12 +4,10 @@ import { motion } from "framer-motion";
 import { Container } from "@/components/layout/Container";
 import { AnimatedCounter } from "@/components/animations/AnimatedCounter";
 import { Card } from "@/components/primitives/card";
-
-const stats = [
-  { value: 500, suffix: "+", label: "реализованных проектов" },
-  { value: 15, suffix: " лет", label: "опыта команды" },
-  { value: 98, suffix: "%", label: "довольных клиентов" },
-];
+import { Section } from "@/components/primitives/section";
+import { Heading } from "@/components/primitives/heading";
+import { Label } from "@/components/primitives/label";
+import sectionsConfig from "@/content/sections.json";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 24 },
@@ -18,28 +16,29 @@ const fadeInUp = {
 
 export function TrustSection() {
   return (
-    <section className="relative py-20 sm:py-24">
+    <Section spacing="lg">
       <Container className="relative z-10">
         <div className="mb-12 max-w-3xl">
-          <motion.p
-            className="text-sm uppercase tracking-[0.4em] text-[var(--color-text-muted)]"
+          <motion.div
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            доверяют лидеры рынка
-          </motion.p>
-          <motion.h2
-            className="mt-4 text-3xl font-semibold text-[var(--color-text-primary)] sm:text-4xl lg:text-5xl"
+            <Label size="md" spacing="widest" tone="muted">
+              {sectionsConfig.trust.label}
+            </Label>
+          </motion.div>
+          <motion.div
             initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7, delay: 0.1 }}
             viewport={{ once: true }}
           >
-            Более десяти лет объединяем юридический опыт и технологические продукты в рамках одной
-            команды Uralliance.
-          </motion.h2>
+            <Heading as="h2" size="2xl" weight="semibold" className="mt-4">
+              {sectionsConfig.trust.heading}
+            </Heading>
+          </motion.div>
           <motion.p
             className="mt-4 text-base text-[var(--color-text-secondary)] sm:text-lg"
             initial={{ opacity: 0, y: 18 }}
@@ -47,8 +46,7 @@ export function TrustSection() {
             transition={{ duration: 0.7, delay: 0.2 }}
             viewport={{ once: true }}
           >
-            Нас выбирают компании, которым нужен не подрядчик, а стратегический партнёр: защищаем
-            сделки, внедряем интеграции, масштабируем процессы без бюрократии.
+            {sectionsConfig.trust.description}
           </motion.p>
         </div>
 
@@ -61,7 +59,7 @@ export function TrustSection() {
           whileInView="visible"
           viewport={{ once: true, amount: 0.4 }}
         >
-          {stats.map((stat) => (
+          {sectionsConfig.trust.stats.map((stat) => (
             <motion.div key={stat.label} variants={fadeInUp}>
               <Card variant="glass" padding="lg" className="h-full">
                 <AnimatedCounter
@@ -70,7 +68,7 @@ export function TrustSection() {
                   className="gap-3"
                   valueClassName="text-4xl font-bold text-gradient lg:text-5xl"
                   label={stat.label}
-                  labelClassName="text-xs uppercase tracking-[0.3em] text-[var(--color-text-muted)]"
+                  labelClassName="text-xs uppercase tracking-wider text-[var(--color-text-muted)]"
                 />
               </Card>
             </motion.div>
@@ -81,6 +79,6 @@ export function TrustSection() {
       <div className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 opacity-40">
         <div className="mx-auto h-64 w-64 rounded-full bg-gradient-to-br from-[var(--color-legal-primary)]/10 to-[var(--color-tech-primary)]/10 blur-3xl" />
       </div>
-    </section>
+    </Section>
   );
 }

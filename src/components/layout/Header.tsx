@@ -1,11 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/primitives/button";
 import { Container } from "@/components/layout/Container";
 import { MobileMenu } from "@/components/layout/MobileMenu";
+import { useHeroProgress } from "@/context/HeroProgressContext";
+import navigationConfig from "@/content/navigation.json";
 
 /**
  * Navigation Item Interface
@@ -17,18 +19,9 @@ interface NavItem {
 }
 
 /**
- * Navigation Menu Items
+ * Navigation Menu Items - loaded from config
  */
-const navigationItems: NavItem[] = [
-  { label: "Главная", href: "/", category: "general" },
-  { label: "Юридические услуги", href: "/services/legal", category: "legal" },
-  { label: "IT-решения", href: "/services/tech", category: "tech" },
-  { label: "Прайс", href: "/price", category: "general" },
-  { label: "Кейсы", href: "/cases", category: "general" },
-  { label: "Блог", href: "/blog", category: "general" },
-  { label: "О компании", href: "/about", category: "general" },
-  { label: "Контакты", href: "/contacts", category: "general" },
-];
+const navigationItems: NavItem[] = navigationConfig.header.items as NavItem[];
 
 /**
  * Header Component
@@ -46,6 +39,20 @@ const navigationItems: NavItem[] = [
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { progress: heroProgress } = useHeroProgress();
+  const blendedProgress = Math.min(Math.max(heroProgress, 0), 1);
+  const shouldShowGlass = isScrolled || blendedProgress > 0.08;
+  const headerDynamicStyle = useMemo(() => {
+    if (!shouldShowGlass) return undefined;
+    const goldStop = 0.1 + blendedProgress * 0.2;
+    const cyanStop = 0.1 + blendedProgress * 0.25;
+    const backdropAlpha = 0.55 + blendedProgress * 0.25;
+    return {
+      backgroundImage: `linear-gradient(120deg, rgba(212,175,55,${goldStop}) 4%, rgba(6,182,212,${cyanStop}) 96%)`,
+      backgroundColor: `rgba(7,10,20,${backdropAlpha})`,
+      borderColor: `rgba(255,255,255,${0.05 + blendedProgress * 0.12})`,
+    };
+  }, [blendedProgress, shouldShowGlass]);
 
   // Handle scroll effect
   useEffect(() => {
@@ -74,34 +81,38 @@ export function Header() {
   return (
     <header
       className={cn(
-        // Base styles
         "fixed top-0 right-0 left-0 z-50",
         "transition-all duration-[var(--transition-base)]",
-        "select-none",
-        // Scrolled state
-        isScrolled
+        "select-none border-b",
+        shouldShowGlass
           ? cn(
-              "bg-[var(--color-background)]/80 backdrop-blur-[var(--blur-lg)]",
-              "shadow-[0_6px_20px_rgba(0,0,0,0.25)]",
-              "border-b border-[var(--color-border)]"
+              "backdrop-blur-[var(--blur-lg)] shadow-[0_6px_24px_rgba(0,0,0,0.4)]",
+              "border-[var(--color-border)]/30"
             )
-          : "bg-transparent"
+          : "bg-transparent border-transparent"
       )}
+      style={headerDynamicStyle}
+      data-hero-progress={blendedProgress.toFixed(2)}
     >
       <Container size="2xl">
         <nav className="flex h-20 items-center justify-between" aria-label="Main navigation">
           {/* Logo */}
-          <Link href="/" className="group flex items-center gap-2">
+          <Link href={navigationConfig.header.logo.href} className="group flex items-center gap-2">
             <div
               className={cn(
                 "font-display text-2xl font-bold",
                 "bg-gradient-to-r from-[var(--color-legal-primary)] to-[var(--color-tech-primary)]",
                 "bg-clip-text text-transparent",
                 "transition-all duration-[var(--transition-base)]",
-                "group-hover:scale-105"
+                "group-hover:scale-105",
+                blendedProgress > 0.4 && "drop-shadow-[0_0_22px_rgba(6,182,212,0.45)]"
               )}
+              style={{
+                transform: `scale(${1 + blendedProgress * 0.05})`,
+                letterSpacing: `${0.02 + blendedProgress * 0.06}em`,
+              }}
             >
-              Uralliance
+              {navigationConfig.header.logo.text}
             </div>
           </Link>
 
@@ -127,24 +138,16 @@ export function Header() {
 
           {/* CTA Buttons - Desktop */}
           <div className="hidden items-center gap-3 lg:flex">
-            <Button
-              variant="outline-legal"
-              size="sm"
-              onClick={() => {
-                document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
-              }}
-            >
-              Legal
-            </Button>
-            <Button
-              variant="primary-tech"
-              size="sm"
-              onClick={() => {
-                document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
-              }}
-            >
-              Tech
-            </Button>
+            {navigationConfig.header.ctaButtons.map((button) => (
+              <Button
+                key={button.label}
+                variant={button.variant as any}
+                size="sm"
+                asChild
+              >
+                <Link href={button.href}>{button.label}</Link>
+              </Button>
+            ))}
           </div>
 
           {/* Mobile Menu Toggle */}

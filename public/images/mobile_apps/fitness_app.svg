@@ -1,0 +1,133 @@
+<svg width="393" height="852" viewBox="0 0 393 852" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Gradient -->
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1E1B4B"/>
+      <stop offset="100%" stop-color="#0F172A"/>
+    </linearGradient>
+    <linearGradient id="cardGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#EC4899"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="393" height="852" fill="url(#bgGradient)"/>
+
+  <!-- Header -->
+  <text x="20" y="90" fill="#FFFFFF" font-size="32" font-weight="bold" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Панель управления</text>
+  <text x="20" y="115" fill="#A78BFA" font-size="14" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Отслеживайте свои тренировки</text>
+
+  <!-- Stats Card -->
+  <rect x="20" y="140" width="353" height="200" rx="20" fill="url(#cardGradient)"/>
+
+  <!-- Today's Progress -->
+  <text x="40" y="175" fill="#FFFFFF" font-size="18" font-weight="bold" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Сегодняшний прогресс</text>
+
+  <!-- Circular Progress -->
+  <circle cx="196.5" cy="240" r="50" stroke="#FFFFFF" stroke-width="8" fill="none" opacity="0.2"/>
+  <circle cx="196.5" cy="240" r="50" stroke="#FFFFFF" stroke-width="8" fill="none"
+          stroke-dasharray="220 314" stroke-dashoffset="0" transform="rotate(-90 196.5 240)"/>
+  <text x="196.5" y="245" fill="#FFFFFF" font-size="24" font-weight="bold" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">70%</text>
+  <text x="196.5" y="265" fill="#FFFFFF" font-size="12" text-anchor="middle" opacity="0.8" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Цель</text>
+
+  <!-- Stats Row -->
+  <g>
+    <text x="40" y="315" fill="#FFFFFF" font-size="20" font-weight="bold" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">2 547</text>
+    <text x="40" y="332" fill="#FFFFFF" font-size="11" opacity="0.7" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Калории</text>
+  </g>
+
+  <g>
+    <text x="150" y="315" fill="#FFFFFF" font-size="20" font-weight="bold" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">8,2 км</text>
+    <text x="150" y="332" fill="#FFFFFF" font-size="11" opacity="0.7" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Дистанция</text>
+  </g>
+
+  <g>
+    <text x="270" y="315" fill="#FFFFFF" font-size="20" font-weight="bold" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">45 мин</text>
+    <text x="270" y="332" fill="#FFFFFF" font-size="11" opacity="0.7" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Время</text>
+  </g>
+
+  <!-- Workouts Section -->
+  <text x="20" y="375" fill="#FFFFFF" font-size="20" font-weight="bold" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Ваши тренировки</text>
+
+  <!-- Workout Cards -->
+  <g>
+    <!-- Card 1 - Running -->
+    <rect x="20" y="395" width="170" height="130" rx="16" fill="#312E81"/>
+    <circle cx="50" cy="425" r="15" fill="#8B5CF6"/>
+    <text x="80" y="432" fill="#FFFFFF" font-size="16" font-weight="600" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Бег</text>
+    <text x="30" y="465" fill="#A78BFA" font-size="12" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Дистанция</text>
+    <text x="30" y="490" fill="#FFFFFF" font-size="24" font-weight="bold" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">5,2 км</text>
+    <text x="30" y="512" fill="#10B981" font-size="12" font-weight="600" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">+12% за неделю</text>
+
+    <!-- Card 2 - Strength -->
+    <rect x="203" y="395" width="170" height="130" rx="16" fill="#312E81"/>
+    <circle cx="233" cy="425" r="15" fill="#EC4899"/>
+    <text x="263" y="432" fill="#FFFFFF" font-size="16" font-weight="600" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Силовые</text>
+    <text x="213" y="465" fill="#A78BFA" font-size="12" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Сессий</text>
+    <text x="213" y="490" fill="#FFFFFF" font-size="24" font-weight="bold" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">12</text>
+    <text x="213" y="512" fill="#10B981" font-size="12" font-weight="600" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">+3 за неделю</text>
+  </g>
+
+  <!-- Weekly Activity -->
+  <text x="20" y="565" fill="#FFFFFF" font-size="20" font-weight="bold" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Активность за неделю</text>
+
+  <!-- Bar Chart -->
+  <g>
+    <!-- Mon -->
+    <rect x="30" y="670" width="35" height="80" rx="6" fill="#312E81"/>
+    <rect x="30" y="630" width="35" height="40" rx="6" fill="#8B5CF6"/>
+    <text x="47.5" y="765" fill="#A78BFA" font-size="11" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Пн</text>
+
+    <!-- Tue -->
+    <rect x="80" y="650" width="35" height="100" rx="6" fill="#312E81"/>
+    <rect x="80" y="610" width="35" height="60" rx="6" fill="#8B5CF6"/>
+    <text x="97.5" y="765" fill="#A78BFA" font-size="11" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Вт</text>
+
+    <!-- Wed -->
+    <rect x="130" y="680" width="35" height="70" rx="6" fill="#312E81"/>
+    <rect x="130" y="650" width="35" height="30" rx="6" fill="#8B5CF6"/>
+    <text x="147.5" y="765" fill="#A78BFA" font-size="11" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Ср</text>
+
+    <!-- Thu -->
+    <rect x="180" y="640" width="35" height="110" rx="6" fill="#312E81"/>
+    <rect x="180" y="600" width="35" height="70" rx="6" fill="#EC4899"/>
+    <text x="197.5" y="765" fill="#A78BFA" font-size="11" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Чт</text>
+
+    <!-- Fri -->
+    <rect x="230" y="660" width="35" height="90" rx="6" fill="#312E81"/>
+    <rect x="230" y="620" width="35" height="50" rx="6" fill="#8B5CF6"/>
+    <text x="247.5" y="765" fill="#A78BFA" font-size="11" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Пт</text>
+
+    <!-- Sat -->
+    <rect x="280" y="690" width="35" height="60" rx="6" fill="#312E81"/>
+    <rect x="280" y="670" width="35" height="20" rx="6" fill="#8B5CF6"/>
+    <text x="297.5" y="765" fill="#A78BFA" font-size="11" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Сб</text>
+
+    <!-- Sun -->
+    <rect x="330" y="710" width="35" height="40" rx="6" fill="#312E81"/>
+    <text x="347.5" y="765" fill="#A78BFA" font-size="11" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Вс</text>
+  </g>
+
+  <!-- Bottom Navigation -->
+  <rect y="782" width="393" height="70" fill="#1E1B4B" stroke="#312E81" stroke-width="1"/>
+
+  <g>
+    <circle cx="59" cy="810" r="12" fill="#8B5CF6"/>
+    <text x="59" y="835" fill="#8B5CF6" font-size="11" font-weight="600" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Главная</text>
+  </g>
+
+  <g>
+    <circle cx="157" cy="810" r="12" fill="#4C4770"/>
+    <text x="157" y="835" fill="#9CA3AF" font-size="11" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Активность</text>
+  </g>
+
+  <g>
+    <circle cx="255" cy="810" r="12" fill="#4C4770"/>
+    <text x="255" y="835" fill="#9CA3AF" font-size="11" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Статистика</text>
+  </g>
+
+  <g>
+    <circle cx="334" cy="810" r="12" fill="#4C4770"/>
+    <text x="334" y="835" fill="#9CA3AF" font-size="11" text-anchor="middle" font-family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">Профиль</text>
+  </g>
+</svg>
