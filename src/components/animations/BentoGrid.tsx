@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { Heading } from "@/components/primitives/heading";
 import { Label } from "@/components/primitives/label";
+import { CardSwiper } from "./CardSwiper";
 
 export type BentoGridItem = {
   /**
@@ -84,91 +85,97 @@ export function BentoGrid({ items, className, rowHeight = "minmax(220px, auto)" 
   const prefersReducedMotion = useReducedMotion();
 
   return (
-    <div
-      className={cn(
-        // На мобилке используем flexbox для надёжного layout
-        "flex flex-col gap-8",
-        // На планшете и выше - grid
-        "sm:grid sm:grid-cols-2 sm:gap-10",
-        "lg:grid-cols-5 lg:gap-12",
-        // Grid-auto-rows только для десктопа
-        "lg:[grid-auto-rows:var(--row-height)]",
-        className
-      )}
-      style={{
-        // Передаём rowHeight как CSS переменную для десктопа
-        ["--row-height" as string]: rowHeight,
-      }}
-    >
-      {items.map((item, index) => {
-        const cardContent = (
-          <div className="relative flex flex-col gap-3">
-            {item.icon && <div className="text-[var(--color-tech-primary)]">{item.icon}</div>}
-            {item.badge && (
-              <Label
-                as="span"
-                size="sm"
-                spacing="wider"
-                tone="muted"
-                className="inline-flex w-fit items-center rounded-full border border-[var(--color-border-soft)] px-3 py-1"
-              >
-                {item.badge}
-              </Label>
-            )}
-            {item.content ? (
-              item.content
-            ) : (
-              <>
-                {item.title && (
-                  <Heading as="h3" size="md" weight="semibold">
-                    {item.title}
-                  </Heading>
-                )}
-                {item.description && (
-                  <p className="text-sm text-[var(--color-text-secondary)]">{item.description}</p>
-                )}
-              </>
-            )}
-          </div>
-        );
+    <>
+      {/* Mobile: Card Swiper */}
+      <div className="block sm:hidden">
+        <CardSwiper items={items} />
+      </div>
 
-        const cardClassName = cn(
-          "group relative flex h-full flex-col justify-between rounded-3xl border border-[var(--color-border)]",
-          "bg-[var(--color-card-bg)]/70 backdrop-blur-xl p-6 transition-all duration-500",
-          "hover:-translate-y-0.5 hover:border-[var(--color-border-soft)]",
-          "focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-tech-primary)]",
-          item.className
-        );
+      {/* Tablet & Desktop: Grid */}
+      <div
+        className={cn(
+          // Скрываем на мобилке, показываем на планшете и выше
+          "hidden sm:grid sm:grid-cols-2 sm:gap-10",
+          "lg:grid-cols-5 lg:gap-12",
+          // Grid-auto-rows только для десктопа
+          "lg:[grid-auto-rows:var(--row-height)]",
+          className
+        )}
+        style={{
+          // Передаём rowHeight как CSS переменную для десктопа
+          ["--row-height" as string]: rowHeight,
+        }}
+      >
+        {items.map((item, index) => {
+          const cardContent = (
+            <div className="relative flex flex-col gap-3">
+              {item.icon && <div className="text-[var(--color-tech-primary)]">{item.icon}</div>}
+              {item.badge && (
+                <Label
+                  as="span"
+                  size="sm"
+                  spacing="wider"
+                  tone="muted"
+                  className="inline-flex w-fit items-center rounded-full border border-[var(--color-border-soft)] px-3 py-1"
+                >
+                  {item.badge}
+                </Label>
+              )}
+              {item.content ? (
+                item.content
+              ) : (
+                <>
+                  {item.title && (
+                    <Heading as="h3" size="md" weight="semibold">
+                      {item.title}
+                    </Heading>
+                  )}
+                  {item.description && (
+                    <p className="text-sm text-[var(--color-text-secondary)]">{item.description}</p>
+                  )}
+                </>
+              )}
+            </div>
+          );
 
-        return (
-          <motion.div
-            key={item.id ?? index}
-            variants={cardVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{
-              duration: prefersReducedMotion ? 0 : 0.5,
-              delay: prefersReducedMotion ? 0 : index * 0.05,
-            }}
-            className={cn(colSpanMap[item.colSpan ?? 1], rowSpanMap[item.rowSpan ?? 1])}
-          >
-            {item.href ? (
-              <Link href={item.href} className={cardClassName}>
-                {cardContent}
-                <div className="relative mt-6 inline-flex items-center gap-2 text-sm text-[var(--color-text-secondary)]">
-                  Подробнее
-                  <span className="transition-transform duration-300 group-hover:translate-x-1">
-                    →
-                  </span>
-                </div>
-              </Link>
-            ) : (
-              <div className={cardClassName}>{cardContent}</div>
-            )}
-          </motion.div>
-        );
-      })}
-    </div>
+          const cardClassName = cn(
+            "group relative flex h-full flex-col justify-between rounded-3xl border border-[var(--color-border)]",
+            "bg-[var(--color-card-bg)]/70 backdrop-blur-xl p-6 transition-all duration-500",
+            "hover:-translate-y-0.5 hover:border-[var(--color-border-soft)]",
+            "focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-tech-primary)]",
+            item.className
+          );
+
+          return (
+            <motion.div
+              key={item.id ?? index}
+              variants={cardVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{
+                duration: prefersReducedMotion ? 0 : 0.5,
+                delay: prefersReducedMotion ? 0 : index * 0.05,
+              }}
+              className={cn(colSpanMap[item.colSpan ?? 1], rowSpanMap[item.rowSpan ?? 1])}
+            >
+              {item.href ? (
+                <Link href={item.href} className={cardClassName}>
+                  {cardContent}
+                  <div className="relative mt-6 inline-flex items-center gap-2 text-sm text-[var(--color-text-secondary)]">
+                    Подробнее
+                    <span className="transition-transform duration-300 group-hover:translate-x-1">
+                      →
+                    </span>
+                  </div>
+                </Link>
+              ) : (
+                <div className={cardClassName}>{cardContent}</div>
+              )}
+            </motion.div>
+          );
+        })}
+      </div>
+    </>
   );
 }
