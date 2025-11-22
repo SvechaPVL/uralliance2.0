@@ -150,7 +150,7 @@ const bentoItems: BentoGridItem[] = [
 
 export function TechShowcase() {
   return (
-    <Section spacing="xl">
+    <Section spacing="xl" overflow="visible">
       <Container className="relative z-10 flex flex-col select-none">
         <div className="mb-8 max-w-3xl sm:mb-12">
           <Label size="md" spacing="widest" tone="muted">
