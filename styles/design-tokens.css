@@ -40,7 +40,7 @@
   --color-glass-strong: rgba(15, 23, 42, 0.5);
   --color-text-primary: #e2e8f0; /* slate-200 */
   --color-text-secondary: #a0aec0; /* slate-400 - увеличена контрастность */
-  --color-text-muted: #94a3b8; /* slate-400 - увеличена контрастность с 4.5:1 */
+  --color-text-muted: #b0b9c9; /* Увеличена контрастность до 7:1 для WCAG AAA */
   --color-border: rgba(255, 255, 255, 0.12);
   --color-border-soft: rgba(148, 163, 184, 0.18);
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 /**
@@ -84,6 +84,20 @@ export function Particles({
   const particlesRef = useRef<Particle[]>([]);
   const animationFrameRef = useRef<number | undefined>(undefined);
   const prefersReducedMotion = useReducedMotion();
+  const [isCoarsePointer, setIsCoarsePointer] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const media = window.matchMedia("(pointer: coarse)");
+    const update = () => setIsCoarsePointer(media.matches);
+    update();
+    if (typeof media.addEventListener === "function") {
+      media.addEventListener("change", update);
+      return () => media.removeEventListener("change", update);
+    }
+    media.addListener(update);
+    return () => media.removeListener(update);
+  }, []);
 
   // Setup canvas and start animation
   useEffect(() => {
@@ -92,6 +106,7 @@ export function Particles({
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
+    const disableAnimation = prefersReducedMotion || isCoarsePointer;
 
     // Set canvas size
     const resizeCanvas = () => {
@@ -132,7 +147,7 @@ export function Particles({
     };
 
     const updateParticle = (particle: Particle, width: number, height: number) => {
-      if (prefersReducedMotion) return;
+      if (disableAnimation) return;
 
       particle.x += particle.vx;
       particle.y += particle.vy;
@@ -160,7 +175,7 @@ export function Particles({
       animationFrameRef.current = requestAnimationFrame(step);
     };
 
-    if (prefersReducedMotion) {
+    if (disableAnimation) {
       renderFrame(size.width, size.height);
     } else {
       step();
@@ -170,7 +185,7 @@ export function Particles({
     const handleResize = () => {
       size = resizeCanvas();
       initParticles(size.width, size.height);
-      if (prefersReducedMotion) {
+      if (disableAnimation) {
         renderFrame(size.width, size.height);
       }
     };
@@ -184,12 +199,16 @@ export function Particles({
       }
       window.removeEventListener("resize", handleResize);
     };
-  }, [count, colors, sizeRange, speed, prefersReducedMotion]);
+  }, [count, colors, sizeRange, speed, prefersReducedMotion, isCoarsePointer]);
+
+  if (isCoarsePointer) {
+    return null;
+  }
 
   return (
     <canvas
       ref={canvasRef}
-      className={`absolute inset-0 pointer-events-none ${className}`}
+      className={`pointer-events-none absolute inset-0 ${className}`}
       aria-hidden="true"
       style={{
         width: "100%",

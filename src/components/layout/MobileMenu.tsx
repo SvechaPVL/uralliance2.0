@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -54,17 +54,42 @@ interface MobileMenuProps {
  */
 export function MobileMenu({ isOpen, onClose, navigationItems }: MobileMenuProps) {
   const prefersReducedMotion = useReducedMotion();
+  const scrollRef = useRef(0);
 
-  // Lock body scroll when menu is open
+  // Lock body scroll when menu is open (preserve scroll position)
   useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
     if (isOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
+      scrollRef.current = window.scrollY;
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollRef.current}px`;
+      document.body.style.left = "0";
+      document.body.style.right = "0";
+    } else if (document.body.style.position === "fixed") {
+      const offset = document.body.style.top;
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.left = "";
+      document.body.style.right = "";
+      if (offset) {
+        window.scrollTo(0, -parseInt(offset, 10) || 0);
+      }
     }
 
     return () => {
-      document.body.style.overflow = "";
+      if (document.body.style.position === "fixed") {
+        const offset = document.body.style.top;
+        document.body.style.position = "";
+        document.body.style.top = "";
+        document.body.style.left = "";
+        document.body.style.right = "";
+        if (offset) {
+          window.scrollTo(0, -parseInt(offset, 10) || 0);
+        }
+      }
     };
   }, [isOpen]);
 
@@ -122,7 +147,7 @@ export function MobileMenu({ isOpen, onClose, navigationItems }: MobileMenuProps
               duration: prefersReducedMotion ? 0 : 0.2,
             }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40"
+            className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
             aria-hidden="true"
           />
 
@@ -150,10 +175,10 @@ export function MobileMenu({ isOpen, onClose, navigationItems }: MobileMenuProps
             aria-label="Mobile navigation menu"
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-[var(--color-border)]">
+            <div className="flex items-center justify-between border-b border-[var(--color-border)] p-6">
               <div
                 className={cn(
-                  "font-display font-bold text-xl",
+                  "font-display text-xl font-bold",
                   "bg-gradient-to-r from-[var(--color-legal-primary)] to-[var(--color-tech-primary)]",
                   "bg-clip-text text-transparent"
                 )}
@@ -164,16 +189,16 @@ export function MobileMenu({ isOpen, onClose, navigationItems }: MobileMenuProps
                 type="button"
                 onClick={onClose}
                 className={cn(
-                  "p-2 rounded-lg",
+                  "rounded-lg p-2",
                   "text-[var(--color-text-primary)]",
                   "hover:bg-[var(--color-background-secondary)]",
                   "transition-colors duration-[var(--transition-base)]",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-legal-primary)]"
+                  "focus-visible:ring-2 focus-visible:ring-[var(--color-legal-primary)] focus-visible:outline-none"
                 )}
                 aria-label="Close mobile menu"
               >
                 <svg
-                  className="w-6 h-6"
+                  className="h-6 w-6"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -204,11 +229,11 @@ export function MobileMenu({ isOpen, onClose, navigationItems }: MobileMenuProps
                       href={item.href}
                       onClick={onClose}
                       className={cn(
-                        "block py-3 px-4 rounded-lg",
-                        "text-[var(--color-text-primary)] font-medium text-lg",
+                        "block rounded-lg px-4 py-3",
+                        "text-lg font-medium text-[var(--color-text-primary)]",
                         "hover:bg-[var(--color-background-secondary)]",
                         "transition-colors duration-[var(--transition-base)]",
-                        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-legal-primary)]",
+                        "focus-visible:ring-2 focus-visible:ring-[var(--color-legal-primary)] focus-visible:outline-none",
                         item.category === "legal" && "hover:text-[var(--color-legal-primary)]",
                         item.category === "tech" && "hover:text-[var(--color-tech-primary)]"
                       )}
@@ -220,14 +245,11 @@ export function MobileMenu({ isOpen, onClose, navigationItems }: MobileMenuProps
               </ul>
 
               {/* CTA Buttons */}
-              <motion.div
-                variants={itemVariants}
-                className="mt-8 space-y-3"
-              >
+              <motion.div variants={itemVariants} className="mt-8 space-y-3">
                 {navigationConfig.mobile.ctaButtons.map((button) => (
                   <Button
                     key={button.label}
-                    variant={button.variant as any}
+                    variant={button.variant as "primary-legal" | "primary-tech"}
                     size="lg"
                     fullWidth
                     asChild
@@ -242,9 +264,9 @@ export function MobileMenu({ isOpen, onClose, navigationItems }: MobileMenuProps
               {/* Contact Info */}
               <motion.div
                 variants={itemVariants}
-                className="mt-8 pt-8 border-t border-[var(--color-border)]"
+                className="mt-8 border-t border-[var(--color-border)] pt-8"
               >
-                <p className="text-sm text-[var(--color-text-secondary)] mb-4">
+                <p className="mb-4 text-sm text-[var(--color-text-secondary)]">
                   {navigationConfig.mobile.contactHint}
                 </p>
                 <div className="space-y-3">
@@ -255,11 +277,11 @@ export function MobileMenu({ isOpen, onClose, navigationItems }: MobileMenuProps
                       "text-[var(--color-text-primary)]",
                       "hover:text-[var(--color-tech-primary)]",
                       "transition-colors duration-[var(--transition-base)]",
-                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-tech-primary)] rounded-lg p-2"
+                      "rounded-lg p-2 focus-visible:ring-2 focus-visible:ring-[var(--color-tech-primary)] focus-visible:outline-none"
                     )}
                   >
                     <svg
-                      className="w-5 h-5"
+                      className="h-5 w-5"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -281,11 +303,11 @@ export function MobileMenu({ isOpen, onClose, navigationItems }: MobileMenuProps
                       "text-[var(--color-text-primary)]",
                       "hover:text-[var(--color-tech-primary)]",
                       "transition-colors duration-[var(--transition-base)]",
-                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-tech-primary)] rounded-lg p-2"
+                      "rounded-lg p-2 focus-visible:ring-2 focus-visible:ring-[var(--color-tech-primary)] focus-visible:outline-none"
                     )}
                   >
                     <svg
-                      className="w-5 h-5"
+                      className="h-5 w-5"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
