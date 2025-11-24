@@ -50,9 +50,9 @@ docker network inspect bridge | grep -i mtu
 
 ---
 
-## Husky в Production Build
+## Husky и TypeScript в Production Build
 
-### Проблема
+### Проблема 1: Husky в Docker Build
 
 Husky (git hooks) пытается запуститься во время `npm ci` в Docker build, но:
 
@@ -60,28 +60,49 @@ Husky (git hooks) пытается запуститься во время `npm c
 - В Docker контейнере нет git
 - Это вызывает ошибку build
 
+### Проблема 2: TypeScript не найден при сборке
+
+Next.js не может загрузить `next.config.ts` потому что:
+
+- TypeScript является devDependency
+- При установке только production зависимостей TypeScript не устанавливается
+- Next.js build требует TypeScript для транспиляции конфигурации
+
 ### Решение
 
-Используем `--ignore-scripts` флаг в Dockerfile:
+Используем multi-stage build с правильным разделением зависимостей:
+
+**Stage 1 (deps):** Production зависимости для финального образа
 
 ```dockerfile
 RUN npm ci --only=production --ignore-scripts
 ```
 
-Это пропускает:
+**Stage 2 (builder):** ВСЕ зависимости (включая dev) для сборки
 
-- `prepare` скрипт (husky)
-- Другие postinstall скрипты, которые не нужны в production
+```dockerfile
+RUN npm ci --ignore-scripts
+```
+
+**Stage 3 (runner):** Копируем только production зависимости из stage 1
+
+Флаг `--ignore-scripts` в обоих случаях:
+
+- Пропускает `prepare` скрипт (husky)
+- Пропускает другие postinstall скрипты
+- Не ломает установку зависимостей
 
 ### Что это не ломает
 
+✅ TypeScript доступен для сборки в builder stage
 ✅ Next.js build работает нормально
 ✅ Все production зависимости устанавливаются
+✅ Финальный образ содержит только production код
 ✅ Application работает корректно
 
 ### Где применяется
 
-**Файл:** `Dockerfile`, строка 10
+**Файл:** `Dockerfile`, строки 10 и 18
 
 ---
 

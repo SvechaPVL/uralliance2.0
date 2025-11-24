@@ -13,8 +13,11 @@ RUN npm ci --only=production --ignore-scripts
 FROM node:20-alpine AS builder
 WORKDIR /app
 
-# Copy dependencies from deps stage
-COPY --from=deps /app/node_modules ./node_modules
+# Copy package files and install ALL dependencies (including dev)
+COPY package.json package-lock.json ./
+RUN npm ci --ignore-scripts
+
+# Copy application files
 COPY . .
 
 # Set environment variables for build
