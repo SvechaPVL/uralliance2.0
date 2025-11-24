@@ -106,15 +106,47 @@ RUN npm ci --ignore-scripts
 
 ---
 
+## Docker Compose v2 (встроенный плагин)
+
+### Проблема
+
+На современных серверах Docker Compose установлен как плагин (`docker compose`), а не как отдельная команда (`docker-compose`).
+
+Ошибка:
+
+```
+bash: line 14: docker-compose: command not found
+```
+
+### Решение
+
+Использовать `docker compose` (с пробелом) вместо `docker-compose` (с дефисом):
+
+```bash
+# Старая команда (не работает)
+docker-compose up -d
+
+# Новая команда (работает)
+docker compose up -d
+```
+
+### Где применяется
+
+- **GitHub Actions workflow:** `.github/workflows/deploy.yml`
+- Все deployment скрипты
+
+---
+
 ## Чеклист для новых REG.RU серверов
 
 При настройке нового сервера на REG.RU:
 
-1. ✅ Установить Docker
+1. ✅ Установить Docker (версия 20.10+)
 2. ✅ Создать `/etc/docker/daemon.json` с MTU 1450
 3. ✅ Перезапустить Docker: `systemctl restart docker`
 4. ✅ Проверить MTU: `docker network inspect bridge | grep mtu`
-5. ✅ Использовать docker-compose.yml с MTU настройками
+5. ✅ Использовать `docker compose` (не `docker-compose`)
+6. ✅ Проверить Docker Compose: `docker compose version`
 
 ---
 
