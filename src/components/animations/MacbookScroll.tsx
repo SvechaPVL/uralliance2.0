@@ -50,13 +50,13 @@ export function MacbookScrollDemo() {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentMockup((prev) => (prev + 1) % mockupCases.length);
-    }, 4000);
+    }, 4500);
 
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <div className="w-full overflow-hidden bg-white dark:bg-[#0B0B0F]">
+    <div className="mb-0 w-full bg-white sm:mb-28 lg:mb-44 dark:bg-[#0B0B0F]">
       <MacbookScroll
         title={<span>Дизайн + разработка под ключ.</span>}
         badge={<UraBadge className="h-10 w-10 -rotate-6 transform" />}
@@ -68,10 +68,10 @@ export function MacbookScrollDemo() {
                   key={currentMockup}
                   src={mockupCases[currentMockup].imageSrc}
                   alt={mockupCases[currentMockup].title}
-                  initial={{ opacity: 0, scale: 0.98, y: 12 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 1.02, y: -12 }}
-                  transition={{ duration: 0.75, ease: "easeInOut" }}
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.45, ease: "easeOut" }}
                   className="absolute inset-0 h-full w-full object-cover object-top"
                 />
               </AnimatePresence>
@@ -130,12 +130,12 @@ export const MacbookScroll = ({
     return false;
   });
 
-  const scaleX = useTransform(scrollYProgress, [0, 0.6], [1.2, isMobile ? 1 : 1.5]);
-  const scaleY = useTransform(scrollYProgress, [0, 0.6], [0.6, isMobile ? 1 : 1.5]);
-  const translate = useTransform(scrollYProgress, [0, 1], [0, 1500]);
-  const rotate = useTransform(scrollYProgress, [0.1, 0.12, 0.6], [-28, -28, 0]);
-  const textTransform = useTransform(scrollYProgress, [0, 0.3], [0, 100]);
-  const textOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
+  const scaleX = useTransform(scrollYProgress, [0, 0.35], [1.2, isMobile ? 1 : 1.5]);
+  const scaleY = useTransform(scrollYProgress, [0, 0.35], [0.6, isMobile ? 1 : 1.5]);
+  const translate = useTransform(scrollYProgress, [0, 0.85], [0, 1500]);
+  const rotate = useTransform(scrollYProgress, [0.1, 0.14, 0.45], [-28, -28, 0]);
+  const textTransform = useTransform(scrollYProgress, [0, 0.3], [0, 90]);
+  const textOpacity = useTransform(scrollYProgress, [0, 0.22], [1, 0]);
 
   const heading =
     title === null
@@ -149,7 +149,7 @@ export const MacbookScroll = ({
   return (
     <div
       ref={ref}
-      className="relative flex min-h-[150vh] shrink-0 scale-[0.55] transform flex-col items-center justify-start py-0 [perspective:800px] sm:min-h-[170vh] sm:scale-75 md:min-h-[200vh] md:scale-125 md:py-80"
+      className="relative flex min-h-[170vh] shrink-0 scale-[0.45] transform flex-col items-center justify-start py-0 [perspective:800px] sm:min-h-[200vh] sm:scale-75 md:min-h-[260vh] md:scale-125 md:py-80"
     >
       {heading && (
         <motion.h2

@@ -200,6 +200,7 @@ ${services
         <delivery>false</delivery>
         <name>${service.name}</name>
         <vendor>${shopName}</vendor>
+        <model>${service.name}</model>
         <description><![CDATA[${service.description}]]></description>
         <sales_notes>Консультация бесплатно</sales_notes>
         <manufacturer_warranty>true</manufacturer_warranty>
