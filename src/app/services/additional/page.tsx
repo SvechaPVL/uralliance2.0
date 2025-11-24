@@ -39,11 +39,9 @@ export default function AdditionalServicesPage() {
               <Card
                 key={service.id}
                 variant="glass"
-                className="p-6 transition-colors hover:border-[var(--color-legal-border)]"
+                className="animate-fadeInUp p-6 transition-colors hover:border-[var(--color-legal-border)]"
                 style={{
-                  opacity: 0,
-                  transform: "translateY(20px)",
-                  animation: `fadeInUp 0.5s ease-out ${index * 0.1}s forwards`,
+                  animationDelay: `${index * 0.1}s`,
                 }}
               >
                 <div className="mb-4">
@@ -164,19 +162,6 @@ export default function AdditionalServicesPage() {
           </div>
         </Section>
       </Container>
-
-      <style jsx>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
     </main>
   );
 }
