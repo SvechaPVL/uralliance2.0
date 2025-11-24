@@ -58,18 +58,18 @@
 
     <!-- Services -->
     <g>
-      <!-- Legal service -->
+      <!-- Left service -->
       <g>
-        <circle cx="390" cy="410" r="6" fill="#D4AF37" opacity="0.8"/>
-        <text x="405" y="417" font-family="Inter, sans-serif" font-size="22" font-weight="500" fill="#d1d5db">
+        <circle cx="380" cy="450" r="8" fill="#D4AF37" opacity="0.6"/>
+        <text x="400" y="458" font-family="Inter, sans-serif" font-size="24" font-weight="500" fill="#d1d5db">
           Арбитраж • Договоры • ЭЦП
         </text>
       </g>
 
-      <!-- Tech service -->
+      <!-- Right service -->
       <g>
-        <circle cx="430" cy="450" r="6" fill="#06B6D4" opacity="0.8"/>
-        <text x="445" y="457" font-family="Inter, sans-serif" font-size="22" font-weight="500" fill="#d1d5db">
+        <circle cx="380" cy="490" r="8" fill="#06B6D4" opacity="0.6"/>
+        <text x="400" y="498" font-family="Inter, sans-serif" font-size="24" font-weight="500" fill="#d1d5db">
           CRM • Сайты • Автоматизация
         </text>
       </g>
