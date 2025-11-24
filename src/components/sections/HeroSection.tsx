@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { Button } from "@/components/primitives/button";
@@ -49,7 +49,7 @@ export function HeroSection() {
   const legalTags = sectionsConfig.hero.legal.tags;
   const techFeatures = sectionsConfig.hero.tech.features;
   const heroSectionRef = useRef<HTMLElement | null>(null);
-  const { progress, setProgress } = useHeroProgress();
+  const { setProgress } = useHeroProgress();
   useEffect(() => {
     const handleScroll = () => {
       if (!heroSectionRef.current) return;
@@ -112,7 +112,7 @@ export function HeroSection() {
       </div>
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <header className="relative mb-12 text-center lg:text-left">
+        <header className="relative mb-6 text-center sm:mb-10 lg:mb-12 lg:text-left">
           <Label
             as="span"
             size="sm"
@@ -122,12 +122,17 @@ export function HeroSection() {
           >
             {sectionsConfig.hero.main.tagline}
           </Label>
-          <Text size="base" tone="secondary" maxWidth="3xl" className="mx-auto mt-4 lg:mx-0">
+          <Text
+            size="base"
+            tone="secondary"
+            maxWidth="3xl"
+            className="mx-auto mt-3 sm:mt-4 lg:mx-0"
+          >
             {sectionsConfig.hero.main.description}
           </Text>
         </header>
 
-        <div className="grid min-h-[calc(100vh-8rem)] grid-cols-1 items-stretch gap-8 lg:grid-cols-2">
+        <div className="grid min-h-[calc(100vh-8rem)] grid-cols-1 items-stretch gap-4 sm:gap-6 lg:grid-cols-2 lg:gap-8">
           {/* Legal Side Card */}
           <motion.div
             initial={prefersReducedMotion ? {} : { opacity: 0, y: 20 }}
@@ -138,7 +143,7 @@ export function HeroSection() {
               {/* Content */}
               <div className="relative z-10">
                 {/* Badge */}
-                <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[var(--color-legal-border-soft)] bg-[var(--color-legal-badge)] px-4 py-2 backdrop-blur-sm">
+                <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[var(--color-legal-border-soft)] bg-[var(--color-legal-badge)] px-4 py-2 backdrop-blur-sm sm:mb-5 lg:mb-6">
                   <span className="h-2 w-2 animate-pulse rounded-full bg-[var(--color-legal-primary)]" />
                   <span className="text-sm font-semibold text-[var(--color-legal-primary)]">
                     {sectionsConfig.hero.legal.badge}
@@ -146,17 +151,24 @@ export function HeroSection() {
                 </div>
 
                 {/* Heading */}
-                <Heading as="h1" size="2xl" weight="bold" tone="primary" display className="mb-6">
+                <Heading
+                  as="h1"
+                  size="2xl"
+                  weight="bold"
+                  tone="primary"
+                  display
+                  className="mb-4 sm:mb-5 lg:mb-6"
+                >
                   {sectionsConfig.hero.legal.title}
                 </Heading>
 
                 {/* Description */}
-                <Text size="lg" tone="secondary" leading="relaxed" className="mb-6">
+                <Text size="lg" tone="secondary" leading="relaxed" className="mb-4 sm:mb-5 lg:mb-6">
                   {sectionsConfig.hero.legal.description}
                 </Text>
 
                 {/* Tags */}
-                <div className="mb-8 grid grid-cols-2 gap-3 text-sm text-[var(--color-text-secondary)]">
+                <div className="mb-6 grid grid-cols-2 gap-2 text-sm text-[var(--color-text-secondary)] sm:mb-7 sm:gap-3 lg:mb-8">
                   {legalTags.map((tag) => (
                     <div key={tag} className="flex items-center gap-2">
                       <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-legal-primary)] shadow-[0_0_12px_rgba(212,175,55,0.6)]" />
@@ -194,7 +206,7 @@ export function HeroSection() {
               {/* Content */}
               <div className="relative z-10">
                 {/* Badge */}
-                <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[var(--color-tech-border-soft)] bg-[var(--color-tech-badge)] px-4 py-2 backdrop-blur-sm">
+                <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[var(--color-tech-border-soft)] bg-[var(--color-tech-badge)] px-4 py-2 backdrop-blur-sm sm:mb-5 lg:mb-6">
                   <span className="h-2 w-2 animate-pulse rounded-full bg-[var(--color-tech-primary)]" />
                   <span className="text-sm font-semibold text-[var(--color-tech-primary)]">
                     {sectionsConfig.hero.tech.badge}
@@ -202,17 +214,24 @@ export function HeroSection() {
                 </div>
 
                 {/* Heading */}
-                <Heading as="h2" size="2xl" weight="bold" tone="primary" display className="mb-6">
+                <Heading
+                  as="h2"
+                  size="2xl"
+                  weight="bold"
+                  tone="primary"
+                  display
+                  className="mb-4 sm:mb-5 lg:mb-6"
+                >
                   {sectionsConfig.hero.tech.title}
                 </Heading>
 
                 {/* Description */}
-                <Text size="lg" tone="secondary" leading="relaxed" className="mb-6">
+                <Text size="lg" tone="secondary" leading="relaxed" className="mb-4 sm:mb-5 lg:mb-6">
                   {sectionsConfig.hero.tech.description}
                 </Text>
 
                 {/* Feature list */}
-                <div className="mb-8 grid grid-cols-2 gap-3 text-sm text-[var(--color-text-secondary)]">
+                <div className="mb-6 grid grid-cols-2 gap-2 text-sm text-[var(--color-text-secondary)] sm:mb-7 sm:gap-3 lg:mb-8">
                   {techFeatures.map((feature) => (
                     <div key={feature} className="flex items-center gap-2">
                       <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-tech-primary)] shadow-[0_0_12px_rgba(6,182,212,0.6)]" />

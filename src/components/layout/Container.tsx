@@ -73,7 +73,7 @@ export const Container = forwardRef<HTMLDivElement, ContainerProps>(
     },
     ref
   ) => {
-    const Comp = Component as any;
+    const Comp = Component as React.ElementType;
     return (
       <Comp
         ref={ref}
@@ -82,8 +82,8 @@ export const Container = forwardRef<HTMLDivElement, ContainerProps>(
           containerSizes[size],
           // Centering
           center && "mx-auto",
-          // Responsive padding (mobile: 4, tablet: 6, desktop: 8)
-          !noPadding && "px-4 sm:px-6 lg:px-8",
+          // Responsive padding (mobile: 16px, tablet: 24px, desktop: 32px)
+          !noPadding && "px-4 md:px-6 lg:px-8",
           // Custom className
           className
         )}

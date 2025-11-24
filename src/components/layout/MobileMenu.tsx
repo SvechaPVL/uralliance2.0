@@ -147,7 +147,7 @@ export function MobileMenu({ isOpen, onClose, navigationItems }: MobileMenuProps
               duration: prefersReducedMotion ? 0 : 0.2,
             }}
             onClick={onClose}
-            className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
+            className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm"
             aria-hidden="true"
           />
 
@@ -164,7 +164,7 @@ export function MobileMenu({ isOpen, onClose, navigationItems }: MobileMenuProps
               duration: prefersReducedMotion ? 0 : undefined,
             }}
             className={cn(
-              "fixed top-0 right-0 bottom-0 z-50",
+              "fixed top-0 right-0 bottom-0 z-[70]",
               "w-full max-w-sm",
               "bg-[var(--color-background)]",
               "shadow-[0_20px_60px_rgba(0,0,0,0.45)]",

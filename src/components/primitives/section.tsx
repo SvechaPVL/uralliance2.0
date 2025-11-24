@@ -76,18 +76,18 @@ export interface SectionProps extends HTMLAttributes<HTMLElement> {
 }
 
 const sectionVariants: Record<SectionVariant, string> = {
-  hero: "min-h-screen pt-24 pb-16 sm:pt-28 sm:pb-20",
-  default: "pt-24 sm:pt-28",
-  compact: "pt-16 sm:pt-20",
-  feature: "pt-24 sm:pt-28",
+  hero: "min-h-screen pt-20 pb-12 sm:pt-24 sm:pb-16 lg:pt-28 lg:pb-20",
+  default: "pt-16 sm:pt-20 lg:pt-24 xl:pt-28",
+  compact: "pt-12 sm:pt-16 lg:pt-20",
+  feature: "pt-16 sm:pt-20 lg:pt-24 xl:pt-28",
 };
 
 const sectionSpacing: Record<SectionSpacing, string> = {
   none: "",
-  sm: "py-12",
-  md: "py-20",
-  lg: "py-24",
-  xl: "py-28 sm:py-32",
+  sm: "py-8 sm:py-10 lg:py-12",
+  md: "py-12 sm:py-16 lg:py-20",
+  lg: "py-16 sm:py-20 lg:py-24",
+  xl: "py-20 sm:py-24 lg:py-28 xl:py-32",
 };
 
 const sectionBackgrounds: Record<SectionBackground, string> = {
@@ -139,7 +139,7 @@ export const Section = forwardRef<HTMLElement, SectionProps>(
     },
     ref
   ) => {
-    const Comp = Component as any;
+    const Comp = Component as React.ElementType;
     return (
       <Comp
         ref={ref}

@@ -138,7 +138,8 @@ export const CardSwiper: React.FC<CardSwiperProps> = ({
         const deltaX = currentX.current - startX.current;
         applySwipeStyles(deltaX);
 
-        if (Math.abs(deltaX) > 50) {
+        // Увеличен порог для предотвращения случайных свайпов
+        if (Math.abs(deltaX) > 100) {
           handleEnd();
         }
       });
@@ -192,13 +193,13 @@ export const CardSwiper: React.FC<CardSwiperProps> = ({
         {
           width: "100%",
           maxWidth: cardWidth + 32,
-          touchAction: "none",
+          touchAction: "none", // Блокируем дефолтное поведение браузера для свайпа
           transformStyle: "preserve-3d",
           "--card-perspective": "700px",
           "--card-z-offset": "12px",
           "--card-y-offset": "7px",
           "--card-max-z-index": items.length.toString(),
-          "--card-swap-duration": "300ms",
+          "--card-swap-duration": "250ms", // Уменьшаем длительность для более отзывчивого ощущения
         } as React.CSSProperties
       }
     >
@@ -240,8 +241,11 @@ export const CardSwiper: React.FC<CardSwiperProps> = ({
           "left-1/2 top-1/2",
           "rounded-3xl border border-[var(--color-border)]",
           "bg-[var(--color-card-bg)] p-6",
-          "shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)]",
-          "overflow-hidden will-change-transform",
+          // Упрощённая тень для лучшей производительности
+          "shadow-[0_8px_24px_-8px_rgba(0,0,0,0.4)]",
+          "overflow-hidden",
+          // GPU acceleration только для активной карточки
+          displayIndex === 0 && "will-change-transform",
           item.className
         );
 
@@ -260,6 +264,8 @@ export const CardSwiper: React.FC<CardSwiperProps> = ({
                            translateY(calc(var(--card-y-offset) * var(--i)))
                            translateX(var(--swipe-x, 0px))
                            rotateY(var(--swipe-rotate, 0deg))`,
+                // Оптимизация: скрываем контент невидимых карточек
+                contentVisibility: displayIndex > 2 ? "auto" : "visible",
               } as React.CSSProperties
             }
           >

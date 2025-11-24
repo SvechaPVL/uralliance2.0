@@ -5,6 +5,8 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { OverlayScrollbar } from "@/components/system/OverlayScrollbar";
 import { YandexMetrika } from "@/components/system/YandexMetrika";
+import { CookieConsent } from "@/components/system/CookieConsent";
+import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/seo/JsonLd";
 import { HeroProgressProvider } from "@/context/HeroProgressContext";
 import pagesConfig from "@/content/pages.json";
 
@@ -28,14 +30,28 @@ export const metadata: Metadata = {
   },
   description: pagesConfig.home.description,
   keywords: [
+    // Локальные ключевые слова для Владивостока
     "юридические услуги Владивосток",
-    "IT-решения для бизнеса",
-    "разработка сайтов",
-    "CRM системы",
-    "чат-боты для бизнеса",
-    "корпоративное право",
-    "арбитражные споры",
-    "автоматизация бизнеса",
+    "юрист Владивосток",
+    "разработка сайтов Владивосток",
+    "CRM система Владивосток",
+    "чат-бот Владивосток",
+    "ЭЦП Владивосток",
+    "электронная подпись Владивосток",
+
+    // Специализированные услуги
+    "ЭЦП электронная цифровая подпись",
+    "Вестник публикация уведомлений",
+    "Федресурс банкротство",
+    "Такском электронный документооборот",
+
+    // Общие IT и юридические услуги
+    "IT-решения для бизнеса Владивосток",
+    "корпоративное право Владивосток",
+    "арбитражные споры Владивосток",
+    "автоматизация бизнеса Владивосток",
+    "веб-разработка Приморский край",
+    "внедрение CRM Владивосток",
   ],
   authors: [{ name: "Uralliance" }],
   creator: "Uralliance",
@@ -56,11 +72,22 @@ export const metadata: Metadata = {
     title: pagesConfig.home.title,
     description: pagesConfig.home.description,
     siteName: "Uralliance",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Uralliance - Юридические услуги и IT-решения",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: pagesConfig.home.title,
     description: pagesConfig.home.description,
+    images: ["/og-image.png"],
+    creator: "@uralliance",
+    site: "@uralliance",
   },
   robots: {
     index: true,
@@ -97,12 +124,29 @@ export default function RootLayout({
 
   return (
     <html lang="ru">
+      <head>
+        {/* Яндекс.Вебмастер верификация */}
+        <meta name="yandex-verification" content="your-yandex-verification-code" />
+
+        {/* Региональная привязка для Яндекса */}
+        <meta name="geo.region" content="RU-PRI" />
+        <meta name="geo.placename" content="Владивосток" />
+        <meta name="geo.position" content="43.1332;131.9113" />
+
+        {/* Турбо-страницы Яндекса */}
+        <link rel="alternate" type="application/rss+xml" href="/turbo-rss" />
+      </head>
       <body className={`${inter.variable} ${poppins.variable} antialiased`}>
+        {/* Structured Data for SEO */}
+        <OrganizationJsonLd />
+        <WebSiteJsonLd />
+
         <HeroProgressProvider>
           <Header />
           <main className="min-h-screen">{children}</main>
           <Footer />
           <OverlayScrollbar />
+          <CookieConsent />
         </HeroProgressProvider>
 
         {/* Analytics */}

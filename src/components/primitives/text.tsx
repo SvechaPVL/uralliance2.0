@@ -56,10 +56,10 @@ export interface TextProps extends HTMLAttributes<HTMLParagraphElement> {
 const textSizes: Record<TextSize, string> = {
   xs: "text-xs",
   sm: "text-sm",
-  base: "text-base",
-  lg: "text-lg",
-  xl: "text-xl",
-  "2xl": "text-2xl",
+  base: "text-sm sm:text-base",
+  lg: "text-base sm:text-lg",
+  xl: "text-lg sm:text-xl",
+  "2xl": "text-xl sm:text-2xl",
 };
 
 const textTones: Record<TextTone, string> = {
@@ -137,7 +137,7 @@ export const Text = forwardRef<HTMLParagraphElement, TextProps>(
     },
     ref
   ) => {
-    const Comp = Component as any;
+    const Comp = Component as React.ElementType;
     return (
       <Comp
         ref={ref}

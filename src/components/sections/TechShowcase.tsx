@@ -11,6 +11,7 @@ import { Section } from "@/components/primitives/section";
 import { Heading } from "@/components/primitives/heading";
 import { Label } from "@/components/primitives/label";
 import { Text } from "@/components/primitives/text";
+import { motion } from "framer-motion";
 import sectionsConfig from "@/content/sections.json";
 
 const bentoItems: BentoGridItem[] = [
@@ -162,17 +163,36 @@ export function TechShowcase() {
   return (
     <Section spacing="xl" overflow="visible">
       <Container className="relative z-10 flex flex-col select-none">
-        <div className="mb-8 max-w-3xl sm:mb-12">
+        <div className="mb-6 max-w-3xl sm:mb-8 lg:mb-12">
           <Label size="md" spacing="widest" tone="muted">
             {sectionsConfig.tech_showcase.label}
           </Label>
-          <Heading as="h2" size="2xl" weight="semibold" className="mt-4">
+          <Heading as="h2" size="2xl" weight="semibold" className="mt-3 sm:mt-4">
             {sectionsConfig.tech_showcase.heading}
           </Heading>
-          <Text size="base" tone="secondary" className="mt-3">
+          <Text size="base" tone="secondary" className="mt-2 sm:mt-3">
             {sectionsConfig.tech_showcase.description}
           </Text>
         </div>
+
+        {/* Swipe hint for mobile */}
+        <motion.div
+          className="mb-4 flex items-center justify-center gap-2 text-xs text-[var(--color-text-secondary)] sm:hidden"
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          transition={{ delay: 0.8 }}
+        >
+          <svg
+            className="h-4 w-4"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+          <span>Попробуйте свайпать</span>
+        </motion.div>
 
         <div className="mx-auto mt-12 max-w-[1500px] px-4 sm:mt-0 lg:px-12">
           <BentoGrid items={bentoItems} rowHeight="minmax(260px, auto)" />

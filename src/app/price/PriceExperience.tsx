@@ -9,12 +9,7 @@ import { Button } from "@/components/primitives/button";
 import { ServiceIcon } from "@/components/primitives/ServiceIcon";
 import type { PriceItem } from "@/types/content";
 import { cn } from "@/lib/utils";
-import {
-  ArrowUpDown,
-  Layers,
-  Shield,
-  Sparkles,
-} from "lucide-react";
+import { ArrowUpDown, Layers, Shield, Sparkles } from "lucide-react";
 import { Section } from "@/components/primitives/section";
 import { Heading } from "@/components/primitives/heading";
 import { Label } from "@/components/primitives/label";
@@ -140,47 +135,49 @@ export function PriceExperience({ prices }: PriceExperienceProps) {
       {/* Hero */}
       <Section spacing="lg">
         <Container className="space-y-10">
-            <div className="space-y-8">
-              <div className="flex flex-wrap gap-3">
-                <Badge variant="tech" badgeStyle="subtle" size="sm">
-                  Offer Catalog · 2025
-                </Badge>
-                <Badge variant="legal" badgeStyle="subtle" size="sm">
-                  Обновлено ежемесячно
-                </Badge>
-              </div>
-
-              <div className="space-y-6">
-                <Heading as="h1" size="2xl" weight="semibold">
-                  Актуальный прайс-лист Legal + Tech
-                </Heading>
-                <Text size="lg" tone="secondary" className="sm:text-xl">
-                  Прозрачные тарифы на арбитраж, договорную работу, интеграции и цифровые продукты.
-                  Стоимость фиксируем в договоре и сопровождаем проект до результата.
-                </Text>
-              </div>
-
-              <div className="flex flex-wrap gap-4">
-                <Button asChild variant="primary-tech" size="lg">
-                  <Link href="/#contact">Получить точный расчёт</Link>
-                </Button>
-                <Button asChild variant="outline-legal" size="lg">
-                  <Link href="/services/legal">Смотреть услуги</Link>
-                </Button>
-              </div>
-
-              <div className="grid gap-4 sm:grid-cols-3">
-                {summaryBullets.map((bullet) => (
-                  <Card key={bullet.title} variant="glass" padding="md" className="space-y-2">
-                    <Text tone="muted">{bullet.icon}</Text>
-                    <Label size="md" weight="semibold" spacing="wide" tone="muted">
-                      {bullet.title}
-                    </Label>
-                    <Text size="base" tone="secondary">{bullet.description}</Text>
-                  </Card>
-                ))}
-              </div>
+          <div className="space-y-8">
+            <div className="flex flex-wrap gap-3">
+              <Badge variant="tech" badgeStyle="subtle" size="sm">
+                Offer Catalog · 2025
+              </Badge>
+              <Badge variant="legal" badgeStyle="subtle" size="sm">
+                Обновлено ежемесячно
+              </Badge>
             </div>
+
+            <div className="space-y-6">
+              <Heading as="h1" size="2xl" weight="semibold">
+                Актуальный прайс-лист Legal + Tech
+              </Heading>
+              <Text size="lg" tone="secondary" className="sm:text-xl">
+                Прозрачные тарифы на арбитраж, договорную работу, интеграции и цифровые продукты.
+                Стоимость фиксируем в договоре и сопровождаем проект до результата.
+              </Text>
+            </div>
+
+            <div className="flex flex-wrap gap-4">
+              <Button asChild variant="primary-tech" size="lg">
+                <Link href="/#contact">Получить точный расчёт</Link>
+              </Button>
+              <Button asChild variant="outline-legal" size="lg">
+                <Link href="/services/legal">Смотреть услуги</Link>
+              </Button>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-3">
+              {summaryBullets.map((bullet) => (
+                <Card key={bullet.title} variant="glass" padding="md" className="space-y-2">
+                  <Text tone="muted">{bullet.icon}</Text>
+                  <Label size="md" weight="semibold" spacing="wide" tone="muted">
+                    {bullet.title}
+                  </Label>
+                  <Text size="base" tone="secondary">
+                    {bullet.description}
+                  </Text>
+                </Card>
+              ))}
+            </div>
+          </div>
         </Container>
       </Section>
 
@@ -192,7 +189,9 @@ export function PriceExperience({ prices }: PriceExperienceProps) {
               <Label size="md" spacing="wider" tone="muted">
                 Фильтрация
               </Label>
-              <Heading as="h2" size="lg" weight="semibold">Настройте прайс под ваш сценарий</Heading>
+              <Heading as="h2" size="lg" weight="semibold">
+                Настройте прайс под ваш сценарий
+              </Heading>
             </div>
 
             <Button
@@ -231,8 +230,12 @@ export function PriceExperience({ prices }: PriceExperienceProps) {
                 <Label size="sm" spacing="wider" tone="muted">
                   {card.label}
                 </Label>
-                <Text size="2xl" weight="semibold" className="mt-2">{card.description}</Text>
-                <Text size="sm" tone="secondary" className="mt-3">{card.pill}</Text>
+                <Text size="2xl" weight="semibold" className="mt-2">
+                  {card.description}
+                </Text>
+                <Text size="sm" tone="secondary" className="mt-3">
+                  {card.pill}
+                </Text>
               </Card>
             ))}
           </div>
@@ -257,22 +260,26 @@ export function PriceExperience({ prices }: PriceExperienceProps) {
                 hoverable
                 className="flex h-full flex-col gap-6 p-7"
               >
-                {price.featured && (
-                  <Badge variant="tech" badgeStyle="filled" size="sm" className="absolute right-5 top-5">
-                    ТОП
-                  </Badge>
-                )}
-
-                <div className="flex flex-col gap-5 flex-1">
-                  <div className="flex items-center gap-4">
-                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-2xl bg-white/10">
-                    <ServiceIcon
-                      name={getIconForService(price.id)}
-                      variant={price.practice}
-                      className="h-6 w-6 text-white"
-                    />
-                  </div>
-                  <Heading as="h3" size="lg" weight="semibold">{price.title}</Heading>
+                <div className="flex flex-1 flex-col gap-5">
+                  {/* Заголовок с бейджем */}
+                  <div className="flex items-start gap-3 sm:gap-4">
+                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-2xl bg-white/10">
+                      <ServiceIcon
+                        name={getIconForService(price.id)}
+                        variant={price.practice}
+                        className="h-6 w-6 text-white"
+                      />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <Heading as="h3" size="lg" weight="semibold">
+                        {price.title}
+                      </Heading>
+                    </div>
+                    {price.featured && (
+                      <Badge variant="tech" badgeStyle="filled" size="sm" className="flex-shrink-0">
+                        ТОП
+                      </Badge>
+                    )}
                   </div>
 
                   <div className="space-y-1">
@@ -286,7 +293,11 @@ export function PriceExperience({ prices }: PriceExperienceProps) {
                   </div>
 
                   {price.features && (
-                    <List variant="checkmark" spacing="sm" className="mt-2 text-sm text-[var(--color-text-secondary)]">
+                    <List
+                      variant="checkmark"
+                      spacing="sm"
+                      className="mt-2 text-sm text-[var(--color-text-secondary)]"
+                    >
                       {price.features.map((feature) => (
                         <li key={feature}>{feature}</li>
                       ))}
@@ -294,16 +305,14 @@ export function PriceExperience({ prices }: PriceExperienceProps) {
                   )}
                 </div>
 
-                <div className="pt-4 flex flex-wrap gap-3">
+                <div className="flex flex-wrap gap-3 pt-4">
                   <Button
                     asChild
                     variant={price.practice === "legal" ? "primary-legal" : "primary-tech"}
                     size="sm"
                     className="flex-1"
                   >
-                    <Link href="/#contact">
-                      Запросить смету
-                    </Link>
+                    <Link href="/#contact">Запросить смету</Link>
                   </Button>
                   <Button
                     asChild
@@ -322,7 +331,7 @@ export function PriceExperience({ prices }: PriceExperienceProps) {
       </Section>
 
       {/* CTA */}
-      <Section spacing="lg" className="pb-24 pt-0">
+      <Section spacing="lg" className="pt-0 pb-24">
         <Container>
           <Card variant="glass" padding="lg" className="text-center">
             <div className="space-y-6">
@@ -338,14 +347,10 @@ export function PriceExperience({ prices }: PriceExperienceProps) {
               </Text>
               <div className="flex flex-wrap justify-center gap-4">
                 <Button asChild variant="primary-tech" size="lg">
-                  <Link href="/contacts">
-                    Назначить звонок
-                  </Link>
+                  <Link href="/contacts">Назначить звонок</Link>
                 </Button>
                 <Button asChild variant="outline-tech" size="lg">
-                  <Link href="mailto:info@uralliance.ru">
-                    info@uralliance.ru
-                  </Link>
+                  <Link href="mailto:info@uralliance.ru">info@uralliance.ru</Link>
                 </Button>
               </div>
             </div>
@@ -359,8 +364,12 @@ export function PriceExperience({ prices }: PriceExperienceProps) {
 function InsightBadge({ label, value }: { label: string; value: string }) {
   return (
     <Card variant="glass" padding="sm" className="border-dashed">
-      <Label size="sm" spacing="wider" tone="muted">{label}</Label>
-      <Text size="sm" weight="semibold" tone="secondary" className="mt-1">{value}</Text>
+      <Label size="sm" spacing="wider" tone="muted">
+        {label}
+      </Label>
+      <Text size="sm" weight="semibold" tone="secondary" className="mt-1">
+        {value}
+      </Text>
     </Card>
   );
 }
