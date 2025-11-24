@@ -15,6 +15,7 @@ import { List } from "@/components/primitives/list";
 import { remark } from "remark";
 import remarkRehype from "remark-rehype";
 import rehypeStringify from "rehype-stringify";
+import { ServiceJsonLd, BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 
 /**
  * Service Detail Page
@@ -88,16 +89,52 @@ export async function generateMetadata({ params }: ServiceDetailPageProps): Prom
   try {
     const service = await getServiceBySlug(category, slug);
     const isLegal = category === "legal";
+    const categoryName = isLegal ? "Юридические услуги" : "IT-решения";
 
     return {
-      title: `${service.frontmatter.title} | ${isLegal ? "Юридические услуги" : "IT-услуги"} | Uralliance`,
-      description: service.frontmatter.description,
+      title: `${service.frontmatter.title} во Владивостоке | ${categoryName} | Uralliance`,
+      description: `${service.frontmatter.description}. ${service.frontmatter.price}. Uralliance - ${categoryName.toLowerCase()} во Владивостоке.`,
       keywords: service.frontmatter.seo.keywords,
+      authors: [{ name: "Uralliance" }],
+      creator: "Uralliance",
+      publisher: "Uralliance",
+      alternates: {
+        canonical: `/services/${category}/${slug}`,
+      },
       openGraph: {
-        title: service.frontmatter.title,
+        title: `${service.frontmatter.title} во Владивостоке | Uralliance`,
         description: service.frontmatter.description,
         type: "website",
-        images: service.frontmatter.seo.ogImage ? [{ url: service.frontmatter.seo.ogImage }] : [],
+        locale: "ru_RU",
+        url: `/services/${category}/${slug}`,
+        siteName: "Uralliance",
+        images: service.frontmatter.seo.ogImage
+          ? [
+              {
+                url: service.frontmatter.seo.ogImage,
+                width: 1200,
+                height: 630,
+                alt: service.frontmatter.title,
+              },
+            ]
+          : [],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: `${service.frontmatter.title} во Владивостоке`,
+        description: service.frontmatter.description,
+        images: service.frontmatter.seo.ogImage ? [service.frontmatter.seo.ogImage] : [],
+      },
+      robots: {
+        index: true,
+        follow: true,
+        googleBot: {
+          index: true,
+          follow: true,
+          "max-video-preview": -1,
+          "max-image-preview": "large",
+          "max-snippet": -1,
+        },
       },
     };
   } catch {
@@ -187,34 +224,55 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
 
   return (
     <>
+      {/* Structured Data */}
+      <ServiceJsonLd
+        name={service.frontmatter.title}
+        description={service.frontmatter.description}
+      />
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Главная", url: "https://uralliance.ru" },
+          {
+            name: isLegal ? "Юридические услуги" : "IT-решения",
+            url: `https://uralliance.ru/services/${category}`,
+          },
+          { name: service.frontmatter.title },
+        ]}
+      />
+
       {/* Hero */}
       <Section spacing="lg" background="secondary">
         <Container className="max-w-5xl">
-          <Card variant="glass" className="space-y-10 p-8 lg:p-10">
-            <div className="flex flex-wrap items-center gap-3">
-              <Badge variant={isLegal ? "legal" : "tech"} badgeStyle="subtle" size="sm" className="uppercase tracking-[0.3em]">
+          <Card variant="glass" className="space-y-6 p-4 sm:space-y-8 sm:p-6 lg:space-y-10 lg:p-10">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+              <Badge
+                variant={isLegal ? "legal" : "tech"}
+                badgeStyle="subtle"
+                size="sm"
+                className="tracking-[0.3em] uppercase"
+              >
                 {isLegal ? "Legal" : "Tech"}
               </Badge>
-              <Label size="sm" spacing="wider" tone="muted">
+              <Label size="sm" spacing="wider" tone="muted" className="hidden sm:block">
                 {isLegal ? "Юридическая практика Uralliance" : "Цифровая практика Uralliance"}
               </Label>
             </div>
 
-            <div className="grid gap-8 lg:grid-cols-[1.4fr,0.8fr]">
-              <div className="space-y-6">
-                <div className="flex items-start gap-4">
+            <div className="grid gap-6 sm:gap-8 lg:grid-cols-[1.4fr,0.8fr]">
+              <div className="space-y-4 sm:space-y-6">
+                <div className="flex items-start gap-3 sm:gap-4">
                   <Badge
                     variant={isLegal ? "legal" : "tech"}
                     badgeStyle="filled"
-                    className="h-20 w-20 rounded-3xl"
+                    className="h-14 w-14 shrink-0 rounded-2xl sm:h-16 sm:w-16 sm:rounded-3xl lg:h-20 lg:w-20"
                   >
                     <ServiceIcon
                       name={service.frontmatter.icon}
                       variant={isLegal ? "legal" : "tech"}
-                      className="h-10 w-10"
+                      className="h-7 w-7 sm:h-8 sm:w-8 lg:h-10 lg:w-10"
                     />
                   </Badge>
-                  <div className="space-y-4">
+                  <div className="min-w-0 flex-1 space-y-2 sm:space-y-4">
                     <Heading as="h1" size="2xl" weight="semibold">
                       {service.frontmatter.title}
                     </Heading>
@@ -224,14 +282,14 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
                   </div>
                 </div>
 
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-wrap gap-2 sm:gap-3">
                   {focusItems.map((focus) => (
                     <Badge
                       key={focus}
                       variant={isLegal ? "legal" : "tech"}
                       badgeStyle="subtle"
                       size="sm"
-                      className="rounded-full px-4 py-1 text-xs uppercase tracking-[0.2em]"
+                      className="rounded-full px-3 py-1 text-[10px] tracking-[0.15em] uppercase sm:px-4 sm:text-xs sm:tracking-[0.2em]"
                     >
                       {focus}
                     </Badge>
@@ -239,13 +297,13 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
                 </div>
               </div>
 
-              <Card variant="glass" padding="md">
+              <Card variant="glass" className="p-4 sm:p-5 lg:p-6">
                 <List variant="feature" spacing="lg">
                   <li>
                     <Label size="sm" spacing="wider" tone="muted">
                       Стоимость
                     </Label>
-                    <Text size="lg" weight="semibold" className="mt-1">
+                    <Text size="base" weight="semibold" className="mt-1 sm:text-lg">
                       {service.frontmatter.price}
                     </Text>
                   </li>
@@ -254,7 +312,9 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
                       Команда
                     </Label>
                     <Text size="sm" tone="secondary" className="mt-1">
-                      {isLegal ? "Партнёры-юристы и судебная команда" : "Менеджер проекта, дизайнер и разработчики"}
+                      {isLegal
+                        ? "Партнёры-юристы и судебная команда"
+                        : "Менеджер проекта, дизайнер и разработчики"}
                     </Text>
                   </li>
                   <li>
@@ -262,15 +322,21 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
                       Формат
                     </Label>
                     <Text size="sm" tone="secondary" className="mt-1">
-                      Соберём отдельную команду под задачу, зафиксируем результаты договором и понятными отчётами.
+                      Соберём отдельную команду под задачу, зафиксируем результаты договором и
+                      понятными отчётами.
                     </Text>
                   </li>
                 </List>
-                <div className="mt-6 flex flex-wrap gap-3">
-                  <Button asChild variant={isLegal ? "primary-legal" : "primary-tech"} size="md">
+                <div className="mt-4 flex flex-col gap-2 sm:mt-6 sm:flex-row sm:gap-3">
+                  <Button
+                    asChild
+                    variant={isLegal ? "primary-legal" : "primary-tech"}
+                    size="md"
+                    className="w-full sm:w-auto"
+                  >
                     <Link href="/contacts">Обсудить задачу</Link>
                   </Button>
-                  <Button asChild variant="outline" size="md">
+                  <Button asChild variant="outline" size="md" className="w-full sm:w-auto">
                     <Link href={`/services/${category}`}>Все услуги</Link>
                   </Button>
                 </div>
@@ -322,7 +388,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
       {/* Workflow */}
       <Section spacing="md" background="secondary">
         <Container className="max-w-5xl space-y-8">
-          <div className="text-center space-y-3">
+          <div className="space-y-3 text-center">
             <Label size="sm" spacing="wider" tone="muted">
               Процесс
             </Label>
@@ -330,17 +396,13 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
               Как мы работаем над {isLegal ? "юридическими" : "digital"} проектами
             </Heading>
             <Text size="lg" tone="secondary">
-              От запроса до измеримого результата команда ведёт прозрачные фазы и отправляет отчёты еженедельно.
+              От запроса до измеримого результата команда ведёт прозрачные фазы и отправляет отчёты
+              еженедельно.
             </Text>
           </div>
           <div className="grid gap-6 md:grid-cols-2">
             {workflow.map((step, index) => (
-              <Card
-                key={step.title}
-                variant="glass"
-                padding="md"
-                className="h-full"
-              >
+              <Card key={step.title} variant="glass" padding="md" className="h-full">
                 <Label size="sm" spacing="wider" tone="muted">
                   Шаг {String(index + 1).padStart(2, "0")}
                 </Label>
@@ -367,7 +429,8 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
               Обсудим {service.frontmatter.title} для вашей компании
             </Heading>
             <Text size="lg" tone="secondary">
-              Поделитесь документацией или брифом — подготовим дорожную карту и бюджет за два рабочих дня.
+              Поделитесь документацией или брифом — подготовим дорожную карту и бюджет за два
+              рабочих дня.
             </Text>
             <div className="mt-8 flex flex-wrap justify-center gap-4">
               <Button asChild variant={isLegal ? "primary-legal" : "primary-tech"} size="lg">
