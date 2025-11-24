@@ -6,7 +6,8 @@ WORKDIR /app
 
 # Copy package files
 COPY package.json package-lock.json ./
-RUN npm ci --only=production
+# Install production dependencies, skip prepare script (husky)
+RUN npm ci --only=production --ignore-scripts
 
 # Stage 2: Builder
 FROM node:20-alpine AS builder
