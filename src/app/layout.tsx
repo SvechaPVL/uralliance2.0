@@ -7,6 +7,7 @@ import { OverlayScrollbar } from "@/components/system/OverlayScrollbar";
 import { YandexMetrika } from "@/components/system/YandexMetrika";
 import { CookieConsent } from "@/components/system/CookieConsent";
 import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/seo/JsonLd";
+import { FaqJsonLd } from "@/components/seo/FaqJsonLd";
 import { HeroProgressProvider } from "@/context/HeroProgressContext";
 import pagesConfig from "@/content/pages.json";
 
@@ -140,6 +141,7 @@ export default function RootLayout({
         {/* Structured Data for SEO */}
         <OrganizationJsonLd />
         <WebSiteJsonLd />
+        <FaqJsonLd />
 
         <HeroProgressProvider>
           <Header />

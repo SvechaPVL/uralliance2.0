@@ -70,7 +70,7 @@ export default function AdditionalServicesPage() {
 
         {/* Партнерство с банками */}
         <Section>
-          <Card variant="gradient" className="border-[var(--color-tech-border)] p-8 md:p-12">
+          <Card variant="tech" className="border-[var(--color-tech-border)] p-8 md:p-12">
             <div className="max-w-3xl">
               <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-[var(--color-tech-border-soft)] bg-[var(--color-tech-badge)] px-4 py-2 backdrop-blur-sm">
                 <span className="h-2 w-2 animate-pulse rounded-full bg-[var(--color-tech-primary)]" />
