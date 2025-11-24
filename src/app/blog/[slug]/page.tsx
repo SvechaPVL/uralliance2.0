@@ -10,6 +10,7 @@ import { cn } from "@/lib/utils";
 import { Section } from "@/components/primitives/section";
 import { Heading } from "@/components/primitives/heading";
 import { Label } from "@/components/primitives/label";
+import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 
 interface BlogPostPageProps {
   params: Promise<{
@@ -139,132 +140,164 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   };
 
   return (
-    <article id="top" className="pb-24 lg:pb-32">
-      <Section background="secondary" spacing="xl" isolate overflow="hidden">
-        <div className="absolute inset-0">
-          <Image
-            src={frontmatter.image}
-            alt={frontmatter.title}
-            fill
-            className="object-cover opacity-40"
-            sizes="100vw"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-black/40" />
-        </div>
-        <Container className="relative z-10 space-y-8">
-          <Badge variant="neutral" badgeStyle="subtle" className="bg-white/15 text-white">
-            {frontmatter.category}
-          </Badge>
-          <Heading as="h1" size="2xl" weight="semibold" display tone="white">{frontmatter.title}</Heading>
-          <p className="max-w-3xl text-lg text-white/80">{frontmatter.excerpt}</p>
-          <div className="flex flex-wrap gap-6 text-white/80 text-sm">
-            <div>
-              <Label size="sm" spacing="wider" tone="white" className="opacity-60">Автор</Label>
-              <p className="mt-2 text-lg font-semibold text-white">{frontmatter.author}</p>
-            </div>
-            <div>
-              <Label size="sm" spacing="wider" tone="white" className="opacity-60">Опубликовано</Label>
-              <p className="mt-2 text-lg font-semibold text-white">
-                {new Date(frontmatter.date).toLocaleDateString("ru-RU", {
-                  day: "numeric",
-                  month: "long",
-                  year: "numeric",
-                })}
-              </p>
-            </div>
-            <div>
-              <Label size="sm" spacing="wider" tone="white" className="opacity-60">Время чтения</Label>
-              <p className="mt-2 text-lg font-semibold text-white">{readingTime} мин</p>
-            </div>
+    <>
+      {/* Breadcrumb Schema */}
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Главная", url: "https://uralliance.ru" },
+          { name: "Блог", url: "https://uralliance.ru/blog" },
+          { name: frontmatter.title },
+        ]}
+      />
+
+      <article id="top" className="pb-24 lg:pb-32">
+        <Section background="secondary" spacing="xl" isolate overflow="hidden">
+          <div className="absolute inset-0">
+            <Image
+              src={frontmatter.image}
+              alt={frontmatter.title}
+              fill
+              className="object-cover opacity-40"
+              sizes="100vw"
+              priority
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-black via-black/70 to-black/40" />
           </div>
-        </Container>
-      </Section>
+          <Container className="relative z-10 space-y-8">
+            <Badge variant="neutral" badgeStyle="subtle" className="bg-white/15 text-white">
+              {frontmatter.category}
+            </Badge>
+            <Heading as="h1" size="2xl" weight="semibold" display tone="white">
+              {frontmatter.title}
+            </Heading>
+            <p className="max-w-3xl text-lg text-white/80">{frontmatter.excerpt}</p>
+            <div className="flex flex-wrap gap-6 text-sm text-white/80">
+              <div>
+                <Label size="sm" spacing="wider" tone="white" className="opacity-60">
+                  Автор
+                </Label>
+                <p className="mt-2 text-lg font-semibold text-white">{frontmatter.author}</p>
+              </div>
+              <div>
+                <Label size="sm" spacing="wider" tone="white" className="opacity-60">
+                  Опубликовано
+                </Label>
+                <p className="mt-2 text-lg font-semibold text-white">
+                  {new Date(frontmatter.date).toLocaleDateString("ru-RU", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </p>
+              </div>
+              <div>
+                <Label size="sm" spacing="wider" tone="white" className="opacity-60">
+                  Время чтения
+                </Label>
+                <p className="mt-2 text-lg font-semibold text-white">{readingTime} мин</p>
+              </div>
+            </div>
+          </Container>
+        </Section>
 
-      <Container className="mt-16 grid gap-12 lg:grid-cols-[3fr,1fr]">
-        <div
-          className="space-y-6 text-lg leading-relaxed text-[var(--color-text-secondary)]"
-          dangerouslySetInnerHTML={{ __html: html ?? "" }}
-        />
+        <Container className="mt-16 grid gap-12 lg:grid-cols-[3fr,1fr]">
+          <div
+            className="space-y-6 text-lg leading-relaxed text-[var(--color-text-secondary)]"
+            dangerouslySetInnerHTML={{ __html: html ?? "" }}
+          />
 
-        <aside className="space-y-8">
-          {toc.length > 0 && (
+          <aside className="space-y-8">
+            {toc.length > 0 && (
+              <div className="rounded-3xl border border-[var(--color-border)] bg-[var(--color-card-bg)]/80 p-6">
+                <Label size="sm" spacing="wider" tone="muted" className="mb-4">
+                  Оглавление
+                </Label>
+                <ul className="space-y-2 text-sm text-[var(--color-text-secondary)]">
+                  {toc.map((item) => (
+                    <li
+                      key={item.id}
+                      className={cn(item.level === 3 && "pl-4 text-[var(--color-text-muted)]")}
+                    >
+                      <a
+                        href={`#${item.id}`}
+                        className="transition-colors hover:text-[var(--color-tech-primary)]"
+                      >
+                        {item.text}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
             <div className="rounded-3xl border border-[var(--color-border)] bg-[var(--color-card-bg)]/80 p-6">
               <Label size="sm" spacing="wider" tone="muted" className="mb-4">
-                Оглавление
+                Навигация
               </Label>
-              <ul className="space-y-2 text-sm text-[var(--color-text-secondary)]">
-                {toc.map((item) => (
-                  <li
-                    key={item.id}
-                    className={cn(item.level === 3 && "pl-4 text-[var(--color-text-muted)]")}
-                  >
-                    <a href={`#${item.id}`} className="hover:text-[var(--color-tech-primary)] transition-colors">
-                      {item.text}
-                    </a>
-                  </li>
-                ))}
-              </ul>
+              <div className="space-y-3 text-sm text-[var(--color-text-secondary)]">
+                <Link
+                  href="/blog"
+                  className="flex items-center gap-2 transition-colors hover:text-[var(--color-tech-primary)]"
+                >
+                  ← Все статьи
+                </Link>
+                <a
+                  href="#top"
+                  className="flex items-center gap-2 transition-colors hover:text-[var(--color-tech-primary)]"
+                >
+                  ↑ В начало
+                </a>
+              </div>
+            </div>
+          </aside>
+        </Container>
+
+        <Container className="mt-24 space-y-8">
+          <div className="flex items-center justify-between">
+            <Heading as="h2" size="lg" weight="semibold">
+              Связанные материалы
+            </Heading>
+            <Link
+              href="/blog"
+              className="text-sm font-semibold text-[var(--color-tech-primary)] transition-colors hover:text-white"
+            >
+              Смотреть все →
+            </Link>
+          </div>
+
+          {relatedPosts.length === 0 ? (
+            <p className="text-[var(--color-text-secondary)]">
+              Мы подбираем материалы по этой теме. Загляните позже — скоро здесь появятся
+              рекомендации.
+            </p>
+          ) : (
+            <div className="grid gap-6 md:grid-cols-2">
+              {relatedPosts.map((related) => (
+                <Link
+                  key={related.slug}
+                  href={`/blog/${related.slug}`}
+                  className="rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-card-bg)]/80 p-6 transition-colors hover:border-white/20"
+                >
+                  <Label size="sm" spacing="wider" tone="muted">
+                    {related.frontmatter.category}
+                  </Label>
+                  <p className="mt-3 text-lg font-semibold text-[var(--color-text-primary)]">
+                    {related.frontmatter.title}
+                  </p>
+                  <p className="mt-2 text-sm text-[var(--color-text-secondary)]">
+                    {related.frontmatter.excerpt}
+                  </p>
+                </Link>
+              ))}
             </div>
           )}
+        </Container>
 
-          <div className="rounded-3xl border border-[var(--color-border)] bg-[var(--color-card-bg)]/80 p-6">
-            <Label size="sm" spacing="wider" tone="muted" className="mb-4">Навигация</Label>
-            <div className="space-y-3 text-sm text-[var(--color-text-secondary)]">
-              <Link
-                href="/blog"
-                className="flex items-center gap-2 hover:text-[var(--color-tech-primary)] transition-colors"
-              >
-                ← Все статьи
-              </Link>
-              <a
-                href="#top"
-                className="flex items-center gap-2 hover:text-[var(--color-tech-primary)] transition-colors"
-              >
-                ↑ В начало
-              </a>
-            </div>
-          </div>
-        </aside>
-      </Container>
-
-      <Container className="mt-24 space-y-8">
-        <div className="flex items-center justify-between">
-          <Heading as="h2" size="lg" weight="semibold">Связанные материалы</Heading>
-          <Link
-            href="/blog"
-            className="text-sm font-semibold text-[var(--color-tech-primary)] hover:text-white transition-colors"
-          >
-            Смотреть все →
-          </Link>
-        </div>
-
-        {relatedPosts.length === 0 ? (
-          <p className="text-[var(--color-text-secondary)]">
-            Мы подбираем материалы по этой теме. Загляните позже — скоро здесь появятся рекомендации.
-          </p>
-        ) : (
-          <div className="grid gap-6 md:grid-cols-2">
-            {relatedPosts.map((related) => (
-              <Link
-                key={related.slug}
-                href={`/blog/${related.slug}`}
-                className="rounded-2xl border border-[var(--color-border-soft)] bg-[var(--color-card-bg)]/80 p-6 hover:border-white/20 transition-colors"
-              >
-                <Label size="sm" spacing="wider" tone="muted">
-                  {related.frontmatter.category}
-                </Label>
-                <p className="mt-3 text-lg font-semibold text-[var(--color-text-primary)]">
-                  {related.frontmatter.title}
-                </p>
-                <p className="mt-2 text-sm text-[var(--color-text-secondary)]">{related.frontmatter.excerpt}</p>
-              </Link>
-            ))}
-          </div>
-        )}
-      </Container>
-
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-    </article>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </article>
+    </>
   );
 }

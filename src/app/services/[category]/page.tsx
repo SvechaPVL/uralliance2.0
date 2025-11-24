@@ -12,6 +12,7 @@ import { Heading } from "@/components/primitives/heading";
 import { Label } from "@/components/primitives/label";
 import { Text } from "@/components/primitives/text";
 import { List } from "@/components/primitives/list";
+import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 
 /**
  * Services Category Page
@@ -117,6 +118,14 @@ export default async function ServicesCategoryPage({ params }: ServicesCategoryP
 
   return (
     <>
+      {/* Breadcrumb Schema */}
+      <BreadcrumbJsonLd
+        items={[
+          { name: "Главная", url: "https://uralliance.ru" },
+          { name: isLegal ? "Юридические услуги" : "IT-решения" },
+        ]}
+      />
+
       {/* Hero */}
       <Section spacing="md" isolate overflow="hidden" className="pt-20 sm:pt-24 lg:pt-28">
         <Container className="space-y-12">
