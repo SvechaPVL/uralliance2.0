@@ -69,7 +69,7 @@ function isMetrikaAvailable(): boolean {
  * reachGoal('phone_click');
  */
 export function reachGoal(goalName: MetrikaGoal, params?: GoalParams): void {
-  if (!isMetrikaAvailable()) {
+  if (!isMetrikaAvailable() || !window.ym) {
     console.log(`[Analytics] Goal: ${goalName}`, params);
     return;
   }
@@ -124,7 +124,7 @@ export function trackMessengerClick(
   location?: string
 ): void {
   const goal = messenger === "whatsapp" ? "whatsapp_click" : "telegram_click";
-  reachGoal(goal, { location });
+  reachGoal(goal, location ? { location } : undefined);
 }
 
 /**
@@ -137,7 +137,7 @@ export function trackCTAClick(
   const goal = location.startsWith("hero_") ? (location as "cta_hero_legal" | "cta_hero_tech") : undefined;
 
   if (goal) {
-    reachGoal(goal, { label });
+    reachGoal(goal, label ? { label } : undefined);
   } else {
     trackEvent("cta", location, label);
   }
@@ -259,7 +259,7 @@ export function getActiveABTests(): ABTestConfig {
  * Track page view (called automatically by Next.js, but can be used manually)
  */
 export function trackPageView(url: string): void {
-  if (!isMetrikaAvailable()) return;
+  if (!isMetrikaAvailable() || !window.ym) return;
 
   const counterId = process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID!;
 

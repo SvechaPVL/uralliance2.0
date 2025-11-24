@@ -1,4 +1,4 @@
-import { HTMLAttributes, forwardRef, ReactNode } from "react";
+import { HTMLAttributes, forwardRef, ReactNode, createElement } from "react";
 import { cn } from "@/lib/utils";
 
 export type ContainerSize = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "full";
@@ -78,11 +78,11 @@ export const Container = forwardRef<HTMLDivElement, ContainerProps>(
     },
     ref
   ) => {
-    const Comp = Component as React.ElementType;
-    return (
-      <Comp
-        ref={ref}
-        className={cn(
+    return createElement(
+      Component,
+      {
+        ref,
+        className: cn(
           // Max width
           containerSizes[size],
           // Centering
@@ -91,11 +91,10 @@ export const Container = forwardRef<HTMLDivElement, ContainerProps>(
           !noPadding && "px-4 md:px-6 lg:px-8",
           // Custom className
           className
-        )}
-        {...props}
-      >
-        {children}
-      </Comp>
+        ),
+        ...props,
+      },
+      children
     );
   }
 );

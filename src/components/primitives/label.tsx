@@ -1,4 +1,4 @@
-import { HTMLAttributes, forwardRef } from "react";
+import { HTMLAttributes, forwardRef, ReactNode, createElement } from "react";
 import { cn } from "@/lib/utils";
 
 export type LabelSize = "xs" | "sm" | "md" | "lg";
@@ -7,7 +7,7 @@ export type LabelSpacing = "normal" | "wide" | "wider" | "widest";
 
 export type LabelTone = "default" | "primary" | "secondary" | "muted" | "legal" | "tech" | "white";
 
-export interface LabelProps extends HTMLAttributes<HTMLParagraphElement> {
+export interface LabelProps extends Omit<HTMLAttributes<HTMLParagraphElement>, "children"> {
   /**
    * Label size
    * @default "sm"
@@ -43,6 +43,11 @@ export interface LabelProps extends HTMLAttributes<HTMLParagraphElement> {
    * @default "p"
    */
   as?: "p" | "span" | "label" | "div" | "dt" | "dd";
+
+  /**
+   * Children content
+   */
+  children?: ReactNode;
 }
 
 const labelSizes: Record<LabelSize, string> = {
@@ -110,11 +115,11 @@ export const Label = forwardRef<HTMLParagraphElement, LabelProps>(
     },
     ref
   ) => {
-    const Comp = Component as any;
-    return (
-      <Comp
-        ref={ref}
-        className={cn(
+    return createElement(
+      Component,
+      {
+        ref,
+        className: cn(
           // Size
           labelSizes[size],
           // Spacing
@@ -127,11 +132,10 @@ export const Label = forwardRef<HTMLParagraphElement, LabelProps>(
           uppercase && "uppercase",
           // Custom className
           className
-        )}
-        {...props}
-      >
-        {children}
-      </Comp>
+        ),
+        ...props,
+      },
+      children
     );
   }
 );

@@ -1,4 +1,4 @@
-import { HTMLAttributes, forwardRef } from "react";
+import { HTMLAttributes, forwardRef, ReactNode, createElement } from "react";
 import { cn } from "@/lib/utils";
 
 export type HeadingLevel = "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
@@ -9,7 +9,7 @@ export type HeadingWeight = "normal" | "medium" | "semibold" | "bold";
 
 export type HeadingTone = "default" | "primary" | "secondary" | "muted" | "white" | "legal" | "tech";
 
-export interface HeadingProps extends HTMLAttributes<HTMLHeadingElement> {
+export interface HeadingProps extends Omit<HTMLAttributes<HTMLHeadingElement>, "children"> {
   /**
    * Heading level (semantic HTML tag)
    * @default "h2"
@@ -45,6 +45,11 @@ export interface HeadingProps extends HTMLAttributes<HTMLHeadingElement> {
    * @default false
    */
   truncate?: boolean;
+
+  /**
+   * Children content
+   */
+  children?: ReactNode;
 }
 
 const headingSizes: Record<HeadingSize, string> = {
@@ -110,10 +115,11 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
     },
     ref
   ) => {
-    return (
-      <Component
-        ref={ref}
-        className={cn(
+    return createElement(
+      Component,
+      {
+        ref,
+        className: cn(
           // Base styles
           "tracking-tight",
           // Size
@@ -128,11 +134,10 @@ export const Heading = forwardRef<HTMLHeadingElement, HeadingProps>(
           truncate && "truncate",
           // Custom className
           className
-        )}
-        {...props}
-      >
-        {children}
-      </Component>
+        ),
+        ...props,
+      },
+      children
     );
   }
 );

@@ -1,4 +1,4 @@
-import { HTMLAttributes, forwardRef } from "react";
+import { HTMLAttributes, forwardRef, ReactNode, createElement } from "react";
 import { cn } from "@/lib/utils";
 
 export type TextSize = "xs" | "sm" | "base" | "lg" | "xl" | "2xl";
@@ -9,7 +9,7 @@ export type TextLeading = "none" | "tight" | "snug" | "normal" | "relaxed" | "lo
 
 export type TextWeight = "normal" | "medium" | "semibold" | "bold";
 
-export interface TextProps extends HTMLAttributes<HTMLParagraphElement> {
+export interface TextProps extends Omit<HTMLAttributes<HTMLParagraphElement>, "children"> {
   /**
    * Text size
    * @default "base"
@@ -51,6 +51,11 @@ export interface TextProps extends HTMLAttributes<HTMLParagraphElement> {
    * @default "p"
    */
   as?: "p" | "span" | "div" | "li";
+
+  /**
+   * Children content
+   */
+  children?: ReactNode;
 }
 
 const textSizes: Record<TextSize, string> = {
@@ -137,11 +142,11 @@ export const Text = forwardRef<HTMLParagraphElement, TextProps>(
     },
     ref
   ) => {
-    const Comp = Component as React.ElementType;
-    return (
-      <Comp
-        ref={ref}
-        className={cn(
+    return createElement(
+      Component,
+      {
+        ref,
+        className: cn(
           // Size
           textSizes[size],
           // Tone
@@ -156,11 +161,10 @@ export const Text = forwardRef<HTMLParagraphElement, TextProps>(
           truncate && "truncate",
           // Custom className
           className
-        )}
-        {...props}
-      >
-        {children}
-      </Comp>
+        ),
+        ...props,
+      },
+      children
     );
   }
 );

@@ -1,4 +1,4 @@
-import { HTMLAttributes, forwardRef } from "react";
+import { HTMLAttributes, forwardRef, ReactNode, createElement } from "react";
 import { cn } from "@/lib/utils";
 
 export type SectionVariant = "hero" | "default" | "compact" | "feature";
@@ -7,7 +7,7 @@ export type SectionSpacing = "none" | "sm" | "md" | "lg" | "xl";
 
 export type SectionBackground = "default" | "secondary" | "gradient-light" | "gradient-dark";
 
-export interface SectionProps extends HTMLAttributes<HTMLElement> {
+export interface SectionProps extends Omit<HTMLAttributes<HTMLElement>, "children"> {
   /**
    * Section variant
    * @default "default"
@@ -73,6 +73,11 @@ export interface SectionProps extends HTMLAttributes<HTMLElement> {
    * @default "section"
    */
   as?: React.ElementType;
+
+  /**
+   * Children content
+   */
+  children?: ReactNode;
 }
 
 const sectionVariants: Record<SectionVariant, string> = {
@@ -139,11 +144,11 @@ export const Section = forwardRef<HTMLElement, SectionProps>(
     },
     ref
   ) => {
-    const Comp = Component as React.ElementType;
-    return (
-      <Comp
-        ref={ref}
-        className={cn(
+    return createElement(
+      Component,
+      {
+        ref,
+        className: cn(
           // Base styles
           "w-full",
           // Variant
@@ -164,11 +169,10 @@ export const Section = forwardRef<HTMLElement, SectionProps>(
           backdropBlur && "backdrop-blur",
           // Custom className
           className
-        )}
-        {...props}
-      >
-        {children}
-      </Comp>
+        ),
+        ...props,
+      },
+      children
     );
   }
 );
