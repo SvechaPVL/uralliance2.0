@@ -4,10 +4,11 @@ import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
-export interface Card3DProps extends Omit<
-  React.HTMLAttributes<HTMLDivElement>,
-  'onDrag' | 'onDragStart' | 'onDragEnd' | 'onAnimationStart' | 'onAnimationEnd'
-> {
+export interface Card3DProps
+  extends Omit<
+    React.HTMLAttributes<HTMLDivElement>,
+    "onDrag" | "onDragStart" | "onDragEnd" | "onAnimationStart" | "onAnimationEnd"
+  > {
   /**
    * Maximum rotation in degrees
    * @default 6
@@ -75,7 +76,9 @@ export function Card3D({
       >
         <div
           className={cn(
-            "rounded-3xl border border-[var(--color-border)] bg-[var(--color-card-bg)]/80 backdrop-blur-lg p-6 will-change-transform",
+            "rounded-3xl border border-[var(--color-border)] p-6 will-change-transform",
+            // На мобилке - сплошной непрозрачный фон, на десктопе - с эффектом стекла
+            "bg-[var(--color-background-secondary)] sm:bg-[var(--color-card-bg)]/80 sm:backdrop-blur-lg",
             className
           )}
           style={{

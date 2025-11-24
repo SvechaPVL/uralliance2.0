@@ -64,9 +64,11 @@ export const CardSwiper: React.FC<CardSwiperProps> = ({
     (deltaX: number) => {
       const card = getActiveCard();
       if (!card) return;
+      // Используем CSS переменные вместо прямого transform для совместимости с 3D позиционированием
       card.style.setProperty("--swipe-x", `${deltaX}px`);
       card.style.setProperty("--swipe-rotate", `${deltaX * 0.2}deg`);
-      card.style.opacity = (1 - Math.min(Math.abs(deltaX) / 100, 1) * 0.75).toString();
+      // Убираем изменение opacity для лучшей производительности на мобилке
+      // card.style.opacity = (1 - Math.min(Math.abs(deltaX) / 100, 1) * 0.75).toString();
     },
     [getActiveCard]
   );
@@ -237,7 +239,7 @@ export const CardSwiper: React.FC<CardSwiperProps> = ({
           "swiper-card absolute cursor-grab active:cursor-grabbing",
           "left-1/2 top-1/2",
           "rounded-3xl border border-[var(--color-border)]",
-          "bg-[var(--color-card-bg)]/90 backdrop-blur-xl p-6",
+          "bg-[var(--color-card-bg)] p-6",
           "shadow-[0_20px_60px_-15px_rgba(0,0,0,0.3)]",
           "overflow-hidden will-change-transform",
           item.className

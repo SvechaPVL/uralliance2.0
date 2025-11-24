@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Output standalone для Docker
+  output: "standalone",
+
   // Оптимизация производительности
   compiler: {
     // Удаляем console.log в продакшене

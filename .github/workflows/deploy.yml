@@ -1,0 +1,83 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        run: |
+          docker build -t uralliance:${{ github.sha }} .
+          docker tag uralliance:${{ github.sha }} uralliance:latest
+
+      - name: Save Docker image
+        run: |
+          docker save uralliance:latest | gzip > uralliance-latest.tar.gz
+
+      - name: Copy files to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          source: "uralliance-latest.tar.gz,docker-compose.yml"
+          target: "/opt/uralliance"
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            cd /opt/uralliance
+
+            # Load new image
+            docker load < uralliance-latest.tar.gz
+            rm uralliance-latest.tar.gz
+
+            # Load environment variables
+            if [ ! -f .env ]; then
+              echo "ERROR: .env file not found!"
+              exit 1
+            fi
+
+            # Stop and remove old container
+            docker-compose down || true
+
+            # Start new container
+            docker-compose up -d
+
+            # Clean up old images
+            docker image prune -f
+
+            # Show status
+            docker-compose ps
+            docker-compose logs --tail=50
+
+      - name: Health check
+        run: |
+          sleep 10
+          curl -f https://uralliance.ru || exit 1
+
+      - name: Cleanup
+        if: always()
+        run: rm -f uralliance-latest.tar.gz
+
+      - name: Notify on failure
+        if: failure()
+        run: |
+          echo "Deployment failed! Check logs for details."

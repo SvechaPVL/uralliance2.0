@@ -4,6 +4,7 @@ import "./globals.css";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { OverlayScrollbar } from "@/components/system/OverlayScrollbar";
+import { YandexMetrika } from "@/components/system/YandexMetrika";
 import { HeroProgressProvider } from "@/context/HeroProgressContext";
 import pagesConfig from "@/content/pages.json";
 
@@ -77,6 +78,14 @@ export const metadata: Metadata = {
     // google: 'your-google-verification-code',
     // yandex: 'your-yandex-verification-code',
   },
+  manifest: "/manifest.webmanifest",
+  icons: {
+    icon: [
+      { url: "/icon.png", sizes: "32x32", type: "image/png" },
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    apple: [{ url: "/apple-icon.png", sizes: "180x180", type: "image/png" }],
+  },
 };
 
 export default function RootLayout({
@@ -84,6 +93,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const yandexMetrikaId = process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID;
+
   return (
     <html lang="ru">
       <body className={`${inter.variable} ${poppins.variable} antialiased`}>
@@ -93,6 +104,9 @@ export default function RootLayout({
           <Footer />
           <OverlayScrollbar />
         </HeroProgressProvider>
+
+        {/* Analytics */}
+        {yandexMetrikaId && <YandexMetrika counterId={yandexMetrikaId} />}
       </body>
     </html>
   );

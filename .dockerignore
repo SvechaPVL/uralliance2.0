@@ -1,0 +1,64 @@
+# Dependencies
+node_modules
+npm-debug.log*
+
+# Next.js
+.next
+out
+
+# Testing
+coverage
+.storybook
+storybook-static
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# Git
+.git
+.gitignore
+.github
+
+# Environment files
+.env*.local
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Documentation
+README.md
+*.md
+!content/**/*.md
+
+# Misc
+.DS_Store
+*.pem
+.cache
+
+# CI/CD
+.husky
+.prettierrc
+.prettierignore
+eslint.config.mjs
+
+# Build artifacts
+*.log
+.next.pid
+.storybook.pid
+tsconfig.tsbuildinfo
+
+# Scripts
+scripts/
+
+# Specs
+.specify/
+specs/
+
+# Design docs
+design.md
+designsystem.md
