@@ -118,7 +118,7 @@ export default async function ServicesCategoryPage({ params }: ServicesCategoryP
   return (
     <>
       {/* Hero */}
-      <Section spacing="md" isolate overflow="hidden">
+      <Section spacing="md" isolate overflow="hidden" className="pt-20 sm:pt-24 lg:pt-28">
         <Container className="space-y-12">
           <div className="grid gap-10 lg:grid-cols-[1.15fr,0.85fr]">
             <div className="space-y-6">
@@ -132,18 +132,16 @@ export default async function ServicesCategoryPage({ params }: ServicesCategoryP
                 {hero.description}
               </Text>
               <div className="flex flex-wrap gap-4">
-                <Button
-                  asChild
-                  variant={isLegal ? "primary-legal" : "primary-tech"}
-                  size="md"
-                >
+                <Button asChild variant={isLegal ? "primary-legal" : "primary-tech"} size="md">
                   <Link href={hero.primaryCta.href}>{hero.primaryCta.label}</Link>
                 </Button>
               </div>
               <div className="grid gap-4 sm:grid-cols-3">
                 {hero.highlights.map((highlight) => (
                   <Card key={highlight.label} variant="glass" className="p-5 text-center">
-                    <Text size="2xl" weight="semibold" className="text-3xl">{highlight.value}</Text>
+                    <Text size="2xl" weight="semibold" className="text-3xl">
+                      {highlight.value}
+                    </Text>
                     <Text size="sm" tone="secondary" className="mt-1">
                       {highlight.label}
                     </Text>
@@ -155,7 +153,11 @@ export default async function ServicesCategoryPage({ params }: ServicesCategoryP
               <Heading as="h2" size="lg" weight="semibold">
                 {isLegal ? "Юридическое сопровождение" : "Цифровая реализация"}
               </Heading>
-              <List variant="feature" spacing="md" className="text-sm text-[var(--color-text-secondary)]">
+              <List
+                variant="feature"
+                spacing="md"
+                className="text-sm text-[var(--color-text-secondary)]"
+              >
                 {hero.supporting.map((item) => (
                   <li key={item}>{item}</li>
                 ))}
@@ -180,7 +182,9 @@ export default async function ServicesCategoryPage({ params }: ServicesCategoryP
               <Label size="md" spacing="wider" tone="muted">
                 {isLegal ? "Юридический фокус" : "Цифровой фокус"}
               </Label>
-              <Text size="lg" weight="semibold" className="mt-2">{bullet}</Text>
+              <Text size="lg" weight="semibold" className="mt-2">
+                {bullet}
+              </Text>
             </Card>
           ))}
         </Container>
@@ -211,7 +215,7 @@ export default async function ServicesCategoryPage({ params }: ServicesCategoryP
                     variant={isLegal ? "legal" : "tech"}
                     badgeStyle="subtle"
                     size="sm"
-                    className="uppercase tracking-[0.2em]"
+                    className="tracking-[0.2em] uppercase"
                   >
                     {isLegal ? "Legal" : "Tech"}
                   </Badge>
@@ -231,7 +235,9 @@ export default async function ServicesCategoryPage({ params }: ServicesCategoryP
                     />
                   </div>
                   <div className="space-y-2">
-                    <Heading as="h3" size="lg" weight="semibold">{service.frontmatter.title}</Heading>
+                    <Heading as="h3" size="lg" weight="semibold">
+                      {service.frontmatter.title}
+                    </Heading>
                     <Text size="sm" tone="secondary">
                       {service.frontmatter.description}
                     </Text>
@@ -246,12 +252,16 @@ export default async function ServicesCategoryPage({ params }: ServicesCategoryP
                       {service.frontmatter.price}
                     </Text>
                   </div>
-                  <List variant="checkmark" spacing="sm" className="text-sm text-[var(--color-text-secondary)]">
+                  <List
+                    variant="checkmark"
+                    spacing="sm"
+                    className="text-sm text-[var(--color-text-secondary)]"
+                  >
                     <li>Ведение команды {isLegal ? "юристов" : "разработчиков"}</li>
                     <li>Промежуточные отчёты каждую неделю</li>
                   </List>
                 </div>
-                <div className="mt-auto flex justify-between items-center pt-2">
+                <div className="mt-auto flex items-center justify-between pt-2">
                   <Link
                     href={`/services/${category}/${service.slug}`}
                     className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--color-text-secondary)] transition-colors hover:text-white"
@@ -267,7 +277,7 @@ export default async function ServicesCategoryPage({ params }: ServicesCategoryP
       </Section>
 
       {/* CTA */}
-      <Section spacing="md" className="pb-20 pt-0">
+      <Section spacing="md" className="pt-0 pb-20">
         <Container>
           <Card variant="glass" padding="lg" className="text-center">
             <div className="space-y-6">
@@ -278,7 +288,8 @@ export default async function ServicesCategoryPage({ params }: ServicesCategoryP
                 Получите персональную консультацию
               </Heading>
               <Text size="lg" tone="secondary">
-                Расскажите о задаче — соберем команду, подготовим бэклог и бюджет за два рабочих дня.
+                Расскажите о задаче — соберем команду, подготовим бэклог и бюджет за два рабочих
+                дня.
               </Text>
               <div className="flex flex-wrap justify-center gap-4">
                 <Button asChild variant="primary-tech" size="md">

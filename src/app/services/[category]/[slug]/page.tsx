@@ -1,4 +1,5 @@
 import { getServiceBySlug, getAllServiceSlugs } from "@/lib/content";
+import { cn } from "@/lib/utils";
 import { Container } from "@/components/layout/Container";
 import { Badge } from "@/components/primitives/badge";
 import { Button } from "@/components/primitives/button";
@@ -241,15 +242,18 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
       />
 
       {/* Hero */}
-      <Section spacing="lg" background="secondary">
+      <Section spacing="lg" background="secondary" className="pt-20 sm:pt-24 lg:pt-28">
         <Container className="max-w-5xl">
-          <Card variant="glass" className="space-y-6 p-4 sm:space-y-8 sm:p-6 lg:space-y-10 lg:p-10">
+          <Card
+            variant="glass"
+            className="space-y-4 p-3 sm:space-y-6 sm:p-5 md:p-6 lg:space-y-8 lg:p-8"
+          >
             <div className="flex flex-wrap items-center gap-2 sm:gap-3">
               <Badge
                 variant={isLegal ? "legal" : "tech"}
                 badgeStyle="subtle"
                 size="sm"
-                className="tracking-[0.3em] uppercase"
+                className="tracking-[0.2em] uppercase sm:tracking-[0.3em]"
               >
                 {isLegal ? "Legal" : "Tech"}
               </Badge>
@@ -258,46 +262,60 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
               </Label>
             </div>
 
-            <div className="grid gap-6 sm:gap-8 lg:grid-cols-[1.4fr,0.8fr]">
-              <div className="space-y-4 sm:space-y-6">
-                <div className="flex items-start gap-3 sm:gap-4">
-                  <Badge
-                    variant={isLegal ? "legal" : "tech"}
-                    badgeStyle="filled"
-                    className="h-14 w-14 shrink-0 rounded-2xl sm:h-16 sm:w-16 sm:rounded-3xl lg:h-20 lg:w-20"
-                  >
-                    <ServiceIcon
-                      name={service.frontmatter.icon}
+            <div className="grid gap-5 sm:gap-6 md:gap-7 lg:grid-cols-[1.4fr,0.8fr] lg:gap-8">
+              <div className="space-y-3 sm:space-y-4 md:space-y-5">
+                <div className="flex flex-col gap-2 sm:gap-2.5 md:gap-3">
+                  <div className="flex items-center gap-2.5 sm:gap-3 md:gap-4">
+                    <Badge
                       variant={isLegal ? "legal" : "tech"}
-                      className="h-7 w-7 sm:h-8 sm:w-8 lg:h-10 lg:w-10"
-                    />
-                  </Badge>
-                  <div className="min-w-0 flex-1 space-y-2 sm:space-y-4">
-                    <Heading as="h1" size="2xl" weight="semibold">
+                      badgeStyle="filled"
+                      className="h-12 w-12 shrink-0 rounded-xl sm:h-14 sm:w-14 sm:rounded-2xl md:h-16 md:w-16 md:rounded-3xl lg:h-20 lg:w-20"
+                    >
+                      <ServiceIcon
+                        name={service.frontmatter.icon}
+                        variant={isLegal ? "legal" : "tech"}
+                        className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 lg:h-10 lg:w-10"
+                      />
+                    </Badge>
+                    <Heading as="h1" size="2xl" weight="semibold" className="min-w-0">
                       {service.frontmatter.title}
                     </Heading>
-                    <Text size="lg" tone="secondary">
-                      {service.frontmatter.description}
-                    </Text>
                   </div>
+                  <Text size="lg" tone="secondary">
+                    {service.frontmatter.description}
+                  </Text>
                 </div>
 
-                <div className="flex flex-wrap gap-2 sm:gap-3">
+                <div className="grid gap-2 sm:grid-cols-2 sm:gap-3">
                   {focusItems.map((focus) => (
-                    <Badge
+                    <div
                       key={focus}
-                      variant={isLegal ? "legal" : "tech"}
-                      badgeStyle="subtle"
-                      size="sm"
-                      className="rounded-full px-3 py-1 text-[10px] tracking-[0.15em] uppercase sm:px-4 sm:text-xs sm:tracking-[0.2em]"
+                      className={cn(
+                        "flex items-start gap-2 rounded-2xl border px-3 py-2.5 shadow-sm",
+                        "bg-[var(--color-glass-strong)]/70 backdrop-blur",
+                        isLegal
+                          ? "border-[var(--color-legal-accent)]/40"
+                          : "border-[var(--color-tech-accent)]/40"
+                      )}
                     >
-                      {focus}
-                    </Badge>
+                      <span
+                        className={cn(
+                          "mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full",
+                          isLegal
+                            ? "bg-[var(--color-legal-primary)]"
+                            : "bg-[var(--color-tech-primary)]"
+                        )}
+                        aria-hidden="true"
+                      />
+                      <span className="text-[13px] leading-snug text-[var(--color-text-primary)] sm:text-sm">
+                        {focus}
+                      </span>
+                    </div>
                   ))}
                 </div>
               </div>
 
-              <Card variant="glass" className="p-4 sm:p-5 lg:p-6">
+              <Card variant="glass" className="p-3.5 sm:p-4 md:p-5 lg:p-6">
                 <List variant="feature" spacing="lg">
                   <li>
                     <Label size="sm" spacing="wider" tone="muted">
@@ -327,16 +345,16 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
                     </Text>
                   </li>
                 </List>
-                <div className="mt-4 flex flex-col gap-2 sm:mt-6 sm:flex-row sm:gap-3">
+                <div className="mt-3.5 flex flex-col gap-2 sm:mt-4 sm:gap-2.5 md:mt-5 md:flex-row md:gap-3">
                   <Button
                     asChild
                     variant={isLegal ? "primary-legal" : "primary-tech"}
                     size="md"
-                    className="w-full sm:w-auto"
+                    className="w-full md:w-auto"
                   >
                     <Link href="/contacts">Обсудить задачу</Link>
                   </Button>
-                  <Button asChild variant="outline" size="md" className="w-full sm:w-auto">
+                  <Button asChild variant="outline" size="md" className="w-full md:w-auto">
                     <Link href={`/services/${category}`}>Все услуги</Link>
                   </Button>
                 </div>

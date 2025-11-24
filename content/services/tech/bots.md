@@ -6,7 +6,7 @@ icon: "MessageSquare"
 category: "tech"
 order: 3
 seo:
-  keywords: "разработка telegram бота владивосток, создание чат-бота, whatsapp bot"
+  keywords: "разработка telegram бота владивосток, создание чат-бота владивосток, разработка whatsapp бота владивосток, заказать telegram бота владивосток, чат-бот для бизнеса владивосток, telegram bot разработка владивосток, автоматизация через чат-бота владивосток"
   ogImage: "/images/services/bots-og.jpg"
 ---
 

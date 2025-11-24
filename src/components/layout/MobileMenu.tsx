@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/primitives/button";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { trackPhoneClick, trackEmailClick } from "@/lib/analytics";
 import navigationConfig from "@/content/navigation.json";
 import contactsConfig from "@/content/contacts.json";
 
@@ -272,6 +273,7 @@ export function MobileMenu({ isOpen, onClose, navigationItems }: MobileMenuProps
                 <div className="space-y-3">
                   <a
                     href={contactsConfig.phone.link}
+                    onClick={() => trackPhoneClick(contactsConfig.phone.display)}
                     className={cn(
                       "flex items-center gap-3",
                       "text-[var(--color-text-primary)]",
@@ -298,6 +300,7 @@ export function MobileMenu({ isOpen, onClose, navigationItems }: MobileMenuProps
                   </a>
                   <a
                     href={contactsConfig.email.link}
+                    onClick={() => trackEmailClick(contactsConfig.email.display)}
                     className={cn(
                       "flex items-center gap-3",
                       "text-[var(--color-text-primary)]",

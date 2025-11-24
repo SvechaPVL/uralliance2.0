@@ -10,16 +10,16 @@ export const metadata: Metadata = {
 
 export default function TermsPage() {
   return (
-    <main className="min-h-screen pt-28 pb-20">
-      <Container>
-        <Section>
+    <main className="min-h-screen">
+      <Section spacing="md">
+        <Container>
           <div className="mx-auto max-w-4xl">
-            <h1 className="mb-8 text-4xl font-bold text-[var(--color-text-primary)] md:text-5xl">
+            <h1 className="mb-6 text-3xl font-bold text-[var(--color-text-primary)] sm:text-4xl md:text-5xl">
               Условия использования
             </h1>
 
             <div className="prose prose-invert max-w-none">
-              <p className="mb-6 text-lg text-[var(--color-text-secondary)]">
+              <p className="mb-6 text-base text-[var(--color-text-secondary)] sm:text-lg">
                 Дата последнего обновления: {new Date().toLocaleDateString("ru-RU")}
               </p>
 
@@ -136,8 +136,8 @@ export default function TermsPage() {
               </section>
             </div>
           </div>
-        </Section>
-      </Container>
+        </Container>
+      </Section>
     </main>
   );
 }

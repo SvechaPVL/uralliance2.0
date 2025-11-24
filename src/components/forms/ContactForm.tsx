@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useMemo } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/primitives/button";
@@ -9,6 +9,7 @@ import { PhoneInput } from "@/components/primitives/phone-input";
 import { Select, SelectItem } from "@/components/primitives/select";
 import { Textarea } from "@/components/primitives/textarea";
 import { cn } from "@/lib/utils";
+import { reachGoal } from "@/lib/analytics";
 import type {
   ContactFormErrorResponse,
   ContactFormSuccessResponse,
@@ -37,6 +38,7 @@ const defaultValues: ContactFormValues = {
 export function ContactForm() {
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [serverMessage, setServerMessage] = useState<string | null>(null);
+  const formStartTracked = useRef(false);
 
   const {
     register,
@@ -48,6 +50,14 @@ export function ContactForm() {
     resolver: zodResolver(contactFormSchema),
     defaultValues,
   });
+
+  // Track when user starts filling the form (first field focus)
+  const handleFormStart = () => {
+    if (!formStartTracked.current) {
+      reachGoal("contact_form_start");
+      formStartTracked.current = true;
+    }
+  };
 
   const onSubmit = async (values: ContactFormValues) => {
     setStatus("idle");
@@ -67,24 +77,45 @@ export function ContactForm() {
       if (!response.ok || !result.success) {
         setStatus("error");
         setServerMessage(
-          "error" in result && result.error
-            ? result.error
-            : formConfig.contact.messages.error
+          "error" in result && result.error ? result.error : formConfig.contact.messages.error
         );
+
+        // Track form error
+        reachGoal("contact_form_error", {
+          error: "error" in result ? result.error : "unknown",
+        });
+
         return;
       }
 
       setStatus("success");
       setServerMessage(formConfig.contact.messages.success);
+
+      // Track successful form submission
+      reachGoal("contact_form_submit", {
+        service: values.service,
+      });
+
       reset({ ...defaultValues });
+
+      // Reset tracking flag for next submission
+      formStartTracked.current = false;
     } catch {
       setStatus("error");
       setServerMessage(formConfig.contact.messages.networkError);
+
+      // Track network error
+      reachGoal("contact_form_error", {
+        error: "network_error",
+      });
     }
   };
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const handleFormSubmit = useMemo(() => handleSubmit(onSubmit), [handleSubmit]);
+
   return (
-    <form className="space-y-6" onSubmit={handleSubmit(onSubmit)} noValidate>
+    <form className="space-y-6" onSubmit={handleFormSubmit} noValidate>
       {/* Invisible honeypot field */}
       <div className="sr-only" aria-hidden="true">
         <label htmlFor="company-field">{formConfig.contact.honeypot.label}</label>
@@ -97,14 +128,15 @@ export function ContactForm() {
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         <Input
           label={formConfig.contact.fields.name.label}
           placeholder={formConfig.contact.fields.name.placeholder}
-          variant={formConfig.contact.fields.name.variant as any}
+          variant={formConfig.contact.fields.name.variant as "default"}
           fullWidth
           required={formConfig.contact.fields.name.required}
           {...register("name")}
+          onFocus={handleFormStart}
           error={!!errors.name}
           errorMessage={errors.name?.message}
         />
@@ -112,7 +144,7 @@ export function ContactForm() {
           label={formConfig.contact.fields.email.label}
           type="email"
           placeholder={formConfig.contact.fields.email.placeholder}
-          variant={formConfig.contact.fields.email.variant as any}
+          variant={formConfig.contact.fields.email.variant as "default"}
           fullWidth
           required={formConfig.contact.fields.email.required}
           autoComplete="email"
@@ -127,7 +159,7 @@ export function ContactForm() {
             <PhoneInput
               label={formConfig.contact.fields.phone.label}
               placeholder={formConfig.contact.fields.phone.placeholder}
-              variant={formConfig.contact.fields.phone.variant as any}
+              variant={formConfig.contact.fields.phone.variant as "default"}
               fullWidth
               required={formConfig.contact.fields.phone.required}
               autoComplete="tel"
@@ -146,7 +178,7 @@ export function ContactForm() {
           render={({ field }) => (
             <Select
               label={formConfig.contact.fields.service.label}
-              variant={formConfig.contact.fields.service.variant as any}
+              variant={formConfig.contact.fields.service.variant as "default"}
               fullWidth
               required={formConfig.contact.fields.service.required}
               value={field.value}
@@ -166,7 +198,7 @@ export function ContactForm() {
 
       <Textarea
         label={formConfig.contact.fields.message.label}
-        variant={formConfig.contact.fields.message.variant as any}
+        variant={formConfig.contact.fields.message.variant as "default"}
         fullWidth
         required={formConfig.contact.fields.message.required}
         rows={5}
@@ -180,15 +212,13 @@ export function ContactForm() {
       <div className="space-y-3">
         <Button
           type="submit"
-          variant={formConfig.contact.button.variant as any}
+          variant={formConfig.contact.button.variant as "primary-tech"}
           fullWidth
           isLoading={isSubmitting}
         >
           {isSubmitting ? formConfig.contact.button.loadingLabel : formConfig.contact.button.label}
         </Button>
-        <p className="text-sm text-[var(--color-text-muted)]">
-          {formConfig.contact.hint}
-        </p>
+        <p className="text-sm text-[var(--color-text-muted)]">{formConfig.contact.hint}</p>
         {serverMessage && (
           <p
             role="status"

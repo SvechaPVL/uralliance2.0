@@ -1,6 +1,7 @@
+"use client";
+
 import Script from "next/script";
 import Link from "next/link";
-import type { Metadata } from "next";
 import { Container } from "@/components/layout/Container";
 import { Card } from "@/components/primitives/card";
 import { Badge } from "@/components/primitives/badge";
@@ -10,6 +11,7 @@ import { Spotlight } from "@/components/animations/Spotlight";
 import { MapWrapper } from "@/components/animations/MapWrapper";
 import { generateLocalBusinessSchema, generateOrganizationSchema } from "@/lib/seo";
 import { generateTelegramLink, generateWhatsAppLink } from "@/lib/messenger";
+import { trackPhoneClick, trackEmailClick, trackMessengerClick } from "@/lib/analytics";
 import { MapPin, Phone, Mail, Clock, MessageSquare, Navigation } from "lucide-react";
 import { Section } from "@/components/primitives/section";
 import { Heading } from "@/components/primitives/heading";
@@ -18,12 +20,6 @@ import { Text } from "@/components/primitives/text";
 import { List } from "@/components/primitives/list";
 import pagesConfig from "@/content/pages.json";
 import contactsConfig from "@/content/contacts.json";
-
-export const metadata: Metadata = {
-  title: pagesConfig.contacts.title,
-  description: pagesConfig.contacts.description,
-  keywords: pagesConfig.contacts.keywords,
-};
 
 const ORGANIZATION_SCHEMA = generateOrganizationSchema();
 const LOCAL_BUSINESS_SCHEMA = generateLocalBusinessSchema();
@@ -115,7 +111,18 @@ export default function ContactsPage() {
                     size="md"
                     icon={<MessageSquare className="h-5 w-5" />}
                   >
-                    <a href={messenger.href} target="_blank" rel="noopener noreferrer">
+                    <a
+                      href={messenger.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => {
+                        if (messenger.label.toLowerCase().includes("telegram")) {
+                          trackMessengerClick("telegram", "contacts_page_hero");
+                        } else if (messenger.label.toLowerCase().includes("whatsapp")) {
+                          trackMessengerClick("whatsapp", "contacts_page_hero");
+                        }
+                      }}
+                    >
                       {messenger.label}
                     </a>
                   </Button>
@@ -126,7 +133,7 @@ export default function ContactsPage() {
         </Section>
 
         {/* Contact info */}
-        <Section spacing="md" className="pb-16 pt-4">
+        <Section spacing="md" className="pt-4 pb-16">
           <Container className="space-y-8">
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
               {CONTACT_DETAILS.map((detail) => {
@@ -140,7 +147,9 @@ export default function ContactsPage() {
                     <Label size="md" spacing="wider" tone="muted">
                       {detail.label}
                     </Label>
-                    <Text size="lg" weight="semibold">{detail.value}</Text>
+                    <Text size="lg" weight="semibold">
+                      {detail.value}
+                    </Text>
                   </Card>
                 );
 
@@ -155,6 +164,13 @@ export default function ContactsPage() {
                     key={detail.label}
                     href={detail.href}
                     className="block"
+                    onClick={() => {
+                      if (detail.href?.startsWith("tel:")) {
+                        trackPhoneClick(detail.value);
+                      } else if (detail.href?.startsWith("mailto:")) {
+                        trackEmailClick(detail.value);
+                      }
+                    }}
                     {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                   >
                     {content}
@@ -169,12 +185,14 @@ export default function ContactsPage() {
         <Section spacing="md">
           <Container className="grid gap-10 lg:grid-cols-[1.05fr,0.95fr]">
             <Spotlight className="border border-[var(--color-border-soft)] bg-[var(--color-card-bg)]/80 p-6 shadow-[0_30px_80px_rgba(0,0,0,0.35)]">
-              <div className="rounded-3xl border border-white/5 bg-[var(--color-background)]/90 p-6 sm:p-8 max-w-3xl mx-auto">
+              <div className="mx-auto max-w-3xl rounded-3xl border border-white/5 bg-[var(--color-background)]/90 p-6 sm:p-8">
                 <div className="mb-8 space-y-3">
                   <Badge variant="tech" badgeStyle="subtle" size="sm">
                     {pagesConfig.contacts.form.badge}
                   </Badge>
-                  <Heading as="h2" size="xl" weight="semibold">{pagesConfig.contacts.form.heading}</Heading>
+                  <Heading as="h2" size="xl" weight="semibold">
+                    {pagesConfig.contacts.form.heading}
+                  </Heading>
                   <Text size="lg" tone="secondary">
                     {pagesConfig.contacts.form.description}
                   </Text>
@@ -188,7 +206,11 @@ export default function ContactsPage() {
                 <Label size="md" spacing="wider" tone="muted">
                   {pagesConfig.contacts.responseHighlights.label}
                 </Label>
-                <List variant="feature" spacing="md" className="text-sm text-[var(--color-text-secondary)]">
+                <List
+                  variant="feature"
+                  spacing="md"
+                  className="text-sm text-[var(--color-text-secondary)]"
+                >
                   {responseHighlights.map((item) => (
                     <li key={item}>{item}</li>
                   ))}
@@ -205,10 +227,25 @@ export default function ContactsPage() {
                   <p>{pagesConfig.contacts.meeting.description}</p>
                   <div className="flex flex-wrap gap-3">
                     <Button asChild variant="primary-tech" size="sm">
-                      <Link href={contactsConfig.phone.link}>{pagesConfig.contacts.meeting.buttons.call}</Link>
+                      <Link
+                        href={contactsConfig.phone.link}
+                        onClick={() => trackPhoneClick(contactsConfig.phone.display)}
+                      >
+                        {pagesConfig.contacts.meeting.buttons.call}
+                      </Link>
                     </Button>
-                    <Button asChild variant="ghost" size="sm" className="border border-[var(--color-border)]">
-                      <Link href={contactsConfig.email.link}>{pagesConfig.contacts.meeting.buttons.email}</Link>
+                    <Button
+                      asChild
+                      variant="ghost"
+                      size="sm"
+                      className="border border-[var(--color-border)]"
+                    >
+                      <Link
+                        href={contactsConfig.email.link}
+                        onClick={() => trackEmailClick(contactsConfig.email.display)}
+                      >
+                        {pagesConfig.contacts.meeting.buttons.email}
+                      </Link>
                     </Button>
                   </div>
                 </div>
@@ -223,7 +260,9 @@ export default function ContactsPage() {
             <div className="flex items-center gap-3">
               <Navigation className="h-10 w-10 rounded-2xl bg-[var(--color-card-bg)] p-2" />
               <div>
-                <Text size="xl" weight="semibold">{pagesConfig.contacts.map.label}</Text>
+                <Text size="xl" weight="semibold">
+                  {pagesConfig.contacts.map.label}
+                </Text>
               </div>
             </div>
             <Card variant="glass" className="overflow-hidden p-0">
@@ -251,10 +290,17 @@ export default function ContactsPage() {
               </Heading>
               <div className="mt-8 flex flex-wrap justify-center gap-4">
                 <Button asChild variant="primary-legal" size="md">
-                  <Link href={pagesConfig.contacts.cta.buttons.price.href}>{pagesConfig.contacts.cta.buttons.price.label}</Link>
+                  <Link href={pagesConfig.contacts.cta.buttons.price.href}>
+                    {pagesConfig.contacts.cta.buttons.price.label}
+                  </Link>
                 </Button>
                 <Button asChild variant="outline" size="md">
-                  <Link href={pagesConfig.contacts.cta.buttons.email.href}>{pagesConfig.contacts.cta.buttons.email.label}</Link>
+                  <Link
+                    href={pagesConfig.contacts.cta.buttons.email.href}
+                    onClick={() => trackEmailClick(contactsConfig.email.display)}
+                  >
+                    {pagesConfig.contacts.cta.buttons.email.label}
+                  </Link>
                 </Button>
               </div>
             </Card>

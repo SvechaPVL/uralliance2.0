@@ -51,6 +51,12 @@ export interface SectionProps extends Omit<HTMLAttributes<HTMLElement>, "childre
   relative?: boolean;
 
   /**
+   * Disable the extra top padding applied to the first section on the page
+   * @default false
+   */
+  disableFirstSpacing?: boolean;
+
+  /**
    * Overflow behavior
    * @default "visible"
    */
@@ -134,6 +140,7 @@ export const Section = forwardRef<HTMLElement, SectionProps>(
       borderBottom = false,
       bordered = false,
       relative = true,
+      disableFirstSpacing = false,
       overflow = "visible",
       backdropBlur = false,
       isolate = false,
@@ -155,6 +162,8 @@ export const Section = forwardRef<HTMLElement, SectionProps>(
           sectionVariants[variant],
           // Spacing (additional bottom padding)
           sectionSpacing[spacing],
+          // Extra breathing room for the first section on the page (especially on mobile)
+          !disableFirstSpacing && "first:pt-24 first:sm:pt-28 first:lg:pt-32",
           // Background
           sectionBackgrounds[background],
           // Positioning

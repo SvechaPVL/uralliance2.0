@@ -7,12 +7,29 @@ import { Button } from "@/components/primitives/button";
 import { Card } from "@/components/primitives/card";
 import { MagneticButton } from "@/components/animations/MagneticButton";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { trackCTAClick, getABVariant } from "@/lib/analytics";
 import { Section } from "@/components/primitives/section";
 import { Heading } from "@/components/primitives/heading";
 import { Label } from "@/components/primitives/label";
 import { Text } from "@/components/primitives/text";
 import { useHeroProgress } from "@/context/HeroProgressContext";
 import sectionsConfig from "@/content/sections.json";
+
+// A/B Test: Hero CTA Button Texts
+const HERO_CTA_VARIANTS = {
+  A: {
+    legal: "Получить консультацию",
+    tech: "Обсудить проект",
+  },
+  B: {
+    legal: "Записаться на встречу",
+    tech: "Начать разработку",
+  },
+  C: {
+    legal: "Связаться с юристом",
+    tech: "Заказать разработку",
+  },
+} as const;
 
 // Dynamic import ThreeScene with SSR disabled (Next.js recommended approach)
 const ThreeScene = dynamic(
@@ -50,6 +67,13 @@ export function HeroSection() {
   const techFeatures = sectionsConfig.hero.tech.features;
   const heroSectionRef = useRef<HTMLElement | null>(null);
   const { setProgress } = useHeroProgress();
+
+  // A/B Test: Get variant for Hero CTA
+  const [ctaVariant] = useState<"A" | "B" | "C">(() => {
+    // Only run on client
+    if (typeof window === "undefined") return "A";
+    return getABVariant("hero_cta", ["A", "B", "C"]);
+  });
   useEffect(() => {
     const handleScroll = () => {
       if (!heroSectionRef.current) return;
@@ -183,10 +207,11 @@ export function HeroSection() {
                     variant="primary-legal"
                     size="lg"
                     onClick={() => {
+                      trackCTAClick("hero_legal", HERO_CTA_VARIANTS[ctaVariant].legal);
                       document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
                     }}
                   >
-                    {sectionsConfig.hero.legal.cta.label}
+                    {HERO_CTA_VARIANTS[ctaVariant].legal}
                   </Button>
                 </MagneticButton>
               </div>
@@ -247,7 +272,12 @@ export function HeroSection() {
                     variant={sectionsConfig.hero.tech.cta[0].variant as "secondary-tech"}
                     size="lg"
                   >
-                    <a href={sectionsConfig.hero.tech.cta[0].href}>
+                    <a
+                      href={sectionsConfig.hero.tech.cta[0].href}
+                      onClick={() =>
+                        trackCTAClick("hero_tech", sectionsConfig.hero.tech.cta[0].label)
+                      }
+                    >
                       {sectionsConfig.hero.tech.cta[0].label}
                     </a>
                   </Button>
@@ -256,10 +286,11 @@ export function HeroSection() {
                       variant={sectionsConfig.hero.tech.cta[1].variant as "primary-tech"}
                       size="lg"
                       onClick={() => {
+                        trackCTAClick("hero_tech", HERO_CTA_VARIANTS[ctaVariant].tech);
                         document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
                       }}
                     >
-                      {sectionsConfig.hero.tech.cta[1].label}
+                      {HERO_CTA_VARIANTS[ctaVariant].tech}
                     </Button>
                   </MagneticButton>
                 </div>
