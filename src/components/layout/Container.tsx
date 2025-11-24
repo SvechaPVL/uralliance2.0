@@ -1,9 +1,9 @@
-import { HTMLAttributes, forwardRef } from "react";
+import { HTMLAttributes, forwardRef, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 export type ContainerSize = "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "full";
 
-export interface ContainerProps extends HTMLAttributes<HTMLDivElement> {
+export interface ContainerProps extends Omit<HTMLAttributes<HTMLDivElement>, "children"> {
   /**
    * Maximum width constraint
    * @default "2xl"
@@ -27,6 +27,11 @@ export interface ContainerProps extends HTMLAttributes<HTMLDivElement> {
    * @default "div"
    */
   as?: React.ElementType;
+
+  /**
+   * Children content
+   */
+  children?: ReactNode;
 }
 
 const containerSizes: Record<ContainerSize, string> = {
