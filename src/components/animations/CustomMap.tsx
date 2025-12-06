@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -28,7 +28,6 @@ export function CustomMap({
 }: CustomMapProps) {
   const mapRef = useRef<L.Map | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
@@ -45,15 +44,10 @@ export function CustomMap({
     mapRef.current = map;
 
     // Add dark themed tile layer (CartoDB Dark Matter)
-    const tileLayer = L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
       subdomains: "abcd",
       maxZoom: 20,
     }).addTo(map);
-
-    // Listen for tiles load event to show map with fade-in
-    tileLayer.on("load", () => {
-      setIsLoaded(true);
-    });
 
     // Custom marker icon
     const customIcon = L.divIcon({
@@ -108,25 +102,11 @@ export function CustomMap({
 
   return (
     <>
-      <div style={{ height, width: "100%" }} className="relative isolate rounded-[inherit]">
-        {/* Map container - always rendered, fades in */}
-        <div
-          ref={containerRef}
-          style={{ height: "100%", width: "100%" }}
-          className={`overflow-hidden rounded-[inherit] transition-opacity duration-500 ${isLoaded ? "opacity-100" : "opacity-0"}`}
-        />
-        {/* Loading skeleton - overlays map, fades out */}
-        <div
-          className={`absolute inset-0 flex items-center justify-center bg-[var(--color-background-secondary)] transition-opacity duration-500 ${
-            isLoaded ? "pointer-events-none opacity-0" : "opacity-100"
-          }`}
-        >
-          <div className="flex flex-col items-center gap-3">
-            <div className="h-8 w-8 animate-spin rounded-full border-2 border-[var(--color-tech-primary)] border-t-transparent" />
-            <span className="text-sm text-[var(--color-text-muted)]">Загрузка карты...</span>
-          </div>
-        </div>
-      </div>
+      <div
+        ref={containerRef}
+        style={{ height, width: "100%" }}
+        className="relative isolate overflow-hidden rounded-[inherit]"
+      />
       <style jsx global>{`
         /* Custom marker styles */
         .custom-marker {
