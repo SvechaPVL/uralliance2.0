@@ -72,8 +72,8 @@ export function CustomMap({
         window.open(mapUrl, "_blank", "noopener,noreferrer");
       });
 
-      // Add cursor pointer style
-      marker.getElement()?.classList.add("cursor-pointer");
+      // Mark as clickable for custom cursor detection
+      marker.getElement()?.setAttribute("data-cursor", "pointer");
     }
 
     if (markerTitle) {
@@ -112,10 +112,6 @@ export function CustomMap({
         .custom-marker {
           background: transparent !important;
           border: none !important;
-        }
-
-        .cursor-pointer {
-          cursor: pointer !important;
         }
 
         .custom-marker-wrapper {

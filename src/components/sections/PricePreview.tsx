@@ -119,8 +119,13 @@ export function PricePreview() {
                     </List>
 
                     {/* CTA */}
-                    <Button variant={isTech ? "primary-tech" : "primary-legal"} size="md" fullWidth>
-                      {sectionsConfig.price_preview.button}
+                    <Button
+                      asChild
+                      variant={isTech ? "primary-tech" : "primary-legal"}
+                      size="md"
+                      fullWidth
+                    >
+                      <Link href="/price">{sectionsConfig.price_preview.button}</Link>
                     </Button>
                   </div>
                 </Card>
