@@ -155,10 +155,8 @@ export default function EcpPage() {
               {/* Quick Stats */}
               <div className="grid grid-cols-3 gap-4 pt-4">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-[var(--color-legal-primary)]">1-2</div>
-                  <div className="text-xs text-[var(--color-text-secondary)]">
-                    дня на оформление
-                  </div>
+                  <div className="text-2xl font-bold text-[var(--color-legal-primary)]">1 час</div>
+                  <div className="text-xs text-[var(--color-text-secondary)]">на оформление</div>
                 </div>
                 <div className="text-center">
                   <div className="text-2xl font-bold text-[var(--color-tech-primary)]">10+</div>
