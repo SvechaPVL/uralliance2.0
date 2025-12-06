@@ -38,7 +38,7 @@
           {
             "label": "ЭЦП и Рутокен",
             "description": "Электронные подписи для бизнеса",
-            "href": "/services/legal/ecp",
+            "href": "/ecp",
             "icon": "KeyRound"
           }
         ]
@@ -80,6 +80,11 @@
         "label": "Прайс",
         "href": "/price",
         "category": "general"
+      },
+      {
+        "label": "ЭЦП",
+        "href": "/ecp",
+        "category": "legal"
       },
       {
         "label": "О компании",
