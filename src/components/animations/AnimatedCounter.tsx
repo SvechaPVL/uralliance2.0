@@ -108,7 +108,7 @@ export function AnimatedCounter({
       >
         {prefix && <span className="opacity-80">{prefix}</span>}
         {formattedValue}
-        {suffix && <span className="ml-1 opacity-80">{suffix}</span>}
+        {suffix && <span className="ml-1">{suffix}</span>}
       </span>
       {label && (
         <span className={cn("text-sm uppercase tracking-widest text-[var(--color-text-muted)]", labelClassName)}>
