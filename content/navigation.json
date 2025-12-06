@@ -40,6 +40,12 @@
             "description": "Электронные подписи для бизнеса",
             "href": "/ecp",
             "icon": "KeyRound"
+          },
+          {
+            "label": "Такском ЭДО",
+            "description": "Отчётность и документооборот",
+            "href": "/edo",
+            "icon": "FileText"
           }
         ]
       },

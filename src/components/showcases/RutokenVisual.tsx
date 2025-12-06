@@ -5,7 +5,7 @@ import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { cn } from "@/lib/utils";
 
 interface RutokenVisualProps {
-  variant?: "ecp3" | "ecp2" | "lite";
+  variant?: "ecp3" | "lite";
   className?: string;
   showLabel?: boolean;
 }
@@ -17,17 +17,8 @@ const VARIANTS = {
     borderColor: "border-[#0891b2]/40",
     textColor: "text-[#7dd3fc]",
     pinColor: "bg-[#0891b2]/60",
-    hasNfc: true,
-    price: "3 500",
-  },
-  ecp2: {
-    name: "ЭЦП 2.0",
-    bgColor: "bg-[#d4af37]/15",
-    borderColor: "border-[#d4af37]/40",
-    textColor: "text-[#fcd34d]",
-    pinColor: "bg-[#d4af37]/60",
     hasNfc: false,
-    price: "2 500",
+    price: "2 800",
   },
   lite: {
     name: "Lite",
@@ -36,7 +27,7 @@ const VARIANTS = {
     textColor: "text-[#a5b4fc]",
     pinColor: "bg-[#6366f1]/60",
     hasNfc: false,
-    price: "1 500",
+    price: "2 300",
   },
 };
 
@@ -179,14 +170,6 @@ export function RutokenShowcase() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            viewport={{ once: true }}
-          >
-            <RutokenVisual variant="ecp2" />
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
             viewport={{ once: true }}
           >
             <RutokenVisual variant="lite" />
