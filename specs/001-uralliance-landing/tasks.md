@@ -104,7 +104,7 @@
 ### Реализация для Пользовательской Истории 2
 
 - [ ] T033 [P] [US2] Создать src/components/animations/AnimatedCounter.tsx — Компонент для animated counters (react-countup или кастомная реализация, анимация от 0 до целевого значения при попадании в viewport через IntersectionObserver)
-- [ ] T034 [P] [US2] Создать src/components/sections/TrustSection.tsx — Trust секция с animated counters: "Более 500 проектов | 15 лет опыта | 98% довольных клиентов", fade-in on scroll (Framer Motion fadeInUp variant)
+- [ ] T034 [P] [US2] Создать src/components/sections/TrustSection.tsx — Trust секция с animated counters: "Более 500 проектов | 22 года опыта | 98% довольных клиентов", fade-in on scroll (Framer Motion fadeInUp variant)
 - [ ] T035 [P] [US2] Создать src/components/sections/ServicesPreview.tsx — Dual Services Preview: две колонки (Legal | Tech), каждая с 4 ключевыми услугами, hover cards с lift эффектом, stagger animation для списков (Framer Motion staggerChildren)
 - [ ] T036 [P] [US2] Создать src/components/animations/BentoGrid.tsx — Bento Grid компонент (Aceternity UI или кастомный) с поддержкой асимметричных карточек (col-span-1/2, row-span-1/2), hover glow эффект
 - [ ] T037 [P] [US2] Создать src/components/animations/Card3D.tsx — 3D Card Effect компонент с rotateX/rotateY трансформациями при движении курсора (useSpring для плавности), поддержка useReducedMotion

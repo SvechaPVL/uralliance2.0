@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 /**
@@ -90,19 +90,29 @@ export function Particles({
   const particlesRef = useRef<Particle[]>([]);
   const animationFrameRef = useRef<number | undefined>(undefined);
   const prefersReducedMotion = useReducedMotion();
+  const [isTouchDevice, setIsTouchDevice] = useState<boolean | null>(null);
 
-  // Setup canvas and start animation
+  // Detect touch device once on mount
   useEffect(() => {
+    setIsTouchDevice(
+      window.matchMedia("(pointer: coarse)").matches ||
+      "ontouchstart" in window ||
+      navigator.maxTouchPoints > 0
+    );
+  }, []);
+
+  // Setup canvas and start animation (only on non-touch devices)
+  useEffect(() => {
+    // Skip entirely on touch devices
+    if (isTouchDevice === null || isTouchDevice) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Sync check for touch device - no state, no race condition
-    const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
-    // Disable animation on touch devices (prevents jitter from mobile resize events)
-    const disableAnimation = prefersReducedMotion || isTouchDevice;
+    const disableAnimation = prefersReducedMotion;
 
     // Set canvas size
     const resizeCanvas = () => {
@@ -177,7 +187,7 @@ export function Particles({
       step();
     }
 
-    // Handle window resize (disabled on touch devices to prevent jitter)
+    // Handle window resize
     const handleResize = () => {
       size = resizeCanvas();
       initParticles(size.width, size.height);
@@ -186,21 +196,21 @@ export function Particles({
       }
     };
 
-    // Only listen to resize on non-touch devices
-    if (!isTouchDevice) {
-      window.addEventListener("resize", handleResize);
-    }
+    window.addEventListener("resize", handleResize);
 
     // Cleanup
     return () => {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
-      if (!isTouchDevice) {
-        window.removeEventListener("resize", handleResize);
-      }
+      window.removeEventListener("resize", handleResize);
     };
-  }, [count, colors, sizeRange, speed, prefersReducedMotion]);
+  }, [count, colors, sizeRange, speed, prefersReducedMotion, isTouchDevice]);
+
+  // Don't render anything on touch devices
+  if (isTouchDevice) {
+    return null;
+  }
 
   return (
     <canvas
@@ -210,8 +220,6 @@ export function Particles({
       style={{
         width: "100%",
         height: "100%",
-        touchAction: "none",
-        userSelect: "none",
       }}
     />
   );

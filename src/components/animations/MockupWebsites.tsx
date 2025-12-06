@@ -100,7 +100,7 @@ export function AutoDealershipMockup() {
       <text x="320" y="720" className="fill-blue-600 font-bold" fontSize="42" textAnchor="middle">500+</text>
       <text x="320" y="760" className="fill-gray-600" fontSize="18" textAnchor="middle">Авто в наличии</text>
 
-      <text x="720" y="720" className="fill-blue-600 font-bold" fontSize="42" textAnchor="middle">15 лет</text>
+      <text x="720" y="720" className="fill-blue-600 font-bold" fontSize="42" textAnchor="middle">22 года</text>
       <text x="720" y="760" className="fill-gray-600" fontSize="18" textAnchor="middle">На рынке</text>
 
       <text x="1120" y="720" className="fill-blue-600 font-bold" fontSize="42" textAnchor="middle">98%</text>
