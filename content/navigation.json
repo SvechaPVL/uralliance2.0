@@ -82,11 +82,6 @@
         "category": "general"
       },
       {
-        "label": "ЭЦП",
-        "href": "/ecp",
-        "category": "legal"
-      },
-      {
         "label": "О компании",
         "href": "/about",
         "category": "general"
