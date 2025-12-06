@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useSyncExternalStore } from "react";
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { Button } from "@/components/primitives/button";
@@ -68,12 +68,15 @@ export function HeroSection() {
   const heroSectionRef = useRef<HTMLElement | null>(null);
   const { setProgress } = useHeroProgress();
 
-  // A/B Test: Get variant for Hero CTA
-  const [ctaVariant] = useState<"A" | "B" | "C">(() => {
-    // Only run on client
-    if (typeof window === "undefined") return "A";
-    return getABVariant("hero_cta", ["A", "B", "C"]);
-  });
+  // A/B Test: Get variant for Hero CTA using useSyncExternalStore for SSR safety
+  const ctaVariant = useSyncExternalStore(
+    // Subscribe - no-op since variant doesn't change
+    () => () => {},
+    // Client snapshot
+    () => getABVariant("hero_cta", ["A", "B", "C"]),
+    // Server snapshot - default value for SSR
+    () => "A" as const
+  );
   useEffect(() => {
     const handleScroll = () => {
       if (!heroSectionRef.current) return;
@@ -101,19 +104,16 @@ export function HeroSection() {
       if (raf) cancelAnimationFrame(raf);
     };
   }, [setProgress]);
-  const [desktopViewport, setDesktopViewport] = useState(() => {
-    if (typeof window !== "undefined") {
-      return window.matchMedia("(min-width: 1024px)").matches;
-    }
-    return false;
-  });
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const mq = window.matchMedia("(min-width: 1024px)");
-    const handleChange = (event: MediaQueryListEvent) => setDesktopViewport(event.matches);
-    mq.addEventListener("change", handleChange);
-    return () => mq.removeEventListener("change", handleChange);
-  }, []);
+  // Desktop viewport detection using useSyncExternalStore for SSR safety
+  const desktopViewport = useSyncExternalStore(
+    (onStoreChange) => {
+      const mq = window.matchMedia("(min-width: 1024px)");
+      mq.addEventListener("change", onStoreChange);
+      return () => mq.removeEventListener("change", onStoreChange);
+    },
+    () => window.matchMedia("(min-width: 1024px)").matches,
+    () => false // Server always returns false
+  );
   const shouldRenderThreeScene = !prefersReducedMotion && desktopViewport;
 
   return (
