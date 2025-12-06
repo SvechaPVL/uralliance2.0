@@ -140,7 +140,7 @@ export default function ContactsPage() {
                 const content = (
                   <Card
                     key={detail.label}
-                    variant="glass"
+                    variant="tech"
                     className="h-full space-y-3 p-6 hover:shadow-[0_20px_45px_-30px_rgba(0,0,0,0.75)]"
                     hoverable
                   >
@@ -202,7 +202,7 @@ export default function ContactsPage() {
             </Spotlight>
 
             <div className="space-y-6">
-              <Card variant="glass" className="space-y-4 p-6">
+              <Card variant="tech" className="space-y-4 p-6">
                 <Label size="md" spacing="wider" tone="muted">
                   {pagesConfig.contacts.responseHighlights.label}
                 </Label>
@@ -219,7 +219,7 @@ export default function ContactsPage() {
                   {pagesConfig.contacts.responseHighlights.note}
                 </div>
               </Card>
-              <Card variant="glass" className="space-y-4 p-6">
+              <Card variant="tech" className="space-y-4 p-6">
                 <Label size="md" spacing="wider" tone="muted">
                   {pagesConfig.contacts.meeting.label}
                 </Label>
@@ -265,7 +265,7 @@ export default function ContactsPage() {
                 </Text>
               </div>
             </div>
-            <Card variant="glass" className="overflow-hidden p-0">
+            <Card variant="tech" className="overflow-hidden p-0">
               <MapWrapper
                 lat={contactsConfig.office.coordinates.lat}
                 lng={contactsConfig.office.coordinates.lng}
@@ -281,7 +281,7 @@ export default function ContactsPage() {
         {/* CTA */}
         <Section spacing="md">
           <Container>
-            <Card variant="glass" padding="lg" className="text-center">
+            <Card variant="tech" padding="lg" className="text-center">
               <Label size="md" spacing="wider" tone="muted">
                 {pagesConfig.contacts.cta.label}
               </Label>

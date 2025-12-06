@@ -5,13 +5,13 @@ const ORGANIZATION_NAME = "Uralliance";
 const LOGO_URL = `${DEFAULT_SITE_URL}/images/logo.svg`;
 
 const ORGANIZATION_CONTACT = {
-  phone: "+7 (343) 123-45-67",
+  phone: "+74232028878",
   email: "info@uralliance.ru",
   address: {
-    streetAddress: "ул. Малышева, 51",
-    addressLocality: "Екатеринбург",
-    addressRegion: "Свердловская область",
-    postalCode: "620014",
+    streetAddress: "ул. Суханова, 11",
+    addressLocality: "Владивосток",
+    addressRegion: "Приморский край",
+    postalCode: "690091",
     addressCountry: "RU",
   },
 };
@@ -26,7 +26,8 @@ export function generateOrganizationSchema(options?: { sameAs?: string[] }) {
     name: ORGANIZATION_NAME,
     url: DEFAULT_SITE_URL,
     logo: LOGO_URL,
-    description: "Uralliance — Legal + Tech команда из Екатеринбурга. Сопровождаем сложные юридические кейсы и внедряем цифровые продукты.",
+    description:
+      "Uralliance — юридические услуги и IT-решения для бизнеса во Владивостоке. Сопровождаем сложные юридические кейсы и внедряем цифровые продукты.",
     email: ORGANIZATION_CONTACT.email,
     telephone: ORGANIZATION_CONTACT.phone,
     sameAs: options?.sameAs ?? [
@@ -65,8 +66,8 @@ export function generateLocalBusinessSchema() {
     },
     geo: {
       "@type": "GeoCoordinates",
-      latitude: 56.838011,
-      longitude: 60.597474,
+      latitude: 43.117098,
+      longitude: 131.896262,
     },
     openingHoursSpecification: [
       {
@@ -76,11 +77,7 @@ export function generateLocalBusinessSchema() {
         closes: "18:00",
       },
     ],
-    sameAs: [
-      "https://t.me/uralliance",
-      "https://wa.me/79000000000",
-      "https://vk.com/uralliance",
-    ],
+    sameAs: ["https://t.me/uralliance", "https://wa.me/79000000000", "https://vk.com/uralliance"],
   };
 }
 

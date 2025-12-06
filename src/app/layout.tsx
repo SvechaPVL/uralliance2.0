@@ -6,6 +6,7 @@ import { Footer } from "@/components/layout/Footer";
 import { OverlayScrollbar } from "@/components/system/OverlayScrollbar";
 import { YandexMetrika } from "@/components/system/YandexMetrika";
 import { CookieConsent } from "@/components/system/CookieConsent";
+import { PromoBanner } from "@/components/system/PromoBanner";
 import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/seo/JsonLd";
 import { FaqJsonLd } from "@/components/seo/FaqJsonLd";
 import { HeroProgressProvider } from "@/context/HeroProgressContext";
@@ -31,20 +32,62 @@ export const metadata: Metadata = {
   },
   description: pagesConfig.home.description,
   keywords: [
+    // Брендовые запросы (все вариации написания)
+    "uralliance",
+    "юр альянс",
+    "юральянс",
+    "юраллианс",
+    "юр-альянс",
+    "уральянс",
+    "uralliance владивосток",
+
     // Локальные ключевые слова для Владивостока
     "юридические услуги Владивосток",
     "юрист Владивосток",
     "разработка сайтов Владивосток",
     "CRM система Владивосток",
     "чат-бот Владивосток",
+
+    // ЭЦП и рутокены
     "ЭЦП Владивосток",
     "электронная подпись Владивосток",
+    "рутокен Владивосток",
+    "купить рутокен Владивосток",
+    "эцп рутокен Владивосток",
+    "носитель для эцп Владивосток",
+    "токен для электронной подписи",
+
+    // Бухгалтерия и аутсорс
+    "бухгалтерское обслуживание Владивосток",
+    "бухгалтеры на аутсорсе Владивосток",
+    "бухучет Владивосток",
+    "бухгалтерский аутсорсинг Владивосток",
+    "ведение бухгалтерии Владивосток",
+    "бухгалтерские услуги Владивосток",
+    "удаленный бухгалтер Владивосток",
+    "аутсорсинг бухгалтерии Владивосток",
+
+    // Ликвидация
+    "ликвидация ООО Владивосток",
+    "ликвидация под ключ Владивосток",
+    "закрытие ООО Владивосток",
+    "ликвидация компании Владивосток",
+    "ликвидация юридического лица Владивосток",
+    "банкротство ООО Владивосток",
 
     // Специализированные услуги
     "ЭЦП электронная цифровая подпись",
     "Вестник публикация уведомлений",
     "Федресурс банкротство",
     "Такском электронный документооборот",
+
+    // Разработка сайтов (расширенные)
+    "создание сайтов Владивосток",
+    "заказать сайт Владивосток",
+    "веб студия Владивосток",
+    "сайт под ключ Владивосток",
+    "разработка интернет магазина Владивосток",
+    "создание лендинга Владивосток",
 
     // Общие IT и юридические услуги
     "IT-решения для бизнеса Владивосток",
@@ -132,7 +175,7 @@ export default function RootLayout({
         {/* Региональная привязка для Яндекса */}
         <meta name="geo.region" content="RU-PRI" />
         <meta name="geo.placename" content="Владивосток" />
-        <meta name="geo.position" content="43.1332;131.9113" />
+        <meta name="geo.position" content="43.117098;131.896262" />
 
         {/* Турбо-страницы Яндекса */}
         <link rel="alternate" type="application/rss+xml" href="/turbo-rss" />
@@ -144,6 +187,17 @@ export default function RootLayout({
         <FaqJsonLd />
 
         <HeroProgressProvider>
+          <PromoBanner
+            id="pensioner-discount"
+            badge="Акция"
+            message="Скидки для пенсионеров на все услуги!"
+            link={{
+              href: "/#contact",
+              label: "Узнать подробности",
+            }}
+            variant="legal"
+            hideForDays={7}
+          />
           <Header />
           <main className="min-h-screen">{children}</main>
           <Footer />

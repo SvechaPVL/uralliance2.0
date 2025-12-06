@@ -170,8 +170,13 @@ export function PriceExperience({ prices }: PriceExperienceProps) {
             </div>
 
             <div className="grid gap-4 sm:grid-cols-3">
-              {summaryBullets.map((bullet) => (
-                <Card key={bullet.title} variant="glass" padding="md" className="space-y-2">
+              {summaryBullets.map((bullet, index) => (
+                <Card
+                  key={bullet.title}
+                  variant={index === 0 ? "tech" : index === 1 ? "legal" : "tech"}
+                  padding="md"
+                  className="space-y-2"
+                >
                   <Text tone="muted">{bullet.icon}</Text>
                   <Label size="md" weight="semibold" spacing="wide" tone="muted">
                     {bullet.title}
@@ -214,7 +219,7 @@ export function PriceExperience({ prices }: PriceExperienceProps) {
             {categoryCards.map((card) => (
               <Card
                 key={card.value}
-                variant="glass"
+                variant={card.tone === "legal" ? "legal" : card.tone === "tech" ? "tech" : "glass"}
                 padding="md"
                 hoverable
                 onClick={() => {
@@ -223,7 +228,12 @@ export function PriceExperience({ prices }: PriceExperienceProps) {
                 }}
                 className={cn(
                   "cursor-pointer text-left",
-                  card.value === category && "ring-2 ring-[var(--color-text-primary)]"
+                  card.value === category &&
+                    (card.tone === "legal"
+                      ? "ring-1 ring-[var(--color-legal-primary)]/60"
+                      : card.tone === "tech"
+                        ? "ring-1 ring-[var(--color-tech-primary)]/60"
+                        : "ring-1 ring-[var(--color-text-secondary)]/40")
                 )}
                 aria-pressed={card.value === category}
                 role="button"
@@ -350,7 +360,7 @@ export function PriceExperience({ prices }: PriceExperienceProps) {
       {/* CTA */}
       <Section spacing="lg" className="pt-0 pb-24">
         <Container>
-          <Card variant="glass" padding="lg" className="text-center">
+          <Card variant="tech" padding="lg" className="text-center">
             <div className="space-y-6">
               <Label size="md" spacing="wider" tone="muted">
                 Готовы обсудить стоимость?
@@ -380,7 +390,7 @@ export function PriceExperience({ prices }: PriceExperienceProps) {
 
 function InsightBadge({ label, value }: { label: string; value: string }) {
   return (
-    <Card variant="glass" padding="sm" className="border-dashed">
+    <Card variant="tech" padding="sm" className="border-dashed">
       <Label size="sm" spacing="wider" tone="muted">
         {label}
       </Label>

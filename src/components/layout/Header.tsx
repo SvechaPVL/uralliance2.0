@@ -7,16 +7,26 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/primitives/button";
 import { Container } from "@/components/layout/Container";
 import { MobileMenu } from "@/components/layout/MobileMenu";
+import { NavDropdown } from "@/components/layout/NavDropdown";
 import { useHeroProgress } from "@/context/HeroProgressContext";
 import navigationConfig from "@/content/navigation.json";
 
 /**
  * Navigation Item Interface
  */
+interface DropdownItem {
+  label: string;
+  description: string;
+  href: string;
+  icon: string;
+}
+
 interface NavItem {
   label: string;
   href: string;
   category?: "legal" | "tech" | "general";
+  hasDropdown?: boolean;
+  dropdownItems?: DropdownItem[];
 }
 
 /**
@@ -129,23 +139,34 @@ export function Header() {
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden items-center gap-8 lg:flex">
-              {navigationItems.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className={cn(
-                    "font-medium text-[var(--color-text-primary)]",
-                    "transition-colors duration-[var(--transition-base)]",
-                    "hover:text-[var(--color-legal-primary)]",
-                    "rounded-sm px-2 py-1 focus-visible:ring-2 focus-visible:ring-[var(--color-legal-primary)] focus-visible:outline-none",
-                    item.category === "legal" && "hover:text-[var(--color-legal-primary)]",
-                    item.category === "tech" && "hover:text-[var(--color-tech-primary)]"
-                  )}
-                >
-                  {item.label}
-                </Link>
-              ))}
+            <div className="hidden items-center gap-6 lg:flex">
+              {navigationItems.map((item) =>
+                item.hasDropdown && item.dropdownItems ? (
+                  <NavDropdown
+                    key={item.href}
+                    label={item.label}
+                    href={item.href}
+                    items={item.dropdownItems}
+                    category={item.category as "legal" | "tech"}
+                    layoutId="nav-hover"
+                  />
+                ) : (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    className={cn(
+                      "font-medium text-[var(--color-text-primary)]",
+                      "transition-colors duration-[var(--transition-base)]",
+                      "hover:text-[var(--color-legal-primary)]",
+                      "rounded-sm px-2 py-1 focus-visible:ring-2 focus-visible:ring-[var(--color-legal-primary)] focus-visible:outline-none",
+                      item.category === "legal" && "hover:text-[var(--color-legal-primary)]",
+                      item.category === "tech" && "hover:text-[var(--color-tech-primary)]"
+                    )}
+                  >
+                    {item.label}
+                  </Link>
+                )
+              )}
             </div>
 
             {/* CTA Buttons - Desktop */}

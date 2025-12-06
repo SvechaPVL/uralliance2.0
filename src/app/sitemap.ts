@@ -12,6 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/about",
     "/contacts",
     "/blog",
+    "/ecp",
   ].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),
@@ -19,16 +20,27 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: route === "" ? 1 : 0.8,
   }));
 
-  // Страницы услуг (если будут динамические)
+  // Страницы услуг
   const serviceRoutes = [
-    "/services/legal/corporate-law",
-    "/services/legal/arbitration",
+    // Юридические услуги
+    "/services/legal/corporate",
+    "/services/legal/arbitrazh",
     "/services/legal/contracts",
-    "/services/tech/web-development",
-    "/services/tech/crm-systems",
-    "/services/tech/chatbots",
-    "/services/tech/mobile-apps",
-    "/services/tech/integration",
+    "/services/legal/ecp",
+    "/services/legal/vestnik",
+    "/services/legal/fedresurs",
+    "/services/legal/compliance",
+    "/services/legal/ip",
+    "/services/legal/real-estate",
+    "/services/legal/liquidation",
+    "/services/legal/accounting",
+    // IT услуги
+    "/services/tech/web",
+    "/services/tech/crm",
+    "/services/tech/bots",
+    "/services/tech/mobile",
+    "/services/tech/taxcom-edo",
+    "/services/tech/ai",
   ].map((route) => ({
     url: `${baseUrl}${route}`,
     lastModified: new Date(),

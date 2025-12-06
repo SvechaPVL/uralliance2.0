@@ -12,11 +12,11 @@ import { Heading } from "@/components/primitives/heading";
 import { Card } from "@/components/primitives/card";
 import { Label } from "@/components/primitives/label";
 import { Text } from "@/components/primitives/text";
-import { List } from "@/components/primitives/list";
 import { remark } from "remark";
 import remarkRehype from "remark-rehype";
 import rehypeStringify from "rehype-stringify";
 import { ServiceJsonLd, BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+import { ArrowRight, ChevronRight, Sparkles } from "lucide-react";
 
 /**
  * Service Detail Page
@@ -241,137 +241,211 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
         ]}
       />
 
-      {/* Hero */}
-      <Section spacing="lg" background="secondary" className="pt-20 sm:pt-24 lg:pt-28">
-        <Container className="max-w-5xl">
-          <Card
-            variant="glass"
-            className="space-y-4 p-3 sm:space-y-6 sm:p-5 md:p-6 lg:space-y-8 lg:p-8"
-          >
-            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-              <Badge
-                variant={isLegal ? "legal" : "tech"}
-                badgeStyle="subtle"
-                size="sm"
-                className="tracking-[0.2em] uppercase sm:tracking-[0.3em]"
-              >
-                {isLegal ? "Legal" : "Tech"}
-              </Badge>
-              <Label size="sm" spacing="wider" tone="muted" className="hidden sm:block">
-                {isLegal ? "Юридическая практика Uralliance" : "Цифровая практика Uralliance"}
-              </Label>
-            </div>
+      {/* Hero - 2025 Bento Style */}
+      <Section
+        spacing="lg"
+        background="secondary"
+        className="relative overflow-hidden pt-20 sm:pt-24 lg:pt-28"
+      >
+        {/* Background gradient orbs */}
+        <div
+          className={cn(
+            "pointer-events-none absolute -top-40 -right-40 h-96 w-96 rounded-full opacity-30 blur-3xl",
+            isLegal ? "bg-[var(--color-legal-primary)]" : "bg-[var(--color-tech-primary)]"
+          )}
+        />
+        <div
+          className={cn(
+            "pointer-events-none absolute -bottom-40 -left-40 h-80 w-80 rounded-full opacity-20 blur-3xl",
+            isLegal ? "bg-[var(--color-legal-primary)]" : "bg-[var(--color-tech-primary)]"
+          )}
+        />
 
-            <div className="grid gap-5 sm:gap-6 md:gap-7 lg:grid-cols-[1.4fr,0.8fr] lg:gap-8">
-              <div className="space-y-3 sm:space-y-4 md:space-y-5">
-                <div className="flex flex-col gap-2 sm:gap-2.5 md:gap-3">
-                  <div className="flex items-center gap-2.5 sm:gap-3 md:gap-4">
-                    <Badge
+        <Container className="relative max-w-6xl">
+          {/* Breadcrumb */}
+          <nav className="mb-6 flex items-center gap-2 text-sm text-[var(--color-text-secondary)]">
+            <Link href="/" className="transition-colors hover:text-[var(--color-text-primary)]">
+              Главная
+            </Link>
+            <ChevronRight className="h-4 w-4" />
+            <Link
+              href={`/services/${category}`}
+              className="transition-colors hover:text-[var(--color-text-primary)]"
+            >
+              {isLegal ? "Юридические услуги" : "IT-решения"}
+            </Link>
+            <ChevronRight className="h-4 w-4" />
+            <span className="text-[var(--color-text-primary)]">{service.frontmatter.title}</span>
+          </nav>
+
+          {/* Bento Grid */}
+          <div className="grid gap-4 sm:gap-5 md:grid-cols-12 lg:gap-6">
+            {/* Main card - spans 8 columns */}
+            <Card
+              variant={isLegal ? "legal" : "tech"}
+              className="relative overflow-hidden p-5 sm:p-6 md:col-span-8 lg:p-8"
+            >
+              {/* Gradient line at top */}
+              <div
+                className={cn(
+                  "absolute top-0 right-0 left-0 h-1",
+                  isLegal
+                    ? "bg-gradient-to-r from-transparent via-[var(--color-legal-primary)] to-transparent"
+                    : "bg-gradient-to-r from-transparent via-[var(--color-tech-primary)] to-transparent"
+                )}
+              />
+
+              <div className="space-y-5 sm:space-y-6">
+                {/* Badge + Practice label */}
+                <div className="flex flex-wrap items-center gap-3">
+                  <Badge
+                    variant={isLegal ? "legal" : "tech"}
+                    badgeStyle="filled"
+                    size="sm"
+                    className="gap-1.5"
+                  >
+                    <Sparkles className="h-3 w-3" />
+                    {isLegal ? "Юридическая практика" : "Цифровая практика"}
+                  </Badge>
+                </div>
+
+                {/* Icon + Title inline */}
+                <div className="flex items-start gap-4 sm:items-center sm:gap-5">
+                  <div
+                    className={cn(
+                      "flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl sm:h-16 sm:w-16 sm:rounded-3xl lg:h-20 lg:w-20",
+                      isLegal
+                        ? "bg-gradient-to-br from-[var(--color-legal-primary)] to-[var(--color-legal-600)]"
+                        : "bg-gradient-to-br from-[var(--color-tech-primary)] to-[var(--color-tech-600)]"
+                    )}
+                  >
+                    <ServiceIcon
+                      name={service.frontmatter.icon}
                       variant={isLegal ? "legal" : "tech"}
-                      badgeStyle="filled"
-                      className="h-12 w-12 shrink-0 rounded-xl sm:h-14 sm:w-14 sm:rounded-2xl md:h-16 md:w-16 md:rounded-3xl lg:h-20 lg:w-20"
-                    >
-                      <ServiceIcon
-                        name={service.frontmatter.icon}
-                        variant={isLegal ? "legal" : "tech"}
-                        className="h-6 w-6 sm:h-7 sm:w-7 md:h-8 md:w-8 lg:h-10 lg:w-10"
-                      />
-                    </Badge>
-                    <Heading as="h1" size="2xl" weight="semibold" className="min-w-0">
+                      className="h-7 w-7 text-white sm:h-8 sm:w-8 lg:h-10 lg:w-10"
+                    />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <Heading as="h1" size="2xl" weight="bold" className="leading-tight">
                       {service.frontmatter.title}
                     </Heading>
                   </div>
-                  <Text size="lg" tone="secondary">
-                    {service.frontmatter.description}
-                  </Text>
                 </div>
 
-                <div className="grid gap-2 sm:grid-cols-2 sm:gap-3">
+                {/* Description */}
+                <Text size="lg" tone="secondary" className="max-w-2xl leading-relaxed">
+                  {service.frontmatter.description}
+                </Text>
+
+                {/* Focus items as pills */}
+                <div className="flex flex-wrap gap-2 sm:gap-2.5">
                   {focusItems.map((focus) => (
-                    <div
+                    <span
                       key={focus}
                       className={cn(
-                        "flex items-start gap-2 rounded-2xl border px-3 py-2.5 shadow-sm",
-                        "bg-[var(--color-glass-strong)]/70 backdrop-blur",
+                        "inline-flex items-center gap-2 rounded-full px-3.5 py-2 text-sm",
+                        "border backdrop-blur-sm transition-all",
                         isLegal
-                          ? "border-[var(--color-legal-accent)]/40"
-                          : "border-[var(--color-tech-accent)]/40"
+                          ? "border-[var(--color-legal-primary)]/30 bg-[var(--color-legal-surface)]/50 text-[var(--color-text-primary)] hover:border-[var(--color-legal-primary)]/50"
+                          : "border-[var(--color-tech-primary)]/30 bg-[var(--color-tech-surface)]/50 text-[var(--color-text-primary)] hover:border-[var(--color-tech-primary)]/50"
                       )}
                     >
                       <span
                         className={cn(
-                          "mt-1 h-1.5 w-1.5 flex-shrink-0 rounded-full",
+                          "h-1.5 w-1.5 rounded-full",
                           isLegal
                             ? "bg-[var(--color-legal-primary)]"
                             : "bg-[var(--color-tech-primary)]"
                         )}
-                        aria-hidden="true"
                       />
-                      <span className="text-[13px] leading-snug text-[var(--color-text-primary)] sm:text-sm">
-                        {focus}
-                      </span>
-                    </div>
+                      {focus}
+                    </span>
                   ))}
                 </div>
               </div>
+            </Card>
 
-              <Card variant="glass" className="p-3.5 sm:p-4 md:p-5 lg:p-6">
-                <List variant="feature" spacing="lg">
-                  <li>
-                    <Label size="sm" spacing="wider" tone="muted">
-                      Стоимость
-                    </Label>
-                    <Text size="base" weight="semibold" className="mt-1 sm:text-lg">
-                      {service.frontmatter.price}
-                    </Text>
-                  </li>
-                  <li>
-                    <Label size="sm" spacing="wider" tone="muted">
-                      Команда
-                    </Label>
-                    <Text size="sm" tone="secondary" className="mt-1">
-                      {isLegal
-                        ? "Партнёры-юристы и судебная команда"
-                        : "Менеджер проекта, дизайнер и разработчики"}
-                    </Text>
-                  </li>
-                  <li>
-                    <Label size="sm" spacing="wider" tone="muted">
-                      Формат
-                    </Label>
-                    <Text size="sm" tone="secondary" className="mt-1">
-                      Соберём отдельную команду под задачу, зафиксируем результаты договором и
-                      понятными отчётами.
-                    </Text>
-                  </li>
-                </List>
-                <div className="mt-3.5 flex flex-col gap-2 sm:mt-4 sm:gap-2.5 md:mt-5 md:flex-row md:gap-3">
-                  <Button
-                    asChild
-                    variant={isLegal ? "primary-legal" : "primary-tech"}
-                    size="md"
-                    className="w-full md:w-auto"
+            {/* Price card - spans 4 columns */}
+            <Card
+              variant={isLegal ? "legal" : "tech"}
+              className="flex flex-col justify-between p-5 sm:p-6 md:col-span-4"
+            >
+              <div className="space-y-5">
+                {/* Price */}
+                <div>
+                  <Label size="sm" spacing="wider" tone="muted" className="uppercase">
+                    Стоимость
+                  </Label>
+                  <div
+                    className={cn(
+                      "mt-2 text-2xl font-bold sm:text-3xl",
+                      isLegal
+                        ? "bg-gradient-to-r from-[var(--color-legal-primary)] to-[var(--color-legal-400)] bg-clip-text text-transparent"
+                        : "bg-gradient-to-r from-[var(--color-tech-primary)] to-[var(--color-tech-400)] bg-clip-text text-transparent"
+                    )}
                   >
-                    <Link href="/contacts">Обсудить задачу</Link>
-                  </Button>
-                  <Button asChild variant="outline" size="md" className="w-full md:w-auto">
-                    <Link href={`/services/${category}`}>Все услуги</Link>
-                  </Button>
+                    {service.frontmatter.price}
+                  </div>
                 </div>
-              </Card>
-            </div>
-          </Card>
+
+                {/* Team */}
+                <div>
+                  <Label size="sm" spacing="wider" tone="muted" className="uppercase">
+                    Команда
+                  </Label>
+                  <Text size="sm" tone="secondary" className="mt-1.5">
+                    {isLegal
+                      ? "Партнёры-юристы и судебная команда"
+                      : "Менеджер проекта, дизайнер и разработчики"}
+                  </Text>
+                </div>
+
+                {/* Format */}
+                <div>
+                  <Label size="sm" spacing="wider" tone="muted" className="uppercase">
+                    Формат
+                  </Label>
+                  <Text size="sm" tone="secondary" className="mt-1.5">
+                    Фиксируем результаты договором и понятными отчётами
+                  </Text>
+                </div>
+              </div>
+
+              {/* CTA buttons */}
+              <div className="mt-6 flex flex-col gap-2.5">
+                <Button
+                  asChild
+                  variant={isLegal ? "primary-legal" : "primary-tech"}
+                  size="lg"
+                  className="w-full gap-2"
+                >
+                  <Link href="/contacts">
+                    Обсудить задачу
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" size="md" className="w-full">
+                  <Link href={`/services/${category}`}>Все услуги</Link>
+                </Button>
+              </div>
+            </Card>
+          </div>
         </Container>
       </Section>
 
-      {/* Content */}
-      <Section spacing="md">
-        <Container className="max-w-5xl space-y-8">
-          <div className="space-y-3 text-center">
-            <Label size="sm" spacing="wider" tone="muted">
+      {/* Content - Modern Cards */}
+      <Section spacing="lg">
+        <Container className="max-w-6xl space-y-10">
+          <div className="mx-auto max-w-2xl space-y-4 text-center">
+            <Badge
+              variant={isLegal ? "legal" : "tech"}
+              badgeStyle="subtle"
+              size="sm"
+              className="uppercase"
+            >
               Что входит
-            </Label>
-            <Heading as="h2" size="xl" weight="semibold">
+            </Badge>
+            <Heading as="h2" size="xl" weight="bold">
               Детали услуги «{service.frontmatter.title}»
             </Heading>
             <Text size="lg" tone="secondary">
@@ -379,21 +453,40 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
             </Text>
           </div>
           {hasStructuredSections ? (
-            <div className="grid gap-6 md:grid-cols-2">
-              {structuredSections.map((section) => (
-                <Card key={section.title} variant="glass" padding="md" className="space-y-4">
-                  <Heading as="h3" size="lg" weight="semibold">
-                    {section.title}
-                  </Heading>
-                  <div
-                    className="prose prose-neutral dark:prose-invert"
-                    dangerouslySetInnerHTML={{ __html: section.html }}
-                  />
+            <div className="grid gap-5 sm:gap-6 md:grid-cols-2">
+              {structuredSections.map((section, index) => (
+                <Card
+                  key={section.title}
+                  variant={isLegal ? "legal" : "tech"}
+                  hoverable
+                  className="p-5 sm:p-6"
+                >
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-3">
+                      <span
+                        className={cn(
+                          "flex h-8 w-8 items-center justify-center rounded-lg text-sm font-bold",
+                          isLegal
+                            ? "bg-[var(--color-legal-surface)] text-[var(--color-legal-primary)]"
+                            : "bg-[var(--color-tech-surface)] text-[var(--color-tech-primary)]"
+                        )}
+                      >
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <Heading as="h3" size="lg" weight="semibold">
+                        {section.title}
+                      </Heading>
+                    </div>
+                    <div
+                      className="prose prose-neutral dark:prose-invert prose-sm max-w-none"
+                      dangerouslySetInnerHTML={{ __html: section.html }}
+                    />
+                  </div>
                 </Card>
               ))}
             </div>
           ) : (
-            <Card variant="glass" className="p-8">
+            <Card variant={isLegal ? "legal" : "tech"} className="p-6 sm:p-8">
               <div
                 className="prose prose-neutral dark:prose-invert max-w-none"
                 dangerouslySetInnerHTML={{ __html: service.html }}
@@ -403,62 +496,153 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
         </Container>
       </Section>
 
-      {/* Workflow */}
-      <Section spacing="md" background="secondary">
-        <Container className="max-w-5xl space-y-8">
-          <div className="space-y-3 text-center">
-            <Label size="sm" spacing="wider" tone="muted">
+      {/* Workflow - Timeline Style */}
+      <Section spacing="lg" background="secondary" className="relative overflow-hidden">
+        {/* Background pattern */}
+        <div className="pointer-events-none absolute inset-0 opacity-50">
+          <div
+            className={cn(
+              "absolute top-0 left-1/2 hidden h-full w-px -translate-x-1/2 md:block",
+              isLegal
+                ? "bg-gradient-to-b from-transparent via-[var(--color-legal-primary)]/20 to-transparent"
+                : "bg-gradient-to-b from-transparent via-[var(--color-tech-primary)]/20 to-transparent"
+            )}
+          />
+        </div>
+
+        <Container className="relative max-w-6xl space-y-10">
+          <div className="mx-auto max-w-2xl space-y-4 text-center">
+            <Badge
+              variant={isLegal ? "legal" : "tech"}
+              badgeStyle="subtle"
+              size="sm"
+              className="uppercase"
+            >
               Процесс
-            </Label>
-            <Heading as="h2" size="xl" weight="semibold">
+            </Badge>
+            <Heading as="h2" size="xl" weight="bold">
               Как мы работаем над {isLegal ? "юридическими" : "digital"} проектами
             </Heading>
             <Text size="lg" tone="secondary">
-              От запроса до измеримого результата команда ведёт прозрачные фазы и отправляет отчёты
-              еженедельно.
+              От запроса до измеримого результата — прозрачные фазы и еженедельные отчёты.
             </Text>
           </div>
-          <div className="grid gap-6 md:grid-cols-2">
+
+          <div className="grid gap-4 sm:gap-5 md:grid-cols-2 lg:grid-cols-4">
             {workflow.map((step, index) => (
-              <Card key={step.title} variant="glass" padding="md" className="h-full">
-                <Label size="sm" spacing="wider" tone="muted">
-                  Шаг {String(index + 1).padStart(2, "0")}
-                </Label>
-                <Heading as="h3" size="lg" weight="semibold" className="mt-3">
-                  {step.title}
-                </Heading>
-                <Text size="sm" tone="secondary" className="mt-2">
-                  {step.description}
-                </Text>
+              <Card
+                key={step.title}
+                variant={isLegal ? "legal" : "tech"}
+                className={cn(
+                  "group relative h-full overflow-hidden p-5 transition-all duration-300 hover:scale-[1.03]",
+                  "border-2",
+                  isLegal
+                    ? "border-[var(--color-legal-primary)]/10 hover:border-[var(--color-legal-primary)]/40"
+                    : "border-[var(--color-tech-primary)]/10 hover:border-[var(--color-tech-primary)]/40"
+                )}
+              >
+                {/* Step number - large background */}
+                <div
+                  className={cn(
+                    "absolute -top-3 -right-3 text-[80px] leading-none font-black opacity-5 transition-opacity group-hover:opacity-10",
+                    isLegal
+                      ? "text-[var(--color-legal-primary)]"
+                      : "text-[var(--color-tech-primary)]"
+                  )}
+                >
+                  {index + 1}
+                </div>
+
+                <div className="relative space-y-3">
+                  <Heading as="h3" size="sm" weight="semibold">
+                    {step.title}
+                  </Heading>
+
+                  <Text size="sm" tone="secondary" className="leading-relaxed">
+                    {step.description}
+                  </Text>
+                </div>
+
+                {/* Connector line for desktop */}
+                {index < workflow.length - 1 && (
+                  <div
+                    className={cn(
+                      "absolute top-1/2 -right-3 hidden h-0.5 w-6 lg:block",
+                      isLegal
+                        ? "bg-[var(--color-legal-primary)]/30"
+                        : "bg-[var(--color-tech-primary)]/30"
+                    )}
+                  />
+                )}
               </Card>
             ))}
           </div>
         </Container>
       </Section>
 
-      {/* CTA */}
-      <Section spacing="lg">
-        <Container className="max-w-4xl">
-          <Card variant="glass" padding="lg" className="text-center">
-            <Label size="sm" spacing="wider" tone="muted">
-              Следующий шаг
-            </Label>
-            <Heading as="h3" size="lg" weight="semibold">
-              Обсудим {service.frontmatter.title} для вашей компании
-            </Heading>
-            <Text size="lg" tone="secondary">
-              Поделитесь документацией или брифом — подготовим дорожную карту и бюджет за два
-              рабочих дня.
-            </Text>
-            <div className="mt-8 flex flex-wrap justify-center gap-4">
-              <Button asChild variant={isLegal ? "primary-legal" : "primary-tech"} size="lg">
-                <Link href="/#contact">Назначить консультацию</Link>
-              </Button>
-              <Button asChild variant="outline" size="lg">
-                <Link href={`/services/${category}`}>Вернуться к услугам</Link>
-              </Button>
+      {/* CTA - Gradient Style */}
+      <Section spacing="xl">
+        <Container className="max-w-5xl">
+          <div
+            className={cn(
+              "relative overflow-hidden rounded-3xl p-8 sm:p-10 md:p-12 lg:p-16",
+              "border-2 text-center",
+              isLegal
+                ? "border-[var(--color-legal-primary)]/30 bg-gradient-to-br from-[var(--color-legal-surface)] via-[var(--color-background-secondary)] to-[var(--color-legal-surface)]/50"
+                : "border-[var(--color-tech-primary)]/30 bg-gradient-to-br from-[var(--color-tech-surface)] via-[var(--color-background-secondary)] to-[var(--color-tech-surface)]/50"
+            )}
+          >
+            {/* Decorative elements */}
+            <div
+              className={cn(
+                "pointer-events-none absolute -top-20 -right-20 h-60 w-60 rounded-full opacity-30 blur-3xl",
+                isLegal ? "bg-[var(--color-legal-primary)]" : "bg-[var(--color-tech-primary)]"
+              )}
+            />
+            <div
+              className={cn(
+                "pointer-events-none absolute -bottom-20 -left-20 h-60 w-60 rounded-full opacity-20 blur-3xl",
+                isLegal ? "bg-[var(--color-legal-primary)]" : "bg-[var(--color-tech-primary)]"
+              )}
+            />
+
+            <div className="relative space-y-6">
+              <Badge
+                variant={isLegal ? "legal" : "tech"}
+                badgeStyle="filled"
+                size="sm"
+                className="uppercase"
+              >
+                Следующий шаг
+              </Badge>
+
+              <Heading as="h3" size="xl" weight="bold" className="mx-auto max-w-xl">
+                Обсудим {service.frontmatter.title} для вашей компании
+              </Heading>
+
+              <Text size="lg" tone="secondary" className="mx-auto max-w-lg">
+                Поделитесь документацией или брифом — подготовим дорожную карту и бюджет за два
+                рабочих дня.
+              </Text>
+
+              <div className="flex flex-wrap justify-center gap-4 pt-4">
+                <Button
+                  asChild
+                  variant={isLegal ? "primary-legal" : "primary-tech"}
+                  size="lg"
+                  className="gap-2 px-8"
+                >
+                  <Link href="/#contact">
+                    Назначить консультацию
+                    <ArrowRight className="h-4 w-4" />
+                  </Link>
+                </Button>
+                <Button asChild variant="outline" size="lg" className="px-8">
+                  <Link href={`/services/${category}`}>Вернуться к услугам</Link>
+                </Button>
+              </div>
             </div>
-          </Card>
+          </div>
         </Container>
       </Section>
     </>

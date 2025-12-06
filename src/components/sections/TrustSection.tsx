@@ -61,7 +61,7 @@ export function TrustSection() {
         >
           {sectionsConfig.trust.stats.map((stat) => (
             <motion.div key={stat.label} variants={fadeInUp}>
-              <Card variant="glass" padding="lg" className="h-full">
+              <Card variant="tech" padding="lg" className="h-full">
                 <AnimatedCounter
                   value={stat.value}
                   suffix={stat.suffix}

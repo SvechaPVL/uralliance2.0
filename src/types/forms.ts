@@ -16,25 +16,31 @@ export const contactFormSchema = z.object({
     .min(2, "Имя должно содержать минимум 2 символа")
     .max(100, "Имя не должно превышать 100 символов")
     .trim(),
-  email: z.string().email("Укажите корректный email"),
+  email: z
+    .string()
+    .transform((value) => value?.trim() || "")
+    .refine((value) => {
+      // Пустое значение разрешено (email необязателен)
+      if (!value) return true;
+      // Если заполнено - проверяем формат
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+    }, "Укажите корректный email"),
   phone: z
     .string()
     .transform((value) => value?.trim() || "")
-    .refine(
-      (value) => {
-        // Пустое значение разрешено
-        if (!value) return true;
-        // Проверяем что это полный российский номер
-        // и не содержит символов маски "_"
-        return russianPhoneRegex.test(value) && !value.includes("_");
-      },
-      "Введите полный номер телефона в формате +7 (XXX) XXX-XX-XX"
-    ),
+    .refine((value) => {
+      // Телефон обязателен - проверяем что заполнен
+      if (!value) return false;
+      // Проверяем что это полный российский номер
+      // и не содержит символов маски "_"
+      return russianPhoneRegex.test(value) && !value.includes("_");
+    }, "Введите полный номер телефона в формате +7 (XXX) XXX-XX-XX"),
   message: z
     .string()
-    .min(10, "Сообщение должно содержать минимум 10 символов")
     .max(1000, "Сообщение не должно превышать 1000 символов")
-    .trim(),
+    .transform((value) => value?.trim() || "")
+    .optional()
+    .or(z.literal("")),
   service: z.enum(["legal", "tech"] as const, {
     message: "Выберите направление",
   }),

@@ -8,6 +8,7 @@ import { Section } from "@/components/primitives/section";
 import { Heading } from "@/components/primitives/heading";
 import { Label } from "@/components/primitives/label";
 import { Text } from "@/components/primitives/text";
+import Link from "next/link";
 import servicesConfig from "@/content/services-preview.json";
 import sectionsConfig from "@/content/sections.json";
 
@@ -27,7 +28,7 @@ const itemVariants = {
 
 export function ServicesPreview() {
   return (
-    <Section spacing="lg">
+    <Section id="services" spacing="lg">
       <Container className="relative z-10">
         <div className="mb-12 max-w-3xl">
           <motion.div
@@ -73,11 +74,16 @@ export function ServicesPreview() {
                   {sectionsConfig.services_preview.legal.description}
                 </Text>
               </div>
-              <motion.ul variants={listVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+              <motion.ul
+                variants={listVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+              >
                 {servicesConfig.legal.map((service) => (
                   <motion.li key={service.title} variants={itemVariants}>
                     <Card
-                      variant="glass"
+                      variant="legal"
                       padding="md"
                       className="group relative mb-4 overflow-hidden border border-[var(--color-legal-border-soft)] bg-[var(--color-legal-surface)]/70 transition-transform duration-300 hover:-translate-y-1"
                     >
@@ -90,16 +96,20 @@ export function ServicesPreview() {
                       />
                       <div className="relative flex items-start justify-between gap-2 select-none">
                         <div>
-                          <Heading as="h4" size="sm" weight="semibold">{service.title}</Heading>
-                          <Text size="sm" tone="secondary" className="mt-1">{service.description}</Text>
+                          <Heading as="h4" size="sm" weight="semibold">
+                            {service.title}
+                          </Heading>
+                          <Text size="sm" tone="secondary" className="mt-1">
+                            {service.description}
+                          </Text>
                         </div>
                       </div>
                     </Card>
                   </motion.li>
                 ))}
               </motion.ul>
-              <Button variant="primary-legal" size="md" className="mt-4">
-                {sectionsConfig.services_preview.legal.ctaLabel}
+              <Button asChild variant="primary-legal" size="md" className="mt-4">
+                <Link href="/services/legal">{sectionsConfig.services_preview.legal.ctaLabel}</Link>
               </Button>
             </Card>
           </motion.div>
@@ -125,11 +135,16 @@ export function ServicesPreview() {
                   {sectionsConfig.services_preview.tech.description}
                 </Text>
               </div>
-              <motion.ul variants={listVariants} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+              <motion.ul
+                variants={listVariants}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+              >
                 {servicesConfig.tech.map((service) => (
                   <motion.li key={service.title} variants={itemVariants}>
                     <Card
-                      variant="glass"
+                      variant="tech"
                       padding="md"
                       className="group relative mb-4 overflow-hidden border border-[var(--color-tech-border-soft)] bg-[var(--color-tech-surface)]/70 transition-transform duration-300 hover:-translate-y-1"
                     >
@@ -142,16 +157,20 @@ export function ServicesPreview() {
                       />
                       <div className="relative flex items-start justify-between gap-2 select-none">
                         <div>
-                          <Heading as="h4" size="sm" weight="semibold">{service.title}</Heading>
-                          <Text size="sm" tone="secondary" className="mt-1">{service.description}</Text>
+                          <Heading as="h4" size="sm" weight="semibold">
+                            {service.title}
+                          </Heading>
+                          <Text size="sm" tone="secondary" className="mt-1">
+                            {service.description}
+                          </Text>
                         </div>
                       </div>
                     </Card>
                   </motion.li>
                 ))}
               </motion.ul>
-              <Button variant="primary-tech" size="md" className="mt-4">
-                {sectionsConfig.services_preview.tech.ctaLabel}
+              <Button asChild variant="primary-tech" size="md" className="mt-4">
+                <Link href="/services/tech">{sectionsConfig.services_preview.tech.ctaLabel}</Link>
               </Button>
             </Card>
           </motion.div>

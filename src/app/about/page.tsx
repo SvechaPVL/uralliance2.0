@@ -72,7 +72,12 @@ export default function AboutPage() {
                       <ArrowUpRight className="ml-2 h-5 w-5" />
                     </Link>
                   </Button>
-                  <Button asChild variant="ghost" size="md" className="border border-[var(--color-border)]">
+                  <Button
+                    asChild
+                    variant="ghost"
+                    size="md"
+                    className="border border-[var(--color-border)]"
+                  >
                     <Link href={pagesConfig.about.hero.buttons.tech.href}>
                       {pagesConfig.about.hero.buttons.tech.label}
                       <ArrowUpRight className="ml-2 h-5 w-5" />
@@ -81,14 +86,18 @@ export default function AboutPage() {
                 </div>
               </div>
 
-              <Card variant="glass" className="space-y-6 p-8">
+              <Card variant="tech" className="space-y-6 p-8">
                 <Label size="md" spacing="wider" tone="muted">
                   {pagesConfig.about.hero.manifest.label}
                 </Label>
                 <Text size="2xl" weight="semibold">
                   {pagesConfig.about.hero.manifest.heading}
                 </Text>
-                <List variant="feature" spacing="lg" className="text-sm text-[var(--color-text-secondary)]">
+                <List
+                  variant="feature"
+                  spacing="lg"
+                  className="text-sm text-[var(--color-text-secondary)]"
+                >
                   {pagesConfig.about.hero.manifest.items.map((item) => (
                     <li key={item}>{item}</li>
                   ))}
@@ -98,9 +107,13 @@ export default function AboutPage() {
 
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {pagesConfig.about.stats.map((stat) => (
-                <Card key={stat.label} variant="glass" className="p-6">
-                  <Text size="2xl" weight="semibold" className="text-4xl">{stat.value}</Text>
-                  <Text size="sm" tone="secondary" className="mt-2">{stat.label}</Text>
+                <Card key={stat.label} variant="tech" className="p-6">
+                  <Text size="2xl" weight="semibold" className="text-4xl">
+                    {stat.value}
+                  </Text>
+                  <Text size="sm" tone="secondary" className="mt-2">
+                    {stat.label}
+                  </Text>
                 </Card>
               ))}
             </div>
@@ -115,11 +128,17 @@ export default function AboutPage() {
                 <Badge variant="legal" badgeStyle="outline" size="sm">
                   {pagesConfig.about.synergy.legal.badge}
                 </Badge>
-                <Heading as="h2" size="xl" weight="semibold">{pagesConfig.about.synergy.legal.heading}</Heading>
+                <Heading as="h2" size="xl" weight="semibold">
+                  {pagesConfig.about.synergy.legal.heading}
+                </Heading>
                 <Text size="lg" tone="secondary">
                   {pagesConfig.about.synergy.legal.description}
                 </Text>
-                <List variant="feature" spacing="md" className="text-sm text-[var(--color-text-secondary)]">
+                <List
+                  variant="feature"
+                  spacing="md"
+                  className="text-sm text-[var(--color-text-secondary)]"
+                >
                   {pagesConfig.about.synergy.legal.features.map((feature) => (
                     <li key={feature}>{feature}</li>
                   ))}
@@ -130,11 +149,17 @@ export default function AboutPage() {
                 <Badge variant="tech" badgeStyle="outline" size="sm">
                   {pagesConfig.about.synergy.tech.badge}
                 </Badge>
-                <Heading as="h2" size="xl" weight="semibold">{pagesConfig.about.synergy.tech.heading}</Heading>
+                <Heading as="h2" size="xl" weight="semibold">
+                  {pagesConfig.about.synergy.tech.heading}
+                </Heading>
                 <Text size="lg" tone="secondary">
                   {pagesConfig.about.synergy.tech.description}
                 </Text>
-                <List variant="feature" spacing="md" className="text-sm text-[var(--color-text-secondary)]">
+                <List
+                  variant="feature"
+                  spacing="md"
+                  className="text-sm text-[var(--color-text-secondary)]"
+                >
                   {pagesConfig.about.synergy.tech.features.map((feature) => (
                     <li key={feature}>{feature}</li>
                   ))}
@@ -151,7 +176,9 @@ export default function AboutPage() {
               <Badge variant="tech" badgeStyle="subtle">
                 {pagesConfig.about.values.badge}
               </Badge>
-              <Heading as="h2" size="2xl" weight="semibold">{pagesConfig.about.values.heading}</Heading>
+              <Heading as="h2" size="2xl" weight="semibold">
+                {pagesConfig.about.values.heading}
+              </Heading>
               <Text size="lg" tone="secondary">
                 {pagesConfig.about.values.description}
               </Text>
@@ -161,10 +188,14 @@ export default function AboutPage() {
               {pagesConfig.about.values.items.map((value) => {
                 const Icon = iconMap[value.icon as keyof typeof iconMap];
                 return (
-                  <Card key={value.title} variant="glass" className="space-y-4 p-6">
+                  <Card key={value.title} variant="tech" className="space-y-4 p-6">
                     <Icon className="h-12 w-12 text-[var(--color-text-primary)]" />
-                    <Heading as="h3" size="lg" weight="semibold">{value.title}</Heading>
-                    <Text size="sm" tone="secondary">{value.description}</Text>
+                    <Heading as="h3" size="lg" weight="semibold">
+                      {value.title}
+                    </Heading>
+                    <Text size="sm" tone="secondary">
+                      {value.description}
+                    </Text>
                   </Card>
                 );
               })}
@@ -179,13 +210,19 @@ export default function AboutPage() {
               <Badge variant="legal" badgeStyle="subtle">
                 {pagesConfig.about.differentiators.badge}
               </Badge>
-              <Heading as="h2" size="2xl" weight="semibold">{pagesConfig.about.differentiators.heading}</Heading>
+              <Heading as="h2" size="2xl" weight="semibold">
+                {pagesConfig.about.differentiators.heading}
+              </Heading>
             </div>
             <div className="grid gap-6 md:grid-cols-2">
               {pagesConfig.about.differentiators.items.map((diff) => (
-                <Card key={diff.title} variant="glass" className="space-y-3 p-6">
-                  <Heading as="h3" size="md" weight="semibold">{diff.title}</Heading>
-                  <Text size="sm" tone="secondary">{diff.description}</Text>
+                <Card key={diff.title} variant="legal" className="space-y-3 p-6">
+                  <Heading as="h3" size="md" weight="semibold">
+                    {diff.title}
+                  </Heading>
+                  <Text size="sm" tone="secondary">
+                    {diff.description}
+                  </Text>
                 </Card>
               ))}
             </div>
@@ -199,7 +236,9 @@ export default function AboutPage() {
               <Badge variant="tech" badgeStyle="subtle">
                 {pagesConfig.about.timeline.badge}
               </Badge>
-              <Heading as="h2" size="2xl" weight="semibold">{pagesConfig.about.timeline.heading}</Heading>
+              <Heading as="h2" size="2xl" weight="semibold">
+                {pagesConfig.about.timeline.heading}
+              </Heading>
             </div>
             <div className="space-y-8">
               {pagesConfig.about.timeline.items.map((item) => (
@@ -213,8 +252,12 @@ export default function AboutPage() {
                     </Label>
                   </div>
                   <div>
-                    <Heading as="h3" size="lg" weight="semibold">{item.title}</Heading>
-                    <Text size="sm" tone="secondary" className="mt-2">{item.description}</Text>
+                    <Heading as="h3" size="lg" weight="semibold">
+                      {item.title}
+                    </Heading>
+                    <Text size="sm" tone="secondary" className="mt-2">
+                      {item.description}
+                    </Text>
                   </div>
                   <div className="rounded-2xl bg-[var(--color-background-secondary)] p-4 text-sm text-[var(--color-text-secondary)]">
                     {item.result}
@@ -226,15 +269,17 @@ export default function AboutPage() {
         </Section>
 
         {/* CTA */}
-        <Section spacing="lg" className="pb-24 pt-12">
+        <Section spacing="lg" className="pt-12 pb-24">
           <Container>
-            <Card variant="glass" className="relative overflow-hidden p-10 text-center">
+            <Card variant="tech" className="relative overflow-hidden p-10 text-center">
               <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(6,182,212,0.25),_transparent_60%)]" />
               <div className="relative space-y-6">
                 <Label size="md" spacing="wider" tone="muted">
                   {pagesConfig.about.cta.label}
                 </Label>
-                <Heading as="h3" size="lg" weight="semibold">{pagesConfig.about.cta.heading}</Heading>
+                <Heading as="h3" size="lg" weight="semibold">
+                  {pagesConfig.about.cta.heading}
+                </Heading>
                 <Text size="lg" tone="secondary">
                   {pagesConfig.about.cta.description}
                 </Text>

@@ -1,14 +1,26 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/primitives/button";
+import { ServiceIcon } from "@/components/primitives/ServiceIcon";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { trackPhoneClick, trackEmailClick } from "@/lib/analytics";
 import navigationConfig from "@/content/navigation.json";
 import contactsConfig from "@/content/contacts.json";
+
+/**
+ * Dropdown Item Interface
+ */
+interface DropdownItem {
+  label: string;
+  description: string;
+  href: string;
+  icon: string;
+}
 
 /**
  * Navigation Item Interface
@@ -17,6 +29,8 @@ interface NavItem {
   label: string;
   href: string;
   category?: "legal" | "tech" | "general";
+  hasDropdown?: boolean;
+  dropdownItems?: DropdownItem[];
 }
 
 /**
@@ -56,6 +70,11 @@ interface MobileMenuProps {
 export function MobileMenu({ isOpen, onClose, navigationItems }: MobileMenuProps) {
   const prefersReducedMotion = useReducedMotion();
   const scrollRef = useRef(0);
+  const [openAccordion, setOpenAccordion] = useState<string | null>(null);
+
+  const toggleAccordion = (href: string) => {
+    setOpenAccordion((prev) => (prev === href ? null : href));
+  };
 
   // Lock body scroll when menu is open (preserve scroll position)
   useEffect(() => {
@@ -226,21 +245,122 @@ export function MobileMenu({ isOpen, onClose, navigationItems }: MobileMenuProps
               <ul className="space-y-2">
                 {navigationItems.map((item) => (
                   <motion.li key={item.href} variants={itemVariants}>
-                    <Link
-                      href={item.href}
-                      onClick={onClose}
-                      className={cn(
-                        "block rounded-lg px-4 py-3",
-                        "text-lg font-medium text-[var(--color-text-primary)]",
-                        "hover:bg-[var(--color-background-secondary)]",
-                        "transition-colors duration-[var(--transition-base)]",
-                        "focus-visible:ring-2 focus-visible:ring-[var(--color-legal-primary)] focus-visible:outline-none",
-                        item.category === "legal" && "hover:text-[var(--color-legal-primary)]",
-                        item.category === "tech" && "hover:text-[var(--color-tech-primary)]"
-                      )}
-                    >
-                      {item.label}
-                    </Link>
+                    {item.hasDropdown && item.dropdownItems ? (
+                      <div>
+                        {/* Accordion Header */}
+                        <button
+                          type="button"
+                          onClick={() => toggleAccordion(item.href)}
+                          className={cn(
+                            "flex w-full items-center justify-between rounded-lg px-4 py-3",
+                            "text-lg font-medium text-[var(--color-text-primary)]",
+                            "hover:bg-[var(--color-background-secondary)]",
+                            "transition-colors duration-[var(--transition-base)]",
+                            "focus-visible:ring-2 focus-visible:ring-[var(--color-legal-primary)] focus-visible:outline-none",
+                            item.category === "legal" && "hover:text-[var(--color-legal-primary)]",
+                            item.category === "tech" && "hover:text-[var(--color-tech-primary)]"
+                          )}
+                          aria-expanded={openAccordion === item.href}
+                        >
+                          <span>{item.label}</span>
+                          <ChevronDown
+                            className={cn(
+                              "h-5 w-5 transition-transform duration-200",
+                              openAccordion === item.href && "rotate-180"
+                            )}
+                          />
+                        </button>
+
+                        {/* Accordion Content */}
+                        <AnimatePresence>
+                          {openAccordion === item.href && (
+                            <motion.div
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: "auto", opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              transition={{ duration: 0.2 }}
+                              className="overflow-hidden"
+                            >
+                              <ul className="mt-1 space-y-1 pl-4">
+                                {/* Link to main category page */}
+                                <li>
+                                  <Link
+                                    href={item.href}
+                                    onClick={onClose}
+                                    className={cn(
+                                      "flex items-center gap-3 rounded-lg px-3 py-2.5",
+                                      "text-sm font-medium",
+                                      "transition-colors duration-[var(--transition-base)]",
+                                      item.category === "legal"
+                                        ? "text-[var(--color-legal-primary)] hover:bg-[var(--color-legal-surface)]/50"
+                                        : "text-[var(--color-tech-primary)] hover:bg-[var(--color-tech-surface)]/50"
+                                    )}
+                                  >
+                                    Все{" "}
+                                    {item.category === "legal"
+                                      ? "юридические услуги"
+                                      : "IT-решения"}{" "}
+                                    →
+                                  </Link>
+                                </li>
+                                {item.dropdownItems.map((subItem) => (
+                                  <li key={subItem.href}>
+                                    <Link
+                                      href={subItem.href}
+                                      onClick={onClose}
+                                      className={cn(
+                                        "flex items-start gap-3 rounded-lg px-3 py-2.5",
+                                        "hover:bg-[var(--color-background-secondary)]",
+                                        "transition-colors duration-[var(--transition-base)]"
+                                      )}
+                                    >
+                                      <div
+                                        className={cn(
+                                          "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg",
+                                          item.category === "legal"
+                                            ? "bg-[var(--color-legal-surface)]/70 text-[var(--color-legal-primary)]"
+                                            : "bg-[var(--color-tech-surface)]/70 text-[var(--color-tech-primary)]"
+                                        )}
+                                      >
+                                        <ServiceIcon
+                                          name={subItem.icon}
+                                          variant={item.category as "legal" | "tech"}
+                                          className="h-4 w-4"
+                                        />
+                                      </div>
+                                      <div className="min-w-0 flex-1">
+                                        <p className="text-sm font-medium text-[var(--color-text-primary)]">
+                                          {subItem.label}
+                                        </p>
+                                        <p className="mt-0.5 text-xs text-[var(--color-text-secondary)]">
+                                          {subItem.description}
+                                        </p>
+                                      </div>
+                                    </Link>
+                                  </li>
+                                ))}
+                              </ul>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    ) : (
+                      <Link
+                        href={item.href}
+                        onClick={onClose}
+                        className={cn(
+                          "block rounded-lg px-4 py-3",
+                          "text-lg font-medium text-[var(--color-text-primary)]",
+                          "hover:bg-[var(--color-background-secondary)]",
+                          "transition-colors duration-[var(--transition-base)]",
+                          "focus-visible:ring-2 focus-visible:ring-[var(--color-legal-primary)] focus-visible:outline-none",
+                          item.category === "legal" && "hover:text-[var(--color-legal-primary)]",
+                          item.category === "tech" && "hover:text-[var(--color-tech-primary)]"
+                        )}
+                      >
+                        {item.label}
+                      </Link>
+                    )}
                   </motion.li>
                 ))}
               </ul>

@@ -20,7 +20,7 @@
         "label": "Email",
         "placeholder": "you@example.com",
         "variant": "tech",
-        "required": true,
+        "required": false,
         "validation": {
           "pattern": "email",
           "errorMessage": "Введите корректный email"
@@ -30,7 +30,7 @@
         "label": "Телефон",
         "placeholder": "+7 (900) 000-00-00",
         "variant": "legal",
-        "required": false,
+        "required": true,
         "validation": {
           "pattern": "phone",
           "errorMessage": "Введите корректный номер телефона"
@@ -53,12 +53,12 @@
       },
       "message": {
         "label": "Сообщение",
-        "placeholder": "Опишите вашу задачу...",
+        "placeholder": "Опишите вашу задачу или оставьте пустым для заказа звонка",
         "variant": "legal",
-        "required": true,
+        "required": false,
         "validation": {
-          "minLength": 10,
-          "errorMessage": "Напишите хотя бы 10 символов"
+          "minLength": 0,
+          "errorMessage": ""
         }
       }
     },

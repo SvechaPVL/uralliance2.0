@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { AnimatePresence, MotionValue, motion, useScroll, useTransform } from "framer-motion";
 import {
   IconBrightnessDown,
@@ -72,7 +72,7 @@ export function MacbookScrollDemo() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -8 }}
                   transition={{ duration: 0.45, ease: "easeOut" }}
-                  className="absolute inset-0 h-full w-full object-cover object-top"
+                  className="absolute inset-0 h-full w-full object-contain object-top"
                 />
               </AnimatePresence>
               <motion.div
@@ -123,12 +123,15 @@ export const MacbookScroll = ({
     offset: ["start start", "end start"],
   });
 
-  const [isMobile] = useState(() => {
-    if (typeof window !== "undefined") {
-      return window.innerWidth < 768;
-    }
-    return false;
-  });
+  // Использую useSyncExternalStore для корректной гидратации
+  const isMobile = useSyncExternalStore(
+    (callback) => {
+      window.addEventListener("resize", callback);
+      return () => window.removeEventListener("resize", callback);
+    },
+    () => window.innerWidth < 768,
+    () => false // SSR fallback
+  );
 
   const scaleX = useTransform(scrollYProgress, [0, 0.35], [1.2, isMobile ? 1 : 1.5]);
   const scaleY = useTransform(scrollYProgress, [0, 0.35], [0.6, isMobile ? 1 : 1.5]);
@@ -149,7 +152,7 @@ export const MacbookScroll = ({
   return (
     <div
       ref={ref}
-      className="relative flex min-h-[200vh] shrink-0 scale-[0.68] transform flex-col items-center justify-start py-0 [perspective:800px] sm:min-h-[200vh] sm:scale-75 md:min-h-[260vh] md:scale-125 md:py-80"
+      className="relative flex min-h-[180vh] shrink-0 scale-[0.58] transform flex-col items-center justify-start py-0 [perspective:800px] sm:min-h-[200vh] sm:scale-75 md:min-h-[260vh] md:scale-125 md:py-80"
     >
       {heading && (
         <motion.h2
@@ -170,7 +173,7 @@ export const MacbookScroll = ({
         rotate={rotate}
         translate={translate}
       />
-      <div className="relative -z-10 h-[22rem] w-[32rem] overflow-hidden rounded-2xl bg-gray-200 dark:bg-[#272729]">
+      <div className="relative -z-10 h-[22rem] w-[36rem] overflow-hidden rounded-2xl bg-gray-200 dark:bg-[#272729]">
         <div className="relative h-10 w-full">
           <div className="absolute inset-x-0 mx-auto h-4 w-[80%] bg-[#050505]" />
         </div>
@@ -219,7 +222,7 @@ export const Lid = ({
           transformOrigin: "bottom",
           transformStyle: "preserve-3d",
         }}
-        className="relative h-[12rem] w-[32rem] rounded-2xl bg-[#010101] p-2"
+        className="relative h-[12rem] w-[36rem] rounded-2xl bg-[#010101] p-2"
       >
         <div
           style={{
@@ -241,7 +244,7 @@ export const Lid = ({
           transformStyle: "preserve-3d",
           transformOrigin: "top",
         }}
-        className="absolute inset-0 h-96 w-[32rem] rounded-2xl bg-[#010101] p-2"
+        className="absolute inset-0 h-96 w-[36rem] rounded-2xl bg-[#010101] p-2"
       >
         <div className="absolute inset-0 rounded-lg bg-[#272729]" />
         {mockupContent ? (

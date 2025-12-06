@@ -38,7 +38,7 @@ export default function AdditionalServicesPage() {
             {legalServices.map((service, index) => (
               <Card
                 key={service.id}
-                variant="glass"
+                variant="legal"
                 className="animate-fadeInUp p-6 transition-colors hover:border-[var(--color-legal-border)]"
                 style={{
                   animationDelay: `${index * 0.1}s`,

@@ -39,12 +39,10 @@ export interface CardProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 const baseCardClasses = cn(
-  "group/card rounded-[28px] relative overflow-hidden border border-white/10",
-  "bg-[var(--color-card-bg)]/75 backdrop-blur-[18px]",
-  "shadow-[0_25px_70px_-35px_rgba(0,0,0,0.65)]",
-  "transform-gpu transition duration-[360ms] ease-[cubic-bezier(0.25,0.8,0.25,1)]",
-  "before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:border before:border-white/10 before:opacity-40 before:content-['']",
-  "after:pointer-events-none after:absolute after:inset-x-8 after:top-0 after:h-[2px] after:bg-white/30 after:opacity-60 after:blur-[2px] after:content-['']"
+  "rounded-3xl relative overflow-hidden border",
+  "bg-gradient-to-br from-[var(--color-background-secondary)] to-[var(--color-card-bg)]",
+  "border-[var(--color-border)]",
+  "transition-all duration-300"
 );
 
 const cardVariants: Record<CardVariant, string> = {
@@ -57,7 +55,7 @@ const cardVariants: Record<CardVariant, string> = {
     "bg-gradient-to-br from-[var(--color-tech-surface)]/90 to-[var(--color-tech-surface-strong)]/90",
     "border-[var(--color-tech-border)]/50 text-[var(--color-text-primary)]"
   ),
-  glass: cn("bg-[var(--color-glass-strong)] border-white/15 backdrop-blur-[24px]"),
+  glass: cn("bg-[var(--color-background-secondary)]/80 border-[var(--color-border)]"),
 };
 
 const cardPaddings: Record<CardPadding, string> = {
@@ -106,7 +104,6 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
         className={cn(
           // Base styles
           baseCardClasses,
-          "motion-reduce:transform-none motion-reduce:transition-none",
           // Variant styles
           cardVariants[variant],
           // Padding
@@ -114,13 +111,9 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
           // Hoverable effect
           hoverable &&
             cn(
-              "cursor-pointer",
-              "hover:-translate-y-[3px] hover:shadow-[0_25px_55px_-30px_rgba(0,0,0,0.55)]",
-              "motion-reduce:hover:translate-y-0 motion-reduce:hover:shadow-none",
-              "hover:border-white/20",
-              variant === "legal" && "hover:border-[var(--color-legal-primary)]/35",
-              variant === "tech" && "hover:border-[var(--color-tech-primary)]/35",
-              variant === "glass" && "hover:bg-[var(--color-glass)]/90"
+              "cursor-pointer hover:-translate-y-1",
+              variant === "legal" && "hover:border-[var(--color-legal-primary)]/40",
+              variant === "tech" && "hover:border-[var(--color-tech-primary)]/40"
             ),
           // Neobrutalist style
           brutal &&

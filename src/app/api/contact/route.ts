@@ -9,21 +9,30 @@ import { escapeMarkdown, sendTelegramMessage } from "@/lib/telegram";
 
 type ContactResponse = ContactFormSuccessResponse | ContactFormErrorResponse;
 
-function formatTelegramMessage(data: { name: string; email: string; phone?: string; message: string; service: "legal" | "tech" }) {
+function formatTelegramMessage(data: {
+  name: string;
+  email: string;
+  phone: string;
+  message?: string;
+  service: "legal" | "tech";
+}) {
   const serviceLabel = data.service === "legal" ? "Legal" : "Tech";
   const parts = [
     "*Новая заявка Uralliance*",
     "",
     `*Имя:* ${escapeMarkdown(data.name)}`,
-    `*Email:* ${escapeMarkdown(data.email)}`,
-    data.phone ? `*Телефон:* ${escapeMarkdown(data.phone)}` : null,
+    `*Телефон:* ${escapeMarkdown(data.phone)}`,
+    data.email ? `*Email:* ${escapeMarkdown(data.email)}` : null,
     `*Направление:* ${serviceLabel}`,
-    "",
-    "*Сообщение:*",
-    escapeMarkdown(data.message),
-  ].filter(Boolean);
+  ];
 
-  return parts.join("\n");
+  if (data.message) {
+    parts.push("", "*Сообщение:*", escapeMarkdown(data.message));
+  } else {
+    parts.push("", "_Заказан обратный звонок_");
+  }
+
+  return parts.filter(Boolean).join("\n");
 }
 
 export async function POST(request: Request) {

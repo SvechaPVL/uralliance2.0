@@ -147,7 +147,11 @@ export default async function ServicesCategoryPage({ params }: ServicesCategoryP
               </div>
               <div className="grid gap-4 sm:grid-cols-3">
                 {hero.highlights.map((highlight) => (
-                  <Card key={highlight.label} variant="glass" className="p-5 text-center">
+                  <Card
+                    key={highlight.label}
+                    variant={isLegal ? "legal" : "tech"}
+                    className="p-5 text-center"
+                  >
                     <Text size="2xl" weight="semibold" className="text-3xl">
                       {highlight.value}
                     </Text>
@@ -158,7 +162,7 @@ export default async function ServicesCategoryPage({ params }: ServicesCategoryP
                 ))}
               </div>
             </div>
-            <Card variant="glass" className="space-y-4 p-8">
+            <Card variant={isLegal ? "legal" : "tech"} className="space-y-4 p-8">
               <Heading as="h2" size="lg" weight="semibold">
                 {isLegal ? "Юридическое сопровождение" : "Цифровая реализация"}
               </Heading>
@@ -171,7 +175,7 @@ export default async function ServicesCategoryPage({ params }: ServicesCategoryP
                   <li key={item}>{item}</li>
                 ))}
               </List>
-              <Card variant="glass" className="border-dashed p-4">
+              <Card variant={isLegal ? "legal" : "tech"} className="border-dashed p-4">
                 <Text size="sm" tone="secondary">
                   {isLegal
                     ? "Фиксируем условия договором и защищаем результаты юридически на каждом этапе."
@@ -187,7 +191,7 @@ export default async function ServicesCategoryPage({ params }: ServicesCategoryP
       <Section spacing="sm" background="secondary" bordered>
         <Container className="grid gap-6 md:grid-cols-3">
           {SERVICE_BULLETS[category].map((bullet) => (
-            <Card key={bullet} variant="glass" className="p-6">
+            <Card key={bullet} variant={isLegal ? "legal" : "tech"} className="p-6">
               <Label size="md" spacing="wider" tone="muted">
                 {isLegal ? "Юридический фокус" : "Цифровой фокус"}
               </Label>
@@ -215,7 +219,7 @@ export default async function ServicesCategoryPage({ params }: ServicesCategoryP
             {services.map((service) => (
               <Card
                 key={service.slug}
-                variant="glass"
+                variant={isLegal ? "legal" : "tech"}
                 hoverable
                 className="flex h-full flex-col gap-6 p-6"
               >
@@ -288,7 +292,7 @@ export default async function ServicesCategoryPage({ params }: ServicesCategoryP
       {/* CTA */}
       <Section spacing="md" className="pt-0 pb-20">
         <Container>
-          <Card variant="glass" padding="lg" className="text-center">
+          <Card variant={isLegal ? "legal" : "tech"} padding="lg" className="text-center">
             <div className="space-y-6">
               <Label size="md" spacing="wider" tone="muted">
                 Следующий шаг

@@ -13,12 +13,66 @@
       {
         "label": "Юридические услуги",
         "href": "/services/legal",
-        "category": "legal"
+        "category": "legal",
+        "hasDropdown": true,
+        "dropdownItems": [
+          {
+            "label": "Регистрация и налоги",
+            "description": "Регистрация бизнеса, работа с налоговой",
+            "href": "/services/legal/corporate",
+            "icon": "Building2"
+          },
+          {
+            "label": "Договоры",
+            "description": "Составление и проверка договоров",
+            "href": "/services/legal/contracts",
+            "icon": "FileText"
+          },
+          {
+            "label": "Недвижимость",
+            "description": "Проверка и сопровождение сделок",
+            "href": "/services/legal/real-estate",
+            "icon": "Home"
+          },
+          {
+            "label": "ЭЦП и Рутокен",
+            "description": "Электронные подписи для бизнеса",
+            "href": "/services/legal/ecp",
+            "icon": "KeyRound"
+          }
+        ]
       },
       {
         "label": "IT-решения",
         "href": "/services/tech",
-        "category": "tech"
+        "category": "tech",
+        "hasDropdown": true,
+        "dropdownItems": [
+          {
+            "label": "Сайты и веб-приложения",
+            "description": "Сайты, личные кабинеты, магазины",
+            "href": "/services/tech/web",
+            "icon": "Globe"
+          },
+          {
+            "label": "Чат-боты",
+            "description": "Telegram, WhatsApp, автоматизация",
+            "href": "/services/tech/bots",
+            "icon": "MessageSquare"
+          },
+          {
+            "label": "Интеграции с 1С",
+            "description": "Обмен данными между системами",
+            "href": "/services/tech/crm",
+            "icon": "Workflow"
+          },
+          {
+            "label": "AI и автоматизация",
+            "description": "Умные помощники и обработка данных",
+            "href": "/services/tech/ai",
+            "icon": "Sparkles"
+          }
+        ]
       },
       {
         "label": "Прайс",
