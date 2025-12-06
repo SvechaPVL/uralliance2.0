@@ -79,6 +79,29 @@ textarea,
   }
 }
 
+/* Custom cursor - hide default on desktop */
+@media (pointer: fine) and (min-width: 768px) {
+  html,
+  html *,
+  html *::before,
+  html *::after {
+    cursor: none !important;
+  }
+
+  /* Force hide for common interactive elements */
+  a,
+  button,
+  input,
+  textarea,
+  select,
+  [role="button"],
+  [tabindex],
+  label,
+  summary {
+    cursor: none !important;
+  }
+}
+
 .overlay-scrollbar {
   position: fixed;
   top: 16px;
@@ -99,12 +122,10 @@ textarea,
   background: rgba(6, 182, 212, 0.25);
   box-shadow: 0 4px 12px rgba(2, 6, 23, 0.4);
   pointer-events: auto;
-  cursor: grab;
   transition: background var(--transition-base);
 }
 
 .overlay-scrollbar__thumb:active {
-  cursor: grabbing;
   background: rgba(6, 182, 212, 0.5);
 }
 

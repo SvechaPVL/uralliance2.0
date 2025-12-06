@@ -108,10 +108,10 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
           cardVariants[variant],
           // Padding
           cardPaddings[padding],
-          // Hoverable effect
+          // Hoverable effect (no cursor-pointer - custom cursor handles it)
           hoverable &&
             cn(
-              "cursor-pointer hover:-translate-y-1",
+              "hover:-translate-y-1",
               variant === "legal" && "hover:border-[var(--color-legal-primary)]/40",
               variant === "tech" && "hover:border-[var(--color-tech-primary)]/40"
             ),

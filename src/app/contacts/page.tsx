@@ -38,6 +38,12 @@ const CONTACT_DETAILS = [
     href: contactsConfig.phone.link,
   },
   {
+    icon: Phone,
+    label: pagesConfig.contacts.details.labels.phone,
+    value: contactsConfig.phone2.display,
+    href: contactsConfig.phone2.link,
+  },
+  {
     icon: Mail,
     label: pagesConfig.contacts.details.labels.email,
     value: contactsConfig.email.display,
@@ -142,11 +148,12 @@ export default function ContactsPage() {
         {/* Contact info */}
         <Section spacing="md" className="pt-4 pb-16">
           <Container className="space-y-8">
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-              {CONTACT_DETAILS.map((detail) => {
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-5">
+              {CONTACT_DETAILS.map((detail, index) => {
+                const uniqueKey = `${detail.label}-${index}`;
                 const content = (
                   <Card
-                    key={detail.label}
+                    key={uniqueKey}
                     variant="tech"
                     className="h-full space-y-3 p-6 hover:shadow-[0_20px_45px_-30px_rgba(0,0,0,0.75)]"
                     hoverable
@@ -161,14 +168,14 @@ export default function ContactsPage() {
                 );
 
                 if (!detail.href) {
-                  return content;
+                  return <div key={uniqueKey}>{content}</div>;
                 }
 
                 const external = detail.href.startsWith("http");
 
                 return (
                   <a
-                    key={detail.label}
+                    key={uniqueKey}
                     href={detail.href}
                     className="block"
                     onClick={() => {

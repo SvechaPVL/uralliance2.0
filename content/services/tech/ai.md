@@ -2,9 +2,18 @@
 title: "Умные помощники и автоматизация"
 description: "Внедрение AI-решений для автоматизации бизнес-процессов"
 price: "от 80 000 ₽"
+priceNum: 80000
+priceFrom: true
+unit: "проект"
 icon: "Sparkles"
 category: "tech"
 order: 4
+featured: true
+features:
+  - "AI-ассистенты на базе ChatGPT"
+  - "Обработка документов и OCR"
+  - "Интеграция с вашими системами"
+  - "Мониторинг качества работы AI"
 seo:
   keywords: "внедрение ai владивосток, автоматизация с искусственным интеллектом, chatgpt для бизнеса"
   ogImage: "/images/services/ai-og.jpg"

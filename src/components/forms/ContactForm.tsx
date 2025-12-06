@@ -210,6 +210,17 @@ export function ContactForm() {
       />
 
       <div className="space-y-3">
+        <p className="text-xs text-[var(--color-text-muted)]">
+          Нажимая кнопку «Отправить», вы соглашаетесь с{" "}
+          <a
+            href="/privacy-policy"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline underline-offset-2 hover:text-[var(--color-text-secondary)]"
+          >
+            политикой конфиденциальности
+          </a>
+        </p>
         <Button
           type="submit"
           variant={formConfig.contact.button.variant as "primary-tech"}

@@ -2,9 +2,18 @@
 title: "Моб. приложения"
 description: "Разработка приложений для iPhone и Android — от идеи до публикации в App Store и Google Play"
 price: "от 150 000 ₽"
+priceNum: 150000
+priceFrom: true
+unit: "проект"
 icon: "Smartphone"
 category: "tech"
 order: 5
+featured: false
+features:
+  - "Дизайн интерфейса в Figma"
+  - "Разработка для iOS и Android"
+  - "Публикация в App Store и Google Play"
+  - "Гарантия 6 месяцев"
 seo:
   keywords: "разработка мобильных приложений владивосток, создание мобильного приложения владивосток, разработка приложений ios владивосток, разработка приложений android владивосток, заказать мобильное приложение владивосток, react native владивосток, кроссплатформенная разработка владивосток"
   ogImage: "/images/services/mobile-og.jpg"

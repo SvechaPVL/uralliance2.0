@@ -2,9 +2,18 @@
 title: "Чат-боты"
 description: "Разработка чат-ботов для Telegram и WhatsApp — автоматизация общения с клиентами"
 price: "от 30 000 ₽"
+priceNum: 30000
+priceFrom: true
+unit: "проект"
 icon: "MessageSquare"
 category: "tech"
 order: 3
+featured: true
+features:
+  - "Сценарии общения и квизы"
+  - "Приём оплат и интеграция с CRM"
+  - "Личный кабинет для операторов"
+  - "Мониторинг и аналитика"
 seo:
   keywords: "разработка telegram бота владивосток, создание чат-бота владивосток, разработка whatsapp бота владивосток, заказать telegram бота владивосток, чат-бот для бизнеса владивосток, telegram bot разработка владивосток, автоматизация через чат-бота владивосток"
   ogImage: "/images/services/bots-og.jpg"

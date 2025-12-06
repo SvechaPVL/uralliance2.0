@@ -5,6 +5,10 @@
     "display": "+7 (423) 202-88-78",
     "link": "tel:+74232028878"
   },
+  "phone2": {
+    "display": "+7 (4232) 43-36-10",
+    "link": "tel:+74232433610"
+  },
   "email": {
     "display": "info@uralliance.ru",
     "link": "mailto:info@uralliance.ru"

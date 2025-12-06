@@ -1,8 +1,21 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useSyncExternalStore } from "react";
 
 type CursorVariant = "default" | "pointer" | "text" | "legal" | "tech";
+
+// SSR-safe subscription for mounted state
+function subscribe() {
+  return () => {};
+}
+
+function getSnapshot() {
+  return true;
+}
+
+function getServerSnapshot() {
+  return false;
+}
 
 /**
  * CustomCursor Component (Optimized)
@@ -13,7 +26,7 @@ type CursorVariant = "default" | "pointer" | "text" | "legal" | "tech";
  * - Legal gold / Tech cyan theming
  */
 export function CustomCursor() {
-  const [mounted, setMounted] = useState(false);
+  const mounted = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const [variant, setVariant] = useState<CursorVariant>("default");
   const [position, setPosition] = useState({ x: -100, y: -100 });
   const variantRef = useRef<CursorVariant>("default");
@@ -21,7 +34,7 @@ export function CustomCursor() {
   const posRef = useRef({ x: -100, y: -100 });
 
   useEffect(() => {
-    setMounted(true);
+    if (!mounted) return;
 
     // Skip on touch devices
     if (
@@ -94,7 +107,7 @@ export function CustomCursor() {
       document.removeEventListener("mouseover", handleMouseOver);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, []);
+  }, [mounted]);
 
   if (!mounted) return null;
 
@@ -103,37 +116,36 @@ export function CustomCursor() {
     default: "#ffffff",
     pointer: "#ffffff",
     text: "#ffffff",
-    legal: "#06B6D4",  // cyan on gold background
-    tech: "#D4AF37",   // gold on cyan background
+    legal: "#06B6D4", // cyan on gold background
+    tech: "#D4AF37", // gold on cyan background
   };
 
   const color = colors[variant];
 
   return (
     <>
-      {/* Hide default cursor */}
-      <style jsx global>{`
-        @media (pointer: fine) {
-          * { cursor: none !important; }
-        }
-      `}</style>
-
       {/* Main cursor - no delay */}
       <div
-        className="pointer-events-none fixed left-0 top-0 z-[9999] hidden md:block"
+        className="pointer-events-none fixed top-0 left-0 z-[9999] hidden md:block"
         style={{ transform: `translate(${position.x}px, ${position.y}px)` }}
       >
         {/* Arrow cursor - same style as hand */}
         <div
-          className="absolute left-0 top-0 transition-all duration-100"
+          className="absolute top-0 left-0 transition-all duration-100"
           style={{
             transform: `translate(-3px, -1px) scale(${variant === "pointer" || variant === "legal" || variant === "tech" || variant === "text" ? 0 : 1})`,
-            opacity: variant === "pointer" || variant === "legal" || variant === "tech" || variant === "text" ? 0 : 1,
+            opacity:
+              variant === "pointer" ||
+              variant === "legal" ||
+              variant === "tech" ||
+              variant === "text"
+                ? 0
+                : 1,
           }}
         >
           {/* Glow behind arrow */}
           <div
-            className="absolute -left-1 -top-1 h-10 w-10 animate-pulse rounded-full opacity-60"
+            className="absolute -top-1 -left-1 h-10 w-10 animate-pulse rounded-full opacity-60"
             style={{
               background: `radial-gradient(circle, ${color}35 0%, transparent 70%)`,
             }}
@@ -153,7 +165,7 @@ export function CustomCursor() {
 
         {/* Hand cursor */}
         <div
-          className="absolute left-0 top-0 transition-all duration-100"
+          className="absolute top-0 left-0 transition-all duration-100"
           style={{
             transform: `translate(-6px, 0) scale(${variant === "pointer" || variant === "legal" || variant === "tech" ? 1 : 0})`,
             opacity: variant === "pointer" || variant === "legal" || variant === "tech" ? 1 : 0,
@@ -161,7 +173,7 @@ export function CustomCursor() {
         >
           {(variant === "legal" || variant === "tech") && (
             <div
-              className="absolute -left-2 -top-1 h-12 w-12 animate-pulse rounded-full"
+              className="absolute -top-1 -left-2 h-12 w-12 animate-pulse rounded-full"
               style={{
                 background: `radial-gradient(circle, ${color}40 0%, transparent 70%)`,
               }}
@@ -181,7 +193,7 @@ export function CustomCursor() {
 
         {/* Text cursor (I-beam) */}
         <div
-          className="absolute left-0 top-0 transition-all duration-100"
+          className="absolute top-0 left-0 transition-all duration-100"
           style={{
             transform: `translate(-2px, -10px) scale(${variant === "text" ? 1 : 0})`,
             opacity: variant === "text" ? 1 : 0,
@@ -195,7 +207,7 @@ export function CustomCursor() {
 
       {/* Trail dot */}
       <div
-        className="pointer-events-none fixed left-0 top-0 z-[9998] hidden md:block"
+        className="pointer-events-none fixed top-0 left-0 z-[9998] hidden md:block"
         style={{
           transform: `translate(${position.x - 6}px, ${position.y - 6}px)`,
         }}
