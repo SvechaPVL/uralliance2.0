@@ -24,7 +24,7 @@ export function CustomMap({
   zoom = 17,
   height = "420px",
   markerTitle = "Офис Uralliance",
-  mapUrl
+  mapUrl,
 }: CustomMapProps) {
   const mapRef = useRef<L.Map | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -44,14 +44,14 @@ export function CustomMap({
     mapRef.current = map;
 
     // Add dark themed tile layer (CartoDB Dark Matter)
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-      subdomains: 'abcd',
-      maxZoom: 20
+    L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+      subdomains: "abcd",
+      maxZoom: 20,
     }).addTo(map);
 
     // Custom marker icon
     const customIcon = L.divIcon({
-      className: 'custom-marker',
+      className: "custom-marker",
       html: `
         <div class="custom-marker-wrapper">
           <div class="custom-marker-pin"></div>
@@ -68,25 +68,27 @@ export function CustomMap({
 
     // Open Yandex Maps on marker click
     if (mapUrl) {
-      marker.on('click', () => {
-        window.open(mapUrl, '_blank', 'noopener,noreferrer');
+      marker.on("click", () => {
+        window.open(mapUrl, "_blank", "noopener,noreferrer");
       });
 
       // Add cursor pointer style
-      marker.getElement()?.classList.add('cursor-pointer');
+      marker.getElement()?.classList.add("cursor-pointer");
     }
 
     if (markerTitle) {
-      marker.bindPopup(
-        `<div class="custom-popup">
+      marker
+        .bindPopup(
+          `<div class="custom-popup">
           <strong>${markerTitle}</strong>
         </div>`,
-        {
-          closeButton: false,
-          autoClose: false,
-          closeOnClick: false,
-        }
-      ).openPopup();
+          {
+            closeButton: false,
+            autoClose: false,
+            closeOnClick: false,
+          }
+        )
+        .openPopup();
     }
 
     // Cleanup on unmount
@@ -102,8 +104,8 @@ export function CustomMap({
     <>
       <div
         ref={containerRef}
-        style={{ height, width: '100%' }}
-        className="rounded-[inherit] overflow-hidden"
+        style={{ height, width: "100%" }}
+        className="relative z-0 overflow-hidden rounded-[inherit]"
       />
       <style jsx global>{`
         /* Custom marker styles */
@@ -129,7 +131,11 @@ export function CustomMap({
           transform: translateX(-50%);
           width: 24px;
           height: 24px;
-          background: linear-gradient(135deg, var(--color-legal-primary), var(--color-tech-primary));
+          background: linear-gradient(
+            135deg,
+            var(--color-legal-primary),
+            var(--color-tech-primary)
+          );
           border-radius: 50% 50% 50% 0;
           transform: translateX(-50%) rotate(-45deg);
           border: 3px solid rgba(255, 255, 255, 0.9);
@@ -137,7 +143,7 @@ export function CustomMap({
         }
 
         .custom-marker-pin::after {
-          content: '';
+          content: "";
           position: absolute;
           top: 50%;
           left: 50%;
@@ -189,7 +195,11 @@ export function CustomMap({
 
         .custom-popup strong {
           font-weight: 600;
-          background: linear-gradient(135deg, var(--color-legal-primary), var(--color-tech-primary));
+          background: linear-gradient(
+            135deg,
+            var(--color-legal-primary),
+            var(--color-tech-primary)
+          );
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
