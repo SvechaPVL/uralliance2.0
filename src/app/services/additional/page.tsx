@@ -151,7 +151,7 @@ export default function AdditionalServicesPage() {
                 Написать в Telegram
               </a>
               <a
-                href="https://wa.me/79147054713"
+                href="https://wa.me/79149618687"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center justify-center rounded-lg border-2 border-[var(--color-legal-primary)] px-8 py-4 text-lg font-semibold text-[var(--color-legal-primary)] transition-all duration-200 hover:bg-[var(--color-legal-surface)] active:scale-95"

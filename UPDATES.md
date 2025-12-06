@@ -79,8 +79,8 @@
 
 **Контакты:**
 
-- Телефон: +7 (914) 705-47-13
-- WhatsApp: +7 (914) 705-47-13
+- Телефон: +7 (423) 202-88-78
+- WhatsApp: +7 (914) 961-86-87
 - Telegram: @svechapvl
 - Email: info@uralliance.ru
 
