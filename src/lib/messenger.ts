@@ -44,12 +44,12 @@ export function generateWhatsAppLink(phone?: string, message?: string): string {
  *
  * @example
  * ```ts
- * const link = generateTelegramLink("uralliance", "Здравствуйте! Интересует консультация");
- * // Returns: "https://t.me/uralliance?text=Здравствуйте!%20Интересует%20консультация"
+ * const link = generateTelegramLink("svechapvl", "Здравствуйте! Интересует консультация");
+ * // Returns: "https://t.me/svechapvl?text=Здравствуйте!%20Интересует%20консультация"
  * ```
  */
 export function generateTelegramLink(username?: string, message?: string): string {
-  const defaultUsername = process.env.NEXT_PUBLIC_TELEGRAM_USERNAME || "uralliance";
+  const defaultUsername = process.env.NEXT_PUBLIC_TELEGRAM_USERNAME || "svechapvl";
   const defaultMessage =
     "Здравствуйте! Я обращаюсь с сайта Uralliance. Хочу узнать больше о ваших услугах.";
 
