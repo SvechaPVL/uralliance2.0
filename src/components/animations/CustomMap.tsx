@@ -109,16 +109,18 @@ export function CustomMap({
   return (
     <>
       <div style={{ height, width: "100%" }} className="relative">
-        {/* Loading skeleton */}
-        {!isLoaded && (
-          <div className="absolute inset-0 z-10 flex items-center justify-center rounded-[inherit] bg-[var(--color-background-secondary)]">
-            <div className="flex flex-col items-center gap-3">
-              <div className="h-8 w-8 animate-spin rounded-full border-2 border-[var(--color-tech-primary)] border-t-transparent" />
-              <span className="text-sm text-[var(--color-text-muted)]">Загрузка карты...</span>
-            </div>
+        {/* Loading skeleton - always rendered, fades out */}
+        <div
+          className={`absolute inset-0 z-10 flex items-center justify-center rounded-[inherit] bg-[var(--color-background-secondary)] transition-opacity duration-500 ${
+            isLoaded ? "pointer-events-none opacity-0" : "opacity-100"
+          }`}
+        >
+          <div className="flex flex-col items-center gap-3">
+            <div className="h-8 w-8 animate-spin rounded-full border-2 border-[var(--color-tech-primary)] border-t-transparent" />
+            <span className="text-sm text-[var(--color-text-muted)]">Загрузка карты...</span>
           </div>
-        )}
-        {/* Map container with fade-in */}
+        </div>
+        {/* Map container - always rendered, fades in */}
         <div
           ref={containerRef}
           style={{ height: "100%", width: "100%" }}
