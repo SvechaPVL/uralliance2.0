@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
@@ -28,6 +28,7 @@ export function CustomMap({
 }: CustomMapProps) {
   const mapRef = useRef<L.Map | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     if (!containerRef.current || mapRef.current) return;
@@ -44,10 +45,15 @@ export function CustomMap({
     mapRef.current = map;
 
     // Add dark themed tile layer (CartoDB Dark Matter)
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+    const tileLayer = L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
       subdomains: "abcd",
       maxZoom: 20,
     }).addTo(map);
+
+    // Listen for tiles load event to show map with fade-in
+    tileLayer.on("load", () => {
+      setIsLoaded(true);
+    });
 
     // Custom marker icon
     const customIcon = L.divIcon({
@@ -102,11 +108,25 @@ export function CustomMap({
 
   return (
     <>
-      <div
-        ref={containerRef}
-        style={{ height, width: "100%" }}
-        className="relative z-0 overflow-hidden rounded-[inherit]"
-      />
+      <div style={{ height, width: "100%" }} className="relative">
+        {/* Loading skeleton */}
+        {!isLoaded && (
+          <div className="absolute inset-0 z-10 flex items-center justify-center rounded-[inherit] bg-[var(--color-background-secondary)]">
+            <div className="flex flex-col items-center gap-3">
+              <div className="h-8 w-8 animate-spin rounded-full border-2 border-[var(--color-tech-primary)] border-t-transparent" />
+              <span className="text-sm text-[var(--color-text-muted)]">Загрузка карты...</span>
+            </div>
+          </div>
+        )}
+        {/* Map container with fade-in */}
+        <div
+          ref={containerRef}
+          style={{ height: "100%", width: "100%" }}
+          className={`relative z-0 overflow-hidden rounded-[inherit] transition-opacity duration-500 ${
+            isLoaded ? "opacity-100" : "opacity-0"
+          }`}
+        />
+      </div>
       <style jsx global>{`
         /* Custom marker styles */
         .custom-marker {
