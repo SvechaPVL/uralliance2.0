@@ -77,7 +77,7 @@ export function generateLocalBusinessSchema() {
         closes: "18:00",
       },
     ],
-    sameAs: ["https://t.me/uralliance", "https://wa.me/79000000000", "https://vk.com/uralliance"],
+    sameAs: ["https://t.me/svechapvl", "https://wa.me/79149618687", "https://vk.com/uralliance"],
   };
 }
 

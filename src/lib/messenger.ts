@@ -19,7 +19,7 @@
  * ```
  */
 export function generateWhatsAppLink(phone?: string, message?: string): string {
-  const defaultPhone = process.env.NEXT_PUBLIC_WHATSAPP_PHONE || "79000000000";
+  const defaultPhone = process.env.NEXT_PUBLIC_WHATSAPP_PHONE || "79149618687";
   const defaultMessage =
     "Здравствуйте! Я обращаюсь с сайта Uralliance. Хочу узнать больше о ваших услугах.";
 
