@@ -291,7 +291,7 @@ export default function EdoPage() {
                 <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--color-tech-surface)]">
                   <feature.icon className="h-6 w-6 text-[var(--color-tech-primary)]" />
                 </div>
-                <Heading as="h3" size="base" weight="semibold">
+                <Heading as="h3" size="sm" weight="semibold">
                   {feature.title}
                 </Heading>
                 <Text size="sm" tone="secondary" className="mt-2">
