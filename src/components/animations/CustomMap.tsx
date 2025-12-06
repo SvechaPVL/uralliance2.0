@@ -108,15 +108,12 @@ export function CustomMap({
 
   return (
     <>
-      <div
-        style={{ height, width: "100%" }}
-        className="relative isolate overflow-hidden rounded-[inherit]"
-      >
+      <div style={{ height, width: "100%" }} className="relative isolate rounded-[inherit]">
         {/* Map container - always rendered, fades in */}
         <div
           ref={containerRef}
           style={{ height: "100%", width: "100%" }}
-          className={`transition-opacity duration-500 ${isLoaded ? "opacity-100" : "opacity-0"}`}
+          className={`overflow-hidden rounded-[inherit] transition-opacity duration-500 ${isLoaded ? "opacity-100" : "opacity-0"}`}
         />
         {/* Loading skeleton - overlays map, fades out */}
         <div
