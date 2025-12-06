@@ -52,11 +52,12 @@ export function PriceExperience({ prices }: PriceExperienceProps) {
     const legalCount = prices.filter((item) => item.practice === "legal").length;
     const techCount = prices.length - legalCount;
     const featuredCount = prices.filter((item) => item.featured).length;
-    const minPrice = Math.min(...prices.map((item) => item.price));
-    const maxPrice = Math.max(...prices.map((item) => item.price));
-    const averagePrice = Math.round(
-      prices.reduce((acc, item) => acc + item.price, 0) / prices.length
-    );
+    const pricedItems = prices.filter((item) => item.price > 0 && !item.priceLabel);
+    const minPrice = pricedItems.length > 0 ? Math.min(...pricedItems.map((item) => item.price)) : 0;
+    const maxPrice = pricedItems.length > 0 ? Math.max(...pricedItems.map((item) => item.price)) : 0;
+    const averagePrice = pricedItems.length > 0 ? Math.round(
+      pricedItems.reduce((acc, item) => acc + item.price, 0) / pricedItems.length
+    ) : 0;
 
     return {
       legalCount,
@@ -104,11 +105,21 @@ export function PriceExperience({ prices }: PriceExperienceProps) {
     }
 
     if (sortOrder === "asc") {
-      return list.sort((a, b) => a.price - b.price);
+      return list.sort((a, b) => {
+        // Items with priceLabel go to the end
+        if (a.priceLabel && !b.priceLabel) return 1;
+        if (!a.priceLabel && b.priceLabel) return -1;
+        return a.price - b.price;
+      });
     }
 
     if (sortOrder === "desc") {
-      return list.sort((a, b) => b.price - a.price);
+      return list.sort((a, b) => {
+        // Items with priceLabel go to the end
+        if (a.priceLabel && !b.priceLabel) return 1;
+        if (!a.priceLabel && b.priceLabel) return -1;
+        return b.price - a.price;
+      });
     }
 
     return list.sort((a, b) => Number(b.featured ?? false) - Number(a.featured ?? false));
@@ -318,8 +329,14 @@ export function PriceExperience({ prices }: PriceExperienceProps) {
                       Стоимость
                     </Label>
                     <Text size="xl" weight="semibold" className="sm:text-2xl">
-                      {price.priceFrom ? "от " : ""}
-                      {currencyFormatter.format(price.price)} ₽
+                      {price.priceLabel ? (
+                        price.priceLabel
+                      ) : (
+                        <>
+                          {price.priceFrom ? "от " : ""}
+                          {currencyFormatter.format(price.price)}&nbsp;₽
+                        </>
+                      )}
                     </Text>
                   </div>
 

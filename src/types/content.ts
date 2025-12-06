@@ -142,6 +142,11 @@ export interface PriceItem {
   priceFrom: boolean;
 
   /**
+   * Custom price label (e.g., "По запросу") - displayed instead of numeric price
+   */
+  priceLabel?: string;
+
+  /**
    * Unit of measurement (дело, проект, консультация, месяц)
    */
   unit: string;
