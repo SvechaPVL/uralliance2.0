@@ -248,15 +248,15 @@ export default async function ServicesCategoryPage({ params }: ServicesCategoryP
                   </Link>
                 </div>
                 <div className="space-y-3">
-                  <div className="flex flex-wrap items-center gap-3">
-                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-2xl bg-white/10">
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-xl bg-white/10">
                       <ServiceIcon
                         name={service.frontmatter.icon}
                         variant={isLegal ? "legal" : "tech"}
-                        className="h-6 w-6 text-white"
+                        className="h-5 w-5 text-white"
                       />
                     </div>
-                    <Heading as="h3" size="lg" weight="semibold">
+                    <Heading as="h3" size="md" weight="semibold" className="leading-tight">
                       {service.frontmatter.title}
                     </Heading>
                   </div>
