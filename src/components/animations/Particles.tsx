@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 /**
@@ -90,21 +90,6 @@ export function Particles({
   const particlesRef = useRef<Particle[]>([]);
   const animationFrameRef = useRef<number | undefined>(undefined);
   const prefersReducedMotion = useReducedMotion();
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
-
-  // Detect touch devices on mount
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const media = window.matchMedia("(pointer: coarse)");
-    const update = () => setIsTouchDevice(media.matches);
-    update();
-    if (typeof media.addEventListener === "function") {
-      media.addEventListener("change", update);
-      return () => media.removeEventListener("change", update);
-    }
-    media.addListener(update);
-    return () => media.removeListener(update);
-  }, []);
 
   // Setup canvas and start animation
   useEffect(() => {
@@ -113,6 +98,9 @@ export function Particles({
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
+
+    // Sync check for touch device - no state, no race condition
+    const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
     // Disable animation on touch devices (prevents jitter from mobile resize events)
     const disableAnimation = prefersReducedMotion || isTouchDevice;
 
@@ -212,7 +200,7 @@ export function Particles({
         window.removeEventListener("resize", handleResize);
       }
     };
-  }, [count, colors, sizeRange, speed, prefersReducedMotion, isTouchDevice]);
+  }, [count, colors, sizeRange, speed, prefersReducedMotion]);
 
   return (
     <canvas

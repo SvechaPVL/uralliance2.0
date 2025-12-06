@@ -10,6 +10,7 @@ import { PromoBanner } from "@/components/system/PromoBanner";
 import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/seo/JsonLd";
 import { FaqJsonLd } from "@/components/seo/FaqJsonLd";
 import { HeroProgressProvider } from "@/context/HeroProgressContext";
+import { CustomCursor } from "@/components/effects/CustomCursor";
 import pagesConfig from "@/content/pages.json";
 
 const inter = Inter({
@@ -181,6 +182,9 @@ export default function RootLayout({
         <link rel="alternate" type="application/rss+xml" href="/turbo-rss" />
       </head>
       <body className={`${inter.variable} ${poppins.variable} antialiased`}>
+        {/* Custom Cursor */}
+        <CustomCursor />
+
         {/* Structured Data for SEO */}
         <OrganizationJsonLd />
         <WebSiteJsonLd />

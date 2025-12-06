@@ -22,11 +22,11 @@
       "slug": "contracts"
     },
     {
-      "id": "real-estate",
-      "title": "Недвижимость",
-      "description": "Проверка перед покупкой, помощь со сделками.",
-      "icon": "Home",
-      "slug": "real-estate"
+      "id": "accounting",
+      "title": "Сдача бухотчётности",
+      "description": "Бухгалтерский аутсорсинг, сдача отчётов в налоговую и фонды.",
+      "icon": "Calculator",
+      "slug": "accounting"
     }
   ],
   "tech": [
