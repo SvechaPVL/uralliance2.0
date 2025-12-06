@@ -45,8 +45,9 @@ export function CustomCursor() {
       return;
     }
 
-    // Mouse move - instant update via RAF
-    const handleMouseMove = (e: MouseEvent) => {
+    // Mouse/pointer move - instant update via RAF
+    // Listen to both mousemove and pointermove for compatibility with drag operations
+    const handleMove = (e: MouseEvent | PointerEvent) => {
       posRef.current = { x: e.clientX, y: e.clientY };
 
       if (!rafRef.current) {
@@ -99,11 +100,13 @@ export function CustomCursor() {
       }
     };
 
-    document.addEventListener("mousemove", handleMouseMove, { passive: true });
+    document.addEventListener("mousemove", handleMove, { passive: true });
+    document.addEventListener("pointermove", handleMove, { passive: true });
     document.addEventListener("mouseover", handleMouseOver, { passive: true });
 
     return () => {
-      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mousemove", handleMove);
+      document.removeEventListener("pointermove", handleMove);
       document.removeEventListener("mouseover", handleMouseOver);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };

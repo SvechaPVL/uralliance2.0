@@ -100,6 +100,18 @@ textarea,
   summary {
     cursor: none !important;
   }
+
+  /* Override Leaflet and other library cursors */
+  .leaflet-container,
+  .leaflet-container *,
+  .leaflet-interactive,
+  .leaflet-grab,
+  .leaflet-dragging,
+  .leaflet-dragging .leaflet-grab,
+  .leaflet-clickable,
+  [class*="leaflet-"] {
+    cursor: none !important;
+  }
 }
 
 .overlay-scrollbar {
