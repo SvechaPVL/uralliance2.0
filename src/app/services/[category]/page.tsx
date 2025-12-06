@@ -247,22 +247,22 @@ export default async function ServicesCategoryPage({ params }: ServicesCategoryP
                     Узнать стоимость →
                   </Link>
                 </div>
-                <div className="flex items-center gap-4">
-                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-2xl bg-white/10">
-                    <ServiceIcon
-                      name={service.frontmatter.icon}
-                      variant={isLegal ? "legal" : "tech"}
-                      className="h-6 w-6 text-white"
-                    />
-                  </div>
-                  <div className="space-y-2">
+                <div className="space-y-3">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-2xl bg-white/10">
+                      <ServiceIcon
+                        name={service.frontmatter.icon}
+                        variant={isLegal ? "legal" : "tech"}
+                        className="h-6 w-6 text-white"
+                      />
+                    </div>
                     <Heading as="h3" size="lg" weight="semibold">
                       {service.frontmatter.title}
                     </Heading>
-                    <Text size="sm" tone="secondary">
-                      {service.frontmatter.description}
-                    </Text>
                   </div>
+                  <Text size="sm" tone="secondary">
+                    {service.frontmatter.description}
+                  </Text>
                 </div>
                 <div className="space-y-3">
                   <div className="space-y-1">
