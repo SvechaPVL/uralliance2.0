@@ -1,7 +1,7 @@
 ---
 title: "Договоры"
 description: "Составление, проверка и сопровождение договоров для бизнеса"
-price: "от 8 000 ₽"
+price: "от 5 000 ₽"
 icon: "FileText"
 category: "legal"
 order: 8
