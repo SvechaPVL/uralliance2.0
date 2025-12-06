@@ -1,12 +1,8 @@
 import Script from "next/script";
 import type { Metadata } from "next";
-import priceItemsData from "@/../content/prices.json";
-import type { PriceItem } from "@/types/content";
+import { getServicesForPricePage } from "@/lib/content";
 import { generateOfferCatalogSchema } from "@/lib/seo";
 import PriceExperience from "./PriceExperience";
-
-const priceItems = priceItemsData as PriceItem[];
-const offerCatalogSchema = generateOfferCatalogSchema(priceItems);
 
 export const metadata: Metadata = {
   title: "Прайс-лист Legal + Tech | Uralliance",
@@ -20,17 +16,22 @@ export const metadata: Metadata = {
   ],
 };
 
-export default function PricePage() {
+export default async function PricePage() {
+  // Single source of truth: read from markdown files
+  const priceItems = await getServicesForPricePage();
+  const offerCatalogSchema = generateOfferCatalogSchema(priceItems as any);
+
   return (
     <>
       <Script
         id="ld-json-offer-catalog"
         type="application/ld+json"
         strategy="afterInteractive"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(offerCatalogSchema) }}
-      />
+      >
+        {JSON.stringify(offerCatalogSchema)}
+      </Script>
 
-      <PriceExperience prices={priceItems} />
+      <PriceExperience prices={priceItems as any} />
     </>
   );
 }

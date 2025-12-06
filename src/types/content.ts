@@ -52,9 +52,29 @@ export interface ServiceFrontmatter {
   icon: string;
 
   /**
-   * Service price
+   * Service price (display string)
    */
   price: string;
+
+  /**
+   * Numeric price for sorting/filtering
+   */
+  priceNum?: number;
+
+  /**
+   * Whether price is "from" (от)
+   */
+  priceFrom?: boolean;
+
+  /**
+   * Custom price label (e.g., "По запросу")
+   */
+  priceLabel?: string;
+
+  /**
+   * Unit of measurement
+   */
+  unit?: string;
 
   /**
    * Display order
@@ -73,6 +93,11 @@ export interface ServiceFrontmatter {
    * Featured service flag
    */
   featured?: boolean;
+
+  /**
+   * Feature bullets for price cards
+   */
+  features?: string[];
 }
 
 /**

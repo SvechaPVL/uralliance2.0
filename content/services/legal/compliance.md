@@ -2,9 +2,18 @@
 title: "Безопасность"
 description: "Защита данных — помогаем бизнесу соблюдать законы и защищать информацию"
 price: "от 40 000 ₽"
+priceNum: 40000
+priceFrom: true
+unit: "проект"
 icon: "Shield"
 category: "legal"
 order: 10
+featured: false
+features:
+  - "Разработка политик и регламентов"
+  - "Защита персональных данных (152-ФЗ)"
+  - "Обучение персонала"
+  - "Аудит информационной безопасности"
 seo:
   keywords: "комплаенс владивосток, защита персональных данных, 152-ФЗ, gdpr"
   ogImage: "/images/services/compliance-og.jpg"

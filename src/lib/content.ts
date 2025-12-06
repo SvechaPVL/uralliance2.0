@@ -174,3 +174,28 @@ export async function getAllServices(): Promise<Service[]> {
 
   return [...legal, ...tech];
 }
+
+/**
+ * Transform services into PriceItem format for price page
+ * This is the SINGLE SOURCE OF TRUTH for pricing data
+ */
+export async function getServicesForPricePage() {
+  const services = await getAllServices();
+
+  return services.map((service) => ({
+    id: `${service.frontmatter.category}-${service.slug}`,
+    practice: service.frontmatter.category,
+    category: service.frontmatter.title,
+    title: service.frontmatter.title,
+    description: service.frontmatter.description,
+    price: service.frontmatter.priceNum ?? 0,
+    priceFrom: service.frontmatter.priceFrom ?? true,
+    priceLabel: service.frontmatter.priceLabel,
+    unit: service.frontmatter.unit ?? "проект",
+    featured: service.frontmatter.featured ?? false,
+    features: service.frontmatter.features ?? [],
+    icon: service.frontmatter.icon,
+    slug: service.slug,
+    order: service.frontmatter.order,
+  }));
+}

@@ -300,7 +300,7 @@ export function PriceExperience({ prices }: PriceExperienceProps) {
                   <div className="flex items-start gap-2 sm:gap-3">
                     <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-white/10 sm:h-10 sm:w-10 sm:rounded-2xl">
                       <ServiceIcon
-                        name={getIconForService(price.id)}
+                        name={(price as any).icon || getIconForService(price.id)}
                         variant={price.practice}
                         className="h-5 w-5 text-white sm:h-6 sm:w-6"
                       />
