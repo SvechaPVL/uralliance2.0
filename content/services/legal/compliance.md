@@ -4,7 +4,7 @@ description: "Защита данных — помогаем бизнесу со
 price: "от 40 000 ₽"
 icon: "Shield"
 category: "legal"
-order: 4
+order: 10
 seo:
   keywords: "комплаенс владивосток, защита персональных данных, 152-ФЗ, gdpr"
   ogImage: "/images/services/compliance-og.jpg"

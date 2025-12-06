@@ -4,7 +4,7 @@ description: "Юридическое сопровождение сделок с 
 price: "от 25 000 ₽"
 icon: "Home"
 category: "legal"
-order: 3
+order: 9
 seo:
   keywords: "юрист по недвижимости владивосток, проверка квартиры перед покупкой, сопровождение сделки"
   ogImage: "/images/services/real-estate-og.jpg"

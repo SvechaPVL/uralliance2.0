@@ -4,7 +4,7 @@ description: "Полное сопровождение индивидуальны
 price: "от 5 000 ₽"
 icon: "User"
 category: "legal"
-order: 5
+order: 11
 seo:
   keywords: "регистрация ип владивосток, открыть ип, юрист для ип, закрыть ип"
   ogImage: "/images/services/ip-og.jpg"
