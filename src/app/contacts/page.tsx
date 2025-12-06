@@ -89,7 +89,14 @@ export default function ContactsPage() {
 
       <div className="bg-[var(--color-background)] text-[var(--color-text-primary)]">
         {/* Hero */}
-        <Section spacing="lg" isolate overflow="hidden">
+        <Section
+          variant="page-hero"
+          spacing="none"
+          isolate
+          overflow="hidden"
+          disableFirstSpacing
+          className="pt-[calc(6rem+var(--promo-banner-height))] pb-16 sm:pt-[calc(7rem+var(--promo-banner-height))] sm:pb-20 lg:pt-[calc(8rem+var(--promo-banner-height))] lg:pb-24"
+        >
           <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(6,182,212,0.2),_transparent_55%)]" />
           <Container className="space-y-10">
             <div className="space-y-6 text-center">

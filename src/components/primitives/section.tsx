@@ -1,7 +1,7 @@
 import { HTMLAttributes, forwardRef, ReactNode, createElement } from "react";
 import { cn } from "@/lib/utils";
 
-export type SectionVariant = "hero" | "default" | "compact" | "feature";
+export type SectionVariant = "hero" | "default" | "compact" | "feature" | "page-hero";
 
 export type SectionSpacing = "none" | "sm" | "md" | "lg" | "xl";
 
@@ -91,6 +91,9 @@ const sectionVariants: Record<SectionVariant, string> = {
   default: "pt-16 sm:pt-20 lg:pt-24 xl:pt-28",
   compact: "pt-12 sm:pt-16 lg:pt-20",
   feature: "pt-16 sm:pt-20 lg:pt-24 xl:pt-28",
+  // Page hero: no built-in pt-* padding, controlled entirely by className
+  // Use this for hero sections that need custom padding (e.g., with promo banner)
+  "page-hero": "",
 };
 
 const sectionSpacing: Record<SectionSpacing, string> = {

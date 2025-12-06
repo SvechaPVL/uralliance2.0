@@ -131,7 +131,13 @@ export default function EcpPage() {
       />
 
       {/* Hero Section */}
-      <Section spacing="lg" background="secondary" className="pt-24 sm:pt-28 lg:pt-32">
+      <Section
+        variant="page-hero"
+        spacing="none"
+        background="secondary"
+        disableFirstSpacing
+        className="pt-[calc(6rem+var(--promo-banner-height))] pb-16 sm:pt-[calc(7rem+var(--promo-banner-height))] sm:pb-20 lg:pt-[calc(8rem+var(--promo-banner-height))] lg:pb-24"
+      >
         <Container className="max-w-6xl">
           <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
             <div className="space-y-6">

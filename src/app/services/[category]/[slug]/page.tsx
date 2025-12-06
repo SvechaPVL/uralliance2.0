@@ -16,7 +16,22 @@ import { remark } from "remark";
 import remarkRehype from "remark-rehype";
 import rehypeStringify from "rehype-stringify";
 import { ServiceJsonLd, BreadcrumbJsonLd } from "@/components/seo/JsonLd";
-import { ArrowRight, ChevronRight, Sparkles } from "lucide-react";
+import {
+  ArrowRight,
+  ChevronRight,
+  Sparkles,
+  ShieldCheck,
+  FileKey,
+  Cpu,
+  CheckCircle2,
+  Zap,
+  Award,
+  ListChecks,
+  Target,
+  HelpCircle,
+  Rocket,
+  type LucideIcon,
+} from "lucide-react";
 
 /**
  * Service Detail Page
@@ -35,6 +50,142 @@ interface ServiceDetailPageProps {
 interface ContentSection {
   title: string;
   markdown: string;
+  icon?: LucideIcon;
+  contentType?: "prose" | "price-list" | "feature-list" | "process";
+  items?: ParsedItem[];
+}
+
+interface ParsedItem {
+  name: string;
+  price?: string;
+  description?: string;
+  isSubheading?: boolean;
+}
+
+// Map section title keywords to icons
+const SECTION_ICONS: Record<string, LucideIcon> = {
+  рутокен: ShieldCheck,
+  эцп: FileKey,
+  криптопро: Cpu,
+  лицензи: Cpu,
+  подпис: FileKey,
+  преимущ: Award,
+  почему: HelpCircle,
+  "что входит": ListChecks,
+  услуг: ListChecks,
+  "для чего": Target,
+  "как получить": Rocket,
+  "как мы": Rocket,
+  процесс: Zap,
+  этап: Zap,
+  гарант: ShieldCheck,
+  защит: ShieldCheck,
+};
+
+function getSectionIcon(title: string): LucideIcon {
+  const lowerTitle = title.toLowerCase();
+  for (const [keyword, icon] of Object.entries(SECTION_ICONS)) {
+    if (lowerTitle.includes(keyword)) {
+      return icon;
+    }
+  }
+  return CheckCircle2;
+}
+
+// Detect if content contains price items (pattern: "— X ₽" or "— от X ₽")
+function isPriceList(markdown: string): boolean {
+  const pricePattern = /—\s*(?:от\s*)?\d[\d\s]*₽/;
+  return pricePattern.test(markdown);
+}
+
+// Parse price items from markdown
+function parsePriceItems(markdown: string): ParsedItem[] {
+  const lines = markdown.split("\n");
+  const items: ParsedItem[] = [];
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+
+    // Detect subheadings (### Title)
+    if (trimmed.startsWith("### ")) {
+      items.push({
+        name: trimmed.replace(/^###\s+/, ""),
+        isSubheading: true,
+      });
+      continue;
+    }
+
+    // Detect list items with prices
+    // Pattern: - **Name** — Price (description)
+    const priceMatch = trimmed.match(
+      /^-\s+\*\*(.+?)\*\*\s*—\s*((?:от\s*)?\d[\d\s]*₽)\s*(?:\((.+?)\))?/
+    );
+    if (priceMatch) {
+      items.push({
+        name: priceMatch[1].trim(),
+        price: priceMatch[2].trim(),
+        description: priceMatch[3]?.trim(),
+      });
+      continue;
+    }
+
+    // Pattern: - **Name** — Price
+    const simplePriceMatch = trimmed.match(/^-\s+\*\*(.+?)\*\*\s*—\s*((?:от\s*)?\d[\d\s]*₽)/);
+    if (simplePriceMatch) {
+      items.push({
+        name: simplePriceMatch[1].trim(),
+        price: simplePriceMatch[2].trim(),
+      });
+      continue;
+    }
+
+    // Pattern: - Name — Price (without bold)
+    const plainPriceMatch = trimmed.match(/^-\s+(.+?)\s*—\s*((?:от\s*)?\d[\d\s]*₽)/);
+    if (plainPriceMatch) {
+      items.push({
+        name: plainPriceMatch[1].trim(),
+        price: plainPriceMatch[2].trim(),
+      });
+    }
+  }
+
+  return items;
+}
+
+// Strip markdown bold syntax from text
+function stripMarkdownBold(text: string): string {
+  return text.replace(/\*\*(.+?)\*\*/g, "$1");
+}
+
+// Parse feature list items
+function parseFeatureItems(markdown: string): ParsedItem[] {
+  const lines = markdown.split("\n");
+  const items: ParsedItem[] = [];
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+
+    // Detect list items with bold title and description
+    // Pattern: - **Title** — Description
+    const featureMatch = trimmed.match(/^-\s+\*\*(.+?)\*\*\s*—\s*(.+)/);
+    if (featureMatch) {
+      items.push({
+        name: featureMatch[1].trim(),
+        description: stripMarkdownBold(featureMatch[2].trim()),
+      });
+      continue;
+    }
+
+    // Simple list item (strip any remaining bold markers)
+    const simpleMatch = trimmed.match(/^-\s+(.+)/);
+    if (simpleMatch) {
+      items.push({
+        name: stripMarkdownBold(simpleMatch[1].trim()),
+      });
+    }
+  }
+
+  return items;
 }
 
 async function renderMarkdown(markdown: string) {
@@ -51,9 +202,20 @@ function extractSections(markdown: string): ContentSection[] {
   for (const line of lines) {
     if (line.startsWith("## ")) {
       if (currentTitle) {
+        const content = buffer.join("\n").trim();
+        const hasPrices = isPriceList(content);
+        const hasFeatures = !hasPrices && content.includes("- **") && content.includes("—");
+
         sections.push({
           title: currentTitle,
-          markdown: buffer.join("\n").trim(),
+          markdown: content,
+          icon: getSectionIcon(currentTitle),
+          contentType: hasPrices ? "price-list" : hasFeatures ? "feature-list" : "prose",
+          items: hasPrices
+            ? parsePriceItems(content)
+            : hasFeatures
+              ? parseFeatureItems(content)
+              : undefined,
         });
       }
       currentTitle = line.replace(/^##\s+/, "").trim();
@@ -64,9 +226,20 @@ function extractSections(markdown: string): ContentSection[] {
   }
 
   if (currentTitle && buffer.length) {
+    const content = buffer.join("\n").trim();
+    const hasPrices = isPriceList(content);
+    const hasFeatures = !hasPrices && content.includes("- **") && content.includes("—");
+
     sections.push({
       title: currentTitle,
-      markdown: buffer.join("\n").trim(),
+      markdown: content,
+      icon: getSectionIcon(currentTitle),
+      contentType: hasPrices ? "price-list" : hasFeatures ? "feature-list" : "prose",
+      items: hasPrices
+        ? parsePriceItems(content)
+        : hasFeatures
+          ? parseFeatureItems(content)
+          : undefined,
     });
   }
 
@@ -243,9 +416,11 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
 
       {/* Hero - 2025 Bento Style */}
       <Section
-        spacing="lg"
+        variant="page-hero"
+        spacing="none"
         background="secondary"
-        className="relative overflow-hidden pt-20 sm:pt-24 lg:pt-28"
+        disableFirstSpacing
+        className="relative overflow-hidden pt-[calc(6rem+var(--promo-banner-height))] pb-16 sm:pt-[calc(7rem+var(--promo-banner-height))] sm:pb-20 lg:pt-[calc(8rem+var(--promo-banner-height))] lg:pb-24"
       >
         {/* Background gradient orbs */}
         <div
@@ -453,37 +628,144 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
             </Text>
           </div>
           {hasStructuredSections ? (
-            <div className="grid gap-5 sm:gap-6 md:grid-cols-2">
-              {structuredSections.map((section, index) => (
-                <Card
-                  key={section.title}
-                  variant={isLegal ? "legal" : "tech"}
-                  hoverable
-                  className="p-5 sm:p-6"
-                >
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <span
+            <div className="space-y-8">
+              {structuredSections.map((section) => {
+                const SectionIcon = section.icon || CheckCircle2;
+                const isPriceSection = section.contentType === "price-list";
+                const isFeatureSection = section.contentType === "feature-list";
+
+                return (
+                  <Card
+                    key={section.title}
+                    variant={isLegal ? "legal" : "tech"}
+                    className="overflow-hidden"
+                  >
+                    {/* Section Header */}
+                    <div
+                      className={cn(
+                        "flex items-center gap-4 border-b p-5 sm:p-6",
+                        isLegal
+                          ? "border-[var(--color-legal-border)]/30 bg-[var(--color-legal-surface)]/30"
+                          : "border-[var(--color-tech-border)]/30 bg-[var(--color-tech-surface)]/30"
+                      )}
+                    >
+                      <div
                         className={cn(
-                          "flex h-8 w-8 items-center justify-center rounded-lg text-sm font-bold",
+                          "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl",
                           isLegal
-                            ? "bg-[var(--color-legal-surface)] text-[var(--color-legal-primary)]"
-                            : "bg-[var(--color-tech-surface)] text-[var(--color-tech-primary)]"
+                            ? "bg-[var(--color-legal-primary)]/10 text-[var(--color-legal-primary)]"
+                            : "bg-[var(--color-tech-primary)]/10 text-[var(--color-tech-primary)]"
                         )}
                       >
-                        {String(index + 1).padStart(2, "0")}
-                      </span>
+                        <SectionIcon className="h-5 w-5" />
+                      </div>
                       <Heading as="h3" size="lg" weight="semibold">
                         {section.title}
                       </Heading>
                     </div>
-                    <div
-                      className="prose prose-neutral dark:prose-invert prose-sm max-w-none"
-                      dangerouslySetInnerHTML={{ __html: section.html }}
-                    />
-                  </div>
-                </Card>
-              ))}
+
+                    {/* Section Content */}
+                    <div className="p-5 sm:p-6">
+                      {/* Price List Rendering */}
+                      {isPriceSection && section.items && section.items.length > 0 ? (
+                        <div className="space-y-4">
+                          {/* Intro text if any */}
+                          {section.markdown.split("\n")[0] &&
+                            !section.markdown.split("\n")[0].startsWith("-") &&
+                            !section.markdown.split("\n")[0].startsWith("#") && (
+                              <Text size="sm" tone="secondary" className="mb-4">
+                                {section.markdown.split("\n")[0]}
+                              </Text>
+                            )}
+
+                          {/* Price items */}
+                          <div className="grid gap-3 sm:grid-cols-2">
+                            {section.items.map((item, idx) =>
+                              item.isSubheading ? (
+                                <div
+                                  key={`${item.name}-${idx}`}
+                                  className="col-span-full mt-2 first:mt-0"
+                                >
+                                  <Text size="sm" weight="semibold" tone="secondary">
+                                    {item.name}
+                                  </Text>
+                                </div>
+                              ) : (
+                                <div
+                                  key={`${item.name}-${idx}`}
+                                  className={cn(
+                                    "flex items-center justify-between gap-3 rounded-xl border p-4 transition-all",
+                                    isLegal
+                                      ? "border-[var(--color-legal-border)]/40 bg-[var(--color-legal-surface)]/20 hover:border-[var(--color-legal-primary)]/40"
+                                      : "border-[var(--color-tech-border)]/40 bg-[var(--color-tech-surface)]/20 hover:border-[var(--color-tech-primary)]/40"
+                                  )}
+                                >
+                                  <div className="min-w-0 flex-1">
+                                    <Text size="sm" weight="medium">
+                                      {item.name}
+                                    </Text>
+                                    {item.description && (
+                                      <Text size="xs" tone="secondary" className="mt-0.5">
+                                        {item.description}
+                                      </Text>
+                                    )}
+                                  </div>
+                                  {item.price && (
+                                    <div
+                                      className={cn(
+                                        "shrink-0 rounded-lg px-3 py-1.5 text-sm font-bold whitespace-nowrap",
+                                        isLegal
+                                          ? "bg-[var(--color-legal-primary)]/10 text-[var(--color-legal-primary)]"
+                                          : "bg-[var(--color-tech-primary)]/10 text-[var(--color-tech-primary)]"
+                                      )}
+                                    >
+                                      {item.price}
+                                    </div>
+                                  )}
+                                </div>
+                              )
+                            )}
+                          </div>
+                        </div>
+                      ) : isFeatureSection && section.items && section.items.length > 0 ? (
+                        /* Feature List Rendering */
+                        <div className="grid gap-3 sm:grid-cols-2">
+                          {section.items.map((item, idx) => (
+                            <div key={`${item.name}-${idx}`} className="flex items-start gap-3">
+                              <div
+                                className={cn(
+                                  "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full",
+                                  isLegal
+                                    ? "bg-[var(--color-legal-primary)]/10 text-[var(--color-legal-primary)]"
+                                    : "bg-[var(--color-tech-primary)]/10 text-[var(--color-tech-primary)]"
+                                )}
+                              >
+                                <CheckCircle2 className="h-3 w-3" />
+                              </div>
+                              <div>
+                                <Text size="sm" weight="medium">
+                                  {item.name}
+                                </Text>
+                                {item.description && (
+                                  <Text size="xs" tone="secondary" className="mt-0.5">
+                                    {item.description}
+                                  </Text>
+                                )}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        /* Default Prose Rendering */
+                        <div
+                          className="prose prose-neutral dark:prose-invert prose-sm max-w-none"
+                          dangerouslySetInnerHTML={{ __html: section.html }}
+                        />
+                      )}
+                    </div>
+                  </Card>
+                );
+              })}
             </div>
           ) : (
             <Card variant={isLegal ? "legal" : "tech"} className="p-6 sm:p-8">

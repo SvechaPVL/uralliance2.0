@@ -14,6 +14,7 @@
         "label": "Юридические услуги",
         "href": "/services/legal",
         "category": "legal",
+        "icon": "Scale",
         "hasDropdown": true,
         "dropdownItems": [
           {
@@ -46,6 +47,7 @@
         "label": "IT-решения",
         "href": "/services/tech",
         "category": "tech",
+        "icon": "Code",
         "hasDropdown": true,
         "dropdownItems": [
           {

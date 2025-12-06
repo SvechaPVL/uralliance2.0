@@ -13,7 +13,13 @@ import {
   Gavel,
   BarChart,
   Headphones,
-  LucideIcon,
+  Building2,
+  Home,
+  KeyRound,
+  Workflow,
+  Sparkles,
+  FileKey,
+  type LucideIcon,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -35,6 +41,12 @@ const iconMap: Record<string, LucideIcon> = {
   Gavel,
   BarChart,
   Headphones,
+  Building2,
+  Home,
+  KeyRound,
+  Workflow,
+  Sparkles,
+  FileKey,
 };
 
 interface ServiceIconProps {

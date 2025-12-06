@@ -24,6 +24,7 @@ interface DropdownItem {
 interface NavItem {
   label: string;
   href: string;
+  icon?: string;
   category?: "legal" | "tech" | "general";
   hasDropdown?: boolean;
   dropdownItems?: DropdownItem[];
@@ -146,6 +147,7 @@ export function Header() {
                     key={item.href}
                     label={item.label}
                     href={item.href}
+                    icon={item.icon}
                     items={item.dropdownItems}
                     category={item.category as "legal" | "tech"}
                     layoutId="nav-hover"

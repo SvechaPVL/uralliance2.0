@@ -127,7 +127,14 @@ export default async function ServicesCategoryPage({ params }: ServicesCategoryP
       />
 
       {/* Hero */}
-      <Section spacing="md" isolate overflow="hidden" className="pt-20 sm:pt-24 lg:pt-28">
+      <Section
+        variant="page-hero"
+        spacing="none"
+        isolate
+        overflow="hidden"
+        disableFirstSpacing
+        className="pt-[calc(6rem+var(--promo-banner-height))] pb-12 sm:pt-[calc(7rem+var(--promo-banner-height))] sm:pb-16 lg:pt-[calc(8rem+var(--promo-banner-height))] lg:pb-20"
+      >
         <Container className="space-y-12">
           <div className="grid gap-10 lg:grid-cols-[1.15fr,0.85fr]">
             <div className="space-y-6">

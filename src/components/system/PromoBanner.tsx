@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { X } from "lucide-react";
 
@@ -22,6 +22,9 @@ interface PromoBannerProps {
   hideForDays?: number;
 }
 
+// CSS custom property name for banner height
+const BANNER_HEIGHT_VAR = "--promo-banner-height";
+
 export function PromoBanner({
   id,
   message,
@@ -31,6 +34,7 @@ export function PromoBanner({
   hideForDays = 7,
 }: PromoBannerProps) {
   const [isVisible, setIsVisible] = useState(false);
+  const bannerRef = useRef<HTMLDivElement>(null);
   const storageKey = `promo-banner-${id}`;
 
   useEffect(() => {
@@ -49,6 +53,20 @@ export function PromoBanner({
       return () => clearTimeout(timer);
     }
   }, [storageKey, hideForDays]);
+
+  // Update CSS variable when visibility changes
+  useEffect(() => {
+    if (isVisible && bannerRef.current) {
+      const height = bannerRef.current.offsetHeight;
+      document.documentElement.style.setProperty(BANNER_HEIGHT_VAR, `${height}px`);
+    } else {
+      document.documentElement.style.setProperty(BANNER_HEIGHT_VAR, "0px");
+    }
+
+    return () => {
+      document.documentElement.style.setProperty(BANNER_HEIGHT_VAR, "0px");
+    };
+  }, [isVisible]);
 
   const dismiss = () => {
     localStorage.setItem(storageKey, JSON.stringify({ dismissedAt: Date.now() }));
@@ -72,6 +90,7 @@ export function PromoBanner({
 
   return (
     <div
+      ref={bannerRef}
       className="animate-in slide-in-from-top fixed top-20 right-0 left-0 z-[45] duration-500"
       role="banner"
       aria-label="Промо-акция"

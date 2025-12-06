@@ -138,7 +138,12 @@ export function PriceExperience({ prices }: PriceExperienceProps) {
   return (
     <>
       {/* Hero */}
-      <Section spacing="lg" className="pt-20 sm:pt-24 lg:pt-28">
+      <Section
+        variant="page-hero"
+        spacing="none"
+        disableFirstSpacing
+        className="pt-[calc(6rem+var(--promo-banner-height))] pb-16 sm:pt-[calc(7rem+var(--promo-banner-height))] sm:pb-20 lg:pt-[calc(8rem+var(--promo-banner-height))] lg:pb-24"
+      >
         <Container className="space-y-10">
           <div className="space-y-8">
             <div className="flex flex-wrap gap-3">

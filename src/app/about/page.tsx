@@ -40,7 +40,14 @@ export default function AboutPage() {
 
       <div className="bg-[var(--color-background)] text-[var(--color-text-primary)]">
         {/* Hero */}
-        <Section spacing="lg" isolate overflow="hidden">
+        <Section
+          variant="page-hero"
+          spacing="none"
+          isolate
+          overflow="hidden"
+          disableFirstSpacing
+          className="pt-[calc(6rem+var(--promo-banner-height))] pb-16 sm:pt-[calc(7rem+var(--promo-banner-height))] sm:pb-20 lg:pt-[calc(8rem+var(--promo-banner-height))] lg:pb-24"
+        >
           <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top,_rgba(212,175,55,0.25),_transparent_60%)] dark:bg-[radial-gradient(circle_at_top,_rgba(6,182,212,0.35),_transparent_65%)]" />
           <Container className="space-y-12">
             <div className="grid gap-12 lg:grid-cols-[1.1fr,0.9fr]">

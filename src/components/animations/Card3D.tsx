@@ -62,7 +62,10 @@ export function Card3D({
   const shouldTilt = !prefersReducedMotion;
 
   return (
-    <div className="h-full w-full" style={{ perspective: `${perspective}px` }}>
+    <div
+      className="h-full w-full overflow-hidden rounded-3xl"
+      style={{ perspective: `${perspective}px` }}
+    >
       <motion.div
         onPointerMove={handlePointerMove}
         onPointerLeave={resetTilt}

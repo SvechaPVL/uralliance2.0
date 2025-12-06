@@ -36,6 +36,11 @@
   --color-border: var(--color-border);
 }
 
+:root {
+  /* Promo banner height - dynamically set by PromoBanner component */
+  --promo-banner-height: 0px;
+}
+
 html {
   overflow-x: hidden;
   overflow-y: auto;

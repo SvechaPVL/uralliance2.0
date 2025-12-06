@@ -17,6 +17,7 @@ interface DropdownItem {
 interface NavDropdownProps {
   label: string;
   href: string;
+  icon?: string;
   items: DropdownItem[];
   category: "legal" | "tech";
   isActive?: boolean;
@@ -27,6 +28,7 @@ interface NavDropdownProps {
 export function NavDropdown({
   label,
   href,
+  icon,
   items,
   category,
   isActive,
@@ -53,7 +55,7 @@ export function NavDropdown({
       <Link
         href={href}
         className={cn(
-          "relative flex cursor-pointer items-center justify-center gap-1 px-2 py-1.5 text-sm font-medium",
+          "relative flex cursor-pointer items-center justify-center gap-1.5 px-2 py-1.5 text-sm font-medium",
           "transition-colors duration-[var(--transition-base)]",
           "rounded-sm focus-visible:ring-2 focus-visible:outline-none",
           isLegal
@@ -61,6 +63,16 @@ export function NavDropdown({
             : "text-[var(--color-text-primary)] hover:text-[var(--color-tech-primary)] focus-visible:ring-[var(--color-tech-primary)]"
         )}
       >
+        {icon && (
+          <ServiceIcon
+            name={icon}
+            variant={category}
+            className={cn(
+              "h-4 w-4 transition-colors",
+              isLegal ? "text-[var(--color-legal-primary)]" : "text-[var(--color-tech-primary)]"
+            )}
+          />
+        )}
         <span>{label}</span>
         <ChevronDown
           className={cn("h-4 w-4 transition-transform duration-300", isOpen && "rotate-180")}

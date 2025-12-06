@@ -118,9 +118,11 @@ export function HeroSection() {
 
   return (
     <Section
-      variant="hero"
+      variant="page-hero"
+      spacing="none"
       overflow="hidden"
-      className="select-none"
+      disableFirstSpacing
+      className="min-h-screen pt-[calc(6rem+var(--promo-banner-height))] pb-12 select-none sm:pt-[calc(7rem+var(--promo-banner-height))] sm:pb-16 lg:pt-[calc(8rem+var(--promo-banner-height))] lg:pb-20"
       aria-label="Hero section"
       ref={heroSectionRef}
     >
