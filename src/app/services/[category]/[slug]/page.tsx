@@ -80,6 +80,16 @@ const SECTION_ICONS: Record<string, LucideIcon> = {
   этап: Zap,
   гарант: ShieldCheck,
   защит: ShieldCheck,
+  договор: FileKey,
+  документ: FileKey,
+  регистрац: Rocket,
+  ликвидац: Target,
+  банкрот: ShieldCheck,
+  консульт: HelpCircle,
+  сопровожд: ListChecks,
+  аудит: Target,
+  налог: Cpu,
+  бухгалтер: Cpu,
 };
 
 function getSectionIcon(title: string): LucideIcon {
@@ -460,16 +470,6 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
               variant={isLegal ? "legal" : "tech"}
               className="relative overflow-hidden p-5 sm:p-6 md:col-span-8 lg:p-8"
             >
-              {/* Gradient line at top */}
-              <div
-                className={cn(
-                  "absolute top-0 right-0 left-0 h-1",
-                  isLegal
-                    ? "bg-gradient-to-r from-transparent via-[var(--color-legal-primary)] to-transparent"
-                    : "bg-gradient-to-r from-transparent via-[var(--color-tech-primary)] to-transparent"
-                )}
-              />
-
               <div className="space-y-5 sm:space-y-6">
                 {/* Badge + Practice label */}
                 <div className="flex flex-wrap items-center gap-3">

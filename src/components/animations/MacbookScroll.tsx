@@ -72,7 +72,7 @@ export function MacbookScrollDemo() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -8 }}
                   transition={{ duration: 0.45, ease: "easeOut" }}
-                  className="absolute inset-0 h-full w-full object-contain object-top"
+                  className="absolute inset-0 h-full w-full object-cover object-top"
                 />
               </AnimatePresence>
               <motion.div

@@ -295,7 +295,7 @@ export function PriceExperience({ prices }: PriceExperienceProps) {
                       />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <div className="flex flex-wrap items-start gap-2">
+                      <div className="flex items-center justify-between gap-2">
                         <Heading as="h3" size="md" weight="semibold" className="sm:text-2xl">
                           {price.title}
                         </Heading>
