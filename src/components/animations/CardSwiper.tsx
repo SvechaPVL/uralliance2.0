@@ -19,36 +19,25 @@ export const CardSwiper: React.FC<CardSwiperProps> = ({
   className = "",
 }) => {
   const cardStackRef = useRef<HTMLDivElement>(null);
+  const activeCardRef = useRef<HTMLElement | null>(null);
+
+  // Состояния свайпа
   const isSwiping = useRef(false);
+  const isAnimating = useRef(false); // Блокировка во время анимации
   const startX = useRef(0);
   const currentX = useRef(0);
-  const animationFrameId = useRef<number | null>(null);
 
   const [cardOrder, setCardOrder] = useState<number[]>(() =>
     Array.from({ length: items.length }, (_, i) => i)
   );
 
-  const getDurationFromCSS = useCallback(
-    (variableName: string, element?: HTMLElement | null): number => {
-      const targetElement = element || document.documentElement;
-      const value = getComputedStyle(targetElement)?.getPropertyValue(variableName)?.trim();
-      if (!value) return 300;
-      if (value.endsWith("ms")) return parseFloat(value);
-      if (value.endsWith("s")) return parseFloat(value) * 1000;
-      return parseFloat(value) || 300;
-    },
-    []
-  );
+  const SWIPE_THRESHOLD = 60;
+  const ANIMATION_DURATION = 200; // ms
 
   const getCards = useCallback((): HTMLElement[] => {
     if (!cardStackRef.current) return [];
     return [...cardStackRef.current.querySelectorAll(".swiper-card")] as HTMLElement[];
   }, []);
-
-  const getActiveCard = useCallback((): HTMLElement | null => {
-    const cards = getCards();
-    return cards[0] || null;
-  }, [getCards]);
 
   const updatePositions = useCallback(() => {
     const cards = getCards();
@@ -56,122 +45,153 @@ export const CardSwiper: React.FC<CardSwiperProps> = ({
       card.style.setProperty("--i", (i + 1).toString());
       card.style.setProperty("--swipe-x", "0px");
       card.style.setProperty("--swipe-rotate", "0deg");
-      card.style.opacity = "1";
     });
   }, [getCards]);
 
-  const applySwipeStyles = useCallback(
-    (deltaX: number) => {
-      const card = getActiveCard();
-      if (!card) return;
-      // Используем CSS переменные вместо прямого transform для совместимости с 3D позиционированием
-      card.style.setProperty("--swipe-x", `${deltaX}px`);
-      card.style.setProperty("--swipe-rotate", `${deltaX * 0.2}deg`);
-      // Убираем изменение opacity для лучшей производительности на мобилке
-      // card.style.opacity = (1 - Math.min(Math.abs(deltaX) / 100, 1) * 0.75).toString();
-    },
-    [getActiveCard]
-  );
-
   const handleStart = useCallback(
     (clientX: number) => {
-      if (isSwiping.current) return;
+      // Блокируем если анимация в процессе
+      if (isAnimating.current || isSwiping.current) return;
+
+      const cards = getCards();
+      if (cards.length === 0) return;
+
+      activeCardRef.current = cards[0];
       isSwiping.current = true;
       startX.current = clientX;
       currentX.current = clientX;
-      const card = getActiveCard();
-      if (card) card.style.transition = "none";
+
+      // Убираем transition для мгновенного отклика
+      if (activeCardRef.current) {
+        activeCardRef.current.style.transition = "none";
+      }
     },
-    [getActiveCard]
+    [getCards]
   );
 
+  const handleMove = useCallback((clientX: number) => {
+    if (!isSwiping.current || isAnimating.current || !activeCardRef.current) return;
+
+    currentX.current = clientX;
+    const deltaX = currentX.current - startX.current;
+
+    // Применяем трансформацию напрямую без RAF для лучшей отзывчивости
+    activeCardRef.current.style.setProperty("--swipe-x", `${deltaX}px`);
+    activeCardRef.current.style.setProperty("--swipe-rotate", `${deltaX * 0.15}deg`);
+  }, []);
+
   const handleEnd = useCallback(() => {
-    if (!isSwiping.current) return;
-    if (animationFrameId.current) {
-      cancelAnimationFrame(animationFrameId.current);
-      animationFrameId.current = null;
+    if (!isSwiping.current || isAnimating.current) return;
+
+    const card = activeCardRef.current;
+    if (!card) {
+      isSwiping.current = false;
+      return;
     }
 
     const deltaX = currentX.current - startX.current;
-    const threshold = 50;
-    const duration = getDurationFromCSS("--card-swap-duration", cardStackRef.current);
-    const card = getActiveCard();
+    const shouldSwipe = Math.abs(deltaX) > SWIPE_THRESHOLD;
 
-    if (card) {
-      card.style.transition = `transform ${duration}ms ease, opacity ${duration}ms ease`;
+    // Включаем transition для анимации
+    card.style.transition = `transform ${ANIMATION_DURATION}ms cubic-bezier(0.32, 0.72, 0, 1)`;
 
-      if (Math.abs(deltaX) > threshold) {
-        const direction = Math.sign(deltaX);
-        card.style.setProperty("--swipe-x", `${direction * 300}px`);
-        card.style.setProperty("--swipe-rotate", `${direction * 20}deg`);
+    if (shouldSwipe) {
+      // Блокируем новые свайпы
+      isAnimating.current = true;
+      isSwiping.current = false;
 
-        setTimeout(() => {
-          if (getActiveCard() === card) {
-            card.style.setProperty("--swipe-rotate", `${-direction * 20}deg`);
-          }
-        }, duration * 0.5);
+      const direction = Math.sign(deltaX);
 
-        setTimeout(() => {
-          setCardOrder((prev) => {
-            if (prev.length === 0) return [];
-            return [...prev.slice(1), prev[0]];
-          });
-        }, duration);
-      } else {
-        applySwipeStyles(0);
-      }
+      // Улетаем за экран
+      card.style.setProperty("--swipe-x", `${direction * 350}px`);
+      card.style.setProperty("--swipe-rotate", `${direction * 25}deg`);
+
+      // Ждём окончания анимации
+      const handleTransitionEnd = () => {
+        card.removeEventListener("transitionend", handleTransitionEnd);
+
+        // Убираем transition перед перестановкой
+        card.style.transition = "none";
+
+        // Меняем порядок карточек
+        setCardOrder((prev) => {
+          if (prev.length === 0) return [];
+          return [...prev.slice(1), prev[0]];
+        });
+
+        // Разблокируем после небольшой паузы
+        requestAnimationFrame(() => {
+          isAnimating.current = false;
+          activeCardRef.current = null;
+        });
+      };
+
+      card.addEventListener("transitionend", handleTransitionEnd, { once: true });
+
+      // Fallback если transitionend не сработает
+      setTimeout(() => {
+        if (isAnimating.current) {
+          isAnimating.current = false;
+          activeCardRef.current = null;
+        }
+      }, ANIMATION_DURATION + 50);
+    } else {
+      // Возвращаем на место
+      card.style.setProperty("--swipe-x", "0px");
+      card.style.setProperty("--swipe-rotate", "0deg");
+      isSwiping.current = false;
+      activeCardRef.current = null;
     }
 
-    isSwiping.current = false;
     startX.current = 0;
     currentX.current = 0;
-  }, [getDurationFromCSS, getActiveCard, applySwipeStyles]);
-
-  const handleMove = useCallback(
-    (clientX: number) => {
-      if (!isSwiping.current) return;
-      if (animationFrameId.current) {
-        cancelAnimationFrame(animationFrameId.current);
-      }
-      animationFrameId.current = requestAnimationFrame(() => {
-        currentX.current = clientX;
-        const deltaX = currentX.current - startX.current;
-        applySwipeStyles(deltaX);
-
-        // Увеличен порог для предотвращения случайных свайпов
-        if (Math.abs(deltaX) > 100) {
-          handleEnd();
-        }
-      });
-    },
-    [applySwipeStyles, handleEnd]
-  );
+  }, []);
 
   useEffect(() => {
     const cardStackElement = cardStackRef.current;
     if (!cardStackElement) return;
 
     const handlePointerDown = (e: PointerEvent) => {
+      e.preventDefault();
       handleStart(e.clientX);
     };
+
     const handlePointerMove = (e: PointerEvent) => {
-      handleMove(e.clientX);
+      if (isSwiping.current) {
+        e.preventDefault();
+        handleMove(e.clientX);
+      }
     };
+
     const handlePointerUp = () => {
       handleEnd();
     };
 
-    cardStackElement.addEventListener("pointerdown", handlePointerDown);
-    cardStackElement.addEventListener("pointermove", handlePointerMove);
+    const handlePointerCancel = () => {
+      // При отмене возвращаем карточку на место
+      if (isSwiping.current && activeCardRef.current) {
+        activeCardRef.current.style.transition = `transform ${ANIMATION_DURATION}ms ease-out`;
+        activeCardRef.current.style.setProperty("--swipe-x", "0px");
+        activeCardRef.current.style.setProperty("--swipe-rotate", "0deg");
+      }
+      isSwiping.current = false;
+      activeCardRef.current = null;
+      startX.current = 0;
+      currentX.current = 0;
+    };
+
+    cardStackElement.addEventListener("pointerdown", handlePointerDown, { passive: false });
+    cardStackElement.addEventListener("pointermove", handlePointerMove, { passive: false });
     cardStackElement.addEventListener("pointerup", handlePointerUp);
+    cardStackElement.addEventListener("pointercancel", handlePointerCancel);
+    cardStackElement.addEventListener("pointerleave", handlePointerUp);
 
     return () => {
       cardStackElement.removeEventListener("pointerdown", handlePointerDown);
       cardStackElement.removeEventListener("pointermove", handlePointerMove);
       cardStackElement.removeEventListener("pointerup", handlePointerUp);
-      if (animationFrameId.current) {
-        cancelAnimationFrame(animationFrameId.current);
-      }
+      cardStackElement.removeEventListener("pointercancel", handlePointerCancel);
+      cardStackElement.removeEventListener("pointerleave", handlePointerUp);
     };
   }, [handleStart, handleMove, handleEnd]);
 
@@ -183,8 +203,7 @@ export const CardSwiper: React.FC<CardSwiperProps> = ({
     <section
       className={cn(
         "relative mx-auto select-none",
-        "h-[600px]", // Фиксированная высота для карточек
-        // Уменьшаем showcase компоненты на мобилке
+        "h-[600px]",
         "[&_.showcase-container]:origin-top [&_.showcase-container]:scale-75",
         className
       )}
@@ -193,13 +212,11 @@ export const CardSwiper: React.FC<CardSwiperProps> = ({
         {
           width: "100%",
           maxWidth: cardWidth + 32,
-          touchAction: "none", // Блокируем дефолтное поведение браузера для свайпа
-          transformStyle: "preserve-3d",
+          touchAction: "none",
           "--card-perspective": "700px",
           "--card-z-offset": "12px",
           "--card-y-offset": "7px",
           "--card-max-z-index": items.length.toString(),
-          "--card-swap-duration": "250ms", // Уменьшаем длительность для более отзывчивого ощущения
         } as React.CSSProperties
       }
     >
@@ -241,11 +258,12 @@ export const CardSwiper: React.FC<CardSwiperProps> = ({
           "left-1/2 top-1/2",
           "rounded-3xl border border-[var(--color-border)]",
           "bg-[var(--color-card-bg)] p-6",
-          // Упрощённая тень для лучшей производительности
           "shadow-[0_8px_24px_-8px_rgba(0,0,0,0.4)]",
           "overflow-hidden",
-          // GPU acceleration только для активной карточки
-          displayIndex === 0 && "will-change-transform",
+          // GPU acceleration для первых 3 карточек
+          displayIndex < 3 && "will-change-transform",
+          // Pointer events только для верхней карточки
+          displayIndex !== 0 && "pointer-events-none",
           item.className
         );
 
@@ -256,15 +274,16 @@ export const CardSwiper: React.FC<CardSwiperProps> = ({
             style={
               {
                 "--i": (displayIndex + 1).toString(),
+                "--swipe-x": "0px",
+                "--swipe-rotate": "0deg",
                 zIndex: items.length - displayIndex,
                 width: cardWidth,
                 transform: `translate(-50%, -50%)
                            perspective(var(--card-perspective))
                            translateZ(calc(-1 * var(--card-z-offset) * var(--i)))
                            translateY(calc(var(--card-y-offset) * var(--i)))
-                           translateX(var(--swipe-x, 0px))
-                           rotateY(var(--swipe-rotate, 0deg))`,
-                // Оптимизация: скрываем контент невидимых карточек
+                           translateX(var(--swipe-x))
+                           rotateY(var(--swipe-rotate))`,
                 contentVisibility: displayIndex > 2 ? "auto" : "visible",
               } as React.CSSProperties
             }
