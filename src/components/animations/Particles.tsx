@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 /**
@@ -90,6 +90,21 @@ export function Particles({
   const particlesRef = useRef<Particle[]>([]);
   const animationFrameRef = useRef<number | undefined>(undefined);
   const prefersReducedMotion = useReducedMotion();
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+
+  // Detect touch devices on mount
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const media = window.matchMedia("(pointer: coarse)");
+    const update = () => setIsTouchDevice(media.matches);
+    update();
+    if (typeof media.addEventListener === "function") {
+      media.addEventListener("change", update);
+      return () => media.removeEventListener("change", update);
+    }
+    media.addListener(update);
+    return () => media.removeListener(update);
+  }, []);
 
   // Setup canvas and start animation
   useEffect(() => {
@@ -98,7 +113,8 @@ export function Particles({
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
-    const disableAnimation = prefersReducedMotion;
+    // Disable animation on touch devices (prevents jitter from mobile resize events)
+    const disableAnimation = prefersReducedMotion || isTouchDevice;
 
     // Set canvas size
     const resizeCanvas = () => {
@@ -173,7 +189,7 @@ export function Particles({
       step();
     }
 
-    // Handle window resize
+    // Handle window resize (disabled on touch devices to prevent jitter)
     const handleResize = () => {
       size = resizeCanvas();
       initParticles(size.width, size.height);
@@ -182,16 +198,21 @@ export function Particles({
       }
     };
 
-    window.addEventListener("resize", handleResize);
+    // Only listen to resize on non-touch devices
+    if (!isTouchDevice) {
+      window.addEventListener("resize", handleResize);
+    }
 
     // Cleanup
     return () => {
       if (animationFrameRef.current) {
         cancelAnimationFrame(animationFrameRef.current);
       }
-      window.removeEventListener("resize", handleResize);
+      if (!isTouchDevice) {
+        window.removeEventListener("resize", handleResize);
+      }
     };
-  }, [count, colors, sizeRange, speed, prefersReducedMotion]);
+  }, [count, colors, sizeRange, speed, prefersReducedMotion, isTouchDevice]);
 
   return (
     <canvas

@@ -30,6 +30,7 @@ import {
   Target,
   HelpCircle,
   Rocket,
+  AlertTriangle,
   type LucideIcon,
 } from "lucide-react";
 
@@ -47,12 +48,18 @@ interface ServiceDetailPageProps {
   };
 }
 
+interface AlertBlock {
+  text: string;
+  variant: "warning" | "info";
+}
+
 interface ContentSection {
   title: string;
   markdown: string;
   icon?: LucideIcon;
   contentType?: "prose" | "price-list" | "feature-list" | "process";
   items?: ParsedItem[];
+  alerts?: AlertBlock[];
 }
 
 interface ParsedItem {
@@ -198,6 +205,44 @@ function parseFeatureItems(markdown: string): ParsedItem[] {
   return items;
 }
 
+// Extract alerts from markdown (blockquotes starting with ⚠️ or ℹ️)
+function extractAlerts(markdown: string): { alerts: AlertBlock[]; cleanMarkdown: string } {
+  const alerts: AlertBlock[] = [];
+  const lines = markdown.split("\n");
+  const cleanLines: string[] = [];
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i].trim();
+
+    // Detect alert blockquotes: > ⚠️ or > ℹ️
+    if (line.startsWith("> ⚠️") || line.startsWith(">⚠️")) {
+      const text = line
+        .replace(/^>\s*⚠️\s*/, "")
+        .replace(/\*\*/g, "")
+        .trim();
+      if (text) {
+        alerts.push({ text, variant: "warning" });
+      }
+      continue;
+    }
+
+    if (line.startsWith("> ℹ️") || line.startsWith(">ℹ️")) {
+      const text = line
+        .replace(/^>\s*ℹ️\s*/, "")
+        .replace(/\*\*/g, "")
+        .trim();
+      if (text) {
+        alerts.push({ text, variant: "info" });
+      }
+      continue;
+    }
+
+    cleanLines.push(lines[i]);
+  }
+
+  return { alerts, cleanMarkdown: cleanLines.join("\n") };
+}
+
 async function renderMarkdown(markdown: string) {
   const processed = await remark().use(remarkRehype).use(rehypeStringify).process(markdown);
   return processed.toString();
@@ -212,7 +257,9 @@ function extractSections(markdown: string): ContentSection[] {
   for (const line of lines) {
     if (line.startsWith("## ")) {
       if (currentTitle) {
-        const content = buffer.join("\n").trim();
+        const rawContent = buffer.join("\n").trim();
+        const { alerts, cleanMarkdown } = extractAlerts(rawContent);
+        const content = cleanMarkdown.trim();
         const hasPrices = isPriceList(content);
         const hasFeatures = !hasPrices && content.includes("- **") && content.includes("—");
 
@@ -226,6 +273,7 @@ function extractSections(markdown: string): ContentSection[] {
             : hasFeatures
               ? parseFeatureItems(content)
               : undefined,
+          alerts: alerts.length > 0 ? alerts : undefined,
         });
       }
       currentTitle = line.replace(/^##\s+/, "").trim();
@@ -236,7 +284,9 @@ function extractSections(markdown: string): ContentSection[] {
   }
 
   if (currentTitle && buffer.length) {
-    const content = buffer.join("\n").trim();
+    const rawContent = buffer.join("\n").trim();
+    const { alerts, cleanMarkdown } = extractAlerts(rawContent);
+    const content = cleanMarkdown.trim();
     const hasPrices = isPriceList(content);
     const hasFeatures = !hasPrices && content.includes("- **") && content.includes("—");
 
@@ -250,10 +300,11 @@ function extractSections(markdown: string): ContentSection[] {
         : hasFeatures
           ? parseFeatureItems(content)
           : undefined,
+      alerts: alerts.length > 0 ? alerts : undefined,
     });
   }
 
-  return sections.filter((section) => section.markdown.length > 0);
+  return sections.filter((section) => section.markdown.length > 0 || section.alerts?.length);
 }
 
 // Generate static params for all services
@@ -666,6 +717,33 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
 
                     {/* Section Content */}
                     <div className="p-5 sm:p-6">
+                      {/* Alert Blocks */}
+                      {section.alerts && section.alerts.length > 0 && (
+                        <div className="mb-5 space-y-3">
+                          {section.alerts.map((alert, idx) => (
+                            <div
+                              key={`alert-${idx}`}
+                              className={cn(
+                                "flex items-start gap-3 rounded-xl border-l-4 p-4",
+                                alert.variant === "warning"
+                                  ? "border-l-amber-500 bg-amber-500/10 text-amber-900 dark:text-amber-200"
+                                  : "border-l-blue-500 bg-blue-500/10 text-blue-900 dark:text-blue-200"
+                              )}
+                            >
+                              <AlertTriangle
+                                className={cn(
+                                  "mt-0.5 h-5 w-5 shrink-0",
+                                  alert.variant === "warning" ? "text-amber-500" : "text-blue-500"
+                                )}
+                              />
+                              <Text size="sm" weight="medium" className="flex-1">
+                                {alert.text}
+                              </Text>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
                       {/* Price List Rendering */}
                       {isPriceSection && section.items && section.items.length > 0 ? (
                         <div className="space-y-4">

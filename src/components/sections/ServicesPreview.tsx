@@ -82,29 +82,31 @@ export function ServicesPreview() {
               >
                 {servicesConfig.legal.map((service) => (
                   <motion.li key={service.title} variants={itemVariants}>
-                    <Card
-                      variant="legal"
-                      padding="md"
-                      className="group relative mb-4 overflow-hidden border border-[var(--color-legal-border-soft)] bg-[var(--color-legal-surface)]/70 transition-transform duration-300 hover:-translate-y-1"
-                    >
-                      <div
-                        className="pointer-events-none absolute inset-[-30%] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                        style={{
-                          background:
-                            "radial-gradient(120% 140% at 10% 10%, rgba(212,175,55,0.25), transparent 60%)",
-                        }}
-                      />
-                      <div className="relative flex items-start justify-between gap-2 select-none">
-                        <div>
-                          <Heading as="h4" size="sm" weight="semibold">
-                            {service.title}
-                          </Heading>
-                          <Text size="sm" tone="secondary" className="mt-1">
-                            {service.description}
-                          </Text>
+                    <Link href={`/services/legal/${service.slug}`}>
+                      <Card
+                        variant="legal"
+                        padding="md"
+                        className="group relative mb-4 cursor-pointer overflow-hidden border border-[var(--color-legal-border-soft)] bg-[var(--color-legal-surface)]/70 transition-transform duration-300 hover:-translate-y-1"
+                      >
+                        <div
+                          className="pointer-events-none absolute inset-[-30%] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                          style={{
+                            background:
+                              "radial-gradient(120% 140% at 10% 10%, rgba(212,175,55,0.25), transparent 60%)",
+                          }}
+                        />
+                        <div className="relative flex items-start justify-between gap-2 select-none">
+                          <div>
+                            <Heading as="h4" size="sm" weight="semibold">
+                              {service.title}
+                            </Heading>
+                            <Text size="sm" tone="secondary" className="mt-1">
+                              {service.description}
+                            </Text>
+                          </div>
                         </div>
-                      </div>
-                    </Card>
+                      </Card>
+                    </Link>
                   </motion.li>
                 ))}
               </motion.ul>
@@ -143,29 +145,31 @@ export function ServicesPreview() {
               >
                 {servicesConfig.tech.map((service) => (
                   <motion.li key={service.title} variants={itemVariants}>
-                    <Card
-                      variant="tech"
-                      padding="md"
-                      className="group relative mb-4 overflow-hidden border border-[var(--color-tech-border-soft)] bg-[var(--color-tech-surface)]/70 transition-transform duration-300 hover:-translate-y-1"
-                    >
-                      <div
-                        className="pointer-events-none absolute inset-[-30%] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                        style={{
-                          background:
-                            "radial-gradient(120% 140% at 90% 10%, rgba(6,182,212,0.25), transparent 60%)",
-                        }}
-                      />
-                      <div className="relative flex items-start justify-between gap-2 select-none">
-                        <div>
-                          <Heading as="h4" size="sm" weight="semibold">
-                            {service.title}
-                          </Heading>
-                          <Text size="sm" tone="secondary" className="mt-1">
-                            {service.description}
-                          </Text>
+                    <Link href={`/services/tech/${service.slug}`}>
+                      <Card
+                        variant="tech"
+                        padding="md"
+                        className="group relative mb-4 cursor-pointer overflow-hidden border border-[var(--color-tech-border-soft)] bg-[var(--color-tech-surface)]/70 transition-transform duration-300 hover:-translate-y-1"
+                      >
+                        <div
+                          className="pointer-events-none absolute inset-[-30%] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                          style={{
+                            background:
+                              "radial-gradient(120% 140% at 90% 10%, rgba(6,182,212,0.25), transparent 60%)",
+                          }}
+                        />
+                        <div className="relative flex items-start justify-between gap-2 select-none">
+                          <div>
+                            <Heading as="h4" size="sm" weight="semibold">
+                              {service.title}
+                            </Heading>
+                            <Text size="sm" tone="secondary" className="mt-1">
+                              {service.description}
+                            </Text>
+                          </div>
                         </div>
-                      </div>
-                    </Card>
+                      </Card>
+                    </Link>
                   </motion.li>
                 ))}
               </motion.ul>
