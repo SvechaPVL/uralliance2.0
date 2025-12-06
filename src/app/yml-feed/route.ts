@@ -55,7 +55,7 @@ export async function GET() {
         "Регистрация юридических лиц, реорганизация, ликвидация компаний, корпоративные споры",
       url: `${baseUrl}/services/legal/corporate-law`,
       price: "от 15000",
-      picture: `${baseUrl}/services/legal-corporate.png`,
+      picture: `${baseUrl}/services/legal-corporate.webp`,
     },
     {
       id: "legal-2",
@@ -64,7 +64,7 @@ export async function GET() {
       description: "Представительство в арбитражных судах, взыскание задолженности, защита бизнеса",
       url: `${baseUrl}/services/legal/arbitration`,
       price: "от 25000",
-      picture: `${baseUrl}/services/legal-arbitration.png`,
+      picture: `${baseUrl}/services/legal-arbitration.webp`,
     },
     {
       id: "legal-3",
@@ -73,7 +73,7 @@ export async function GET() {
       description: "Разработка и экспертиза договоров, сопровождение сделок",
       url: `${baseUrl}/services/legal/contracts`,
       price: "от 10000",
-      picture: `${baseUrl}/services/legal-contracts.png`,
+      picture: `${baseUrl}/services/legal-contracts.webp`,
     },
     {
       id: "legal-4",
@@ -83,7 +83,7 @@ export async function GET() {
         "Получение электронной цифровой подписи (ЭЦП) для юридических лиц и ИП. Квалифицированная электронная подпись для работы с госуслугами, торговыми площадками, электронным документооборотом",
       url: `${baseUrl}/services/legal/ecp`,
       price: "от 3000",
-      picture: `${baseUrl}/services/legal-ecp.png`,
+      picture: `${baseUrl}/services/legal-ecp.webp`,
     },
     {
       id: "legal-5",
@@ -93,7 +93,7 @@ export async function GET() {
         "Публикация уведомлений о ликвидации, реорганизации юридических лиц в официальном издании Вестник государственной регистрации",
       url: `${baseUrl}/services/legal/vestnik`,
       price: "от 5000",
-      picture: `${baseUrl}/services/legal-vestnik.png`,
+      picture: `${baseUrl}/services/legal-vestnik.webp`,
     },
     {
       id: "legal-6",
@@ -103,7 +103,7 @@ export async function GET() {
         "Размещение сообщений о банкротстве в Едином федеральном реестре сведений о банкротстве (ЕФРСБ). Публикация обязательных уведомлений о процедурах банкротства",
       url: `${baseUrl}/services/legal/fedresurs`,
       price: "от 4000",
-      picture: `${baseUrl}/services/legal-fedresurs.png`,
+      picture: `${baseUrl}/services/legal-fedresurs.webp`,
     },
 
     // IT-решения
@@ -114,7 +114,7 @@ export async function GET() {
       description: "Создание корпоративных сайтов, интернет-магазинов, лендингов под ключ",
       url: `${baseUrl}/services/tech/web-development`,
       price: "от 50000",
-      picture: `${baseUrl}/services/tech-web.png`,
+      picture: `${baseUrl}/services/tech-web.webp`,
     },
     {
       id: "tech-2",
@@ -123,7 +123,7 @@ export async function GET() {
       description: "Настройка и автоматизация бизнес-процессов, интеграция с 1С, Битрикс24",
       url: `${baseUrl}/services/tech/crm-systems`,
       price: "от 80000",
-      picture: `${baseUrl}/services/tech-crm.png`,
+      picture: `${baseUrl}/services/tech-crm.webp`,
     },
     {
       id: "tech-3",
@@ -132,7 +132,7 @@ export async function GET() {
       description: "Telegram, WhatsApp, VK боты для автоматизации общения с клиентами",
       url: `${baseUrl}/services/tech/chatbots`,
       price: "от 30000",
-      picture: `${baseUrl}/services/tech-bots.png`,
+      picture: `${baseUrl}/services/tech-bots.webp`,
     },
     {
       id: "tech-4",
@@ -141,7 +141,7 @@ export async function GET() {
       description: "Разработка iOS и Android приложений для бизнеса",
       url: `${baseUrl}/services/tech/mobile-apps`,
       price: "от 150000",
-      picture: `${baseUrl}/services/tech-mobile.png`,
+      picture: `${baseUrl}/services/tech-mobile.webp`,
     },
     {
       id: "tech-5",
@@ -150,7 +150,7 @@ export async function GET() {
       description: "Связывание разных программ и сервисов, автоматизация обмена данными",
       url: `${baseUrl}/services/tech/integration`,
       price: "от 40000",
-      picture: `${baseUrl}/services/tech-integration.png`,
+      picture: `${baseUrl}/services/tech-integration.webp`,
     },
     {
       id: "tech-6",
@@ -160,7 +160,7 @@ export async function GET() {
         "Настройка и внедрение системы электронного документооборота Такском. ЭДО для обмена юридически значимыми документами с контрагентами. Интеграция с 1С и другими системами",
       url: `${baseUrl}/services/tech/taxcom-edo`,
       price: "от 25000",
-      picture: `${baseUrl}/services/tech-taxcom.png`,
+      picture: `${baseUrl}/services/tech-taxcom.webp`,
     },
   ];
 

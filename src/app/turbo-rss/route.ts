@@ -24,7 +24,7 @@ export async function GET() {
       title: "Uralliance - Юридические услуги и IT-решения во Владивостоке",
       description:
         "Профессиональные юридические услуги и IT-решения для бизнеса. Разработка сайтов, CRM-систем, чат-ботов.",
-      image: `${baseUrl}/og-image.png`,
+      image: `${baseUrl}/og-image.webp`,
       pubDate: new Date(),
       content: `
         <header>
@@ -75,7 +75,7 @@ export async function GET() {
       title: "Разработка сайтов во Владивостоке - Uralliance",
       description:
         "Создание корпоративных сайтов, интернет-магазинов и лендингов под ключ. Современные технологии, адаптивный дизайн.",
-      image: `${baseUrl}/services/tech-web.png`,
+      image: `${baseUrl}/services/tech-web.webp`,
       pubDate: new Date(),
       content: `
         <header>
@@ -83,7 +83,7 @@ export async function GET() {
         </header>
 
         <figure>
-          <img src="${baseUrl}/services/tech-web.png"/>
+          <img src="${baseUrl}/services/tech-web.webp"/>
           <figcaption>Создание современных сайтов</figcaption>
         </figure>
 
@@ -125,7 +125,7 @@ export async function GET() {
       title: "Внедрение CRM-систем - Битрикс24, amoCRM | Uralliance",
       description:
         "Настройка и автоматизация CRM для вашего бизнеса. Интеграция с 1С, сайтом, телефонией. Обучение персонала.",
-      image: `${baseUrl}/services/tech-crm.png`,
+      image: `${baseUrl}/services/tech-web.webp`,
       pubDate: new Date(),
       content: `
         <header>
@@ -164,7 +164,7 @@ export async function GET() {
       title: "Разработка чат-ботов для Telegram, WhatsApp | Uralliance",
       description:
         "Создание умных чат-ботов для автоматизации общения с клиентами. Telegram, WhatsApp, VK боты под ключ.",
-      image: `${baseUrl}/services/tech-bots.png`,
+      image: `${baseUrl}/services/tech-web.webp`,
       pubDate: new Date(),
       content: `
         <header>
@@ -200,7 +200,7 @@ export async function GET() {
       title: "Корпоративное право - Регистрация ООО, реорганизация | Uralliance",
       description:
         "Юридическое сопровождение бизнеса: регистрация ООО, ИП, изменения в ЕГРЮЛ, корпоративные споры.",
-      image: `${baseUrl}/services/legal-corporate.png`,
+      image: `${baseUrl}/services/legal-corporate.webp`,
       pubDate: new Date(),
       content: `
         <header>
@@ -249,7 +249,7 @@ export async function GET() {
       title: "ЭЦП - Электронная цифровая подпись во Владивостоке | Uralliance",
       description:
         "Получение квалифицированной электронной подписи для юридических лиц и ИП. Работа с госуслугами, торговыми площадками, ЭДО.",
-      image: `${baseUrl}/services/legal-ecp.png`,
+      image: `${baseUrl}/services/legal-corporate.webp`,
       pubDate: new Date(),
       content: `
         <header>
@@ -287,7 +287,7 @@ export async function GET() {
       title: "Публикация в Вестнике государственной регистрации | Uralliance",
       description:
         "Публикация уведомлений о ликвидации и реорганизации юридических лиц в официальном Вестнике.",
-      image: `${baseUrl}/services/legal-vestnik.png`,
+      image: `${baseUrl}/services/legal-corporate.webp`,
       pubDate: new Date(),
       content: `
         <header>
@@ -326,7 +326,7 @@ export async function GET() {
       title: "Публикация на Федресурсе - ЕФРСБ | Uralliance Владивосток",
       description:
         "Размещение сообщений о банкротстве в Едином федеральном реестре сведений о банкротстве.",
-      image: `${baseUrl}/services/legal-fedresurs.png`,
+      image: `${baseUrl}/services/legal-corporate.webp`,
       pubDate: new Date(),
       content: `
         <header>
@@ -363,7 +363,7 @@ export async function GET() {
       title: "Такском - Электронный документооборот ЭДО | Uralliance",
       description:
         "Настройка и внедрение системы электронного документооборота Такском для обмена юридически значимыми документами.",
-      image: `${baseUrl}/services/tech-taxcom.png`,
+      image: `${baseUrl}/services/tech-web.webp`,
       pubDate: new Date(),
       content: `
         <header>

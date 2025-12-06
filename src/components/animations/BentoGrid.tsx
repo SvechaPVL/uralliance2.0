@@ -140,7 +140,7 @@ export function BentoGrid({ items, className, rowHeight = "minmax(220px, auto)" 
 
           const cardClassName = cn(
             "group relative flex h-full flex-col justify-between rounded-3xl border border-[var(--color-border)]",
-            "bg-[var(--color-card-bg)]/70 backdrop-blur-xl p-6 transition-all duration-500",
+            "bg-[var(--color-background-secondary)] p-6 transition-all duration-500",
             "hover:-translate-y-0.5 hover:border-[var(--color-border-soft)]",
             "focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-tech-primary)]",
             item.className
