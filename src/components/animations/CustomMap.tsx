@@ -108,10 +108,19 @@ export function CustomMap({
 
   return (
     <>
-      <div style={{ height, width: "100%" }} className="relative">
-        {/* Loading skeleton - always rendered, fades out */}
+      <div
+        style={{ height, width: "100%" }}
+        className="relative isolate overflow-hidden rounded-[inherit]"
+      >
+        {/* Map container - always rendered, fades in */}
         <div
-          className={`absolute inset-0 z-10 flex items-center justify-center rounded-[inherit] bg-[var(--color-background-secondary)] transition-opacity duration-500 ${
+          ref={containerRef}
+          style={{ height: "100%", width: "100%" }}
+          className={`transition-opacity duration-500 ${isLoaded ? "opacity-100" : "opacity-0"}`}
+        />
+        {/* Loading skeleton - overlays map, fades out */}
+        <div
+          className={`absolute inset-0 flex items-center justify-center bg-[var(--color-background-secondary)] transition-opacity duration-500 ${
             isLoaded ? "pointer-events-none opacity-0" : "opacity-100"
           }`}
         >
@@ -120,14 +129,6 @@ export function CustomMap({
             <span className="text-sm text-[var(--color-text-muted)]">Загрузка карты...</span>
           </div>
         </div>
-        {/* Map container - always rendered, fades in */}
-        <div
-          ref={containerRef}
-          style={{ height: "100%", width: "100%" }}
-          className={`relative z-0 overflow-hidden rounded-[inherit] transition-opacity duration-500 ${
-            isLoaded ? "opacity-100" : "opacity-0"
-          }`}
-        />
       </div>
       <style jsx global>{`
         /* Custom marker styles */
