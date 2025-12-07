@@ -142,6 +142,7 @@ export function IntroLoader({ onComplete, minDisplayTime = 15000 }: IntroLoaderP
     dpr: string;
     textInfo?: string;
     offscreenSize?: string;
+    particleInfo?: string;
   } | null>(null);
 
   // Only render on client to avoid hydration mismatch
@@ -294,8 +295,16 @@ export function IntroLoader({ onComplete, minDisplayTime = 15000 }: IntroLoaderP
     const imageData = offscreenCtx.getImageData(0, 0, logicalWidth, logicalHeight);
     const pixels = imageData.data;
 
+    // DEBUG: Check imageData dimensions
+    console.log(
+      `[IntroLoader] imageData: ${imageData.width}x${imageData.height}, pixels.length=${pixels.length}, expected=${logicalWidth * logicalHeight * 4}`
+    );
+
     const particles = particlesRef.current;
     let particleIndex = 0;
+
+    // DEBUG: Track first few particle coordinates
+    const debugCoords: string[] = [];
 
     const coordsIndexes: number[] = [];
     for (let i = 0; i < pixels.length; i += settings.pixelSteps * 4) {
@@ -314,8 +323,16 @@ export function IntroLoader({ onComplete, minDisplayTime = 15000 }: IntroLoaderP
 
       if (alpha > 0) {
         // Coordinates in logical pixels (CSS pixels)
-        const x = (pixelIndex / 4) % logicalWidth;
-        const y = Math.floor(pixelIndex / 4 / logicalWidth);
+        // IMPORTANT: Use imageData.width for correct row calculation, not logicalWidth
+        const imgWidth = imageData.width;
+        const pixelPos = pixelIndex / 4;
+        const x = pixelPos % imgWidth;
+        const y = Math.floor(pixelPos / imgWidth);
+
+        // DEBUG: Track first 5 particle coordinates
+        if (debugCoords.length < 5) {
+          debugCoords.push(`(${Math.round(x)},${Math.round(y)})`);
+        }
 
         let particle: Particle;
 
@@ -377,6 +394,21 @@ export function IntroLoader({ onComplete, minDisplayTime = 15000 }: IntroLoaderP
         particle.target.y = y;
       }
     }
+
+    // DEBUG: Log particle coordinates
+    console.log(
+      `[IntroLoader] First particles at: ${debugCoords.join(", ")}, total=${particleIndex}`
+    );
+
+    // DEBUG: Update debug info with particle coords
+    setDebugInfo((prev) =>
+      prev
+        ? {
+            ...prev,
+            particleInfo: `${particleIndex} particles, imgW=${imageData.width}, first: ${debugCoords.slice(0, 3).join(" ")}`,
+          }
+        : prev
+    );
 
     // Kill remaining particles (use logical dimensions)
     for (let i = particleIndex; i < particles.length; i++) {
@@ -662,6 +694,9 @@ export function IntroLoader({ onComplete, minDisplayTime = 15000 }: IntroLoaderP
             <div className="text-cyan-400">offscreen: {debugInfo.offscreenSize}</div>
           )}
           {debugInfo.textInfo && <div className="text-pink-400">text: {debugInfo.textInfo}</div>}
+          {debugInfo.particleInfo && (
+            <div className="text-orange-400">particles: {debugInfo.particleInfo}</div>
+          )}
           <div className="mt-1 text-green-400">
             {!isVisible ? "✓ Intro finished" : "⏳ Intro active"}
           </div>
