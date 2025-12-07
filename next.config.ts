@@ -22,20 +22,6 @@ const nextConfig: NextConfig = {
   // Security Headers
   async headers() {
     return [
-      // Allow cross-origin access for OG images (needed for social media previews)
-      {
-        source: "/og-image.:ext(gif|png|jpg|jpeg|webp)",
-        headers: [
-          {
-            key: "Cross-Origin-Resource-Policy",
-            value: "cross-origin",
-          },
-          {
-            key: "Access-Control-Allow-Origin",
-            value: "*",
-          },
-        ],
-      },
       {
         source: "/:path*",
         headers: [
@@ -89,6 +75,21 @@ const nextConfig: NextConfig = {
           {
             key: "Permissions-Policy",
             value: "camera=(), microphone=(), geolocation=()",
+          },
+        ],
+      },
+      // OG images need cross-origin access for social media previews
+      // This rule MUST come after /:path* to override same-origin policy
+      {
+        source: "/og-image.:ext(gif|png|jpg|jpeg|webp)",
+        headers: [
+          {
+            key: "Cross-Origin-Resource-Policy",
+            value: "cross-origin",
+          },
+          {
+            key: "Access-Control-Allow-Origin",
+            value: "*",
           },
         ],
       },
