@@ -1,10 +1,10 @@
 ---
 title: "Публикация в журнале «Вестник»"
 description: "Публикация уведомлений о ликвидации и реорганизации в официальном издании"
-price: "По запросу"
-priceNum: 0
-priceLabel: "По запросу"
-priceFrom: false
+price: "от 5 000 ₽"
+priceNum: 5000
+priceLabel: "от 5 000 ₽"
+priceFrom: true
 unit: "публикация"
 icon: "Newspaper"
 category: "legal"

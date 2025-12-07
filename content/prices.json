@@ -141,9 +141,9 @@
     "category": "Вестник",
     "title": "Публикация в журнале «Вестник»",
     "description": "Публикация уведомлений о ликвидации и реорганизации в официальном издании.",
-    "price": 0,
-    "priceLabel": "По запросу",
-    "priceFrom": false,
+    "price": 5000,
+    "priceLabel": "от 5 000 ₽",
+    "priceFrom": true,
     "unit": "публикация",
     "featured": false,
     "features": [
