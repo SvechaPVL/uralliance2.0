@@ -39,14 +39,11 @@ const nextConfig: NextConfig = {
               "object-src 'none'; " +
               "base-uri 'self'; " +
               "form-action 'self'; " +
-              "frame-ancestors 'none'; " +
+              "frame-ancestors 'self' https://metrika.yandex.ru https://metrika.yandex.by https://metrica.yandex.com https://metrica.yandex.com.tr https://webvisor.com https://*.webvisor.com; " +
               "upgrade-insecure-requests;",
           },
-          // Защита от clickjacking
-          {
-            key: "X-Frame-Options",
-            value: "DENY",
-          },
+          // Защита от clickjacking - используем CSP frame-ancestors вместо X-Frame-Options
+          // X-Frame-Options не поддерживает whitelist доменов, а нам нужен Яндекс Метрика
           // Изоляция origin
           {
             key: "Cross-Origin-Opener-Policy",
