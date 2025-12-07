@@ -140,6 +140,8 @@ export function IntroLoader({ onComplete, minDisplayTime = 15000 }: IntroLoaderP
     canvasLog: string;
     window: string;
     dpr: string;
+    textInfo?: string;
+    offscreenSize?: string;
   } | null>(null);
 
   // Only render on client to avoid hydration mismatch
@@ -268,6 +270,22 @@ export function IntroLoader({ onComplete, minDisplayTime = 15000 }: IntroLoaderP
     const textX = (logicalWidth - textWidth) / 2;
     // For vertical centering, use fontSize as approximation (actualBoundingBox not always available)
     const textY = logicalHeight / 2 + fontSize * 0.35; // 0.35 factor for visual center
+
+    // DEBUG: Log text positioning info
+    console.log(
+      `[IntroLoader] word="${word}" fontSize=${fontSize} textWidth=${textWidth} textX=${textX} textY=${textY} canvasW=${logicalWidth} canvasH=${logicalHeight}`
+    );
+
+    // DEBUG: Update debug info with text details
+    setDebugInfo((prev) =>
+      prev
+        ? {
+            ...prev,
+            textInfo: `"${word}" w=${Math.round(textWidth)} x=${Math.round(textX)} y=${Math.round(textY)} fs=${Math.round(fontSize)}`,
+            offscreenSize: `${offscreenCanvas.width}x${offscreenCanvas.height}`,
+          }
+        : prev
+    );
 
     offscreenCtx.textAlign = "left"; // Use left align with manual X position
     offscreenCtx.textBaseline = "alphabetic"; // Most reliable baseline
@@ -633,13 +651,17 @@ export function IntroLoader({ onComplete, minDisplayTime = 15000 }: IntroLoaderP
     <>
       {/* DEBUG: Show canvas dimensions - PERSISTS AFTER INTRO DISAPPEARS */}
       {debugInfo && (
-        <div className="fixed top-2 left-2 z-[999999] rounded-lg border border-white/20 bg-black/90 p-3 font-mono text-xs text-white">
+        <div className="fixed top-2 left-2 z-[999999] max-w-[90vw] rounded-lg border border-white/20 bg-black/90 p-3 font-mono text-xs text-white">
           <div className="mb-1 font-bold text-yellow-400">DEBUG INFO:</div>
           <div>container: {debugInfo.container}</div>
           <div>canvas(phys): {debugInfo.canvasPhys}</div>
           <div>canvas(log): {debugInfo.canvasLog}</div>
           <div>window: {debugInfo.window}</div>
           <div>dpr: {debugInfo.dpr}</div>
+          {debugInfo.offscreenSize && (
+            <div className="text-cyan-400">offscreen: {debugInfo.offscreenSize}</div>
+          )}
+          {debugInfo.textInfo && <div className="text-pink-400">text: {debugInfo.textInfo}</div>}
           <div className="mt-1 text-green-400">
             {!isVisible ? "✓ Intro finished" : "⏳ Intro active"}
           </div>
