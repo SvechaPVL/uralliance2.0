@@ -63,6 +63,19 @@ jobs:
     needs: build
 
     steps:
+      - name: Checkout code for docker-compose
+        uses: actions/checkout@v4
+
+      - name: Copy docker-compose to server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          source: "docker-compose.yml"
+          target: "/opt/uralliance/"
+          overwrite: true
+
       - name: Deploy to server
         uses: appleboy/ssh-action@master
         with:
