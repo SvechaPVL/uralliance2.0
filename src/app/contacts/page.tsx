@@ -28,20 +28,20 @@ const CONTACT_DETAILS = [
   {
     icon: MapPin,
     label: pagesConfig.contacts.details.labels.office,
-    value: contactsConfig.office.address,
-    href: contactsConfig.office.mapLink,
+    value: contactsConfig.address.short,
+    href: contactsConfig.address.mapLink,
   },
   {
     icon: Phone,
     label: pagesConfig.contacts.details.labels.phone,
-    value: contactsConfig.phone.display,
-    href: contactsConfig.phone.link,
+    value: contactsConfig.phone.main.display,
+    href: contactsConfig.phone.main.link,
   },
   {
     icon: Phone,
     label: pagesConfig.contacts.details.labels.phone,
-    value: contactsConfig.phone2.display,
-    href: contactsConfig.phone2.link,
+    value: contactsConfig.phone.secondary.display,
+    href: contactsConfig.phone.secondary.link,
   },
   {
     icon: Mail,
@@ -68,7 +68,7 @@ const MESSENGERS = [
   {
     label: pagesConfig.contacts.hero.messengers.whatsapp,
     href: generateWhatsAppLink(
-      contactsConfig.messengers.whatsapp.number,
+      contactsConfig.messengers.whatsapp.phone,
       contactsConfig.messengers.whatsapp.defaultMessage
     ),
     variant: "outline-whatsapp" as const,
@@ -242,8 +242,8 @@ export default function ContactsPage() {
                   <div className="flex flex-wrap gap-3">
                     <Button asChild variant="primary-tech" size="sm">
                       <Link
-                        href={contactsConfig.phone.link}
-                        onClick={() => trackPhoneClick(contactsConfig.phone.display)}
+                        href={contactsConfig.phone.main.link}
+                        onClick={() => trackPhoneClick(contactsConfig.phone.main.display)}
                       >
                         {pagesConfig.contacts.meeting.buttons.call}
                       </Link>
@@ -281,12 +281,12 @@ export default function ContactsPage() {
             </div>
             <Card variant="tech" className="overflow-hidden p-0">
               <MapWrapper
-                lat={contactsConfig.office.coordinates.lat}
-                lng={contactsConfig.office.coordinates.lng}
+                lat={contactsConfig.coordinates.lat}
+                lng={contactsConfig.coordinates.lng}
                 zoom={17}
                 height="420px"
                 markerTitle={pagesConfig.contacts.map.iframeTitle}
-                mapUrl={contactsConfig.office.mapLink}
+                mapUrl={contactsConfig.address.mapLink}
               />
             </Card>
           </Container>

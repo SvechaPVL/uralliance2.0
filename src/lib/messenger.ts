@@ -1,99 +1,92 @@
 /**
  * Messenger Utilities
  *
- * Helper functions for generating pre-filled messenger links
- * (WhatsApp, Telegram) with custom messages
+ * Helper functions for generating pre-filled messenger links.
+ * All contact data comes from the centralized contacts.json.
+ *
+ * @deprecated Prefer importing directly from "@/lib/contacts" for new code.
+ * This module is kept for backward compatibility.
  */
+
+import { contacts, getEmailWithMessage, getTelegramLink, getWhatsAppLink } from "./contacts";
 
 /**
  * Generate WhatsApp link with pre-filled message
  *
- * @param phone - Phone number in international format (e.g., "79001234567")
+ * @param phone - Phone number (optional, defaults to contacts.json value)
  * @param message - Pre-filled message text
  * @returns WhatsApp URL with encoded message
  *
  * @example
  * ```ts
- * const link = generateWhatsAppLink("79001234567", "Здравствуйте! Хочу узнать о ваших услугах");
- * // Returns: "https://wa.me/79001234567?text=Здравствуйте!%20Хочу%20узнать%20о%20ваших%20услугах"
+ * const link = generateWhatsAppLink(undefined, "Здравствуйте! Хочу узнать о ваших услугах");
  * ```
  */
 export function generateWhatsAppLink(phone?: string, message?: string): string {
-  const defaultPhone = process.env.NEXT_PUBLIC_WHATSAPP_PHONE || "79149618687";
-  const defaultMessage =
-    "Здравствуйте! Я обращаюсь с сайта Uralliance. Хочу узнать больше о ваших услугах.";
+  // If custom phone provided, build custom URL
+  if (phone) {
+    const cleanPhone = phone.replace(/\D/g, "");
+    const text = message || contacts.messengers.whatsapp.defaultMessage;
+    return `https://wa.me/${cleanPhone}?text=${encodeURIComponent(text)}`;
+  }
 
-  const phoneNumber = phone || defaultPhone;
-  const text = message || defaultMessage;
-
-  // Remove any non-digit characters from phone
-  const cleanPhone = phoneNumber.replace(/\D/g, "");
-
-  // Encode message for URL
-  const encodedMessage = encodeURIComponent(text);
-
-  return `https://wa.me/${cleanPhone}?text=${encodedMessage}`;
+  // Otherwise use centralized contacts
+  return getWhatsAppLink(message);
 }
 
 /**
  * Generate Telegram link with pre-filled message
  *
- * @param username - Telegram username (without @)
+ * @param username - Telegram username (optional, defaults to contacts.json value)
  * @param message - Pre-filled message text
  * @returns Telegram URL with encoded message
  *
  * @example
  * ```ts
- * const link = generateTelegramLink("svechapvl", "Здравствуйте! Интересует консультация");
- * // Returns: "https://t.me/svechapvl?text=Здравствуйте!%20Интересует%20консультация"
+ * const link = generateTelegramLink(undefined, "Здравствуйте! Интересует консультация");
  * ```
  */
 export function generateTelegramLink(username?: string, message?: string): string {
-  const defaultUsername = process.env.NEXT_PUBLIC_TELEGRAM_USERNAME || "svechapvl";
-  const defaultMessage =
-    "Здравствуйте! Я обращаюсь с сайта Uralliance. Хочу узнать больше о ваших услугах.";
+  // If custom username provided, build custom URL
+  if (username) {
+    const cleanUsername = username.replace(/^@/, "");
+    const text = message || contacts.messengers.telegram.defaultMessage;
+    return `https://t.me/${cleanUsername}?text=${encodeURIComponent(text)}`;
+  }
 
-  const telegramUsername = username || defaultUsername;
-  const text = message || defaultMessage;
-
-  // Remove @ if present
-  const cleanUsername = telegramUsername.replace(/^@/, "");
-
-  // Encode message for URL
-  const encodedMessage = encodeURIComponent(text);
-
-  return `https://t.me/${cleanUsername}?text=${encodedMessage}`;
+  // Otherwise use centralized contacts
+  return getTelegramLink(message);
 }
 
 /**
  * Generate email mailto link with subject and body
  *
- * @param email - Email address
+ * @param email - Email address (optional, defaults to contacts.json value)
  * @param subject - Email subject
  * @param body - Email body text
  * @returns Mailto URL with encoded parameters
  *
  * @example
  * ```ts
- * const link = generateEmailLink("info@uralliance.ru", "Запрос консультации", "Здравствуйте...");
- * // Returns: "mailto:info@uralliance.ru?subject=Запрос%20консультации&body=Здравствуйте..."
+ * const link = generateEmailLink(undefined, "Запрос консультации", "Здравствуйте...");
  * ```
  */
 export function generateEmailLink(email?: string, subject?: string, body?: string): string {
-  const defaultEmail = "info@uralliance.ru";
-  const defaultSubject = "Запрос с сайта Uralliance";
-  const defaultBody = "Здравствуйте! Хочу узнать больше о ваших услугах.";
+  const toEmail = email || contacts.email.display;
+  const emailSubject = subject || "Запрос с сайта Uralliance";
+  const emailBody = body || "Здравствуйте! Хочу узнать больше о ваших услугах.";
 
-  const toEmail = email || defaultEmail;
-  const emailSubject = subject || defaultSubject;
-  const emailBody = body || defaultBody;
+  // If custom email provided, build custom URL
+  if (email) {
+    const params = new URLSearchParams({
+      subject: emailSubject,
+      body: emailBody,
+    });
+    return `mailto:${toEmail}?${params.toString()}`;
+  }
 
-  const params = new URLSearchParams({
-    subject: emailSubject,
-    body: emailBody,
-  });
-
-  return `mailto:${toEmail}?${params.toString()}`;
+  // Otherwise use centralized contacts
+  return getEmailWithMessage(subject, body);
 }
 
 /**
@@ -110,8 +103,8 @@ export function generateEmailLink(email?: string, subject?: string, body?: strin
  */
 export function getAllMessengerLinks(message?: string) {
   return {
-    whatsapp: generateWhatsAppLink(undefined, message),
-    telegram: generateTelegramLink(undefined, message),
-    email: generateEmailLink(undefined, undefined, message),
+    whatsapp: getWhatsAppLink(message),
+    telegram: getTelegramLink(message),
+    email: getEmailWithMessage(undefined, message),
   };
 }

@@ -4,6 +4,7 @@
  */
 
 import { NextResponse } from "next/server";
+import { contacts } from "@/lib/contacts";
 
 interface TurboPage {
   url: string;
@@ -62,7 +63,7 @@ export async function GET() {
         </ul>
 
         <div data-block="button" data-primary="true">
-          <a href="tel:+74232028878">Позвонить: +7 (423) 202-88-78</a>
+          <a href="${contacts.phone.main.link}">Позвонить: ${contacts.phone.main.display}</a>
         </div>
 
         <div data-block="button">
@@ -106,7 +107,7 @@ export async function GET() {
         <p>От 2 недель</p>
 
         <div data-block="button" data-primary="true">
-          <a href="tel:+74232028878">Заказать разработку: +7 (423) 202-88-78</a>
+          <a href="${contacts.phone.main.link}">Заказать разработку: ${contacts.phone.main.display}</a>
         </div>
 
         <div data-block="widget-feedback" data-stick="false">
@@ -155,7 +156,7 @@ export async function GET() {
         <p>От 80 000 ₽</p>
 
         <div data-block="button" data-primary="true">
-          <a href="tel:+74232028878">Внедрить CRM: +7 (423) 202-88-78</a>
+          <a href="${contacts.phone.main.link}">Внедрить CRM: ${contacts.phone.main.display}</a>
         </div>
       `,
     },
@@ -191,7 +192,7 @@ export async function GET() {
         <p>От 30 000 ₽</p>
 
         <div data-block="button" data-primary="true">
-          <a href="tel:+74232028878">Заказать бота: +7 (423) 202-88-78</a>
+          <a href="${contacts.phone.main.link}">Заказать бота: ${contacts.phone.main.display}</a>
         </div>
       `,
     },
@@ -230,7 +231,7 @@ export async function GET() {
         <p>От 15 000 ₽</p>
 
         <div data-block="button" data-primary="true">
-          <a href="tel:+74232028878">Консультация юриста: +7 (423) 202-88-78</a>
+          <a href="${contacts.phone.main.link}">Консультация юриста: ${contacts.phone.main.display}</a>
         </div>
 
         <div data-block="widget-feedback" data-stick="false">
@@ -278,7 +279,7 @@ export async function GET() {
         <p>От 3 000 ₽</p>
 
         <div data-block="button" data-primary="true">
-          <a href="tel:+74232028878">Получить ЭЦП: +7 (423) 202-88-78</a>
+          <a href="${contacts.phone.main.link}">Получить ЭЦП: ${contacts.phone.main.display}</a>
         </div>
       `,
     },
@@ -317,7 +318,7 @@ export async function GET() {
         <p>От 5 000 ₽</p>
 
         <div data-block="button" data-primary="true">
-          <a href="tel:+74232028878">Заказать публикацию: +7 (423) 202-88-78</a>
+          <a href="${contacts.phone.main.link}">Заказать публикацию: ${contacts.phone.main.display}</a>
         </div>
       `,
     },
@@ -354,7 +355,7 @@ export async function GET() {
         <p>От 4 000 ₽</p>
 
         <div data-block="button" data-primary="true">
-          <a href="tel:+74232028878">Разместить на Федресурсе: +7 (423) 202-88-78</a>
+          <a href="${contacts.phone.main.link}">Разместить на Федресурсе: ${contacts.phone.main.display}</a>
         </div>
       `,
     },
@@ -392,7 +393,7 @@ export async function GET() {
         <p>От 25 000 ₽</p>
 
         <div data-block="button" data-primary="true">
-          <a href="tel:+74232028878">Внедрить Такском ЭДО: +7 (423) 202-88-78</a>
+          <a href="${contacts.phone.main.link}">Внедрить Такском ЭДО: ${contacts.phone.main.display}</a>
         </div>
       `,
     },

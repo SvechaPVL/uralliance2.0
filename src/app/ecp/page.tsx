@@ -8,6 +8,7 @@ import { Button } from "@/components/primitives/button";
 import { Label } from "@/components/primitives/label";
 import { RutokenShowcase } from "@/components/showcases/RutokenVisual";
 import { ServiceJsonLd, BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+import { contacts } from "@/lib/contacts";
 import Link from "next/link";
 import type { Metadata } from "next";
 import {
@@ -395,7 +396,7 @@ export default function EcpPage() {
                 <Link href="/#contact">Оставить заявку</Link>
               </Button>
               <Button asChild variant="outline" size="lg">
-                <Link href="tel:+74232028878">Позвонить</Link>
+                <Link href={contacts.phone.main.link}>Позвонить</Link>
               </Button>
             </div>
           </Card>

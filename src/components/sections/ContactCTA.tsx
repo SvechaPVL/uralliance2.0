@@ -18,8 +18,8 @@ import sectionsConfig from "@/content/sections.json";
 const CONTACT_DETAILS = [
   {
     label: sectionsConfig.contact_cta.contactDetails.phone,
-    value: contactsData.phone.display,
-    href: contactsData.phone.link,
+    value: contactsData.phone.main.display,
+    href: contactsData.phone.main.link,
   },
   {
     label: sectionsConfig.contact_cta.contactDetails.email,
@@ -28,8 +28,8 @@ const CONTACT_DETAILS = [
   },
   {
     label: sectionsConfig.contact_cta.contactDetails.office,
-    value: contactsData.office.address,
-    href: contactsData.office.mapLink,
+    value: contactsData.address.short,
+    href: contactsData.address.mapLink,
   },
 ] as const;
 
@@ -37,7 +37,7 @@ const messengerActions = [
   {
     label: sectionsConfig.contact_cta.messengers.whatsapp,
     href: generateWhatsAppLink(
-      contactsData.messengers.whatsapp.number,
+      contactsData.messengers.whatsapp.phone,
       contactsData.messengers.whatsapp.defaultMessage
     ),
     style: "legal" as const,

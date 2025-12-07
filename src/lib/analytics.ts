@@ -4,6 +4,8 @@
  * Provides type-safe goal tracking and A/B testing functionality
  */
 
+import { contacts } from "./contacts";
+
 // Yandex Metrika goal names - all possible goals
 export type MetrikaGoal =
   // Tier 1: Critical Conversions
@@ -31,10 +33,7 @@ export type MetrikaGoal =
   | `ab_test_form_position_variant_${"A" | "B" | "C"}`
   | `ab_test_messenger_order_variant_${"A" | "B" | "C"}`;
 
-export type ABTestName =
-  | "hero_cta"
-  | "form_position"
-  | "messenger_order";
+export type ABTestName = "hero_cta" | "form_position" | "messenger_order";
 
 export type ABVariant = "A" | "B" | "C";
 
@@ -106,23 +105,20 @@ export function trackEvent(
  * Track phone click
  */
 export function trackPhoneClick(phoneNumber?: string): void {
-  reachGoal("phone_click", { phone: phoneNumber || "+74232028878" });
+  reachGoal("phone_click", { phone: phoneNumber || contacts.phone.main.raw });
 }
 
 /**
  * Track email click
  */
 export function trackEmailClick(email?: string): void {
-  reachGoal("email_click", { email: email || "info@uralliance.ru" });
+  reachGoal("email_click", { email: email || contacts.email.display });
 }
 
 /**
  * Track messenger click
  */
-export function trackMessengerClick(
-  messenger: "whatsapp" | "telegram",
-  location?: string
-): void {
+export function trackMessengerClick(messenger: "whatsapp" | "telegram", location?: string): void {
   const goal = messenger === "whatsapp" ? "whatsapp_click" : "telegram_click";
   reachGoal(goal, location ? { location } : undefined);
 }
@@ -130,11 +126,10 @@ export function trackMessengerClick(
 /**
  * Track CTA button click
  */
-export function trackCTAClick(
-  location: "hero_legal" | "hero_tech" | string,
-  label?: string
-): void {
-  const goal = location.startsWith("hero_") ? (location as "cta_hero_legal" | "cta_hero_tech") : undefined;
+export function trackCTAClick(location: "hero_legal" | "hero_tech" | string, label?: string): void {
+  const goal = location.startsWith("hero_")
+    ? (location as "cta_hero_legal" | "cta_hero_tech")
+    : undefined;
 
   if (goal) {
     reachGoal(goal, label ? { label } : undefined);
@@ -191,10 +186,7 @@ function saveABTestConfig(config: ABTestConfig): void {
  * const variant = getABVariant('hero_cta');
  * const variant = getABVariant('form_position', ['A', 'B', 'C']);
  */
-export function getABVariant(
-  testName: ABTestName,
-  variants: ABVariant[] = ["A", "B"]
-): ABVariant {
+export function getABVariant(testName: ABTestName, variants: ABVariant[] = ["A", "B"]): ABVariant {
   const config = getABTestConfig();
 
   // Check if user already has a variant for this test
@@ -276,7 +268,7 @@ export function trackPageView(url: string): void {
 
 if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
   // Expose analytics utilities to window for debugging
-  (window as any).analytics = {
+  (window as unknown as { analytics: unknown }).analytics = {
     reachGoal,
     trackEvent,
     trackPhoneClick,

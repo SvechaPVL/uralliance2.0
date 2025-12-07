@@ -4,6 +4,7 @@
  */
 
 import { NextResponse } from "next/server";
+import { contacts } from "@/lib/contacts";
 
 interface Service {
   id: string;
@@ -172,8 +173,8 @@ export async function GET() {
     <name>${shopName}</name>
     <company>${companyName}</company>
     <url>${baseUrl}</url>
-    <phone>+74232028878</phone>
-    <email>info@uralliance.ru</email>
+    <phone>${contacts.phone.main.raw}</phone>
+    <email>${contacts.email.display}</email>
 
     <currencies>
       <currency id="RUB" rate="1"/>

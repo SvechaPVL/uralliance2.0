@@ -124,7 +124,7 @@ export function Footer() {
                   "bg-clip-text text-transparent"
                 )}
               >
-                {contactsConfig.company}
+                {contactsConfig.company.name}
               </div>
             </Link>
             <p className="mb-6 text-sm text-[var(--color-text-secondary)]">

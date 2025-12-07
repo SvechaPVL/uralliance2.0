@@ -4,6 +4,14 @@
  */
 
 import Script from "next/script";
+import {
+  contacts,
+  getSchemaAddress,
+  getSchemaContactPoint,
+  getSchemaGeo,
+  getSchemaOpeningHours,
+  getSchemaSameAs,
+} from "@/lib/contacts";
 
 interface Organization {
   "@context": "https://schema.org";
@@ -105,77 +113,38 @@ export function OrganizationJsonLd() {
   const data = {
     "@context": "https://schema.org",
     "@type": "LegalService",
-    "@id": "https://uralliance.ru/#organization",
-    name: "Uralliance",
-    alternateName: [
-      "Юраллианс",
-      "Юр Альянс",
-      "ЮрАльянс",
-      "Юральянс",
-      "Юр-Альянс",
-      "юр альянс",
-      "юральянс",
-      "Уральянс",
-      "Uralliance Vladivostok",
-    ],
-    url: "https://uralliance.ru",
-    logo: "https://uralliance.ru/logo.png",
-    image: "https://uralliance.ru/og-image.png",
-    description:
-      "Юридические услуги и IT-решения для бизнеса во Владивостоке. Разработка сайтов, CRM-систем, чат-ботов, корпоративное право, арбитражные споры.",
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "ул. Суханова, 11",
-      addressLocality: "Владивосток",
-      addressRegion: "Приморский край",
-      postalCode: "690091",
-      addressCountry: "RU",
-    },
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: "43.117098",
-      longitude: "131.896262",
-    },
-    telephone: "+74232028878",
-    email: "info@uralliance.ru",
+    "@id": `${contacts.website.url}/#organization`,
+    name: contacts.company.name,
+    alternateName: contacts.company.alternateName,
+    url: contacts.website.url,
+    logo: `${contacts.website.url}/logo.png`,
+    image: `${contacts.website.url}/og-image.png`,
+    description: contacts.company.description.full,
+    address: getSchemaAddress(),
+    geo: getSchemaGeo(),
+    telephone: contacts.phone.main.raw,
+    email: contacts.email.display,
     contactPoint: [
+      getSchemaContactPoint(),
       {
         "@type": "ContactPoint",
-        telephone: "+74232028878",
-        contactType: "customer support",
-        availableLanguage: ["Russian", "ru"],
-        areaServed: "RU",
-      },
-      {
-        "@type": "ContactPoint",
-        email: "info@uralliance.ru",
+        email: contacts.email.display,
         contactType: "customer support",
         availableLanguage: ["Russian", "ru"],
       },
     ],
-    sameAs: [
-      // Добавить социальные сети когда будут
-      // "https://vk.com/uralliance",
-      // "https://t.me/uralliance",
-    ],
-    priceRange: "₽₽₽",
+    sameAs: getSchemaSameAs(),
+    priceRange: contacts.priceRange,
     areaServed: {
       "@type": "GeoCircle",
       geoMidpoint: {
         "@type": "GeoCoordinates",
-        latitude: "43.117098",
-        longitude: "131.896262",
+        latitude: String(contacts.coordinates.lat),
+        longitude: String(contacts.coordinates.lng),
       },
       geoRadius: "500000",
     },
-    openingHoursSpecification: [
-      {
-        "@type": "OpeningHoursSpecification",
-        dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-        opens: "09:00",
-        closes: "18:00",
-      },
-    ],
+    openingHoursSpecification: [getSchemaOpeningHours()],
     // Рейтинг и отзывы для звёздочек в поиске
     aggregateRating: {
       "@type": "AggregateRating",
@@ -288,13 +257,13 @@ export function WebSiteJsonLd() {
   const data: WebSite = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "Uralliance - Юридические услуги и IT-решения",
-    url: "https://uralliance.ru",
+    name: `${contacts.company.name} - Юридические услуги и IT-решения`,
+    url: contacts.website.url,
     potentialAction: {
       "@type": "SearchAction",
       target: {
         "@type": "EntryPoint",
-        urlTemplate: "https://uralliance.ru/search?q={search_term_string}",
+        urlTemplate: `${contacts.website.url}/search?q={search_term_string}`,
       },
       "query-input": "required name=search_term_string",
     },
@@ -344,9 +313,9 @@ export function ServiceJsonLd({ name, description }: ServiceJsonLdProps) {
     description,
     provider: {
       "@type": "Organization",
-      name: "Uralliance",
+      name: contacts.company.name,
     },
-    areaServed: "Владивосток, Россия",
+    areaServed: `${contacts.address.city}, ${contacts.address.countryName}`,
     offers: {
       "@type": "Offer",
       availability: "https://schema.org/InStock",

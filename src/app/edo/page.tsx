@@ -7,6 +7,7 @@ import { Card } from "@/components/primitives/card";
 import { Button } from "@/components/primitives/button";
 import { Label } from "@/components/primitives/label";
 import { ServiceJsonLd, BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+import { contacts } from "@/lib/contacts";
 import Link from "next/link";
 import type { Metadata } from "next";
 import {
@@ -486,7 +487,7 @@ export default function EdoPage() {
                 <Link href="/#contact">Оставить заявку</Link>
               </Button>
               <Button asChild variant="outline" size="lg">
-                <Link href="tel:+74232028878">Позвонить</Link>
+                <Link href={contacts.phone.main.link}>Позвонить</Link>
               </Button>
             </div>
           </Card>

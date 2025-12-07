@@ -10,6 +10,7 @@ import { ServiceIcon } from "@/components/primitives/ServiceIcon";
 import type { PriceItem } from "@/types/content";
 import { cn } from "@/lib/utils";
 import { reachGoal } from "@/lib/analytics";
+import { contacts } from "@/lib/contacts";
 import { ArrowUpDown, Layers, Shield, Sparkles } from "lucide-react";
 import { Section } from "@/components/primitives/section";
 import { Heading } from "@/components/primitives/heading";
@@ -53,11 +54,14 @@ export function PriceExperience({ prices }: PriceExperienceProps) {
     const techCount = prices.length - legalCount;
     const featuredCount = prices.filter((item) => item.featured).length;
     const pricedItems = prices.filter((item) => item.price > 0 && !item.priceLabel);
-    const minPrice = pricedItems.length > 0 ? Math.min(...pricedItems.map((item) => item.price)) : 0;
-    const maxPrice = pricedItems.length > 0 ? Math.max(...pricedItems.map((item) => item.price)) : 0;
-    const averagePrice = pricedItems.length > 0 ? Math.round(
-      pricedItems.reduce((acc, item) => acc + item.price, 0) / pricedItems.length
-    ) : 0;
+    const minPrice =
+      pricedItems.length > 0 ? Math.min(...pricedItems.map((item) => item.price)) : 0;
+    const maxPrice =
+      pricedItems.length > 0 ? Math.max(...pricedItems.map((item) => item.price)) : 0;
+    const averagePrice =
+      pricedItems.length > 0
+        ? Math.round(pricedItems.reduce((acc, item) => acc + item.price, 0) / pricedItems.length)
+        : 0;
 
     return {
       legalCount,
@@ -300,7 +304,10 @@ export function PriceExperience({ prices }: PriceExperienceProps) {
                   <div className="flex items-start gap-2 sm:gap-3">
                     <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-white/10 sm:h-10 sm:w-10 sm:rounded-2xl">
                       <ServiceIcon
-                        name={(price as any).icon || getIconForService(price.id)}
+                        name={
+                          (price as unknown as { icon?: string }).icon ||
+                          getIconForService(price.id)
+                        }
                         variant={price.practice}
                         className="h-5 w-5 text-white sm:h-6 sm:w-6"
                       />
@@ -399,7 +406,7 @@ export function PriceExperience({ prices }: PriceExperienceProps) {
                   <Link href="/contacts">Назначить звонок</Link>
                 </Button>
                 <Button asChild variant="outline-tech" size="lg">
-                  <Link href="mailto:info@uralliance.ru">info@uralliance.ru</Link>
+                  <Link href={contacts.email.link}>{contacts.email.display}</Link>
                 </Button>
               </div>
             </div>

@@ -203,7 +203,7 @@ export function MobileMenu({ isOpen, onClose, navigationItems }: MobileMenuProps
                   "bg-clip-text text-transparent"
                 )}
               >
-                {contactsConfig.company}
+                {contactsConfig.company.name}
               </div>
               <button
                 type="button"
@@ -392,8 +392,8 @@ export function MobileMenu({ isOpen, onClose, navigationItems }: MobileMenuProps
                 </p>
                 <div className="space-y-3">
                   <a
-                    href={contactsConfig.phone.link}
-                    onClick={() => trackPhoneClick(contactsConfig.phone.display)}
+                    href={contactsConfig.phone.main.link}
+                    onClick={() => trackPhoneClick(contactsConfig.phone.main.display)}
                     className={cn(
                       "flex items-center gap-3",
                       "text-[var(--color-text-primary)]",
@@ -416,7 +416,7 @@ export function MobileMenu({ isOpen, onClose, navigationItems }: MobileMenuProps
                         d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
                       />
                     </svg>
-                    <span>{contactsConfig.phone.display}</span>
+                    <span>{contactsConfig.phone.main.display}</span>
                   </a>
                   <a
                     href={contactsConfig.email.link}
