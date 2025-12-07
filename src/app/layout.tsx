@@ -127,12 +127,11 @@ export const metadata: Metadata = {
     siteName: "Uralliance",
     images: [
       {
-        // Animated PNG (APNG) - better messenger compatibility than GIF
-        url: "/og-image-animated.png",
-        width: 1200,
-        height: 630,
+        url: "/og-image.gif",
+        width: 800,
+        height: 420,
         alt: "Uralliance - Юридические услуги и IT-решения",
-        type: "image/png",
+        type: "image/gif",
       },
     ],
   },
@@ -140,7 +139,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: pagesConfig.home.title,
     description: pagesConfig.home.description,
-    images: ["/og-image-animated.png"],
+    images: ["/og-image.gif"],
     creator: "@uralliance",
     site: "@uralliance",
   },
@@ -181,6 +180,15 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <head>
+        {/* OG Video for animated preview in messengers */}
+        <meta property="og:video" content="https://uralliance.ru/og-video.mp4" />
+        <meta property="og:video:type" content="video/mp4" />
+        <meta property="og:video:width" content="1200" />
+        <meta property="og:video:height" content="630" />
+        <meta name="twitter:player" content="https://uralliance.ru/og-video.mp4" />
+        <meta name="twitter:player:width" content="1200" />
+        <meta name="twitter:player:height" content="630" />
+
         {/* Яндекс.Вебмастер верификация */}
         <meta name="yandex-verification" content="d33a8b0da9bdd7ed" />
 
