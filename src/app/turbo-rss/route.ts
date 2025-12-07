@@ -25,7 +25,7 @@ export async function GET() {
       title: "Uralliance - Юридические услуги и IT-решения во Владивостоке",
       description:
         "Профессиональные юридические услуги и IT-решения для бизнеса. Разработка сайтов, CRM-систем, чат-ботов.",
-      image: `${baseUrl}/og-image.webp`,
+      image: `${baseUrl}/og-image.png`,
       pubDate: new Date(),
       content: `
         <header>
