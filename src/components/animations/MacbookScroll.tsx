@@ -133,12 +133,28 @@ export const MacbookScroll = ({
     () => false // SSR fallback
   );
 
-  const scaleX = useTransform(scrollYProgress, [0, 0.35], [1.2, isMobile ? 1 : 1.5]);
-  const scaleY = useTransform(scrollYProgress, [0, 0.35], [0.6, isMobile ? 1 : 1.5]);
-  const translate = useTransform(scrollYProgress, [0, 0.85], [0, isMobile ? 950 : 1500]);
-  const rotate = useTransform(scrollYProgress, [0.1, 0.14, 0.45], [-28, -28, 0]);
-  const textTransform = useTransform(scrollYProgress, [0, 0.3], [0, 90]);
-  const textOpacity = useTransform(scrollYProgress, [0, 0.22], [1, 0]);
+  const scaleX = useTransform(
+    scrollYProgress,
+    [0, isMobile ? 0.2 : 0.35],
+    [1.2, isMobile ? 1 : 1.5]
+  );
+  const scaleY = useTransform(
+    scrollYProgress,
+    [0, isMobile ? 0.2 : 0.35],
+    [0.6, isMobile ? 1 : 1.5]
+  );
+  const translate = useTransform(
+    scrollYProgress,
+    [0, isMobile ? 0.5 : 0.85],
+    [0, isMobile ? 1100 : 1500]
+  );
+  const rotate = useTransform(
+    scrollYProgress,
+    [isMobile ? 0.05 : 0.1, isMobile ? 0.08 : 0.14, isMobile ? 0.25 : 0.45],
+    [-28, -28, 0]
+  );
+  const textTransform = useTransform(scrollYProgress, [0, isMobile ? 0.15 : 0.3], [0, 90]);
+  const textOpacity = useTransform(scrollYProgress, [0, isMobile ? 0.12 : 0.22], [1, 0]);
 
   const heading =
     title === null
@@ -152,7 +168,7 @@ export const MacbookScroll = ({
   return (
     <div
       ref={ref}
-      className="relative flex min-h-[110vh] shrink-0 scale-[0.55] transform flex-col items-center justify-start py-0 [perspective:800px] sm:min-h-[145vh] sm:scale-50 sm:overflow-y-clip md:min-h-[185vh] md:scale-100 md:py-40"
+      className="relative flex min-h-[160vh] shrink-0 scale-[0.55] transform flex-col items-center justify-start py-0 [perspective:800px] sm:min-h-[145vh] sm:scale-50 sm:overflow-y-clip md:min-h-[185vh] md:scale-100 md:py-40"
     >
       {heading && (
         <motion.h2
