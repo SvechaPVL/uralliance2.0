@@ -118,8 +118,7 @@ interface IntroLoaderProps {
 
 const WORDS = ["ЮРАЛЬЯНС", "URALLIANCE"];
 
-export function IntroLoader({ onComplete, minDisplayTime = 15000 }: IntroLoaderProps) {
-  // DEBUG: 15s for testing
+export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<number | undefined>(undefined);
@@ -132,18 +131,6 @@ export function IntroLoader({ onComplete, minDisplayTime = 15000 }: IntroLoaderP
   const [isMounted, setIsMounted] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [isFadingOut, setIsFadingOut] = useState(false);
-
-  // DEBUG: Store last dimensions for debugging (persists after intro disappears)
-  const [debugInfo, setDebugInfo] = useState<{
-    container: string;
-    canvasPhys: string;
-    canvasLog: string;
-    window: string;
-    dpr: string;
-    textInfo?: string;
-    offscreenSize?: string;
-    particleInfo?: string;
-  } | null>(null);
 
   // Only render on client to avoid hydration mismatch
   useEffect(() => {
@@ -272,22 +259,6 @@ export function IntroLoader({ onComplete, minDisplayTime = 15000 }: IntroLoaderP
     // For vertical centering, use fontSize as approximation (actualBoundingBox not always available)
     const textY = logicalHeight / 2 + fontSize * 0.35; // 0.35 factor for visual center
 
-    // DEBUG: Log text positioning info
-    console.log(
-      `[IntroLoader] word="${word}" fontSize=${fontSize} textWidth=${textWidth} textX=${textX} textY=${textY} canvasW=${logicalWidth} canvasH=${logicalHeight}`
-    );
-
-    // DEBUG: Update debug info with text details
-    setDebugInfo((prev) =>
-      prev
-        ? {
-            ...prev,
-            textInfo: `"${word}" w=${Math.round(textWidth)} x=${Math.round(textX)} y=${Math.round(textY)} fs=${Math.round(fontSize)}`,
-            offscreenSize: `${offscreenCanvas.width}x${offscreenCanvas.height}`,
-          }
-        : prev
-    );
-
     offscreenCtx.textAlign = "left"; // Use left align with manual X position
     offscreenCtx.textBaseline = "alphabetic"; // Most reliable baseline
     offscreenCtx.fillText(word, textX, textY);
@@ -295,16 +266,8 @@ export function IntroLoader({ onComplete, minDisplayTime = 15000 }: IntroLoaderP
     const imageData = offscreenCtx.getImageData(0, 0, logicalWidth, logicalHeight);
     const pixels = imageData.data;
 
-    // DEBUG: Check imageData dimensions
-    console.log(
-      `[IntroLoader] imageData: ${imageData.width}x${imageData.height}, pixels.length=${pixels.length}, expected=${logicalWidth * logicalHeight * 4}`
-    );
-
     const particles = particlesRef.current;
     let particleIndex = 0;
-
-    // DEBUG: Track first few particle coordinates
-    const debugCoords: string[] = [];
 
     const coordsIndexes: number[] = [];
     for (let i = 0; i < pixels.length; i += settings.pixelSteps * 4) {
@@ -323,16 +286,11 @@ export function IntroLoader({ onComplete, minDisplayTime = 15000 }: IntroLoaderP
 
       if (alpha > 0) {
         // Coordinates in logical pixels (CSS pixels)
-        // IMPORTANT: Use imageData.width for correct row calculation, not logicalWidth
+        // IMPORTANT: Use imageData.width for correct row calculation
         const imgWidth = imageData.width;
         const pixelPos = pixelIndex / 4;
         const x = pixelPos % imgWidth;
         const y = Math.floor(pixelPos / imgWidth);
-
-        // DEBUG: Track first 5 particle coordinates
-        if (debugCoords.length < 5) {
-          debugCoords.push(`(${Math.round(x)},${Math.round(y)})`);
-        }
 
         let particle: Particle;
 
@@ -394,21 +352,6 @@ export function IntroLoader({ onComplete, minDisplayTime = 15000 }: IntroLoaderP
         particle.target.y = y;
       }
     }
-
-    // DEBUG: Log particle coordinates
-    console.log(
-      `[IntroLoader] First particles at: ${debugCoords.join(", ")}, total=${particleIndex}`
-    );
-
-    // DEBUG: Update debug info with particle coords
-    setDebugInfo((prev) =>
-      prev
-        ? {
-            ...prev,
-            particleInfo: `${particleIndex} particles, imgW=${imageData.width}, first: ${debugCoords.slice(0, 3).join(" ")}`,
-          }
-        : prev
-    );
 
     // Kill remaining particles (use logical dimensions)
     for (let i = particleIndex; i < particles.length; i++) {
@@ -617,18 +560,6 @@ export function IntroLoader({ onComplete, minDisplayTime = 15000 }: IntroLoaderP
       canvas.width = logicalWidth * dpr;
       canvas.height = logicalHeight * dpr;
 
-      // DEBUG: Save dimensions for debugging (persists after intro disappears)
-      const containerRect = containerRef.current?.getBoundingClientRect();
-      setDebugInfo({
-        container: containerRect
-          ? `${containerRect.width.toFixed(0)}x${containerRect.height.toFixed(0)}`
-          : "?",
-        canvasPhys: `${canvas.width}x${canvas.height}`,
-        canvasLog: `${logicalWidth.toFixed(0)}x${logicalHeight.toFixed(0)}`,
-        window: `${window.innerWidth}x${window.innerHeight}`,
-        dpr: dpr.toFixed(2),
-      });
-
       const ctx = canvas.getContext("2d");
       if (ctx) {
         ctx.scale(dpr, dpr);
@@ -676,73 +607,46 @@ export function IntroLoader({ onComplete, minDisplayTime = 15000 }: IntroLoaderP
     };
   }, [isMounted, animate, nextWord, minDisplayTime, handleExit, getCanvasDimensions]);
 
-  // Don't render on server
-  if (!isMounted) return null;
+  // Don't render on server or after hiding
+  if (!isMounted || !isVisible) return null;
 
   return (
-    <>
-      {/* DEBUG: Show canvas dimensions - PERSISTS AFTER INTRO DISAPPEARS */}
-      {debugInfo && (
-        <div className="fixed top-2 left-2 z-[999999] max-w-[90vw] rounded-lg border border-white/20 bg-black/90 p-3 font-mono text-xs text-white">
-          <div className="mb-1 font-bold text-yellow-400">DEBUG INFO:</div>
-          <div>container: {debugInfo.container}</div>
-          <div>canvas(phys): {debugInfo.canvasPhys}</div>
-          <div>canvas(log): {debugInfo.canvasLog}</div>
-          <div>window: {debugInfo.window}</div>
-          <div>dpr: {debugInfo.dpr}</div>
-          {debugInfo.offscreenSize && (
-            <div className="text-cyan-400">offscreen: {debugInfo.offscreenSize}</div>
-          )}
-          {debugInfo.textInfo && <div className="text-pink-400">text: {debugInfo.textInfo}</div>}
-          {debugInfo.particleInfo && (
-            <div className="text-orange-400">particles: {debugInfo.particleInfo}</div>
-          )}
-          <div className="mt-1 text-green-400">
-            {!isVisible ? "✓ Intro finished" : "⏳ Intro active"}
-          </div>
-        </div>
-      )}
+    <div
+      ref={containerRef}
+      data-intro-loader
+      className={`fixed inset-0 z-[99999] flex items-center justify-center transition-opacity duration-700 ${
+        isFadingOut ? "opacity-0" : "opacity-100"
+      }`}
+      style={{ background: "#0b0b0c" }}
+    >
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0"
+        style={{
+          width: "100%",
+          height: "100%",
+        }}
+      />
 
-      {/* Main intro - only visible when isVisible */}
-      {isVisible && (
-        <div
-          ref={containerRef}
-          data-intro-loader
-          className={`fixed inset-0 z-[99999] flex items-center justify-center transition-opacity duration-700 ${
-            isFadingOut ? "opacity-0" : "opacity-100"
-          }`}
-          style={{ background: "#0b0b0c" }}
-        >
-          <canvas
-            ref={canvasRef}
-            className="absolute inset-0"
-            style={{
-              width: "100%",
-              height: "100%",
-            }}
-          />
+      {/* Subtle gradient overlay */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background: `
+            radial-gradient(70% 60% at 15% 25%, rgba(212, 175, 55, 0.08), transparent 65%),
+            radial-gradient(70% 60% at 85% 25%, rgba(6, 182, 212, 0.08), transparent 65%)
+          `,
+        }}
+      />
 
-          {/* Subtle gradient overlay */}
-          <div
-            className="pointer-events-none absolute inset-0"
-            style={{
-              background: `
-                radial-gradient(70% 60% at 15% 25%, rgba(212, 175, 55, 0.08), transparent 65%),
-                radial-gradient(70% 60% at 85% 25%, rgba(6, 182, 212, 0.08), transparent 65%)
-              `,
-            }}
-          />
-
-          {/* Skip button */}
-          <button
-            onClick={handleExit}
-            className="absolute right-8 bottom-8 z-10 text-sm text-white/40 transition-colors duration-300 hover:text-white/70"
-            aria-label="Пропустить"
-          >
-            Пропустить →
-          </button>
-        </div>
-      )}
-    </>
+      {/* Skip button */}
+      <button
+        onClick={handleExit}
+        className="absolute right-8 bottom-8 z-10 text-sm text-white/40 transition-colors duration-300 hover:text-white/70"
+        aria-label="Пропустить"
+      >
+        Пропустить →
+      </button>
+    </div>
   );
 }
