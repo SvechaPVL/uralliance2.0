@@ -526,3 +526,33 @@ export function ProductJsonLd({
 
   return <JsonLd data={data} />;
 }
+
+/**
+ * SiteNavigationElement JSON-LD for quick links in search results
+ * Helps Yandex and Google understand site structure for sitelinks
+ */
+export function SiteNavigationJsonLd() {
+  const navigationItems = [
+    { name: "Главная", url: "/" },
+    { name: "ЭЦП и Рутокен", url: "/ecp" },
+    { name: "Такском ЭДО", url: "/edo" },
+    { name: "Юридические услуги", url: "/services/legal" },
+    { name: "IT-решения", url: "/services/tech" },
+    { name: "Прайс", url: "/price" },
+    { name: "О компании", url: "/about" },
+    { name: "Контакты", url: "/contacts" },
+  ];
+
+  const data = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: navigationItems.map((item, index) => ({
+      "@type": "SiteNavigationElement",
+      position: index + 1,
+      name: item.name,
+      url: `${contacts.website.url}${item.url}`,
+    })),
+  };
+
+  return <JsonLd data={data} />;
+}
