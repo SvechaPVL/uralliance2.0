@@ -629,6 +629,22 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
         }}
       />
 
+      {/* DEBUG: Show canvas dimensions - REMOVE AFTER FIXING */}
+      <div className="absolute top-2 left-2 z-20 bg-black/80 p-2 font-mono text-xs text-white">
+        <div>
+          container: {containerRef.current?.getBoundingClientRect().width.toFixed(0)}x
+          {containerRef.current?.getBoundingClientRect().height.toFixed(0)}
+        </div>
+        <div>
+          canvas: {canvasRef.current?.width}x{canvasRef.current?.height}
+        </div>
+        <div>
+          window:{" "}
+          {typeof window !== "undefined" ? `${window.innerWidth}x${window.innerHeight}` : "SSR"}
+        </div>
+        <div>dpr: {typeof window !== "undefined" ? window.devicePixelRatio : "SSR"}</div>
+      </div>
+
       {/* Skip button */}
       <button
         onClick={handleExit}

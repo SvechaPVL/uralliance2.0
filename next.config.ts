@@ -22,6 +22,20 @@ const nextConfig: NextConfig = {
   // Security Headers
   async headers() {
     return [
+      // Allow cross-origin access for OG images (needed for social media previews)
+      {
+        source: "/og-image.:ext(gif|png|jpg|jpeg|webp)",
+        headers: [
+          {
+            key: "Cross-Origin-Resource-Policy",
+            value: "cross-origin",
+          },
+          {
+            key: "Access-Control-Allow-Origin",
+            value: "*",
+          },
+        ],
+      },
       {
         source: "/:path*",
         headers: [
@@ -30,11 +44,11 @@ const nextConfig: NextConfig = {
             key: "Content-Security-Policy",
             value:
               "default-src 'self'; " +
-              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://mc.yandex.ru https://mc.yandex.com https://yandex.ru https://yastatic.net; " +
+              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://mc.yandex.ru https://mc.yandex.com https://yandex.ru https://yastatic.net https://www.googletagmanager.com https://www.google-analytics.com; " +
               "style-src 'self' 'unsafe-inline'; " +
-              "img-src 'self' data: blob: https: https://mc.yandex.ru https://mc.yandex.com; " +
+              "img-src 'self' data: blob: https: https://mc.yandex.ru https://mc.yandex.com https://www.google-analytics.com https://www.googletagmanager.com; " +
               "font-src 'self' data:; " +
-              "connect-src 'self' https://mc.yandex.ru https://mc.yandex.com https://yandex.ru https://mc.webvisor.org wss://mc.webvisor.org; " +
+              "connect-src 'self' https://mc.yandex.ru https://mc.yandex.com https://yandex.ru https://mc.webvisor.org wss://mc.webvisor.org https://www.google-analytics.com https://analytics.google.com https://region1.google-analytics.com; " +
               "frame-src 'self'; " +
               "object-src 'none'; " +
               "base-uri 'self'; " +
