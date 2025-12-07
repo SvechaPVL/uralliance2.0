@@ -139,27 +139,26 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
   }, []);
 
   // Get dimensions for canvas
-  // Android Chrome has issues with window.innerHeight due to dynamic address bar
-  // Use documentElement.clientWidth/Height as more reliable source
+  // CRITICAL: On Android Chrome, document.documentElement.clientHeight returns
+  // a value LARGER than the visible viewport (includes area under address bar).
+  // The container with `fixed inset-0` matches exactly the visible viewport,
+  // so we MUST use container dimensions as the primary source.
   const getCanvasDimensions = useCallback(() => {
     if (typeof window === "undefined") {
       return { width: 1920, height: 1080 };
     }
 
-    // document.documentElement.clientWidth/Height is more reliable on Android
-    // It excludes scrollbars and is not affected by address bar changes
-    const docEl = document.documentElement;
-    let width = docEl.clientWidth || window.innerWidth;
-    let height = docEl.clientHeight || window.innerHeight;
-
-    // Double-check with container if available
+    // PRIMARY: Use container dimensions - it's fixed inset-0 and matches visible viewport exactly
     if (containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect();
       if (rect.width > 0 && rect.height > 0) {
-        width = rect.width;
-        height = rect.height;
+        return { width: rect.width, height: rect.height };
       }
     }
+
+    // FALLBACK: Use window.innerWidth/Height - NOT documentElement which is wrong on Android
+    let width = window.innerWidth;
+    let height = window.innerHeight;
 
     // Safety: ensure we have valid dimensions
     if (width <= 0) width = window.screen.width || 360;
@@ -240,9 +239,10 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
     const fontSize = Math.min(logicalWidth / settings.fontSizeDivisor, settings.fontSizeMax);
 
     offscreenCtx.fillStyle = "white";
-    // Use system fonts only - web fonts may not be loaded yet on mobile
-    // Arial and sans-serif are always available and never italic by default
-    offscreenCtx.font = `700 ${fontSize}px Arial, sans-serif`;
+    // Use simple font declaration that works on all devices including Android
+    // - "bold" is universally understood (700 may not work on some Android devices)
+    // - "sans-serif" ensures system default sans font (Roboto on Android)
+    offscreenCtx.font = `bold ${fontSize}px sans-serif`;
     offscreenCtx.textAlign = "center";
     offscreenCtx.textBaseline = "middle";
     offscreenCtx.fillText(word, logicalWidth / 2, logicalHeight / 2);
@@ -502,22 +502,34 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
     if (!canvas) return;
 
     const initAnimation = async () => {
-      // Wait for multiple frames to ensure layout is complete on Android
-      // Android Chrome needs more time for CSS to fully apply
-      await new Promise((r) => requestAnimationFrame(r));
-      await new Promise((r) => requestAnimationFrame(r));
-      await new Promise((r) => setTimeout(r, 100));
+      // Wait for container to be fully rendered
+      // This is CRITICAL on Android where getBoundingClientRect() may return 0 initially
+      const waitForContainer = async (): Promise<{ width: number; height: number }> => {
+        for (let attempt = 0; attempt < 10; attempt++) {
+          await new Promise((r) => requestAnimationFrame(r));
+
+          if (containerRef.current) {
+            const rect = containerRef.current.getBoundingClientRect();
+            if (rect.width > 0 && rect.height > 0) {
+              return { width: rect.width, height: rect.height };
+            }
+          }
+
+          // Extra delay between retries
+          if (attempt > 0) {
+            await new Promise((r) => setTimeout(r, 50));
+          }
+        }
+
+        // Final fallback
+        return {
+          width: window.innerWidth || window.screen.width || 360,
+          height: window.innerHeight || window.screen.height || 800,
+        };
+      };
 
       const dpr = window.devicePixelRatio || 1;
-      let { width: logicalWidth, height: logicalHeight } = getCanvasDimensions();
-
-      // On Android, dimensions might still be wrong - retry if needed
-      if (logicalWidth <= 0 || logicalHeight <= 0) {
-        await new Promise((r) => setTimeout(r, 100));
-        const dims = getCanvasDimensions();
-        logicalWidth = dims.width;
-        logicalHeight = dims.height;
-      }
+      const { width: logicalWidth, height: logicalHeight } = await waitForContainer();
 
       canvas.width = logicalWidth * dpr;
       canvas.height = logicalHeight * dpr;

@@ -127,7 +127,7 @@ export const metadata: Metadata = {
     siteName: "Uralliance",
     images: [
       {
-        url: "/og-image.png",
+        url: "/og-image.gif",
         width: 1200,
         height: 630,
         alt: "Uralliance - Юридические услуги и IT-решения",
@@ -138,7 +138,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: pagesConfig.home.title,
     description: pagesConfig.home.description,
-    images: ["/og-image.png"],
+    images: ["/og-image.gif"],
     creator: "@uralliance",
     site: "@uralliance",
   },
