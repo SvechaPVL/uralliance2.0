@@ -118,7 +118,8 @@ interface IntroLoaderProps {
 
 const WORDS = ["ЮРАЛЬЯНС", "URALLIANCE"];
 
-export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderProps) {
+export function IntroLoader({ onComplete, minDisplayTime = 15000 }: IntroLoaderProps) {
+  // DEBUG: 15s for testing
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<number | undefined>(undefined);
