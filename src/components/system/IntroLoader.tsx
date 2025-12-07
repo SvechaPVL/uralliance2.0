@@ -138,27 +138,32 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
     setIsMounted(true);
   }, []);
 
-  // Get dimensions for canvas - use window dimensions as primary source
-  // getBoundingClientRect can return 0 before CSS is fully applied on mobile
+  // Get dimensions for canvas
+  // Android Chrome has issues with window.innerHeight due to dynamic address bar
+  // Use documentElement.clientWidth/Height as more reliable source
   const getCanvasDimensions = useCallback(() => {
     if (typeof window === "undefined") {
       return { width: 1920, height: 1080 };
     }
 
-    // On mobile, window.innerHeight includes address bar in some browsers
-    // but it's more reliable than getBoundingClientRect during initial render
-    let width = window.innerWidth;
-    let height = window.innerHeight;
+    // document.documentElement.clientWidth/Height is more reliable on Android
+    // It excludes scrollbars and is not affected by address bar changes
+    const docEl = document.documentElement;
+    let width = docEl.clientWidth || window.innerWidth;
+    let height = docEl.clientHeight || window.innerHeight;
 
-    // If container is mounted and has valid dimensions, prefer those
+    // Double-check with container if available
     if (containerRef.current) {
       const rect = containerRef.current.getBoundingClientRect();
-      // Only use container dimensions if they're valid (non-zero)
       if (rect.width > 0 && rect.height > 0) {
         width = rect.width;
         height = rect.height;
       }
     }
+
+    // Safety: ensure we have valid dimensions
+    if (width <= 0) width = window.screen.width || 360;
+    if (height <= 0) height = window.screen.height || 800;
 
     return { width, height };
   }, []);
@@ -497,13 +502,22 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
     if (!canvas) return;
 
     const initAnimation = async () => {
-      // Wait for next frame to ensure container has correct dimensions
+      // Wait for multiple frames to ensure layout is complete on Android
+      // Android Chrome needs more time for CSS to fully apply
       await new Promise((r) => requestAnimationFrame(r));
-      // Additional small delay for CSS to fully apply on mobile
-      await new Promise((r) => setTimeout(r, 50));
+      await new Promise((r) => requestAnimationFrame(r));
+      await new Promise((r) => setTimeout(r, 100));
 
       const dpr = window.devicePixelRatio || 1;
-      const { width: logicalWidth, height: logicalHeight } = getCanvasDimensions();
+      let { width: logicalWidth, height: logicalHeight } = getCanvasDimensions();
+
+      // On Android, dimensions might still be wrong - retry if needed
+      if (logicalWidth <= 0 || logicalHeight <= 0) {
+        await new Promise((r) => setTimeout(r, 100));
+        const dims = getCanvasDimensions();
+        logicalWidth = dims.width;
+        logicalHeight = dims.height;
+      }
 
       canvas.width = logicalWidth * dpr;
       canvas.height = logicalHeight * dpr;
