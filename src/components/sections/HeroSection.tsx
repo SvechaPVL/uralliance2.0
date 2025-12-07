@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import dynamic from "next/dynamic";
 import { motion } from "framer-motion";
 import { Button } from "@/components/primitives/button";
@@ -31,9 +31,9 @@ const HERO_CTA_VARIANTS = {
   },
 } as const;
 
-// Dynamic import ThreeScene with SSR disabled (Next.js recommended approach)
-const ThreeScene = dynamic(
-  () => import("@/components/animations/ThreeScene").then((mod) => mod.ThreeScene),
+// Dynamic import VortexBackground with SSR disabled (Next.js recommended approach)
+const VortexBackground = dynamic(
+  () => import("@/components/animations/VortexBackground").then((mod) => mod.VortexBackground),
   {
     ssr: false,
     loading: () => null,
@@ -49,9 +49,7 @@ const ThreeScene = dynamic(
  * Features:
  * - Split-screen design (Legal gold left, Tech cyan right)
  * - Hover morphing effect (accent colors shift)
- * - Glowing center line with pulse animation
- * - Particles background effect
- * - 3D scene on Tech side (lazy loaded)
+ * - Vortex particle background with dual-color theme (gold + cyan)
  * - Magnetic CTA buttons
  * - Responsive (vertical stack on mobile)
  * - Accessible keyboard navigation
@@ -67,6 +65,15 @@ export function HeroSection() {
   const techFeatures = sectionsConfig.hero.tech.features;
   const heroSectionRef = useRef<HTMLElement | null>(null);
   const { setProgress } = useHeroProgress();
+
+  // Responsive particle count for mobile optimization
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   // A/B Test: Get variant for Hero CTA using useSyncExternalStore for SSR safety
   const ctaVariant = useSyncExternalStore(
@@ -104,17 +111,8 @@ export function HeroSection() {
       if (raf) cancelAnimationFrame(raf);
     };
   }, [setProgress]);
-  // Desktop viewport detection using useSyncExternalStore for SSR safety
-  const desktopViewport = useSyncExternalStore(
-    (onStoreChange) => {
-      const mq = window.matchMedia("(min-width: 1024px)");
-      mq.addEventListener("change", onStoreChange);
-      return () => mq.removeEventListener("change", onStoreChange);
-    },
-    () => window.matchMedia("(min-width: 1024px)").matches,
-    () => false // Server always returns false
-  );
-  const shouldRenderThreeScene = !prefersReducedMotion && desktopViewport;
+
+  const shouldRenderVortex = !prefersReducedMotion;
 
   return (
     <Section
@@ -126,15 +124,33 @@ export function HeroSection() {
       aria-label="Hero section"
       ref={heroSectionRef}
     >
-      {/* 3D Background Scene */}
+      {/* Vortex Particle Background */}
       <div className="pointer-events-none absolute inset-0 -z-10" aria-hidden="true">
-        {shouldRenderThreeScene ? (
-          <ThreeScene className="h-full w-full" />
+        {/* Base gradient that shows through the vortex */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_-20%,rgba(6,182,212,0.25),transparent_60%),radial-gradient(ellipse_60%_40%_at_70%_80%,rgba(212,175,55,0.15),transparent_50%)]" />
+
+        {shouldRenderVortex ? (
+          <VortexBackground
+            containerClassName="h-full w-full"
+            particleCount={isMobile ? 250 : 600}
+            colorMode="dual"
+            baseSpeed={isMobile ? 0.06 : 0.08}
+            backgroundOpacity={0.08}
+            mouseInfluence={0}
+          />
         ) : (
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(6,182,212,0.35),rgba(3,7,18,0.95))]" />
+          <div
+            className="absolute inset-0"
+            style={{
+              background: `
+                radial-gradient(70% 60% at 15% 25%, rgba(212, 175, 55, 0.15), transparent 65%),
+                radial-gradient(70% 60% at 85% 25%, rgba(6, 182, 212, 0.15), transparent 65%)
+              `,
+            }}
+          />
         )}
-        <div className="absolute inset-0 bg-gradient-to-b from-[rgba(0,0,0,0.65)] via-[rgba(0,0,0,0.6)] to-[rgba(0,0,0,0.85)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,0,0,0.35),transparent_55%)]" />
+
+        {/* Vignette disabled - testing without it */}
       </div>
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
