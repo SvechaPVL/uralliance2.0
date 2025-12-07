@@ -119,7 +119,7 @@ export function Header() {
             {/* Logo */}
             <Link
               href={navigationConfig.header.logo.href}
-              className="group flex items-center gap-2"
+              className="group relative flex items-center gap-2"
             >
               <div
                 className={cn(
@@ -137,6 +137,31 @@ export function Header() {
               >
                 {navigationConfig.header.logo.text}
               </div>
+              {/* Santa Hat SVG - New Year decoration */}
+              <svg
+                className="absolute -top-2 -left-0.5 h-4 w-5 -rotate-[3deg] drop-shadow-sm"
+                viewBox="0 0 32 24"
+                fill="none"
+                aria-hidden="true"
+              >
+                {/* Hat base (red) */}
+                <path
+                  d="M4 20 C4 14, 10 8, 20 8 C26 8, 30 12, 30 16 L30 20 C30 22, 28 24, 26 24 L6 24 C4 24, 4 22, 4 20Z"
+                  fill="#c41e3a"
+                />
+                {/* Hat top curve */}
+                <path
+                  d="M20 8 C20 4, 24 2, 28 4"
+                  stroke="#c41e3a"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  fill="none"
+                />
+                {/* White fur trim */}
+                <rect x="2" y="20" width="30" height="4" rx="2" fill="#fff" />
+                {/* Pompom */}
+                <circle cx="29" cy="4" r="3" fill="#fff" />
+              </svg>
             </Link>
 
             {/* Desktop Navigation */}
