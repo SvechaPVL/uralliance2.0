@@ -1,0 +1,45 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bgGlow" cx="0.7" cy="0.5" r="0.6">
+      <stop offset="0%" stop-color="#0d1a1f"/>
+      <stop offset="100%" stop-color="#0a0a0f"/>
+    </radialGradient>
+    <linearGradient id="arcGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.1"/>
+      <stop offset="50%" stop-color="#06b6d4" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#06b6d4" stop-opacity="0.1"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1024" height="1024" fill="url(#bgGlow)"/>
+
+  <circle cx="900" cy="512" r="450" stroke="url(#arcGradient)" stroke-width="1.5" fill="none"/>
+  <circle cx="920" cy="512" r="380" stroke="url(#arcGradient)" stroke-width="1" fill="none"/>
+
+  <!-- Icon: Family tree with document -->
+  <g transform="translate(332, 50)" stroke="#d4af37" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- Top person (ancestor) -->
+    <circle cx="180" cy="50" r="30"/>
+    <!-- Vertical line down -->
+    <line x1="180" y1="80" x2="180" y2="130"/>
+    <!-- Horizontal branch -->
+    <line x1="100" y1="130" x2="260" y2="130"/>
+    <!-- Left branch down -->
+    <line x1="100" y1="130" x2="100" y2="170"/>
+    <!-- Right branch down -->
+    <line x1="260" y1="130" x2="260" y2="170"/>
+    <!-- Left person -->
+    <circle cx="100" cy="200" r="25"/>
+    <!-- Right person -->
+    <circle cx="260" cy="200" r="25"/>
+    <!-- Document below -->
+    <rect x="110" y="260" rx="8" width="140" height="120"/>
+    <!-- Lines on document -->
+    <line x1="130" y1="295" x2="230" y2="295"/>
+    <line x1="130" y1="325" x2="230" y2="325"/>
+    <line x1="130" y1="355" x2="190" y2="355"/>
+  </g>
+
+  <text x="200" y="520" font-family="system-ui, -apple-system, sans-serif" font-size="80" font-weight="600" fill="white">Оформление</text>
+  <text x="200" y="620" font-family="system-ui, -apple-system, sans-serif" font-size="80" font-weight="600" fill="white">наследства</text>
+</svg>

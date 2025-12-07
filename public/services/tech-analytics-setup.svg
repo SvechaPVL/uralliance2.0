@@ -1,0 +1,43 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bgGlow" cx="0.7" cy="0.5" r="0.6">
+      <stop offset="0%" stop-color="#0d1a1f"/>
+      <stop offset="100%" stop-color="#0a0a0f"/>
+    </radialGradient>
+    <linearGradient id="arcGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.1"/>
+      <stop offset="50%" stop-color="#06b6d4" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#06b6d4" stop-opacity="0.1"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1024" height="1024" fill="url(#bgGlow)"/>
+
+  <circle cx="900" cy="512" r="450" stroke="url(#arcGradient)" stroke-width="1.5" fill="none"/>
+  <circle cx="920" cy="512" r="380" stroke="url(#arcGradient)" stroke-width="1" fill="none"/>
+
+  <!-- Icon: Line chart with gear -->
+  <g transform="translate(200, 100)" stroke="#06b6d4" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- Chart axes -->
+    <path d="M60 320 L60 60 L340 60"/>
+    <!-- Rising line -->
+    <path d="M80 280 L140 220 L200 250 L260 140 L320 80"/>
+    <!-- Data points -->
+    <circle cx="80" cy="280" r="12" fill="#06b6d4"/>
+    <circle cx="140" cy="220" r="12" fill="#06b6d4"/>
+    <circle cx="200" cy="250" r="12" fill="#06b6d4"/>
+    <circle cx="260" cy="140" r="12" fill="#06b6d4"/>
+    <circle cx="320" cy="80" r="12" fill="#06b6d4"/>
+    <!-- Gear (settings) -->
+    <circle cx="100" cy="100" r="40"/>
+    <circle cx="100" cy="100" r="18"/>
+    <!-- Gear teeth -->
+    <line x1="100" y1="55" x2="100" y2="70"/>
+    <line x1="100" y1="130" x2="100" y2="145"/>
+    <line x1="55" y1="100" x2="70" y2="100"/>
+    <line x1="130" y1="100" x2="145" y2="100"/>
+  </g>
+
+  <text x="200" y="520" font-family="system-ui, -apple-system, sans-serif" font-size="80" font-weight="600" fill="white">Настройка</text>
+  <text x="200" y="620" font-family="system-ui, -apple-system, sans-serif" font-size="80" font-weight="600" fill="white">аналитики</text>
+</svg>

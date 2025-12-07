@@ -1,0 +1,41 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bgGlow" cx="0.7" cy="0.5" r="0.6">
+      <stop offset="0%" stop-color="#0d1a1f"/>
+      <stop offset="100%" stop-color="#0a0a0f"/>
+    </radialGradient>
+    <linearGradient id="arcGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.1"/>
+      <stop offset="50%" stop-color="#06b6d4" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#06b6d4" stop-opacity="0.1"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1024" height="1024" fill="url(#bgGlow)"/>
+
+  <circle cx="900" cy="512" r="450" stroke="url(#arcGradient)" stroke-width="1.5" fill="none"/>
+  <circle cx="920" cy="512" r="380" stroke="url(#arcGradient)" stroke-width="1" fill="none"/>
+
+  <!-- Icon: Clipboard with checkmarks - centered -->
+  <g transform="translate(260, 80)" stroke="#06b6d4" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- Clipboard board -->
+    <rect x="40" y="60" width="220" height="320" rx="16"/>
+    <!-- Clip at top -->
+    <rect x="100" y="40" width="100" height="50" rx="8"/>
+    <!-- Checkmark items -->
+    <path d="M75 150 L95 170 L130 130" stroke-width="7"/>
+    <line x1="150" y1="150" x2="225" y2="150"/>
+
+    <path d="M75 220 L95 240 L130 200" stroke-width="7"/>
+    <line x1="150" y1="220" x2="225" y2="220"/>
+
+    <path d="M75 290 L95 310 L130 270" stroke-width="7"/>
+    <line x1="150" y1="290" x2="210" y2="290"/>
+
+    <!-- Magnifying glass (audit symbol) -->
+    <circle cx="240" cy="340" r="45"/>
+    <line x1="275" y1="375" x2="310" y2="410" stroke-width="10"/>
+  </g>
+
+  <text x="200" y="570" font-family="system-ui, -apple-system, sans-serif" font-size="80" font-weight="600" fill="white">Аудит сайта</text>
+</svg>

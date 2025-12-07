@@ -1,0 +1,46 @@
+<svg width="1024" height="1024" viewBox="0 0 1024 1024" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bgGlow" cx="0.7" cy="0.5" r="0.6">
+      <stop offset="0%" stop-color="#0d1a1f"/>
+      <stop offset="100%" stop-color="#0a0a0f"/>
+    </radialGradient>
+    <linearGradient id="arcGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.1"/>
+      <stop offset="50%" stop-color="#06b6d4" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#06b6d4" stop-opacity="0.1"/>
+    </linearGradient>
+    <linearGradient id="comboGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d4af37"/>
+      <stop offset="100%" stop-color="#06b6d4"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1024" height="1024" fill="url(#bgGlow)"/>
+
+  <circle cx="900" cy="512" r="450" stroke="url(#arcGradient)" stroke-width="1.5" fill="none"/>
+  <circle cx="920" cy="512" r="380" stroke="url(#arcGradient)" stroke-width="1" fill="none"/>
+
+  <!-- Icon: Shield (legal) + Lock (tech) -->
+  <g transform="translate(160, 80)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none">
+    <!-- Shield (legal compliance) - wider -->
+    <g stroke="#d4af37">
+      <path d="M130 40 L30 90 L30 200 C30 300 130 360 130 360 C130 360 230 300 230 200 L230 90 L130 40"/>
+      <!-- Checkmark -->
+      <path d="M85 200 L115 230 L180 155" stroke-width="10"/>
+    </g>
+    <!-- Lock (data protection) - symmetric -->
+    <g stroke="#06b6d4">
+      <rect x="270" y="200" width="120" height="100" rx="14"/>
+      <!-- Shackle - centered -->
+      <path d="M295 200 L295 155 C295 115 355 115 355 155 L355 200"/>
+      <!-- Keyhole -->
+      <circle cx="330" cy="245" r="18" fill="#06b6d4"/>
+      <line x1="330" y1="263" x2="330" y2="285" stroke-width="8"/>
+    </g>
+    <!-- Connection -->
+    <path d="M230 200 L270 200" stroke="url(#comboGradient)" stroke-width="4" stroke-dasharray="8 4"/>
+  </g>
+
+  <text x="200" y="520" font-family="system-ui, -apple-system, sans-serif" font-size="80" font-weight="600" fill="white">Комплаенс +</text>
+  <text x="200" y="620" font-family="system-ui, -apple-system, sans-serif" font-size="80" font-weight="600" fill="white">защита данных</text>
+</svg>
