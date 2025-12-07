@@ -133,6 +133,15 @@ export function IntroLoader({ onComplete, minDisplayTime = 15000 }: IntroLoaderP
   const [isVisible, setIsVisible] = useState(true);
   const [isFadingOut, setIsFadingOut] = useState(false);
 
+  // DEBUG: Store last dimensions for debugging (persists after intro disappears)
+  const [debugInfo, setDebugInfo] = useState<{
+    container: string;
+    canvasPhys: string;
+    canvasLog: string;
+    window: string;
+    dpr: string;
+  } | null>(null);
+
   // Only render on client to avoid hydration mismatch
   useEffect(() => {
     startTimeRef.current = Date.now();
@@ -558,6 +567,18 @@ export function IntroLoader({ onComplete, minDisplayTime = 15000 }: IntroLoaderP
       canvas.width = logicalWidth * dpr;
       canvas.height = logicalHeight * dpr;
 
+      // DEBUG: Save dimensions for debugging (persists after intro disappears)
+      const containerRect = containerRef.current?.getBoundingClientRect();
+      setDebugInfo({
+        container: containerRect
+          ? `${containerRect.width.toFixed(0)}x${containerRect.height.toFixed(0)}`
+          : "?",
+        canvasPhys: `${canvas.width}x${canvas.height}`,
+        canvasLog: `${logicalWidth.toFixed(0)}x${logicalHeight.toFixed(0)}`,
+        window: `${window.innerWidth}x${window.innerHeight}`,
+        dpr: dpr.toFixed(2),
+      });
+
       const ctx = canvas.getContext("2d");
       if (ctx) {
         ctx.scale(dpr, dpr);
@@ -605,68 +626,66 @@ export function IntroLoader({ onComplete, minDisplayTime = 15000 }: IntroLoaderP
     };
   }, [isMounted, animate, nextWord, minDisplayTime, handleExit, getCanvasDimensions]);
 
-  // Don't render on server or after hiding
-  if (!isMounted || !isVisible) return null;
+  // Don't render on server
+  if (!isMounted) return null;
 
   return (
-    <div
-      ref={containerRef}
-      data-intro-loader
-      className={`fixed inset-0 z-[99999] flex items-center justify-center transition-opacity duration-700 ${
-        isFadingOut ? "opacity-0" : "opacity-100"
-      }`}
-      style={{ background: "#0b0b0c" }}
-    >
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0"
-        style={{
-          width: "100%",
-          height: "100%",
-        }}
-      />
+    <>
+      {/* DEBUG: Show canvas dimensions - PERSISTS AFTER INTRO DISAPPEARS */}
+      {debugInfo && (
+        <div className="fixed top-2 left-2 z-[999999] rounded-lg border border-white/20 bg-black/90 p-3 font-mono text-xs text-white">
+          <div className="mb-1 font-bold text-yellow-400">DEBUG INFO:</div>
+          <div>container: {debugInfo.container}</div>
+          <div>canvas(phys): {debugInfo.canvasPhys}</div>
+          <div>canvas(log): {debugInfo.canvasLog}</div>
+          <div>window: {debugInfo.window}</div>
+          <div>dpr: {debugInfo.dpr}</div>
+          <div className="mt-1 text-green-400">
+            {!isVisible ? "✓ Intro finished" : "⏳ Intro active"}
+          </div>
+        </div>
+      )}
 
-      {/* Subtle gradient overlay */}
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background: `
-            radial-gradient(70% 60% at 15% 25%, rgba(212, 175, 55, 0.08), transparent 65%),
-            radial-gradient(70% 60% at 85% 25%, rgba(6, 182, 212, 0.08), transparent 65%)
-          `,
-        }}
-      />
+      {/* Main intro - only visible when isVisible */}
+      {isVisible && (
+        <div
+          ref={containerRef}
+          data-intro-loader
+          className={`fixed inset-0 z-[99999] flex items-center justify-center transition-opacity duration-700 ${
+            isFadingOut ? "opacity-0" : "opacity-100"
+          }`}
+          style={{ background: "#0b0b0c" }}
+        >
+          <canvas
+            ref={canvasRef}
+            className="absolute inset-0"
+            style={{
+              width: "100%",
+              height: "100%",
+            }}
+          />
 
-      {/* DEBUG: Show canvas dimensions - REMOVE AFTER FIXING */}
-      <div className="absolute top-2 left-2 z-20 bg-black/80 p-2 font-mono text-xs text-white">
-        <div>
-          container: {containerRef.current?.getBoundingClientRect().width.toFixed(0)}x
-          {containerRef.current?.getBoundingClientRect().height.toFixed(0)}
-        </div>
-        <div>
-          canvas(phys): {canvasRef.current?.width}x{canvasRef.current?.height}
-        </div>
-        <div>
-          canvas(log):{" "}
-          {typeof window !== "undefined" && canvasRef.current
-            ? `${Math.round(canvasRef.current.width / window.devicePixelRatio)}x${Math.round(canvasRef.current.height / window.devicePixelRatio)}`
-            : "?"}
-        </div>
-        <div>
-          window:{" "}
-          {typeof window !== "undefined" ? `${window.innerWidth}x${window.innerHeight}` : "SSR"}
-        </div>
-        <div>dpr: {typeof window !== "undefined" ? window.devicePixelRatio.toFixed(2) : "SSR"}</div>
-      </div>
+          {/* Subtle gradient overlay */}
+          <div
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background: `
+                radial-gradient(70% 60% at 15% 25%, rgba(212, 175, 55, 0.08), transparent 65%),
+                radial-gradient(70% 60% at 85% 25%, rgba(6, 182, 212, 0.08), transparent 65%)
+              `,
+            }}
+          />
 
-      {/* Skip button */}
-      <button
-        onClick={handleExit}
-        className="absolute right-8 bottom-8 z-10 text-sm text-white/40 transition-colors duration-300 hover:text-white/70"
-        aria-label="Пропустить"
-      >
-        Пропустить →
-      </button>
-    </div>
+          {/* Skip button */}
+          <button
+            onClick={handleExit}
+            className="absolute right-8 bottom-8 z-10 text-sm text-white/40 transition-colors duration-300 hover:text-white/70"
+            aria-label="Пропустить"
+          >
+            Пропустить →
+          </button>
+        </div>
+      )}
+    </>
   );
 }
