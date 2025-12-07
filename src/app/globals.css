@@ -59,6 +59,12 @@ body {
   -ms-user-select: none;
 }
 
+/* Intro loader states */
+body.intro-complete #intro-overlay {
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
 /* Разрешаем выделение только для интерактивных элементов */
 input,
 textarea,

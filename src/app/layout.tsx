@@ -18,6 +18,7 @@ import {
 import { FaqJsonLd } from "@/components/seo/FaqJsonLd";
 import { HeroProgressProvider } from "@/context/HeroProgressContext";
 import { CustomCursor } from "@/components/effects/CustomCursor";
+import { IntroOverlay } from "@/components/system/IntroOverlay";
 import pagesConfig from "@/content/pages.json";
 
 const inter = Inter({
@@ -188,10 +189,19 @@ export default function RootLayout({
 
         {/* Турбо-страницы Яндекса */}
         <link rel="alternate" type="application/rss+xml" href="/turbo-rss" />
+
+        {/* Resource hints for performance */}
+        <link rel="preconnect" href="https://www.google-analytics.com" />
+        <link rel="preconnect" href="https://mc.yandex.ru" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+        <link rel="dns-prefetch" href="https://mc.yandex.ru" />
       </head>
       <body className={`${inter.variable} ${poppins.variable} antialiased`}>
+        {/* SSR overlay - hides content until intro loader is ready */}
+        <IntroOverlay />
+
         {/* Intro Loader - particle text effect */}
-        <IntroLoaderWrapper minDisplayTime={7000} />
+        <IntroLoaderWrapper minDisplayTime={5500} />
 
         {/* Custom Cursor */}
         <CustomCursor />

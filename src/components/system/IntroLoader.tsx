@@ -210,7 +210,8 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
     const fontSize = Math.min(logicalWidth / settings.fontSizeDivisor, settings.fontSizeMax);
 
     offscreenCtx.fillStyle = "white";
-    offscreenCtx.font = `bold ${fontSize}px "Poppins", "Inter", sans-serif`;
+    // Use system fonts as fallback to prevent italic on mobile
+    offscreenCtx.font = `bold ${fontSize}px "Poppins", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif`;
     offscreenCtx.textAlign = "center";
     offscreenCtx.textBaseline = "middle";
     offscreenCtx.fillText(word, logicalWidth / 2, logicalHeight / 2);
@@ -323,6 +324,16 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
       });
     }
 
+    // Show main content when loader starts fading out
+    document.body.classList.add("intro-complete");
+
+    // Hide SSR overlay
+    const overlay = document.getElementById("intro-overlay");
+    if (overlay) {
+      overlay.style.opacity = "0";
+      setTimeout(() => overlay.remove(), 500);
+    }
+
     setIsFadingOut(true);
 
     setTimeout(() => {
@@ -422,10 +433,12 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
       settingsRef.current = getResponsiveSettings();
 
       const dpr = window.devicePixelRatio || 1;
-      const rect = canvas.getBoundingClientRect();
+      // Use visualViewport for accurate mobile dimensions (handles keyboard, zoom)
+      const logicalWidth = window.visualViewport?.width || window.innerWidth;
+      const logicalHeight = window.visualViewport?.height || window.innerHeight;
 
-      canvas.width = rect.width * dpr;
-      canvas.height = rect.height * dpr;
+      canvas.width = logicalWidth * dpr;
+      canvas.height = logicalHeight * dpr;
 
       const ctx = canvas.getContext("2d");
       if (ctx) {
@@ -438,10 +451,16 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
       }
     };
 
-    updateCanvasSize();
+    // Don't call updateCanvasSize here - initAnimation does it
+    // Only listen for resize events
     window.addEventListener("resize", updateCanvasSize);
+    // Also listen for visualViewport changes (mobile keyboard, zoom)
+    window.visualViewport?.addEventListener("resize", updateCanvasSize);
 
-    return () => window.removeEventListener("resize", updateCanvasSize);
+    return () => {
+      window.removeEventListener("resize", updateCanvasSize);
+      window.visualViewport?.removeEventListener("resize", updateCanvasSize);
+    };
   }, [nextWord, getResponsiveSettings]);
 
   // Main animation loop
@@ -451,29 +470,44 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
     const canvas = canvasRef.current;
     if (!canvas) return;
 
-    const dpr = window.devicePixelRatio || 1;
-    const logicalWidth = window.innerWidth;
-    const logicalHeight = window.innerHeight;
+    const initAnimation = async () => {
+      // Wait for fonts to load before rendering text
+      // This prevents italic fallback font on mobile
+      try {
+        await document.fonts.ready;
+        // Give extra time for font to be usable
+        await new Promise((r) => setTimeout(r, 100));
+      } catch {
+        // Fallback if fonts API not available
+      }
 
-    canvas.width = logicalWidth * dpr;
-    canvas.height = logicalHeight * dpr;
+      const dpr = window.devicePixelRatio || 1;
+      // Use visualViewport for more accurate mobile dimensions
+      const logicalWidth = window.visualViewport?.width || window.innerWidth;
+      const logicalHeight = window.visualViewport?.height || window.innerHeight;
 
-    const ctx = canvas.getContext("2d");
-    if (ctx) {
-      ctx.scale(dpr, dpr);
-    }
+      canvas.width = logicalWidth * dpr;
+      canvas.height = logicalHeight * dpr;
 
-    // Fill initial background (use logical dimensions since ctx is scaled)
-    if (ctx) {
-      ctx.fillStyle = "#0b0b0c";
-      ctx.fillRect(0, 0, logicalWidth, logicalHeight);
-    }
+      const ctx = canvas.getContext("2d");
+      if (ctx) {
+        ctx.scale(dpr, dpr);
+      }
 
-    // Start with first word
-    nextWord(WORDS[0], canvas);
+      // Fill initial background (use logical dimensions since ctx is scaled)
+      if (ctx) {
+        ctx.fillStyle = "#0b0b0c";
+        ctx.fillRect(0, 0, logicalWidth, logicalHeight);
+      }
 
-    // Start animation
-    animate();
+      // Start with first word
+      nextWord(WORDS[0], canvas);
+
+      // Start animation
+      animate();
+    };
+
+    initAnimation();
 
     // Simple fixed-time display - show for exactly minDisplayTime
     // This ensures particles have time to form the word regardless of page load state
@@ -508,6 +542,7 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
   return (
     <div
       ref={containerRef}
+      data-intro-loader
       className={`fixed inset-0 z-[99999] flex items-center justify-center transition-opacity duration-700 ${
         isFadingOut ? "opacity-0" : "opacity-100"
       }`}
