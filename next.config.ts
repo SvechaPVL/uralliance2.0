@@ -30,12 +30,12 @@ const nextConfig: NextConfig = {
             key: "Content-Security-Policy",
             value:
               "default-src 'self'; " +
-              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://vercel.live https://mc.yandex.ru https://yandex.ru; " +
+              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://mc.yandex.ru https://yandex.ru; " +
               "style-src 'self' 'unsafe-inline'; " +
               "img-src 'self' data: blob: https: https://mc.yandex.ru; " +
               "font-src 'self' data:; " +
-              "connect-src 'self' https://vercel.live wss://ws-us3.pusher.com https://sockjs-us3.pusher.com https://mc.yandex.ru https://yandex.ru; " +
-              "frame-src 'self' https://vercel.live; " +
+              "connect-src 'self' https://mc.yandex.ru https://yandex.ru; " +
+              "frame-src 'self'; " +
               "object-src 'none'; " +
               "base-uri 'self'; " +
               "form-action 'self'; " +
