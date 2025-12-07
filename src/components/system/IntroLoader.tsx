@@ -138,23 +138,30 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
     setIsMounted(true);
   }, []);
 
-  // Get viewport dimensions that work correctly on mobile
-  // Mobile browsers have different behaviors with 100vh due to address bar
-  const getViewportDimensions = useCallback(() => {
+  // Get container dimensions - use actual container size, not viewport
+  // This ensures canvas matches its CSS container exactly
+  const getContainerDimensions = useCallback(() => {
+    // Use container's actual rendered size for accurate positioning
+    if (containerRef.current) {
+      const rect = containerRef.current.getBoundingClientRect();
+      return {
+        width: rect.width,
+        height: rect.height,
+      };
+    }
+    // Fallback to window dimensions if container not mounted yet
     if (typeof window === "undefined") {
       return { width: 1920, height: 1080 };
     }
-    // Prefer visualViewport as it excludes browser UI on mobile
-    const vv = window.visualViewport;
     return {
-      width: vv?.width ?? window.innerWidth,
-      height: vv?.height ?? window.innerHeight,
+      width: window.innerWidth,
+      height: window.innerHeight,
     };
   }, []);
 
   // Responsive settings based on screen size
   const getResponsiveSettings = useCallback(() => {
-    const { width } = getViewportDimensions();
+    const { width } = getContainerDimensions();
     const dpr = typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1;
     const isMobile = width < 768;
     const isTablet = width >= 768 && width < 1024;
@@ -183,7 +190,7 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
       colorBlendRateMin: 0.005,
       colorBlendRateMax: 0.015,
     };
-  }, [getViewportDimensions]);
+  }, [getContainerDimensions]);
 
   const settingsRef = useRef(getResponsiveSettings());
 
@@ -448,7 +455,7 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
       settingsRef.current = getResponsiveSettings();
 
       const dpr = window.devicePixelRatio || 1;
-      const { width: logicalWidth, height: logicalHeight } = getViewportDimensions();
+      const { width: logicalWidth, height: logicalHeight } = getContainerDimensions();
 
       canvas.width = logicalWidth * dpr;
       canvas.height = logicalHeight * dpr;
@@ -476,7 +483,7 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
       window.removeEventListener("resize", updateCanvasSize);
       window.visualViewport?.removeEventListener("resize", updateCanvasSize);
     };
-  }, [nextWord, getResponsiveSettings, getViewportDimensions]);
+  }, [nextWord, getResponsiveSettings, getContainerDimensions]);
 
   // Main animation loop
   useEffect(() => {
@@ -497,7 +504,7 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
       }
 
       const dpr = window.devicePixelRatio || 1;
-      const { width: logicalWidth, height: logicalHeight } = getViewportDimensions();
+      const { width: logicalWidth, height: logicalHeight } = getContainerDimensions();
 
       canvas.width = logicalWidth * dpr;
       canvas.height = logicalHeight * dpr;
@@ -547,7 +554,7 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
       clearTimeout(exitTimeout);
       clearTimeout(maxTimeout);
     };
-  }, [isMounted, animate, nextWord, minDisplayTime, handleExit, getViewportDimensions]);
+  }, [isMounted, animate, nextWord, minDisplayTime, handleExit, getContainerDimensions]);
 
   // Don't render on server or after hiding
   if (!isMounted || !isVisible) return null;
