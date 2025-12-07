@@ -173,7 +173,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const yandexMetrikaId = process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID;
-  const googleAnalyticsId = process.env.NEXT_PUBLIC_GA_ID || "G-K6F7HP6M2J";
+  const googleAnalyticsId = process.env.NEXT_PUBLIC_GA_ID || "G-LH4RFFLFJH";
 
   return (
     <html lang="ru">
