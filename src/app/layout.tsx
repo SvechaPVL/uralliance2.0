@@ -178,7 +178,7 @@ export default function RootLayout({
   const googleAnalyticsId = process.env.NEXT_PUBLIC_GA_ID || "G-LH4RFFLFJH";
 
   return (
-    <html lang="ru">
+    <html lang="ru" suppressHydrationWarning>
       <head>
         {/* OG Video for animated preview in messengers */}
         <meta property="og:video" content="https://uralliance.ru/og-video.mp4" />
@@ -206,7 +206,10 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         <link rel="dns-prefetch" href="https://mc.yandex.ru" />
       </head>
-      <body className={`${inter.variable} ${poppins.variable} antialiased`}>
+      <body
+        className={`${inter.variable} ${poppins.variable} antialiased`}
+        suppressHydrationWarning
+      >
         {/* SSR overlay - hides content until intro loader is ready */}
         <IntroOverlay />
 
