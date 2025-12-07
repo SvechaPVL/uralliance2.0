@@ -31,6 +31,7 @@ export function YandexMetrika({ counterId }: YandexMetrikaProps) {
             })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=${counterId}', 'ym');
 
             ym(${counterId}, 'init', {
+              ssr:true,
               clickmap:true,
               trackLinks:true,
               accurateTrackBounce:true,
