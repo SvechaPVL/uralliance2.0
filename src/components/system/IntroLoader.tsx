@@ -467,7 +467,6 @@ export function IntroLoader({ onComplete, minDisplayTime = 15000 }: IntroLoaderP
       nextWord(WORDS[wordIndexRef.current], canvas);
     }
 
-    // eslint-disable-next-line react-hooks/immutability
     animationRef.current = requestAnimationFrame(animate);
   }, [nextWord]);
 
@@ -519,30 +518,38 @@ export function IntroLoader({ onComplete, minDisplayTime = 15000 }: IntroLoaderP
     if (!canvas) return;
 
     const initAnimation = async () => {
-      // Wait for container to be fully rendered
-      // This is CRITICAL on Android where getBoundingClientRect() may return 0 initially
+      // Wait for container to be fully rendered with CORRECT dimensions
+      // On Android Chrome, the container may initially have wrong height
+      // We need to wait until it matches the expected viewport size
       const waitForContainer = async (): Promise<{ width: number; height: number }> => {
-        for (let attempt = 0; attempt < 10; attempt++) {
+        const expectedWidth = window.innerWidth || window.screen.width || 360;
+        const expectedHeight = window.innerHeight || window.screen.height || 800;
+
+        for (let attempt = 0; attempt < 20; attempt++) {
           await new Promise((r) => requestAnimationFrame(r));
 
           if (containerRef.current) {
             const rect = containerRef.current.getBoundingClientRect();
-            if (rect.width > 0 && rect.height > 0) {
+            // Check that dimensions are valid AND height is reasonable
+            // For portrait mode, height should be >= width
+            // Also check that height is close to expected (within 20%)
+            const heightIsReasonable =
+              rect.height > 0 &&
+              (rect.height >= rect.width * 0.8 || // Portrait or near-square
+                Math.abs(rect.height - expectedHeight) < expectedHeight * 0.2); // Close to expected
+
+            if (rect.width > 0 && heightIsReasonable) {
               return { width: rect.width, height: rect.height };
             }
           }
 
-          // Extra delay between retries
-          if (attempt > 0) {
-            await new Promise((r) => setTimeout(r, 50));
-          }
+          // Increasing delay between retries
+          await new Promise((r) => setTimeout(r, 30 + attempt * 10));
         }
 
-        // Final fallback
-        return {
-          width: window.innerWidth || window.screen.width || 360,
-          height: window.innerHeight || window.screen.height || 800,
-        };
+        // Final fallback - use window dimensions directly
+        console.warn("IntroLoader: Using window dimensions as fallback");
+        return { width: expectedWidth, height: expectedHeight };
       };
 
       const dpr = window.devicePixelRatio || 1;
@@ -637,13 +644,19 @@ export function IntroLoader({ onComplete, minDisplayTime = 15000 }: IntroLoaderP
           {containerRef.current?.getBoundingClientRect().height.toFixed(0)}
         </div>
         <div>
-          canvas: {canvasRef.current?.width}x{canvasRef.current?.height}
+          canvas(phys): {canvasRef.current?.width}x{canvasRef.current?.height}
+        </div>
+        <div>
+          canvas(log):{" "}
+          {typeof window !== "undefined" && canvasRef.current
+            ? `${Math.round(canvasRef.current.width / window.devicePixelRatio)}x${Math.round(canvasRef.current.height / window.devicePixelRatio)}`
+            : "?"}
         </div>
         <div>
           window:{" "}
           {typeof window !== "undefined" ? `${window.innerWidth}x${window.innerHeight}` : "SSR"}
         </div>
-        <div>dpr: {typeof window !== "undefined" ? window.devicePixelRatio : "SSR"}</div>
+        <div>dpr: {typeof window !== "undefined" ? window.devicePixelRatio.toFixed(2) : "SSR"}</div>
       </div>
 
       {/* Skip button */}
