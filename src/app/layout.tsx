@@ -5,8 +5,10 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { OverlayScrollbar } from "@/components/system/OverlayScrollbar";
 import { YandexMetrika } from "@/components/system/YandexMetrika";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { CookieConsent } from "@/components/system/CookieConsent";
 import { PromoBanner } from "@/components/system/PromoBanner";
+import { IntroLoaderWrapper } from "@/components/system/IntroLoaderWrapper";
 import {
   OrganizationJsonLd,
   WebSiteJsonLd,
@@ -171,6 +173,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const yandexMetrikaId = process.env.NEXT_PUBLIC_YANDEX_METRIKA_ID;
+  const googleAnalyticsId = process.env.NEXT_PUBLIC_GA_ID || "G-K6F7HP6M2J";
 
   return (
     <html lang="ru">
@@ -187,6 +190,9 @@ export default function RootLayout({
         <link rel="alternate" type="application/rss+xml" href="/turbo-rss" />
       </head>
       <body className={`${inter.variable} ${poppins.variable} antialiased`}>
+        {/* Intro Loader - particle text effect */}
+        <IntroLoaderWrapper minDisplayTime={7000} />
+
         {/* Custom Cursor */}
         <CustomCursor />
 
@@ -218,6 +224,7 @@ export default function RootLayout({
 
         {/* Analytics */}
         {yandexMetrikaId && <YandexMetrika counterId={yandexMetrikaId} />}
+        <GoogleAnalytics gaId={googleAnalyticsId} />
       </body>
     </html>
   );
