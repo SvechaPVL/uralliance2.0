@@ -30,11 +30,11 @@ const nextConfig: NextConfig = {
             key: "Content-Security-Policy",
             value:
               "default-src 'self'; " +
-              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://mc.yandex.ru https://yandex.ru; " +
+              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://mc.yandex.ru https://mc.yandex.com https://yandex.ru https://yastatic.net; " +
               "style-src 'self' 'unsafe-inline'; " +
-              "img-src 'self' data: blob: https: https://mc.yandex.ru; " +
+              "img-src 'self' data: blob: https: https://mc.yandex.ru https://mc.yandex.com; " +
               "font-src 'self' data:; " +
-              "connect-src 'self' https://mc.yandex.ru https://yandex.ru; " +
+              "connect-src 'self' https://mc.yandex.ru https://mc.yandex.com https://yandex.ru https://mc.webvisor.org wss://mc.webvisor.org; " +
               "frame-src 'self'; " +
               "object-src 'none'; " +
               "base-uri 'self'; " +
