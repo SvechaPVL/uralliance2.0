@@ -138,9 +138,23 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
     setIsMounted(true);
   }, []);
 
+  // Get viewport dimensions that work correctly on mobile
+  // Mobile browsers have different behaviors with 100vh due to address bar
+  const getViewportDimensions = useCallback(() => {
+    if (typeof window === "undefined") {
+      return { width: 1920, height: 1080 };
+    }
+    // Prefer visualViewport as it excludes browser UI on mobile
+    const vv = window.visualViewport;
+    return {
+      width: vv?.width ?? window.innerWidth,
+      height: vv?.height ?? window.innerHeight,
+    };
+  }, []);
+
   // Responsive settings based on screen size
   const getResponsiveSettings = useCallback(() => {
-    const width = typeof window !== "undefined" ? window.innerWidth : 1920;
+    const { width } = getViewportDimensions();
     const dpr = typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1;
     const isMobile = width < 768;
     const isTablet = width >= 768 && width < 1024;
@@ -169,7 +183,7 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
       colorBlendRateMin: 0.005,
       colorBlendRateMax: 0.015,
     };
-  }, []);
+  }, [getViewportDimensions]);
 
   const settingsRef = useRef(getResponsiveSettings());
 
@@ -210,8 +224,9 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
     const fontSize = Math.min(logicalWidth / settings.fontSizeDivisor, settings.fontSizeMax);
 
     offscreenCtx.fillStyle = "white";
-    // Use system fonts as fallback to prevent italic on mobile
-    offscreenCtx.font = `bold ${fontSize}px "Poppins", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif`;
+    // Use explicit font-style normal to prevent italic on mobile
+    // Safari and some mobile browsers may default to italic for missing fonts
+    offscreenCtx.font = `normal bold ${fontSize}px "Poppins", "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif`;
     offscreenCtx.textAlign = "center";
     offscreenCtx.textBaseline = "middle";
     offscreenCtx.fillText(word, logicalWidth / 2, logicalHeight / 2);
@@ -433,15 +448,15 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
       settingsRef.current = getResponsiveSettings();
 
       const dpr = window.devicePixelRatio || 1;
-      // Use visualViewport for accurate mobile dimensions (handles keyboard, zoom)
-      const logicalWidth = window.visualViewport?.width || window.innerWidth;
-      const logicalHeight = window.visualViewport?.height || window.innerHeight;
+      const { width: logicalWidth, height: logicalHeight } = getViewportDimensions();
 
       canvas.width = logicalWidth * dpr;
       canvas.height = logicalHeight * dpr;
 
       const ctx = canvas.getContext("2d");
       if (ctx) {
+        // Reset transform before scaling (important for resize)
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
         ctx.scale(dpr, dpr);
       }
 
@@ -461,7 +476,7 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
       window.removeEventListener("resize", updateCanvasSize);
       window.visualViewport?.removeEventListener("resize", updateCanvasSize);
     };
-  }, [nextWord, getResponsiveSettings]);
+  }, [nextWord, getResponsiveSettings, getViewportDimensions]);
 
   // Main animation loop
   useEffect(() => {
@@ -482,9 +497,7 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
       }
 
       const dpr = window.devicePixelRatio || 1;
-      // Use visualViewport for more accurate mobile dimensions
-      const logicalWidth = window.visualViewport?.width || window.innerWidth;
-      const logicalHeight = window.visualViewport?.height || window.innerHeight;
+      const { width: logicalWidth, height: logicalHeight } = getViewportDimensions();
 
       canvas.width = logicalWidth * dpr;
       canvas.height = logicalHeight * dpr;
@@ -534,7 +547,7 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
       clearTimeout(exitTimeout);
       clearTimeout(maxTimeout);
     };
-  }, [isMounted, animate, nextWord, minDisplayTime, handleExit]);
+  }, [isMounted, animate, nextWord, minDisplayTime, handleExit, getViewportDimensions]);
 
   // Don't render on server or after hiding
   if (!isMounted || !isVisible) return null;
@@ -546,14 +559,20 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
       className={`fixed inset-0 z-[99999] flex items-center justify-center transition-opacity duration-700 ${
         isFadingOut ? "opacity-0" : "opacity-100"
       }`}
-      style={{ background: "#0b0b0c" }}
+      style={{
+        background: "#0b0b0c",
+        // Use dvh for mobile browsers (dynamic viewport height)
+        // Falls back to vh on unsupported browsers
+        height: "100dvh",
+        width: "100dvw",
+      }}
     >
       <canvas
         ref={canvasRef}
-        className="absolute inset-0 h-full w-full"
+        className="absolute inset-0"
         style={{
-          width: "100vw",
-          height: "100vh",
+          width: "100%",
+          height: "100%",
         }}
       />
 
