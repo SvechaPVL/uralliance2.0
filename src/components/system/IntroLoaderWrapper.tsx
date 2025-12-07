@@ -60,13 +60,8 @@ export function IntroLoaderWrapper({ minDisplayTime = 2500 }: IntroLoaderWrapper
 
     if (isBot) {
       // Immediately mark intro as complete for bots
+      // CSS handles hiding #intro-overlay via body.intro-complete selector
       document.body.classList.add("intro-complete");
-      // Remove overlay if present
-      const overlay = document.getElementById("intro-overlay");
-      if (overlay) {
-        overlay.style.opacity = "0";
-        setTimeout(() => overlay.remove(), 100);
-      }
     }
   }, [isBot]);
 

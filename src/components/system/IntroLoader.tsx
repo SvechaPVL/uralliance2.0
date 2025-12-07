@@ -377,12 +377,8 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
     // Show main content when loader starts fading out
     document.body.classList.add("intro-complete");
 
-    // Hide SSR overlay
-    const overlay = document.getElementById("intro-overlay");
-    if (overlay) {
-      overlay.style.opacity = "0";
-      setTimeout(() => overlay.remove(), 500);
-    }
+    // SSR overlay is hidden via CSS when body.intro-complete is set
+    // No direct DOM manipulation needed - CSS handles opacity transition
 
     setIsFadingOut(true);
 
