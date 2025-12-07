@@ -1,9 +1,6 @@
 services:
   uralliance-web:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: uralliance:latest
+    image: ghcr.io/svechapvl/uralliance:latest
     container_name: uralliance-web
     restart: unless-stopped
     ports:

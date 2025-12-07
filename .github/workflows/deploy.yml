@@ -6,10 +6,17 @@ on:
       - main
   workflow_dispatch:
 
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: svechapvl/uralliance
+
 jobs:
-  deploy:
-    name: Build and Deploy
+  build:
+    name: Build and Push Image
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
 
     steps:
       - name: Checkout code
@@ -18,24 +25,44 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: Build Docker image
-        run: |
-          docker build -t uralliance:${{ github.sha }} .
-          docker tag uralliance:${{ github.sha }} uralliance:latest
-
-      - name: Save Docker image
-        run: |
-          docker save uralliance:latest | gzip > uralliance-latest.tar.gz
-
-      - name: Copy files to server
-        uses: appleboy/scp-action@master
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
         with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
-          source: "uralliance-latest.tar.gz,docker-compose.yml"
-          target: "/opt/uralliance"
+          registry: ghcr.io
+          username: svechapvl
+          password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/svechapvl/uralliance
+          tags: |
+            type=sha,prefix=
+            type=raw,value=latest
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            NEXT_PUBLIC_SITE_URL=https://uralliance.ru
+            NEXT_PUBLIC_YANDEX_METRIKA_ID=105470354
+            NEXT_PUBLIC_GA_ID=G-LH4RFFLFJH
+            NEXT_PUBLIC_WHATSAPP_PHONE=79149618687
+            NEXT_PUBLIC_TELEGRAM_USERNAME=svechapvl
+
+  deploy:
+    name: Deploy to Server
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
       - name: Deploy to server
         uses: appleboy/ssh-action@master
         with:
@@ -44,38 +71,22 @@ jobs:
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
             cd /opt/uralliance
-
-            # Load new image
-            docker load < uralliance-latest.tar.gz
-            rm uralliance-latest.tar.gz
-
-            # Load environment variables
+            echo "${{ secrets.CR_PAT }}" | docker login ghcr.io -u svechapvl --password-stdin
+            docker pull ghcr.io/svechapvl/uralliance:latest
             if [ ! -f .env ]; then
               echo "ERROR: .env file not found!"
               exit 1
             fi
-
-            # Stop and remove old container
             docker compose down || true
-
-            # Start new container
             docker compose up -d
-
-            # Clean up old images
             docker image prune -f
-
-            # Show status
             docker compose ps
-            docker compose logs --tail=50
+            docker compose logs --tail=30
 
       - name: Health check
         run: |
-          sleep 10
+          sleep 15
           curl -f https://uralliance.ru || exit 1
-
-      - name: Cleanup
-        if: always()
-        run: rm -f uralliance-latest.tar.gz
 
       - name: Notify on failure
         if: failure()
