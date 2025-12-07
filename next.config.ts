@@ -4,6 +4,9 @@ const nextConfig: NextConfig = {
   // Output standalone для Docker
   output: "standalone",
 
+  // Убираем trailing slash для консистентности URL (без редиректов 301)
+  trailingSlash: false,
+
   // Оптимизация производительности
   compiler: {
     // Удаляем console.log в продакшене
@@ -27,11 +30,11 @@ const nextConfig: NextConfig = {
             key: "Content-Security-Policy",
             value:
               "default-src 'self'; " +
-              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://vercel.live; " +
+              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://vercel.live https://mc.yandex.ru https://yandex.ru; " +
               "style-src 'self' 'unsafe-inline'; " +
-              "img-src 'self' data: blob: https:; " +
+              "img-src 'self' data: blob: https: https://mc.yandex.ru; " +
               "font-src 'self' data:; " +
-              "connect-src 'self' https://vercel.live wss://ws-us3.pusher.com https://sockjs-us3.pusher.com; " +
+              "connect-src 'self' https://vercel.live wss://ws-us3.pusher.com https://sockjs-us3.pusher.com https://mc.yandex.ru https://yandex.ru; " +
               "frame-src 'self' https://vercel.live; " +
               "object-src 'none'; " +
               "base-uri 'self'; " +
