@@ -176,7 +176,7 @@ export default function RootLayout({
     <html lang="ru">
       <head>
         {/* Яндекс.Вебмастер верификация */}
-        <meta name="yandex-verification" content="your-yandex-verification-code" />
+        <meta name="yandex-verification" content="d33a8b0da9bdd7ed" />
 
         {/* Региональная привязка для Яндекса */}
         <meta name="geo.region" content="RU-PRI" />
