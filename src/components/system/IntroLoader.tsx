@@ -138,30 +138,34 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
     setIsMounted(true);
   }, []);
 
-  // Get container dimensions - use actual container size, not viewport
-  // This ensures canvas matches its CSS container exactly
-  const getContainerDimensions = useCallback(() => {
-    // Use container's actual rendered size for accurate positioning
-    if (containerRef.current) {
-      const rect = containerRef.current.getBoundingClientRect();
-      return {
-        width: rect.width,
-        height: rect.height,
-      };
-    }
-    // Fallback to window dimensions if container not mounted yet
+  // Get dimensions for canvas - use window dimensions as primary source
+  // getBoundingClientRect can return 0 before CSS is fully applied on mobile
+  const getCanvasDimensions = useCallback(() => {
     if (typeof window === "undefined") {
       return { width: 1920, height: 1080 };
     }
-    return {
-      width: window.innerWidth,
-      height: window.innerHeight,
-    };
+
+    // On mobile, window.innerHeight includes address bar in some browsers
+    // but it's more reliable than getBoundingClientRect during initial render
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+
+    // If container is mounted and has valid dimensions, prefer those
+    if (containerRef.current) {
+      const rect = containerRef.current.getBoundingClientRect();
+      // Only use container dimensions if they're valid (non-zero)
+      if (rect.width > 0 && rect.height > 0) {
+        width = rect.width;
+        height = rect.height;
+      }
+    }
+
+    return { width, height };
   }, []);
 
   // Responsive settings based on screen size
   const getResponsiveSettings = useCallback(() => {
-    const { width } = getContainerDimensions();
+    const { width } = getCanvasDimensions();
     const dpr = typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1;
     const isMobile = width < 768;
     const isTablet = width >= 768 && width < 1024;
@@ -190,7 +194,7 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
       colorBlendRateMin: 0.005,
       colorBlendRateMax: 0.015,
     };
-  }, [getContainerDimensions]);
+  }, [getCanvasDimensions]);
 
   const settingsRef = useRef(getResponsiveSettings());
 
@@ -231,9 +235,9 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
     const fontSize = Math.min(logicalWidth / settings.fontSizeDivisor, settings.fontSizeMax);
 
     offscreenCtx.fillStyle = "white";
-    // Use explicit font-style normal to prevent italic on mobile
-    // Safari and some mobile browsers may default to italic for missing fonts
-    offscreenCtx.font = `normal bold ${fontSize}px "Poppins", "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif`;
+    // Use system fonts only - web fonts may not be loaded yet on mobile
+    // Arial and sans-serif are always available and never italic by default
+    offscreenCtx.font = `700 ${fontSize}px Arial, sans-serif`;
     offscreenCtx.textAlign = "center";
     offscreenCtx.textBaseline = "middle";
     offscreenCtx.fillText(word, logicalWidth / 2, logicalHeight / 2);
@@ -455,7 +459,7 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
       settingsRef.current = getResponsiveSettings();
 
       const dpr = window.devicePixelRatio || 1;
-      const { width: logicalWidth, height: logicalHeight } = getContainerDimensions();
+      const { width: logicalWidth, height: logicalHeight } = getCanvasDimensions();
 
       canvas.width = logicalWidth * dpr;
       canvas.height = logicalHeight * dpr;
@@ -483,7 +487,7 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
       window.removeEventListener("resize", updateCanvasSize);
       window.visualViewport?.removeEventListener("resize", updateCanvasSize);
     };
-  }, [nextWord, getResponsiveSettings, getContainerDimensions]);
+  }, [nextWord, getResponsiveSettings, getCanvasDimensions]);
 
   // Main animation loop
   useEffect(() => {
@@ -493,18 +497,13 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
     if (!canvas) return;
 
     const initAnimation = async () => {
-      // Wait for fonts to load before rendering text
-      // This prevents italic fallback font on mobile
-      try {
-        await document.fonts.ready;
-        // Give extra time for font to be usable
-        await new Promise((r) => setTimeout(r, 100));
-      } catch {
-        // Fallback if fonts API not available
-      }
+      // Wait for next frame to ensure container has correct dimensions
+      await new Promise((r) => requestAnimationFrame(r));
+      // Additional small delay for CSS to fully apply on mobile
+      await new Promise((r) => setTimeout(r, 50));
 
       const dpr = window.devicePixelRatio || 1;
-      const { width: logicalWidth, height: logicalHeight } = getContainerDimensions();
+      const { width: logicalWidth, height: logicalHeight } = getCanvasDimensions();
 
       canvas.width = logicalWidth * dpr;
       canvas.height = logicalHeight * dpr;
@@ -554,7 +553,7 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
       clearTimeout(exitTimeout);
       clearTimeout(maxTimeout);
     };
-  }, [isMounted, animate, nextWord, minDisplayTime, handleExit, getContainerDimensions]);
+  }, [isMounted, animate, nextWord, minDisplayTime, handleExit, getCanvasDimensions]);
 
   // Don't render on server or after hiding
   if (!isMounted || !isVisible) return null;
@@ -566,13 +565,7 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
       className={`fixed inset-0 z-[99999] flex items-center justify-center transition-opacity duration-700 ${
         isFadingOut ? "opacity-0" : "opacity-100"
       }`}
-      style={{
-        background: "#0b0b0c",
-        // Use dvh for mobile browsers (dynamic viewport height)
-        // Falls back to vh on unsupported browsers
-        height: "100dvh",
-        width: "100dvw",
-      }}
+      style={{ background: "#0b0b0c" }}
     >
       <canvas
         ref={canvasRef}
