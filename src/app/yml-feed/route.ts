@@ -82,7 +82,7 @@ export async function GET() {
       name: "ЭЦП - Электронная подпись",
       description:
         "Получение электронной цифровой подписи (ЭЦП) для юридических лиц и ИП. Квалифицированная электронная подпись для работы с госуслугами, торговыми площадками, электронным документооборотом",
-      url: `${baseUrl}/services/legal/ecp`,
+      url: `${baseUrl}/ecp`,
       price: "от 3000",
       picture: `${baseUrl}/services/legal-ecp.webp`,
     },

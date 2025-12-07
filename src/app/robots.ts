@@ -7,8 +7,8 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: "*",
-        allow: "/",
-        disallow: ["/api/", "/_next/", "/admin/"],
+        allow: ["/", "/sitemap.xml", "/robots.txt", "/manifest.webmanifest"],
+        disallow: ["/api/", "/_next/", "/admin/", "/*.json$"],
       },
       {
         userAgent: "Googlebot",
@@ -19,8 +19,10 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: "Yandex",
         allow: "/",
         disallow: ["/api/", "/_next/", "/admin/"],
+        // crawlDelay не поддерживается в MetadataRoute.Robots
       },
     ],
-    sitemap: `${baseUrl}/sitemap.xml`,
+    sitemap: [`${baseUrl}/sitemap.xml`, `${baseUrl}/turbo-rss`, `${baseUrl}/yml-feed`],
+    host: baseUrl,
   };
 }

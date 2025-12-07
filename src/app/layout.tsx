@@ -7,7 +7,7 @@ import { OverlayScrollbar } from "@/components/system/OverlayScrollbar";
 import { YandexMetrika } from "@/components/system/YandexMetrika";
 import { CookieConsent } from "@/components/system/CookieConsent";
 import { PromoBanner } from "@/components/system/PromoBanner";
-import { OrganizationJsonLd, WebSiteJsonLd } from "@/components/seo/JsonLd";
+import { OrganizationJsonLd, WebSiteJsonLd, LocalBusinessJsonLd } from "@/components/seo/JsonLd";
 import { FaqJsonLd } from "@/components/seo/FaqJsonLd";
 import { HeroProgressProvider } from "@/context/HeroProgressContext";
 import { CustomCursor } from "@/components/effects/CustomCursor";
@@ -188,6 +188,7 @@ export default function RootLayout({
         {/* Structured Data for SEO */}
         <OrganizationJsonLd />
         <WebSiteJsonLd />
+        <LocalBusinessJsonLd />
         <FaqJsonLd />
 
         <HeroProgressProvider>

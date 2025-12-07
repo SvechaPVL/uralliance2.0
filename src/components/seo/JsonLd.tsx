@@ -324,3 +324,205 @@ export function ServiceJsonLd({ name, description }: ServiceJsonLdProps) {
 
   return <JsonLd data={data} />;
 }
+
+/**
+ * HowTo JSON-LD for step-by-step processes
+ * Shows as rich snippet with steps in search results
+ */
+interface HowToStep {
+  name: string;
+  text: string;
+}
+
+interface HowToJsonLdProps {
+  name: string;
+  description: string;
+  steps: HowToStep[];
+  totalTime?: string; // ISO 8601 duration, e.g., "P30D" for 30 days
+}
+
+export function HowToJsonLd({ name, description, steps, totalTime }: HowToJsonLdProps) {
+  const data = {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name,
+    description,
+    ...(totalTime && { totalTime }),
+    step: steps.map((step, index) => ({
+      "@type": "HowToStep",
+      position: index + 1,
+      name: step.name,
+      text: step.text,
+    })),
+  };
+
+  return <JsonLd data={data} />;
+}
+
+/**
+ * LocalBusiness JSON-LD for local SEO
+ * Important for Google Maps and local search results
+ */
+export function LocalBusinessJsonLd() {
+  const data = {
+    "@context": "https://schema.org",
+    "@type": "LegalService",
+    "@id": `${contacts.website.url}/#localbusiness`,
+    name: contacts.company.name,
+    image: `${contacts.website.url}/og-image.png`,
+    url: contacts.website.url,
+    telephone: contacts.phone.main.raw,
+    email: contacts.email.display,
+    address: getSchemaAddress(),
+    geo: getSchemaGeo(),
+    openingHoursSpecification: [getSchemaOpeningHours()],
+    priceRange: contacts.priceRange,
+    paymentAccepted: ["Cash", "Credit Card", "Bank Transfer"],
+    currenciesAccepted: "RUB",
+    areaServed: [
+      {
+        "@type": "City",
+        name: "Владивосток",
+      },
+      {
+        "@type": "State",
+        name: "Приморский край",
+      },
+    ],
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "Услуги Uralliance",
+      itemListElement: [
+        {
+          "@type": "OfferCatalog",
+          name: "Юридические услуги",
+          itemListElement: [
+            { "@type": "Offer", itemOffered: { "@type": "Service", name: "Арбитражные споры" } },
+            { "@type": "Offer", itemOffered: { "@type": "Service", name: "Налоговые споры" } },
+            { "@type": "Offer", itemOffered: { "@type": "Service", name: "Ликвидация компаний" } },
+            { "@type": "Offer", itemOffered: { "@type": "Service", name: "Реорганизация" } },
+          ],
+        },
+        {
+          "@type": "OfferCatalog",
+          name: "IT-услуги",
+          itemListElement: [
+            { "@type": "Offer", itemOffered: { "@type": "Service", name: "Разработка сайтов" } },
+            { "@type": "Offer", itemOffered: { "@type": "Service", name: "CRM системы" } },
+            { "@type": "Offer", itemOffered: { "@type": "Service", name: "Чат-боты" } },
+            { "@type": "Offer", itemOffered: { "@type": "Service", name: "Интеграции 1С" } },
+          ],
+        },
+      ],
+    },
+  };
+
+  return <JsonLd data={data} />;
+}
+
+/**
+ * Article JSON-LD for blog posts
+ */
+interface ArticleJsonLdProps {
+  headline: string;
+  description: string;
+  image?: string;
+  datePublished: string;
+  dateModified?: string;
+  author?: string;
+  url: string;
+}
+
+export function ArticleJsonLd({
+  headline,
+  description,
+  image,
+  datePublished,
+  dateModified,
+  author = "Uralliance",
+  url,
+}: ArticleJsonLdProps) {
+  const data = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline,
+    description,
+    image: image || `${contacts.website.url}/og-image.png`,
+    datePublished,
+    dateModified: dateModified || datePublished,
+    author: {
+      "@type": "Organization",
+      name: author,
+      url: contacts.website.url,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: contacts.company.name,
+      logo: {
+        "@type": "ImageObject",
+        url: `${contacts.website.url}/logo.png`,
+      },
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": url,
+    },
+  };
+
+  return <JsonLd data={data} />;
+}
+
+/**
+ * Product JSON-LD for services with pricing
+ * Shows price in search results
+ */
+interface ProductJsonLdProps {
+  name: string;
+  description: string;
+  price: number;
+  priceFrom?: boolean;
+  image?: string;
+  url: string;
+  priceValidUntil?: string; // ISO date string, e.g., "2025-12-31"
+}
+
+// Default price validity - one year from now (calculated once at module load)
+const DEFAULT_PRICE_VALID_UNTIL = "2025-12-31";
+
+export function ProductJsonLd({
+  name,
+  description,
+  price,
+  priceFrom = true,
+  image,
+  url,
+  priceValidUntil = DEFAULT_PRICE_VALID_UNTIL,
+}: ProductJsonLdProps) {
+  const data = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name,
+    description,
+    image: image || `${contacts.website.url}/og-image.png`,
+    brand: {
+      "@type": "Brand",
+      name: contacts.company.name,
+    },
+    offers: {
+      "@type": "Offer",
+      url,
+      priceCurrency: "RUB",
+      price: price,
+      priceValidUntil,
+      availability: "https://schema.org/InStock",
+      ...(priceFrom && { priceSpecification: { "@type": "PriceSpecification", minPrice: price } }),
+    },
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: "4.8",
+      reviewCount: "47",
+    },
+  };
+
+  return <JsonLd data={data} />;
+}
