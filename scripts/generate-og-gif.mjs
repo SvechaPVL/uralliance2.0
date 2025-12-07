@@ -18,9 +18,12 @@ const WIDTH = 1200;
 const HEIGHT = 630;
 
 // Animation settings
-const FPS = 20; // Higher FPS = smoother
-const DURATION_SECONDS = 2.5;
-const TOTAL_FRAMES = Math.floor(FPS * DURATION_SECONDS);
+const FPS = 20;
+const CONVERGE_SECONDS = 1.5; // Time for particles to form text
+const HOLD_SECONDS = 1.5; // Time to hold the formed text
+const CONVERGE_FRAMES = Math.floor(FPS * CONVERGE_SECONDS);
+const HOLD_FRAMES = Math.floor(FPS * HOLD_SECONDS);
+const TOTAL_FRAMES = CONVERGE_FRAMES + HOLD_FRAMES;
 
 // Brand colors
 const COLORS = {
@@ -110,7 +113,7 @@ function getTextPixels(ctx, text, fontSize, color) {
   const pixels = imageData.data;
 
   const positions = [];
-  const pixelStep = 4; // Sample every 4th pixel for performance
+  const pixelStep = 3; // Sample every 3rd pixel for denser text
 
   for (let y = 0; y < HEIGHT; y += pixelStep) {
     for (let x = 0; x < WIDTH; x += pixelStep) {
@@ -151,10 +154,10 @@ function createParticles(textPositions) {
     particle.targetG = pos.color.g;
     particle.targetB = pos.color.b;
 
-    particle.size = Math.random() * 2 + 2;
-    particle.maxSpeed = Math.random() * 8 + 18; // Fast but smooth
-    particle.maxForce = Math.random() * 0.5 + 1; // Variable smoothness
-    particle.colorSpeed = Math.random() * 0.04 + 0.03;
+    particle.size = Math.random() * 1.5 + 1.5; // Smaller for clearer text
+    particle.maxSpeed = Math.random() * 20 + 30; // Very fast
+    particle.maxForce = Math.random() * 2 + 3; // Very strong steering
+    particle.colorSpeed = Math.random() * 0.08 + 0.05;
 
     particles.push(particle);
   }
@@ -176,7 +179,7 @@ function renderFrame(ctx, particles, alpha = 0.15) {
 
 async function generateGif() {
   console.log("Generating OG GIF...");
-  console.log(`Size: ${WIDTH}x${HEIGHT}, FPS: ${FPS}, Duration: ${DURATION_SECONDS}s`);
+  console.log(`Size: ${WIDTH}x${HEIGHT}, FPS: ${FPS}, Duration: ${CONVERGE_SECONDS + HOLD_SECONDS}s (${CONVERGE_SECONDS}s converge + ${HOLD_SECONDS}s hold)`);
 
   const canvas = createCanvas(WIDTH, HEIGHT);
   const ctx = canvas.getContext("2d");
@@ -206,20 +209,32 @@ async function generateGif() {
 
   // Render frames
   for (let frame = 0; frame < TOTAL_FRAMES; frame++) {
-    // Update particles
-    for (const p of particles) {
-      p.update();
+    // Update particles (only during convergence phase)
+    if (frame < CONVERGE_FRAMES) {
+      for (const p of particles) {
+        p.update();
+      }
     }
 
-    // Smooth motion blur - lower alpha = more trail = smoother look
-    const alpha = frame < TOTAL_FRAMES - 8 ? 0.12 : 0.3;
-    renderFrame(ctx, particles, alpha);
+    // Motion blur during convergence, solid during hold
+    const isHoldPhase = frame >= CONVERGE_FRAMES;
+    if (isHoldPhase) {
+      // Clear background completely and draw solid particles
+      ctx.fillStyle = `rgb(${BACKGROUND.r}, ${BACKGROUND.g}, ${BACKGROUND.b})`;
+      ctx.fillRect(0, 0, WIDTH, HEIGHT);
+      for (const p of particles) {
+        ctx.fillStyle = `rgb(${p.targetR}, ${p.targetG}, ${p.targetB})`;
+        ctx.fillRect(p.targetX, p.targetY, p.size, p.size);
+      }
+    } else {
+      renderFrame(ctx, particles, 0.2);
+    }
 
     // Add frame to GIF
     encoder.addFrame(ctx);
 
     if ((frame + 1) % 10 === 0) {
-      console.log(`Frame ${frame + 1}/${TOTAL_FRAMES}`);
+      console.log(`Frame ${frame + 1}/${TOTAL_FRAMES} ${isHoldPhase ? "(hold)" : "(converge)"}`);
     }
   }
 

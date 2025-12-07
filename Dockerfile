@@ -1,4 +1,6 @@
+# syntax=docker/dockerfile:1.4
 # Multi-stage build for optimized production image
+
 # Stage 1: Dependencies
 FROM node:20-alpine AS deps
 RUN apk add --no-cache libc6-compat
@@ -6,16 +8,18 @@ WORKDIR /app
 
 # Copy package files
 COPY package.json package-lock.json ./
-# Install production dependencies, skip prepare script (husky)
-RUN npm ci --only=production --ignore-scripts
+# Install production dependencies with npm cache mount for faster builds
+RUN --mount=type=cache,target=/root/.npm \
+    npm ci --only=production --ignore-scripts
 
 # Stage 2: Builder
 FROM node:20-alpine AS builder
 WORKDIR /app
 
-# Copy package files and install ALL dependencies (including dev)
+# Copy package files and install ALL dependencies (including dev) with cache
 COPY package.json package-lock.json ./
-RUN npm ci --ignore-scripts
+RUN --mount=type=cache,target=/root/.npm \
+    npm ci --ignore-scripts
 
 # Copy application files
 COPY . .

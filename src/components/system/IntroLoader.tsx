@@ -235,17 +235,33 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
     offscreenCanvas.height = logicalHeight;
     const offscreenCtx = offscreenCanvas.getContext("2d")!;
 
+    // FULL STATE RESET - critical for Android compatibility
+    offscreenCtx.setTransform(1, 0, 0, 1, 0, 0); // Reset any transforms
+    offscreenCtx.globalAlpha = 1;
+    offscreenCtx.globalCompositeOperation = "source-over";
+    offscreenCtx.clearRect(0, 0, logicalWidth, logicalHeight); // Clear canvas
+
     // Responsive font size based on logical width
     const fontSize = Math.min(logicalWidth / settings.fontSizeDivisor, settings.fontSizeMax);
 
+    // CRITICAL: Reset canvas state to avoid inherited RTL or other issues on Android
+    offscreenCtx.direction = "ltr";
     offscreenCtx.fillStyle = "white";
-    // Use simple font declaration that works on all devices including Android
-    // - "bold" is universally understood (700 may not work on some Android devices)
-    // - "sans-serif" ensures system default sans font (Roboto on Android)
-    offscreenCtx.font = `bold ${fontSize}px sans-serif`;
-    offscreenCtx.textAlign = "center";
-    offscreenCtx.textBaseline = "middle";
-    offscreenCtx.fillText(word, logicalWidth / 2, logicalHeight / 2);
+    // Use explicit "normal" font-style to prevent italic on Android
+    // Format: font-style font-weight font-size font-family
+    offscreenCtx.font = `normal bold ${fontSize}px sans-serif`;
+
+    // MANUAL CENTERING - textAlign:center is unreliable on some Android devices
+    // Measure text width and calculate position manually
+    const textMetrics = offscreenCtx.measureText(word);
+    const textWidth = textMetrics.width;
+    const textX = (logicalWidth - textWidth) / 2;
+    // For vertical centering, use fontSize as approximation (actualBoundingBox not always available)
+    const textY = logicalHeight / 2 + fontSize * 0.35; // 0.35 factor for visual center
+
+    offscreenCtx.textAlign = "left"; // Use left align with manual X position
+    offscreenCtx.textBaseline = "alphabetic"; // Most reliable baseline
+    offscreenCtx.fillText(word, textX, textY);
 
     const imageData = offscreenCtx.getImageData(0, 0, logicalWidth, logicalHeight);
     const pixels = imageData.data;
