@@ -210,8 +210,8 @@
     "category": "Консультации",
     "title": "Юридическая консультация",
     "description": "Разбираем вашу ситуацию и даём готовый план действий.",
-    "price": 5000,
-    "priceFrom": false,
+    "price": 3000,
+    "priceFrom": true,
     "unit": "консультация",
     "featured": false,
     "features": [
