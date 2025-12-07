@@ -34,7 +34,7 @@ const nextConfig: NextConfig = {
               "style-src 'self' 'unsafe-inline'; " +
               "img-src 'self' data: blob: https: https://mc.yandex.ru https://mc.yandex.com https://www.google-analytics.com https://www.googletagmanager.com; " +
               "font-src 'self' data:; " +
-              "connect-src 'self' https://mc.yandex.ru https://mc.yandex.com https://yandex.ru https://mc.webvisor.org wss://mc.webvisor.org https://www.google-analytics.com https://analytics.google.com https://region1.google-analytics.com; " +
+              "connect-src 'self' https://mc.yandex.ru https://mc.yandex.com https://yandex.ru https://mc.webvisor.org wss://mc.webvisor.org wss://mc.yandex.ru https://www.google-analytics.com https://analytics.google.com https://region1.google-analytics.com https://stats.g.doubleclick.net; " +
               "frame-src 'self'; " +
               "object-src 'none'; " +
               "base-uri 'self'; " +
@@ -78,10 +78,23 @@ const nextConfig: NextConfig = {
           },
         ],
       },
-      // OG images need cross-origin access for social media previews
-      // This rule MUST come after /:path* to override same-origin policy
+      // OG assets need cross-origin access for social media previews
+      // These rules MUST come after /:path* to override same-origin policy
       {
         source: "/og-image.:ext(gif|png|jpg|jpeg|webp)",
+        headers: [
+          {
+            key: "Cross-Origin-Resource-Policy",
+            value: "cross-origin",
+          },
+          {
+            key: "Access-Control-Allow-Origin",
+            value: "*",
+          },
+        ],
+      },
+      {
+        source: "/og-video.mp4",
         headers: [
           {
             key: "Cross-Origin-Resource-Policy",
