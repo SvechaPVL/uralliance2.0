@@ -5,7 +5,6 @@
  */
 
 import { NextResponse } from "next/server";
-import { contacts } from "@/lib/contacts";
 import pricesData from "@/content/prices.json";
 
 interface PriceItem {
@@ -101,6 +100,13 @@ export async function GET() {
 
   const categories = Array.from(categorySet.values());
 
+  // typePrefix по практике
+  const typePrefixMap: Record<string, string> = {
+    legal: "Юридическая услуга",
+    tech: "IT-услуга",
+    both: "Комплексная услуга",
+  };
+
   // Генерируем офферы
   const offers = prices.map((item) => {
     const categoryKey = `${item.practice}-${item.category}`;
@@ -122,6 +128,7 @@ export async function GET() {
     return {
       id: item.id,
       categoryId: cat?.id || "1",
+      typePrefix: typePrefixMap[item.practice] || "Услуга",
       name: item.title,
       description: item.description,
       url: `${baseUrl}${url}`,
@@ -141,8 +148,6 @@ export async function GET() {
     <name>${shopName}</name>
     <company>${companyName}</company>
     <url>${baseUrl}</url>
-    <phone>${contacts.phone.main.raw}</phone>
-    <email>${contacts.email.display}</email>
 
     <currencies>
       <currency id="RUB" rate="1"/>
@@ -166,14 +171,11 @@ ${offers
         <currencyId>RUB</currencyId>
         <categoryId>${offer.categoryId}</categoryId>
         ${offer.picture ? `<picture>${offer.picture}</picture>` : ""}
-        <delivery>false</delivery>
-        <name>${escapeXml(offer.name)}</name>
+        <typePrefix>${offer.typePrefix}</typePrefix>
         <vendor>${shopName}</vendor>
         <model>${escapeXml(offer.name)}</model>
         <description><![CDATA[${offer.description}${offer.features?.length ? "\n\n" + offer.features.join("\n") : ""}]]></description>
         <sales_notes>Консультация бесплатно</sales_notes>
-        <manufacturer_warranty>true</manufacturer_warranty>
-        <country_of_origin>Россия</country_of_origin>
         <param name="Регион">Владивосток, Приморский край</param>
         <param name="Единица">1 ${offer.unit}</param>
       </offer>`
