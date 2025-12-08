@@ -10,12 +10,12 @@ import type { Metadata } from "next";
 import { Section } from "@/components/primitives/section";
 import { Heading } from "@/components/primitives/heading";
 import { Card } from "@/components/primitives/card";
-import { Label } from "@/components/primitives/label";
 import { Text } from "@/components/primitives/text";
 import { remark } from "remark";
 import remarkRehype from "remark-rehype";
 import rehypeStringify from "rehype-stringify";
 import { ServiceJsonLd, BreadcrumbJsonLd } from "@/components/seo/JsonLd";
+import { ServiceHeroCard } from "@/components/service/ServiceHeroCard";
 import {
   ArrowRight,
   ChevronRight,
@@ -60,6 +60,7 @@ interface ContentSection {
   contentType?: "prose" | "price-list" | "feature-list" | "process";
   items?: ParsedItem[];
   alerts?: AlertBlock[];
+  style?: SectionStyle;
 }
 
 interface ParsedItem {
@@ -107,6 +108,47 @@ function getSectionIcon(title: string): LucideIcon {
     }
   }
   return CheckCircle2;
+}
+
+// Visual style variants for sections
+type SectionStyle = "default" | "steps" | "highlight" | "grid" | "compact";
+
+function getSectionStyle(title: string): SectionStyle {
+  const lowerTitle = title.toLowerCase();
+
+  // Steps/process sections - numbered timeline
+  if (
+    lowerTitle.includes("как начать") ||
+    lowerTitle.includes("этап") ||
+    lowerTitle.includes("шаг")
+  ) {
+    return "steps";
+  }
+
+  // Highlight sections - important info with accent
+  if (
+    lowerTitle.includes("тариф") ||
+    lowerTitle.includes("стоимость") ||
+    lowerTitle.includes("цен")
+  ) {
+    return "highlight";
+  }
+
+  // Grid sections - benefits/advantages with icons
+  if (
+    lowerTitle.includes("почему") ||
+    lowerTitle.includes("преимущ") ||
+    lowerTitle.includes("выбирают")
+  ) {
+    return "grid";
+  }
+
+  // Compact sections - simple lists
+  if (lowerTitle.includes("документ") || lowerTitle.includes("что нужно")) {
+    return "compact";
+  }
+
+  return "default";
 }
 
 // Detect if content contains price items (pattern: "— X ₽" or "— от X ₽")
@@ -274,6 +316,7 @@ function extractSections(markdown: string): ContentSection[] {
               ? parseFeatureItems(content)
               : undefined,
           alerts: alerts.length > 0 ? alerts : undefined,
+          style: getSectionStyle(currentTitle),
         });
       }
       currentTitle = line.replace(/^##\s+/, "").trim();
@@ -301,6 +344,7 @@ function extractSections(markdown: string): ContentSection[] {
           ? parseFeatureItems(content)
           : undefined,
       alerts: alerts.length > 0 ? alerts : undefined,
+      style: getSectionStyle(currentTitle),
     });
   }
 
@@ -591,70 +635,12 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
               </div>
             </Card>
 
-            {/* Price card - spans 4 columns */}
-            <Card
+            {/* Price card with Quick Contact Form - spans 4 columns */}
+            <ServiceHeroCard
+              price={service.frontmatter.price}
+              serviceName={service.frontmatter.title}
               variant={isLegal ? "legal" : "tech"}
-              className="flex flex-col justify-between p-5 sm:p-6 md:col-span-4"
-            >
-              <div className="space-y-5">
-                {/* Price */}
-                <div>
-                  <Label size="sm" spacing="wider" tone="muted" className="uppercase">
-                    Стоимость
-                  </Label>
-                  <div
-                    className={cn(
-                      "mt-2 text-2xl font-bold sm:text-3xl",
-                      isLegal
-                        ? "bg-gradient-to-r from-[var(--color-legal-primary)] to-[var(--color-legal-400)] bg-clip-text text-transparent"
-                        : "bg-gradient-to-r from-[var(--color-tech-primary)] to-[var(--color-tech-400)] bg-clip-text text-transparent"
-                    )}
-                  >
-                    {service.frontmatter.price}
-                  </div>
-                </div>
-
-                {/* Team */}
-                <div>
-                  <Label size="sm" spacing="wider" tone="muted" className="uppercase">
-                    Команда
-                  </Label>
-                  <Text size="sm" tone="secondary" className="mt-1.5">
-                    {isLegal
-                      ? "Партнёры-юристы и судебная команда"
-                      : "Менеджер проекта, дизайнер и разработчики"}
-                  </Text>
-                </div>
-
-                {/* Format */}
-                <div>
-                  <Label size="sm" spacing="wider" tone="muted" className="uppercase">
-                    Формат
-                  </Label>
-                  <Text size="sm" tone="secondary" className="mt-1.5">
-                    Фиксируем результаты договором и понятными отчётами
-                  </Text>
-                </div>
-              </div>
-
-              {/* CTA buttons */}
-              <div className="mt-6 flex flex-col gap-2.5">
-                <Button
-                  asChild
-                  variant={isLegal ? "primary-legal" : "primary-tech"}
-                  size="lg"
-                  className="w-full gap-2"
-                >
-                  <Link href="/contacts">
-                    Обсудить задачу
-                    <ArrowRight className="h-4 w-4" />
-                  </Link>
-                </Button>
-                <Button asChild variant="outline" size="md" className="w-full">
-                  <Link href={`/services/${category}`}>Все услуги</Link>
-                </Button>
-              </div>
-            </Card>
+            />
           </div>
         </Container>
       </Section>
@@ -685,19 +671,31 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
                 const isPriceSection = section.contentType === "price-list";
                 const isFeatureSection = section.contentType === "feature-list";
 
+                const isHighlight = section.style === "highlight";
+
                 return (
                   <Card
                     key={section.title}
                     variant={isLegal ? "legal" : "tech"}
-                    className="overflow-hidden"
+                    className={cn(
+                      "overflow-hidden",
+                      isHighlight &&
+                        (isLegal
+                          ? "border-2 border-[var(--color-legal-primary)]/40 shadow-[var(--color-legal-primary)]/10 shadow-lg"
+                          : "border-2 border-[var(--color-tech-primary)]/40 shadow-[var(--color-tech-primary)]/10 shadow-lg")
+                    )}
                   >
                     {/* Section Header */}
                     <div
                       className={cn(
                         "flex items-center gap-4 border-b p-5 sm:p-6",
-                        isLegal
-                          ? "border-[var(--color-legal-border)]/30 bg-[var(--color-legal-surface)]/30"
-                          : "border-[var(--color-tech-border)]/30 bg-[var(--color-tech-surface)]/30"
+                        isHighlight
+                          ? isLegal
+                            ? "border-[var(--color-legal-primary)]/30 bg-gradient-to-r from-[var(--color-legal-primary)]/20 to-[var(--color-legal-surface)]/50"
+                            : "border-[var(--color-tech-primary)]/30 bg-gradient-to-r from-[var(--color-tech-primary)]/20 to-[var(--color-tech-surface)]/50"
+                          : isLegal
+                            ? "border-[var(--color-legal-border)]/30 bg-[var(--color-legal-surface)]/30"
+                            : "border-[var(--color-tech-border)]/30 bg-[var(--color-tech-surface)]/30"
                       )}
                     >
                       <div
@@ -806,33 +804,135 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
                           </div>
                         </div>
                       ) : isFeatureSection && section.items && section.items.length > 0 ? (
-                        /* Feature List Rendering */
-                        <div className="grid gap-3 sm:grid-cols-2">
-                          {section.items.map((item, idx) => (
-                            <div key={`${item.name}-${idx}`} className="flex items-start gap-3">
+                        /* Feature List Rendering - Different styles */
+                        section.style === "steps" ? (
+                          /* Numbered Steps Style */
+                          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                            {section.items.map((item, idx) => (
                               <div
+                                key={`${item.name}-${idx}`}
                                 className={cn(
-                                  "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full",
+                                  "group relative overflow-hidden rounded-xl border p-5 transition-all hover:scale-[1.02]",
                                   isLegal
-                                    ? "bg-[var(--color-legal-primary)]/10 text-[var(--color-legal-primary)]"
-                                    : "bg-[var(--color-tech-primary)]/10 text-[var(--color-tech-primary)]"
+                                    ? "border-[var(--color-legal-primary)]/20 bg-[var(--color-legal-surface)]/30 hover:border-[var(--color-legal-primary)]/50"
+                                    : "border-[var(--color-tech-primary)]/20 bg-[var(--color-tech-surface)]/30 hover:border-[var(--color-tech-primary)]/50"
                                 )}
                               >
-                                <CheckCircle2 className="h-3 w-3" />
+                                <div
+                                  className={cn(
+                                    "absolute -top-2 -right-2 text-[60px] leading-none font-black opacity-10",
+                                    isLegal
+                                      ? "text-[var(--color-legal-primary)]"
+                                      : "text-[var(--color-tech-primary)]"
+                                  )}
+                                >
+                                  {idx + 1}
+                                </div>
+                                <div className="relative">
+                                  <Text size="sm" weight="semibold" className="mb-1">
+                                    {item.name}
+                                  </Text>
+                                  {item.description && (
+                                    <Text size="xs" tone="secondary">
+                                      {item.description}
+                                    </Text>
+                                  )}
+                                </div>
                               </div>
-                              <div>
+                            ))}
+                          </div>
+                        ) : section.style === "grid" ? (
+                          /* Grid Cards Style for Benefits */
+                          <div className="grid gap-4 sm:grid-cols-2">
+                            {section.items.map((item, idx) => (
+                              <div
+                                key={`${item.name}-${idx}`}
+                                className={cn(
+                                  "flex gap-4 rounded-xl border p-5 transition-all",
+                                  isLegal
+                                    ? "border-[var(--color-legal-border)]/30 bg-gradient-to-br from-[var(--color-legal-surface)]/40 to-transparent"
+                                    : "border-[var(--color-tech-border)]/30 bg-gradient-to-br from-[var(--color-tech-surface)]/40 to-transparent"
+                                )}
+                              >
+                                <div
+                                  className={cn(
+                                    "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl",
+                                    isLegal
+                                      ? "bg-[var(--color-legal-primary)]/15 text-[var(--color-legal-primary)]"
+                                      : "bg-[var(--color-tech-primary)]/15 text-[var(--color-tech-primary)]"
+                                  )}
+                                >
+                                  <CheckCircle2 className="h-5 w-5" />
+                                </div>
+                                <div>
+                                  <Text size="sm" weight="semibold" className="mb-1">
+                                    {item.name}
+                                  </Text>
+                                  {item.description && (
+                                    <Text size="xs" tone="secondary" className="leading-relaxed">
+                                      {item.description}
+                                    </Text>
+                                  )}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        ) : section.style === "compact" ? (
+                          /* Compact Horizontal Style */
+                          <div className="flex flex-wrap gap-3">
+                            {section.items.map((item, idx) => (
+                              <div
+                                key={`${item.name}-${idx}`}
+                                className={cn(
+                                  "flex items-center gap-2 rounded-full border px-4 py-2",
+                                  isLegal
+                                    ? "border-[var(--color-legal-border)]/40 bg-[var(--color-legal-surface)]/30"
+                                    : "border-[var(--color-tech-border)]/40 bg-[var(--color-tech-surface)]/30"
+                                )}
+                              >
+                                <CheckCircle2
+                                  className={cn(
+                                    "h-4 w-4",
+                                    isLegal
+                                      ? "text-[var(--color-legal-primary)]"
+                                      : "text-[var(--color-tech-primary)]"
+                                  )}
+                                />
                                 <Text size="sm" weight="medium">
                                   {item.name}
                                 </Text>
-                                {item.description && (
-                                  <Text size="xs" tone="secondary" className="mt-0.5">
-                                    {item.description}
-                                  </Text>
-                                )}
                               </div>
-                            </div>
-                          ))}
-                        </div>
+                            ))}
+                          </div>
+                        ) : (
+                          /* Default Grid Style */
+                          <div className="grid gap-3 sm:grid-cols-2">
+                            {section.items.map((item, idx) => (
+                              <div key={`${item.name}-${idx}`} className="flex items-start gap-3">
+                                <div
+                                  className={cn(
+                                    "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full",
+                                    isLegal
+                                      ? "bg-[var(--color-legal-primary)]/10 text-[var(--color-legal-primary)]"
+                                      : "bg-[var(--color-tech-primary)]/10 text-[var(--color-tech-primary)]"
+                                  )}
+                                >
+                                  <CheckCircle2 className="h-3 w-3" />
+                                </div>
+                                <div>
+                                  <Text size="sm" weight="medium">
+                                    {item.name}
+                                  </Text>
+                                  {item.description && (
+                                    <Text size="xs" tone="secondary" className="mt-0.5">
+                                      {item.description}
+                                    </Text>
+                                  )}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )
                       ) : (
                         /* Default Prose Rendering */
                         <div
