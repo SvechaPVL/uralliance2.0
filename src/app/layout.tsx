@@ -7,6 +7,7 @@ import { OverlayScrollbar } from "@/components/system/OverlayScrollbar";
 import { YandexMetrika } from "@/components/system/YandexMetrika";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { CookieConsent } from "@/components/system/CookieConsent";
+import { FloatingContactButton } from "@/components/widgets/FloatingContactButton";
 import { PromoBanner } from "@/components/system/PromoBanner";
 import { IntroLoaderWrapper } from "@/components/system/IntroLoaderWrapper";
 import {
@@ -243,6 +244,7 @@ export default function RootLayout({
           <Footer />
           <OverlayScrollbar />
           <CookieConsent />
+          <FloatingContactButton />
         </HeroProgressProvider>
 
         {/* Analytics */}
