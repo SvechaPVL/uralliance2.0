@@ -421,19 +421,6 @@ export async function generateMetadata({ params }: ServiceDetailPageProps): Prom
   }
 }
 
-const SERVICE_FOCUS = {
-  legal: [
-    "Арбитражные споры и защита в судах",
-    "Налоговые проверки и корпоративные вопросы",
-    "Регистрация, сопровождение и публикации в «Вестнике госрегистрации»",
-  ],
-  tech: [
-    "Анализ бизнеса и план цифровой трансформации",
-    "Дизайн интерфейсов и разработка",
-    "Интеграции с CRM, 1С и мессенджерами",
-  ],
-} as const;
-
 const WORKFLOW_STEPS = {
   legal: [
     {
@@ -490,7 +477,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
 
   const isLegal = category === "legal";
 
-  const focusItems = SERVICE_FOCUS[category];
+  const features = service.frontmatter.features || [];
   const workflow = WORKFLOW_STEPS[category];
   const rawSections = extractSections(service.content);
   const structuredSections = await Promise.all(
@@ -607,11 +594,11 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
                   {service.frontmatter.description}
                 </Text>
 
-                {/* Focus items as pills */}
+                {/* Service features as pills */}
                 <div className="flex flex-wrap gap-2 sm:gap-2.5">
-                  {focusItems.map((focus) => (
+                  {features.map((feature) => (
                     <span
-                      key={focus}
+                      key={feature}
                       className={cn(
                         "inline-flex items-center gap-2 rounded-full px-3.5 py-2 text-sm",
                         "border backdrop-blur-sm transition-all",
@@ -628,7 +615,7 @@ export default async function ServiceDetailPage({ params }: ServiceDetailPagePro
                             : "bg-[var(--color-tech-primary)]"
                         )}
                       />
-                      {focus}
+                      {feature}
                     </span>
                   ))}
                 </div>

@@ -256,10 +256,11 @@ export const CardSwiper: React.FC<CardSwiperProps> = ({
         const cardClassName = cn(
           "swiper-card absolute cursor-grab active:cursor-grabbing",
           "left-1/2 top-1/2",
-          "rounded-3xl border border-[var(--color-border)]",
+          "border border-[var(--color-border)]",
           "bg-[var(--color-card-bg)] p-6",
           "shadow-[0_8px_24px_-8px_rgba(0,0,0,0.4)]",
-          "overflow-hidden",
+          // clip-path вместо overflow-hidden + rounded-3xl (работает с 3D трансформациями)
+          "[clip-path:inset(0_round_1.5rem)]",
           // GPU acceleration для первых 3 карточек
           displayIndex < 3 && "will-change-transform",
           // Pointer events только для верхней карточки
@@ -278,6 +279,8 @@ export const CardSwiper: React.FC<CardSwiperProps> = ({
                 "--swipe-rotate": "0deg",
                 zIndex: items.length - displayIndex,
                 width: cardWidth,
+                borderRadius: "1.5rem",
+                overflow: "hidden",
                 transform: `translate(-50%, -50%)
                            perspective(var(--card-perspective))
                            translateZ(calc(-1 * var(--card-z-offset) * var(--i)))
