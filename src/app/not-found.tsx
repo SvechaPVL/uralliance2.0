@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <div className="relative flex min-h-[80vh] flex-col items-center justify-center overflow-hidden px-4 py-16">
+    <div className="relative flex min-h-[80vh] flex-col items-center justify-center overflow-hidden px-4 pt-[calc(6rem+var(--promo-banner-height))] pb-16 sm:pt-[calc(7rem+var(--promo-banner-height))] lg:pt-[calc(8rem+var(--promo-banner-height))]">
       {/* Background decorations */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         {/* Legal gradient blob */}
