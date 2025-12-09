@@ -38,6 +38,13 @@ export function OverlayScrollbar() {
   const updateDimensions = React.useCallback(() => {
     if (typeof window === "undefined" || !trackRef.current || !thumbRef.current) return;
 
+    // Hide on mobile - touch devices have native scrolling
+    const isMobile = window.innerWidth < 768;
+    if (isMobile) {
+      trackRef.current.style.display = "none";
+      return;
+    }
+
     const doc = document.documentElement;
     const scrollHeight = doc.scrollHeight;
     const viewportHeight = window.innerHeight;
