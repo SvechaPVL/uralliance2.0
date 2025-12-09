@@ -58,6 +58,10 @@ export function VortexBackground({
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const animationRef = useRef<number>(0);
+  const isVisibleRef = useRef(true);
+  const drawRef = useRef<
+    ((canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) => void) | null
+  >(null);
   const prefersReducedMotion = useReducedMotion();
 
   // Mobile detection for adaptive rendering
@@ -253,7 +257,6 @@ export function VortexBackground({
       if (checkBounds(x, y) || life > ttl) {
         initParticle(i);
       }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
     },
     [initParticle, mouseInfluence, mouseRadius]
   );
@@ -289,6 +292,11 @@ export function VortexBackground({
     (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) => {
       if (prefersReducedMotion) return;
 
+      // Skip animation when not visible (performance optimization)
+      if (!isVisibleRef.current) {
+        return;
+      }
+
       tickRef.current++;
 
       const { width, height } = sizeRef.current;
@@ -305,10 +313,17 @@ export function VortexBackground({
       renderGlow(canvas, ctx);
       renderToScreen(canvas, ctx);
 
-      animationRef.current = window.requestAnimationFrame(() => draw(canvas, ctx));
+      animationRef.current = window.requestAnimationFrame(() => {
+        drawRef.current?.(canvas, ctx);
+      });
     },
     [prefersReducedMotion, backgroundOpacity, drawParticles]
   );
+
+  // Keep drawRef in sync
+  useEffect(() => {
+    drawRef.current = draw;
+  }, [draw]);
 
   const resize = useCallback(
     (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D | null) => {
@@ -344,7 +359,8 @@ export function VortexBackground({
 
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    const container = containerRef.current;
+    if (!canvas || !container) return;
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
@@ -385,6 +401,22 @@ export function VortexBackground({
       mouseRef.current.active = false;
     };
 
+    // IntersectionObserver to pause animation when not visible
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const isVisible = entries[0]?.isIntersecting ?? true;
+        const wasVisible = isVisibleRef.current;
+        isVisibleRef.current = isVisible;
+
+        // Restart animation when becoming visible again
+        if (isVisible && !wasVisible && !prefersReducedMotion) {
+          draw(canvas, ctx);
+        }
+      },
+      { threshold: 0 }
+    );
+    observer.observe(container);
+
     window.addEventListener("resize", handleResize);
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("mouseleave", handleMouseLeave);
@@ -392,6 +424,7 @@ export function VortexBackground({
     window.addEventListener("touchend", handleTouchEnd);
 
     return () => {
+      observer.disconnect();
       window.removeEventListener("resize", handleResize);
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseleave", handleMouseLeave);

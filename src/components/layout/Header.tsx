@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
@@ -36,70 +36,97 @@ interface NavItem {
 const navigationItems: NavItem[] = navigationConfig.header.items as NavItem[];
 
 /**
- * Header Component
+ * Header Component (Optimized)
  *
- * Sticky navigation header with glassmorphism blur effect on scroll
- * Implements dual brand identity (Legal/Tech) with smooth transitions
- *
- * Features:
- * - Sticky positioning with scroll-triggered blur effect
- * - Desktop horizontal navigation
- * - Mobile hamburger menu trigger
- * - Legal/Tech CTA buttons
- * - Accessible keyboard navigation
+ * Uses direct DOM manipulation for scroll-based styles to avoid
+ * React re-renders on every scroll frame.
  */
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
-  const { progress: heroProgress } = useHeroProgress();
-  const blendedProgress = Math.min(Math.max(heroProgress, 0), 1);
-  const shouldShowGlass = isScrolled || blendedProgress > 0.08;
+  // Check for client-side rendering (for portal)
+  const mounted = typeof document !== "undefined";
 
-  // Ensure component is mounted (for portal)
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setMounted(true);
-  }, []);
-  const headerDynamicStyle = useMemo(() => {
-    if (!shouldShowGlass) return undefined;
-    const goldStop = 0.1 + blendedProgress * 0.2;
-    const cyanStop = 0.1 + blendedProgress * 0.25;
-    const backdropAlpha = 0.55 + blendedProgress * 0.25;
-    return {
-      backgroundImage: `linear-gradient(120deg, rgba(212,175,55,${goldStop}) 4%, rgba(6,182,212,${cyanStop}) 96%)`,
-      backgroundColor: `rgba(7,10,20,${backdropAlpha})`,
-      borderColor: `rgba(255,255,255,${0.05 + blendedProgress * 0.12})`,
-    };
-  }, [blendedProgress, shouldShowGlass]);
+  const headerRef = useRef<HTMLElement>(null);
+  const logoRef = useRef<HTMLDivElement>(null);
+  const { subscribe, progressRef } = useHeroProgress();
 
-  // Handle scroll effect
+  // Handle scroll effect - only updates isScrolled state (for class changes)
   useEffect(() => {
+    let lastScrolled = false;
+
     const handleScroll = () => {
       const scrollThreshold = 20;
-      setIsScrolled(window.scrollY > scrollThreshold);
+      const nowScrolled = window.scrollY > scrollThreshold;
+
+      // Only update React state if changed (rare)
+      if (nowScrolled !== lastScrolled) {
+        lastScrolled = nowScrolled;
+        setIsScrolled(nowScrolled);
+      }
     };
 
-    // Add scroll listener
     window.addEventListener("scroll", handleScroll, { passive: true });
-
-    // Check initial scroll position
     handleScroll();
 
-    // Cleanup
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  // Subscribe to hero progress and update styles via DOM (no React re-render)
+  useEffect(() => {
+    const updateStyles = (progress: number) => {
+      const blended = Math.min(Math.max(progress, 0), 1);
+      const shouldShowGlass = isScrolled || blended > 0.08;
+
+      if (headerRef.current) {
+        if (shouldShowGlass) {
+          const goldStop = 0.1 + blended * 0.2;
+          const cyanStop = 0.1 + blended * 0.25;
+          const backdropAlpha = 0.55 + blended * 0.25;
+
+          headerRef.current.style.backgroundImage = `linear-gradient(120deg, rgba(212,175,55,${goldStop}) 4%, rgba(6,182,212,${cyanStop}) 96%)`;
+          headerRef.current.style.backgroundColor = `rgba(7,10,20,${backdropAlpha})`;
+          headerRef.current.style.borderColor = `rgba(255,255,255,${0.05 + blended * 0.12})`;
+        } else {
+          headerRef.current.style.backgroundImage = "";
+          headerRef.current.style.backgroundColor = "";
+          headerRef.current.style.borderColor = "";
+        }
+      }
+
+      if (logoRef.current) {
+        logoRef.current.style.transform = `scale(${1 + blended * 0.05})`;
+        logoRef.current.style.letterSpacing = `${0.02 + blended * 0.06}em`;
+
+        if (blended > 0.4) {
+          logoRef.current.style.filter = "drop-shadow(0 0 22px rgba(6,182,212,0.45))";
+        } else {
+          logoRef.current.style.filter = "";
+        }
+      }
+    };
+
+    // Initial update
+    updateStyles(progressRef.current);
+
+    // Subscribe to progress changes
+    return subscribe(updateStyles);
+  }, [subscribe, progressRef, isScrolled]);
 
   // Toggle mobile menu
   const toggleMobileMenu = () => {
     setMobileMenuOpen((prev) => !prev);
   };
 
+  // Initial render uses isScrolled only; subscription handles progress-based glass effect
+  const shouldShowGlass = isScrolled;
+
   return (
     <>
       <header
+        ref={headerRef}
         className={cn(
           "fixed top-0 right-0 left-0 z-50",
           "transition-all duration-[var(--transition-base)]",
@@ -111,8 +138,6 @@ export function Header() {
               )
             : "border-transparent bg-transparent"
         )}
-        style={headerDynamicStyle}
-        data-hero-progress={blendedProgress.toFixed(2)}
       >
         <Container size="2xl">
           <nav className="flex h-20 items-center justify-between" aria-label="Main navigation">
@@ -122,18 +147,14 @@ export function Header() {
               className="group relative flex items-center gap-2"
             >
               <div
+                ref={logoRef}
                 className={cn(
                   "font-display text-2xl font-bold",
                   "bg-gradient-to-r from-[var(--color-legal-primary)] to-[var(--color-tech-primary)]",
                   "bg-clip-text text-transparent",
                   "transition-all duration-[var(--transition-base)]",
-                  "group-hover:scale-105",
-                  blendedProgress > 0.4 && "drop-shadow-[0_0_22px_rgba(6,182,212,0.45)]"
+                  "group-hover:scale-105"
                 )}
-                style={{
-                  transform: `scale(${1 + blendedProgress * 0.05})`,
-                  letterSpacing: `${0.02 + blendedProgress * 0.06}em`,
-                }}
               >
                 {navigationConfig.header.logo.text}
               </div>

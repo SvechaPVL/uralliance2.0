@@ -1,56 +1,77 @@
 "use client";
 
-import React, { useEffect, useRef, useState, useSyncExternalStore } from "react";
-import { AnimatePresence, MotionValue, motion, useScroll, useTransform } from "framer-motion";
+import React, { useEffect, useRef, useState } from "react";
+import { MotionValue, motion, useScroll, useTransform } from "framer-motion";
+import { cn } from "@/lib/utils";
 import {
   IconBrightnessDown,
   IconBrightnessUp,
-  IconCaretDownFilled,
-  IconCaretLeftFilled,
   IconCaretRightFilled,
   IconCaretUpFilled,
   IconChevronUp,
-  IconCommand,
   IconMicrophone,
   IconMoon,
   IconPlayerSkipForward,
   IconPlayerTrackNext,
   IconPlayerTrackPrev,
-  IconSearch,
   IconTable,
   IconVolume,
   IconVolume2,
   IconVolume3,
+  IconSearch,
   IconWorld,
+  IconCommand,
+  IconCaretLeftFilled,
+  IconCaretDownFilled,
 } from "@tabler/icons-react";
-import { cn } from "@/lib/utils";
-import { BrowserMockup } from "./BrowserMockup";
 
 const mockupCases = [
   {
-    imageSrc: "/images/mock_landings/restaurant_landing.svg",
+    imageSrc: "/images/mock_landings/restaurant_landing.webp",
     url: "bellacucina.ru",
     title: "Ресторан итальянской кухни",
   },
   {
-    imageSrc: "/images/mock_landings/car_landing.svg",
+    imageSrc: "/images/mock_landings/car_landing.webp",
     url: "premiumauto.com",
     title: "Автосалон бизнес-класса",
   },
   {
-    imageSrc: "/images/mock_landings/law_landing.svg",
+    imageSrc: "/images/mock_landings/law_landing.webp",
     url: "pravo-alliance.ru",
     title: "Юридическая компания",
   },
 ];
 
 export function MacbookScrollDemo() {
-  const [currentMockup, setCurrentMockup] = useState(0);
+  const imgRef = useRef<HTMLImageElement>(null);
+  const indexRef = useRef(0);
 
+  // Preload images once
+  useEffect(() => {
+    mockupCases.forEach((c) => {
+      const img = new Image();
+      img.src = c.imageSrc;
+    });
+  }, []);
+
+  // Rotate through cases - no React state, direct DOM manipulation
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentMockup((prev) => (prev + 1) % mockupCases.length);
-    }, 4500);
+      if (!imgRef.current) return;
+
+      // Fade out
+      imgRef.current.style.opacity = "0";
+
+      setTimeout(() => {
+        if (!imgRef.current) return;
+        // Change image
+        indexRef.current = (indexRef.current + 1) % mockupCases.length;
+        imgRef.current.src = mockupCases[indexRef.current].imageSrc;
+        // Fade in
+        imgRef.current.style.opacity = "1";
+      }, 300);
+    }, 4000);
 
     return () => clearInterval(interval);
   }, []);
@@ -58,33 +79,10 @@ export function MacbookScrollDemo() {
   return (
     <div className="mb-0 w-full bg-white sm:mb-28 lg:mb-44 dark:bg-[#0B0B0F]">
       <MacbookScroll
+        imgRef={imgRef}
+        initialSrc={mockupCases[0].imageSrc}
         title={<span>Дизайн + разработка под ключ.</span>}
         badge={<UraBadge className="h-10 w-10 -rotate-6 transform" />}
-        mockupContent={
-          <BrowserMockup url={mockupCases[currentMockup].url}>
-            <div className="relative h-full w-full overflow-hidden rounded-lg">
-              <AnimatePresence mode="wait">
-                <motion.img
-                  key={currentMockup}
-                  src={mockupCases[currentMockup].imageSrc}
-                  alt={mockupCases[currentMockup].title}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  transition={{ duration: 0.45, ease: "easeOut" }}
-                  className="absolute inset-0 h-full w-full object-cover object-top"
-                />
-              </AnimatePresence>
-              <motion.div
-                key={`glare-${currentMockup}`}
-                initial={{ opacity: 0.25 }}
-                animate={{ opacity: 0 }}
-                transition={{ duration: 0.9, delay: 0.2 }}
-                className="pointer-events-none absolute inset-0 bg-gradient-to-b from-white/30 via-transparent to-black/40 dark:from-white/5 dark:via-transparent dark:to-black/60"
-              />
-            </div>
-          </BrowserMockup>
-        }
         showGradient={false}
       />
     </div>
@@ -105,16 +103,16 @@ const UraBadge = ({ className }: { className?: string }) => {
 };
 
 export const MacbookScroll = ({
-  src,
-  mockupContent,
+  initialSrc,
+  imgRef,
   showGradient,
   title,
   badge,
 }: {
-  src?: string;
-  mockupContent?: React.ReactNode;
+  initialSrc?: string;
+  imgRef?: React.RefObject<HTMLImageElement | null>;
   showGradient?: boolean;
-  title?: string | React.ReactNode | null;
+  title?: string | React.ReactNode;
   badge?: React.ReactNode;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
@@ -123,73 +121,50 @@ export const MacbookScroll = ({
     offset: ["start start", "end start"],
   });
 
-  // Использую useSyncExternalStore для корректной гидратации
-  const isMobile = useSyncExternalStore(
-    (callback) => {
-      window.addEventListener("resize", callback);
-      return () => window.removeEventListener("resize", callback);
-    },
-    () => window.innerWidth < 768,
-    () => false // SSR fallback
-  );
+  const [isMobile] = useState(() => {
+    if (typeof window !== "undefined") {
+      return window.innerWidth < 768;
+    }
+    return false;
+  });
 
-  const scaleX = useTransform(
-    scrollYProgress,
-    [0, isMobile ? 0.2 : 0.35],
-    [1.2, isMobile ? 1 : 1.5]
-  );
-  const scaleY = useTransform(
-    scrollYProgress,
-    [0, isMobile ? 0.2 : 0.35],
-    [0.6, isMobile ? 1 : 1.5]
-  );
-  const translate = useTransform(
-    scrollYProgress,
-    [0, isMobile ? 0.5 : 0.85],
-    [0, isMobile ? 1100 : 1500]
-  );
-  const rotate = useTransform(
-    scrollYProgress,
-    [isMobile ? 0.05 : 0.1, isMobile ? 0.08 : 0.14, isMobile ? 0.25 : 0.45],
-    [-28, -28, 0]
-  );
-  const textTransform = useTransform(scrollYProgress, [0, isMobile ? 0.15 : 0.3], [0, 90]);
-  const textOpacity = useTransform(scrollYProgress, [0, isMobile ? 0.12 : 0.22], [1, 0]);
-
-  const heading =
-    title === null
-      ? null
-      : title || (
-          <span>
-            Сайты, которые продают ваши услуги. <br /> Прорабатываем UX и визуал.
-          </span>
-        );
+  const scaleX = useTransform(scrollYProgress, [0, 0.3], [1.2, isMobile ? 1 : 1.5]);
+  const scaleY = useTransform(scrollYProgress, [0, 0.3], [0.6, isMobile ? 1 : 1.5]);
+  const translate = useTransform(scrollYProgress, [0, 1], [0, 1500]);
+  const rotate = useTransform(scrollYProgress, [0.1, 0.12, 0.3], [-28, -28, 0]);
+  const textTransform = useTransform(scrollYProgress, [0, 0.3], [0, 100]);
+  const textOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
 
   return (
     <div
       ref={ref}
-      className="relative flex min-h-[160vh] shrink-0 scale-[0.55] transform flex-col items-center justify-start py-0 [perspective:800px] sm:min-h-[145vh] sm:scale-50 sm:overflow-y-clip md:min-h-[185vh] md:scale-100 md:py-40"
+      className="flex min-h-[200vh] shrink-0 scale-[0.35] transform flex-col items-center justify-start py-0 [perspective:800px] sm:scale-50 md:scale-100 md:py-80"
     >
-      {heading && (
-        <motion.h2
-          style={{
-            translateY: textTransform,
-            opacity: textOpacity,
-          }}
-          className="mb-20 text-center text-3xl font-bold text-neutral-800 dark:text-white"
-        >
-          {heading}
-        </motion.h2>
-      )}
+      <motion.h2
+        style={{
+          translateY: textTransform,
+          opacity: textOpacity,
+        }}
+        className="mb-20 text-center text-3xl font-bold text-neutral-800 dark:text-white"
+      >
+        {title || (
+          <span>
+            This Macbook is built with Tailwindcss. <br /> No kidding.
+          </span>
+        )}
+      </motion.h2>
+      {/* Lid */}
       <Lid
-        src={src}
-        mockupContent={mockupContent}
+        initialSrc={initialSrc}
+        imgRef={imgRef}
         scaleX={scaleX}
         scaleY={scaleY}
         rotate={rotate}
         translate={translate}
       />
+      {/* Base area */}
       <div className="relative -z-10 h-[22rem] w-[32rem] overflow-hidden rounded-2xl bg-gray-200 dark:bg-[#272729]">
+        {/* above keyboard bar */}
         <div className="relative h-10 w-full">
           <div className="absolute inset-x-0 mx-auto h-4 w-[80%] bg-[#050505]" />
         </div>
@@ -220,15 +195,15 @@ export const Lid = ({
   scaleY,
   rotate,
   translate,
-  src,
-  mockupContent,
+  initialSrc,
+  imgRef,
 }: {
   scaleX: MotionValue<number>;
   scaleY: MotionValue<number>;
   rotate: MotionValue<number>;
   translate: MotionValue<number>;
-  src?: string;
-  mockupContent?: React.ReactNode;
+  initialSrc?: string;
+  imgRef?: React.RefObject<HTMLImageElement | null>;
 }) => {
   return (
     <div className="relative [perspective:800px]">
@@ -263,17 +238,12 @@ export const Lid = ({
         className="absolute inset-0 h-96 w-[32rem] rounded-2xl bg-[#010101] p-2"
       >
         <div className="absolute inset-0 rounded-lg bg-[#272729]" />
-        {mockupContent ? (
-          <div className="absolute inset-0 h-full w-full overflow-hidden rounded-lg">
-            {mockupContent}
-          </div>
-        ) : src ? (
-          <img
-            src={src}
-            alt="macbook screen"
-            className="absolute inset-0 h-full w-full rounded-lg object-cover object-left-top"
-          />
-        ) : null}
+        <img
+          ref={imgRef}
+          src={initialSrc}
+          alt="Демо проекта"
+          className="absolute inset-0 h-full w-full rounded-lg object-cover object-left-top transition-opacity duration-500"
+        />
       </motion.div>
     </div>
   );
@@ -293,6 +263,7 @@ export const Trackpad = () => {
 export const Keypad = () => {
   return (
     <div className="mx-1 h-full [transform:translateZ(0)] rounded-md bg-[#050505] p-1 [will-change:transform]">
+      {/* First Row */}
       <div className="mb-[2px] flex w-full shrink-0 gap-[2px]">
         <KBtn
           className="w-10 items-end justify-start pb-[2px] pl-[4px]"
@@ -355,6 +326,7 @@ export const Keypad = () => {
         </KBtn>
       </div>
 
+      {/* Second row */}
       <div className="mb-[2px] flex w-full shrink-0 gap-[2px]">
         <KBtn>
           <span className="block">~</span>
@@ -416,6 +388,7 @@ export const Keypad = () => {
         </KBtn>
       </div>
 
+      {/* Third row */}
       <div className="mb-[2px] flex w-full shrink-0 gap-[2px]">
         <KBtn
           className="w-10 items-end justify-start pb-[2px] pl-[4px]"
@@ -467,6 +440,7 @@ export const Keypad = () => {
         </KBtn>
       </div>
 
+      {/* Fourth Row */}
       <div className="mb-[2px] flex w-full shrink-0 gap-[2px]">
         <KBtn
           className="w-[2.8rem] items-end justify-start pb-[2px] pl-[4px]"
@@ -517,6 +491,7 @@ export const Keypad = () => {
         </KBtn>
       </div>
 
+      {/* Fifth Row */}
       <div className="mb-[2px] flex w-full shrink-0 gap-[2px]">
         <KBtn
           className="w-[3.65rem] items-end justify-start pb-[2px] pl-[4px]"
@@ -565,8 +540,9 @@ export const Keypad = () => {
         </KBtn>
       </div>
 
+      {/* sixth Row */}
       <div className="mb-[2px] flex w-full shrink-0 gap-[2px]">
-        <KBtn childrenClassName="h-full justify-between py-[4px]">
+        <KBtn className="" childrenClassName="h-full justify-between py-[4px]">
           <div className="flex w-full justify-end pr-1">
             <span className="block">fn</span>
           </div>
@@ -574,7 +550,7 @@ export const Keypad = () => {
             <IconWorld className="h-[6px] w-[6px]" />
           </div>
         </KBtn>
-        <KBtn childrenClassName="h-full justify-between py-[4px]">
+        <KBtn className="" childrenClassName="h-full justify-between py-[4px]">
           <div className="flex w-full justify-end pr-1">
             <IconChevronUp className="h-[6px] w-[6px]" />
           </div>
@@ -582,7 +558,7 @@ export const Keypad = () => {
             <span className="block">control</span>
           </div>
         </KBtn>
-        <KBtn childrenClassName="h-full justify-between py-[4px]">
+        <KBtn className="" childrenClassName="h-full justify-between py-[4px]">
           <div className="flex w-full justify-end pr-1">
             <OptionKey className="h-[6px] w-[6px]" />
           </div>
@@ -598,7 +574,7 @@ export const Keypad = () => {
             <span className="block">command</span>
           </div>
         </KBtn>
-        <KBtn className="w-[8.2rem]" />
+        <KBtn className="w-[8.2rem]"></KBtn>
         <KBtn className="w-8" childrenClassName="h-full justify-between py-[4px]">
           <div className="flex w-full justify-start pl-1">
             <IconCommand className="h-[6px] w-[6px]" />
@@ -607,7 +583,7 @@ export const Keypad = () => {
             <span className="block">command</span>
           </div>
         </KBtn>
-        <KBtn childrenClassName="h-full justify-between py-[4px]">
+        <KBtn className="" childrenClassName="h-full justify-between py-[4px]">
           <div className="flex w-full justify-start pl-1">
             <OptionKey className="h-[6px] w-[6px]" />
           </div>
@@ -689,7 +665,7 @@ export const SpeakerGrid = () => {
   );
 };
 
-export const OptionKey = ({ className = "" }: { className?: string }) => {
+export const OptionKey = ({ className }: { className: string }) => {
   return (
     <svg
       fill="none"
