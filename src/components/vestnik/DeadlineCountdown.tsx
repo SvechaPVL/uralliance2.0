@@ -44,10 +44,10 @@ function parseScheduleDate(dateStr: string, year: number): Date {
     return new Date();
   }
 
-  // Дедлайн в 12:00 по Москве (UTC+3)
+  // Дедлайн в 14:00 по Москве (UTC+3)
   // Создаём дату в UTC, затем корректируем на московское время
-  // 12:00 MSK = 09:00 UTC
-  const utcDate = Date.UTC(year, monthIndex, parseInt(day), 9, 0, 0);
+  // 14:00 MSK = 11:00 UTC
+  const utcDate = Date.UTC(year, monthIndex, parseInt(day), 11, 0, 0);
   return new Date(utcDate);
 }
 
