@@ -11,16 +11,9 @@ import { ServiceJsonLd, BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 import { contacts } from "@/lib/contacts";
 import Link from "next/link";
 import type { Metadata } from "next";
-import {
-  FileKey,
-  Shield,
-  Cpu,
-  CheckCircle2,
-  Clock,
-  HeadphonesIcon,
-  Percent,
-  Usb,
-} from "lucide-react";
+import { FileKey, Shield, CheckCircle2, Clock, HeadphonesIcon, Percent, Usb } from "lucide-react";
+import { CryptoProSection } from "@/components/ecp/CryptoProSection";
+import { EcpPricesSection } from "@/components/ecp/EcpPricesSection";
 
 export const metadata: Metadata = {
   title: "ЭЦП и Рутокены во Владивостоке | Uralliance",
@@ -64,19 +57,9 @@ const RUTOKEN_PRICES = [
   },
 ];
 
-const CRYPTOPRO_PRICES = [
-  { name: "КриптоПро CSP 4.0", price: 2200, period: "бессрочная" },
-  { name: "КриптоПро CSP 5.0", price: 2700, period: "бессрочная" },
-  { name: "Лицензия КриптоПро CSP", price: 1300, period: "1 год" },
-];
-
-const ECP_PRICES = [
-  { name: "ЭЦП для физлиц", price: 1500, period: "1 год" },
-  { name: "ЭЦП для сотрудника", price: 1700, period: "3 месяца" },
-  { name: "ЭЦП для сотрудника", price: 3000, period: "12 месяцев" },
-  { name: "ЭЦП для директора/ИП", price: 3000, period: "от 1 года", priceFrom: true },
-  { name: "ЭЦП для участия в торгах", price: 4500, period: "1 год", priceFrom: true },
-];
+// UTM ссылка на партнёра
+const TAXCOM_URL =
+  "https://taxcom.ru/centr/?utm_source=uralliance&utm_medium=partner&utm_campaign=ecp";
 
 const ADVANTAGES = [
   {
@@ -124,6 +107,17 @@ export default function EcpPage() {
           <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
             <div className="space-y-6">
               <div className="flex flex-wrap items-center gap-3">
+                <Link
+                  href={TAXCOM_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition-opacity hover:opacity-80"
+                >
+                  <Badge variant="tech" badgeStyle="outline" className="gap-1.5 font-semibold">
+                    <Shield className="h-3.5 w-3.5" />
+                    Партнёр Такском
+                  </Badge>
+                </Link>
                 <Badge variant="legal" badgeStyle="subtle" className="tracking-widest uppercase">
                   ЭЦП
                 </Badge>
@@ -268,81 +262,10 @@ export default function EcpPage() {
       </Section>
 
       {/* CryptoPro Prices */}
-      <Section spacing="md">
-        <Container className="max-w-6xl space-y-8">
-          <div className="text-center">
-            <Label size="sm" spacing="wider" tone="muted">
-              Программное обеспечение
-            </Label>
-            <Heading as="h2" size="xl" weight="semibold" className="mt-2">
-              Лицензии КриптоПро
-            </Heading>
-            <Text size="lg" tone="secondary" className="mt-3">
-              ПО для работы с электронной подписью
-            </Text>
-          </div>
-
-          <div className="mx-auto grid max-w-3xl gap-4 sm:grid-cols-3">
-            {CRYPTOPRO_PRICES.map((item) => (
-              <Card key={item.name} variant="tech" padding="md" className="text-center">
-                <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-[var(--color-tech-surface)]">
-                  <Cpu className="h-6 w-6 text-[var(--color-tech-primary)]" />
-                </div>
-                <Heading as="h3" size="sm" weight="semibold">
-                  {item.name}
-                </Heading>
-                <Text size="sm" tone="secondary">
-                  {item.period}
-                </Text>
-                <div className="mt-3 text-2xl font-bold whitespace-nowrap text-[var(--color-tech-primary)]">
-                  {item.price.toLocaleString("ru-RU")}&nbsp;₽
-                </div>
-              </Card>
-            ))}
-          </div>
-        </Container>
-      </Section>
+      <CryptoProSection />
 
       {/* ECP Prices */}
-      <Section spacing="md" background="secondary">
-        <Container className="max-w-6xl space-y-8">
-          <div className="text-center">
-            <Label size="sm" spacing="wider" tone="muted">
-              Электронные подписи
-            </Label>
-            <Heading as="h2" size="xl" weight="semibold" className="mt-2">
-              Сертификаты ЭЦП
-            </Heading>
-            <Text size="lg" tone="secondary" className="mt-3">
-              Квалифицированные электронные подписи для разных целей
-            </Text>
-          </div>
-
-          <div className="mx-auto grid max-w-4xl gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {ECP_PRICES.map((item, idx) => (
-              <Card key={`${item.name}-${idx}`} variant="legal" padding="md">
-                <div className="flex items-start gap-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[var(--color-legal-surface)]">
-                    <FileKey className="h-5 w-5 text-[var(--color-legal-primary)]" />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <Heading as="h3" size="sm" weight="semibold">
-                      {item.name}
-                    </Heading>
-                    <Text size="sm" tone="secondary">
-                      {item.period}
-                    </Text>
-                    <div className="mt-2 text-xl font-bold whitespace-nowrap text-[var(--color-legal-primary)]">
-                      {item.priceFrom && "от "}
-                      {item.price.toLocaleString("ru-RU")}&nbsp;₽
-                    </div>
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </Container>
-      </Section>
+      <EcpPricesSection />
 
       {/* Why Rutoken */}
       <Section spacing="md">

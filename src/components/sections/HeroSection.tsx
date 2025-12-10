@@ -14,6 +14,36 @@ import { Label } from "@/components/primitives/label";
 import { Text } from "@/components/primitives/text";
 import { useHeroProgress } from "@/context/HeroProgressContext";
 import sectionsConfig from "@/content/sections.json";
+import Link from "next/link";
+import { Newspaper, FileKey, FileText, ArrowRight, Globe } from "lucide-react";
+
+// Quick links for hero section
+const QUICK_LINKS = [
+  {
+    href: "/services/legal/vestnik",
+    label: "Журнал Вестник",
+    icon: Newspaper,
+    variant: "legal" as const,
+  },
+  {
+    href: "/services/legal/fedresurs",
+    label: "Федресурс",
+    icon: Globe,
+    variant: "legal" as const,
+  },
+  {
+    href: "/ecp",
+    label: "ЭЦП и Рутокены",
+    icon: FileKey,
+    variant: "legal" as const,
+  },
+  {
+    href: "/edo",
+    label: "ЭДО и Отчётность",
+    icon: FileText,
+    variant: "legal" as const,
+  },
+];
 
 // A/B Test: Hero CTA Button Texts
 const HERO_CTA_VARIANTS = {
@@ -172,6 +202,26 @@ export function HeroSection() {
           >
             {sectionsConfig.hero.main.description}
           </Text>
+
+          {/* Quick Links */}
+          <div className="-mx-4 mt-4 px-4 sm:mx-0 sm:px-0">
+            <div className="scrollbar-hide flex items-center gap-2 overflow-x-auto pb-2 sm:flex-wrap sm:justify-center sm:gap-3 sm:overflow-visible sm:pb-0 lg:justify-start">
+              <span className="shrink-0 text-xs text-[var(--color-text-muted)] sm:text-sm">
+                Популярное:
+              </span>
+              {QUICK_LINKS.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="group inline-flex shrink-0 items-center gap-1.5 rounded-full border border-[var(--color-legal-border)]/30 bg-[var(--color-legal-surface)]/30 px-3 py-1.5 text-xs font-medium whitespace-nowrap text-[var(--color-text-primary)] backdrop-blur-sm transition-all hover:border-[var(--color-legal-primary)]/50 hover:bg-[var(--color-legal-surface)]/60 sm:gap-2 sm:px-4 sm:py-2 sm:text-sm"
+                >
+                  <link.icon className="h-3.5 w-3.5 text-[var(--color-legal-primary)] sm:h-4 sm:w-4" />
+                  {link.label}
+                  <ArrowRight className="h-3 w-3 opacity-0 transition-all group-hover:translate-x-0.5 group-hover:opacity-70" />
+                </Link>
+              ))}
+            </div>
+          </div>
         </header>
 
         <div className="grid min-h-[calc(100vh-8rem)] grid-cols-1 items-stretch gap-4 sm:gap-6 lg:grid-cols-2 lg:gap-8">
@@ -318,7 +368,7 @@ export function HeroSection() {
         </div>
 
         {/* Bottom hint */}
-        <div className="mt-12 flex flex-col items-center gap-4 text-[var(--color-text-muted)] sm:flex-row sm:justify-center sm:gap-6 lg:justify-start">
+        <div className="mt-8 flex flex-col items-center gap-4 text-[var(--color-text-muted)] sm:flex-row sm:justify-center sm:gap-6 lg:justify-start">
           <div className="hidden h-px w-16 bg-[var(--color-border)]/70 sm:block" />
           <Label
             as="span"
