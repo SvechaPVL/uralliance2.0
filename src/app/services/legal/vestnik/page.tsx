@@ -390,7 +390,7 @@ export default function VestnikPage() {
                     <div className="max-w-[200px] space-y-2">
                       <Heading
                         as="h3"
-                        size="base"
+                        size="sm"
                         weight="bold"
                         className="text-[var(--color-legal-primary)]"
                       >
