@@ -110,6 +110,11 @@ const inputVariants: Record<InputVariant, string> = {
  * Форматирует номер телефона в формат +7 (XXX) XXX-XX-XX
  */
 function formatPhoneNumber(value: string): string {
+  // Если ввели только "+" - показываем +7
+  if (value === "+" || value === "+7") {
+    return "+7";
+  }
+
   // Убираем все нецифровые символы
   const digits = value.replace(/\D/g, "");
 
@@ -118,10 +123,20 @@ function formatPhoneNumber(value: string): string {
     return "";
   }
 
+  // Если только одна цифра 7 или 8 - это попытка ввести код страны, игнорируем
+  if (digits === "7" || digits === "8") {
+    return "+7";
+  }
+
   // Если начинается с 8, заменяем на 7
   let phoneDigits = digits;
   if (phoneDigits.startsWith("8")) {
     phoneDigits = "7" + phoneDigits.slice(1);
+  }
+
+  // Если начинается с 77 или 78, убираем дубль (пользователь ввёл 7/8 после +7)
+  if (phoneDigits.startsWith("77") || phoneDigits.startsWith("78")) {
+    phoneDigits = "7" + phoneDigits.slice(2);
   }
 
   // Если не начинается с 7 и есть цифры, добавляем 7
@@ -224,16 +239,6 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
       // Форматируем введённое значение
       const formatted = formatPhoneNumber(inputValue);
 
-      // Если после форматирования получили только "+7", очищаем поле
-      if (formatted === "+7") {
-        const syntheticEvent = {
-          ...e,
-          target: { ...e.target, value: "", name: name || "" },
-        } as React.ChangeEvent<HTMLInputElement>;
-        onChange(syntheticEvent);
-        return;
-      }
-
       // Вызываем onChange с отформатированным значением
       const syntheticEvent = {
         ...e,
@@ -242,7 +247,26 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
       onChange(syntheticEvent);
     };
 
+    const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+      // При фокусе на пустое поле показываем +7
+      if (!value) {
+        const syntheticEvent = {
+          ...e,
+          target: { ...e.target, value: "+7", name: name || "" },
+        } as unknown as React.ChangeEvent<HTMLInputElement>;
+        onChange(syntheticEvent);
+      }
+    };
+
     const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+      // При blur если только "+7", очищаем
+      if (value === "+7") {
+        const syntheticEvent = {
+          ...e,
+          target: { ...e.target, value: "", name: name || "" },
+        } as unknown as React.ChangeEvent<HTMLInputElement>;
+        onChange(syntheticEvent);
+      }
       if (onBlur) {
         onBlur(e);
       }
@@ -272,6 +296,7 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
           name={name}
           value={value}
           onChange={handleChange}
+          onFocus={handleFocus}
           onBlur={handleBlur}
           placeholder={placeholder}
           autoComplete={autoComplete}
@@ -308,18 +333,7 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
 
         {/* Error message */}
         {hasError && errorMessage && (
-          <p
-            id={`${inputId}-error`}
-            className="flex items-center gap-1 text-sm text-[var(--color-error)]"
-            role="alert"
-          >
-            <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-              <path
-                fillRule="evenodd"
-                d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
-                clipRule="evenodd"
-              />
-            </svg>
+          <p id={`${inputId}-error`} className="text-sm text-[var(--color-error)]" role="alert">
             {errorMessage}
           </p>
         )}

@@ -42,11 +42,11 @@
         "required": true,
         "options": [
           {
-            "label": "Помощь юриста",
+            "label": "Юрист",
             "value": "legal"
           },
           {
-            "label": "Сайт или программа",
+            "label": "IT-разработка",
             "value": "tech"
           }
         ]
