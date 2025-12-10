@@ -83,7 +83,7 @@ export function EcpPricesSection() {
         >
           {ECP_PRICES_EXTRA.map((item) => (
             <Card key={item.name} variant="legal" padding="sm">
-              <Heading as="h3" size="xs" weight="semibold">
+              <Heading as="h3" size="sm" weight="semibold">
                 {item.name}
               </Heading>
               <Text size="xs" tone="secondary">

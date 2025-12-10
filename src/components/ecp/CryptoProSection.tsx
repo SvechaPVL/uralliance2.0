@@ -67,7 +67,7 @@ export function CryptoProSection() {
         >
           {CRYPTOPRO_PRICES_EXTRA.map((item) => (
             <Card key={item.name} variant="tech" padding="sm" className="text-center">
-              <Heading as="h3" size="xs" weight="semibold">
+              <Heading as="h3" size="sm" weight="semibold">
                 {item.name}
               </Heading>
               <Text size="xs" tone="secondary">
