@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/primitives/button";
 import { Input } from "@/components/primitives/input";
 import { PhoneInput } from "@/components/primitives/phone-input";
+import { Checkbox } from "@/components/primitives/checkbox";
 import { cn } from "@/lib/utils";
 import { reachGoal } from "@/lib/analytics";
 import { z } from "zod";
@@ -15,6 +16,9 @@ const quickContactSchema = z.object({
   name: z.string().min(2, "Введите имя"),
   phone: z.string().min(10, "Введите телефон"),
   honeypot: z.string().max(0),
+  consent: z.boolean().refine((value) => value === true, {
+    message: "Необходимо согласие",
+  }),
 });
 
 type QuickContactValues = z.infer<typeof quickContactSchema>;
@@ -52,6 +56,7 @@ export function QuickContactForm({
       name: "",
       phone: "",
       honeypot: "",
+      consent: false,
     },
   });
 
@@ -168,6 +173,22 @@ export function QuickContactForm({
             errorMessage={errors.phone?.message}
           />
         )}
+      />
+
+      <Checkbox
+        label={
+          <>
+            Согласен на обработку{" "}
+            <a href="/privacy" target="_blank" rel="noopener noreferrer">
+              персональных данных
+            </a>
+          </>
+        }
+        variant={variant}
+        required
+        {...register("consent")}
+        error={!!errors.consent}
+        errorMessage={errors.consent?.message}
       />
 
       <Button

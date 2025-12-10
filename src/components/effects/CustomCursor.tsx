@@ -105,9 +105,24 @@ export function CustomCursor() {
           newVariant = attr;
         }
       }
-      // Text inputs
+      // Text inputs (except checkboxes and radios)
       else if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") {
-        newVariant = "text";
+        const inputType = (target as HTMLInputElement).type;
+        if (inputType === "checkbox" || inputType === "radio") {
+          newVariant = "pointer";
+        } else {
+          newVariant = "text";
+        }
+      }
+      // Labels associated with checkboxes/radios
+      else if (target.tagName === "LABEL") {
+        const labelFor = (target as HTMLLabelElement).htmlFor;
+        if (labelFor) {
+          const input = document.getElementById(labelFor) as HTMLInputElement | null;
+          if (input && (input.type === "checkbox" || input.type === "radio")) {
+            newVariant = "pointer";
+          }
+        }
       }
       // Clickable elements
       else {

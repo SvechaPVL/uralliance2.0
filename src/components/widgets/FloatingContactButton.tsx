@@ -121,7 +121,7 @@ export function FloatingContactButton() {
             "text-[var(--color-legal-primary)] backdrop-blur-sm",
             "shadow-lg transition-all duration-300",
             "hover:scale-105 hover:border-[var(--color-legal-primary)]/60 hover:bg-[var(--color-legal-primary)]/25",
-            "focus:ring-2 focus:ring-[var(--color-legal-primary)]/50 focus:ring-offset-2 focus:outline-none"
+            "focus:ring-2 focus:ring-[var(--color-legal-primary)]/50 focus:ring-offset-2 focus:ring-offset-[var(--color-background)] focus:outline-none"
           )}
           aria-label={isOpen ? "Закрыть контакты" : "Связаться с нами"}
           aria-expanded={isOpen}

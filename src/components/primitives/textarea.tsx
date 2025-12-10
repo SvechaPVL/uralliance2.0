@@ -62,7 +62,7 @@ const textareaSizes: Record<TextareaSize, string> = {
 };
 
 const textareaVariants: Record<TextareaVariant, string> = {
-  default: "focus:ring-[var(--color-info)]",
+  default: "focus:ring-[var(--color-tech-primary)]",
   legal: "focus:ring-[var(--color-legal-primary)]",
   tech: "focus:ring-[var(--color-tech-primary)]",
 };
@@ -126,11 +126,11 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
               htmlFor={textareaId}
               className={cn(
                 "text-sm font-medium text-[var(--color-text-primary)]",
-                disabled && "opacity-50 cursor-not-allowed"
+                disabled && "cursor-not-allowed opacity-50"
               )}
             >
               {label}
-              {isRequired && <span className="text-[var(--color-tech-primary)] ml-1">*</span>}
+              {isRequired && <span className="ml-1 text-[var(--color-tech-primary)]">*</span>}
             </label>
           )}
           {showCount && maxLength && (
@@ -149,11 +149,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
           value={value}
           aria-invalid={hasError}
           aria-describedby={
-            hasError
-              ? `${textareaId}-error`
-              : helperText
-                ? `${textareaId}-helper`
-                : undefined
+            hasError ? `${textareaId}-error` : helperText ? `${textareaId}-helper` : undefined
           }
           className={cn(
             // Base styles
@@ -165,7 +161,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
             // Size
             textareaSizes[textareaSize],
             // Focus state
-            "focus:outline-none focus:ring-2 focus:ring-offset-2",
+            "focus:ring-2 focus:ring-offset-2 focus:ring-offset-[var(--color-background)] focus:outline-none",
             !hasError && textareaVariants[variant],
             // Error state
             hasError
@@ -176,7 +172,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
               : "border-[var(--color-border)] hover:border-[var(--color-text-muted)]",
             // Disabled state
             disabled &&
-              "opacity-50 cursor-not-allowed bg-[var(--color-background-secondary)] resize-none",
+              "cursor-not-allowed resize-none bg-[var(--color-background-secondary)] opacity-50",
             // Custom className
             className
           )}
@@ -187,15 +183,10 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
         {hasError && errorMessage && (
           <p
             id={`${textareaId}-error`}
-            className="text-sm text-[var(--color-error)] flex items-center gap-1"
+            className="flex items-center gap-1 text-sm text-[var(--color-error)]"
             role="alert"
           >
-            <svg
-              className="w-4 h-4"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              aria-hidden="true"
-            >
+            <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
               <path
                 fillRule="evenodd"
                 d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
@@ -208,10 +199,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
 
         {/* Helper text */}
         {!hasError && helperText && (
-          <p
-            id={`${textareaId}-helper`}
-            className="text-sm text-[var(--color-text-secondary)]"
-          >
+          <p id={`${textareaId}-helper`} className="text-sm text-[var(--color-text-secondary)]">
             {helperText}
           </p>
         )}

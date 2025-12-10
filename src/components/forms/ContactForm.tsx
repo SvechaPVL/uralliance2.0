@@ -8,6 +8,7 @@ import { Input } from "@/components/primitives/input";
 import { PhoneInput } from "@/components/primitives/phone-input";
 import { Select, SelectItem } from "@/components/primitives/select";
 import { Textarea } from "@/components/primitives/textarea";
+import { Checkbox } from "@/components/primitives/checkbox";
 import { cn } from "@/lib/utils";
 import { reachGoal } from "@/lib/analytics";
 import type {
@@ -27,6 +28,7 @@ const defaultValues: ContactFormValues = {
   message: "",
   service: SERVICE_OPTIONS[0].value as "legal" | "tech",
   honeypot: "",
+  consent: false,
 };
 
 /**
@@ -210,17 +212,21 @@ export function ContactForm() {
       />
 
       <div className="space-y-3">
-        <p className="text-xs text-[var(--color-text-muted)]">
-          Нажимая кнопку «Отправить», вы соглашаетесь с{" "}
-          <a
-            href="/privacy-policy"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline underline-offset-2 hover:text-[var(--color-text-secondary)]"
-          >
-            политикой конфиденциальности
-          </a>
-        </p>
+        <Checkbox
+          label={
+            <>
+              Даю согласие на обработку{" "}
+              <a href="/privacy" target="_blank" rel="noopener noreferrer">
+                персональных данных
+              </a>
+            </>
+          }
+          variant="tech"
+          required
+          {...register("consent")}
+          error={!!errors.consent}
+          errorMessage={errors.consent?.message}
+        />
         <Button
           type="submit"
           variant={formConfig.contact.button.variant as "primary-tech"}

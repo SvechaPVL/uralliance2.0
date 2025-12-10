@@ -101,7 +101,7 @@ const inputSizes: Record<InputSize, string> = {
 };
 
 const inputVariants: Record<InputVariant, string> = {
-  default: "focus:ring-[var(--color-info)]",
+  default: "focus:ring-[var(--color-tech-primary)]",
   legal: "focus:ring-[var(--color-legal-primary)]",
   tech: "focus:ring-[var(--color-tech-primary)]",
 };
@@ -289,7 +289,7 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
             // Size
             inputSizes[inputSize],
             // Focus state
-            "focus:ring-2 focus:ring-offset-2 focus:outline-none",
+            "focus:ring-2 focus:ring-offset-2 focus:ring-offset-[var(--color-background)] focus:outline-none",
             !hasError && inputVariants[variant],
             // Error state
             hasError

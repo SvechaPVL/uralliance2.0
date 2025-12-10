@@ -20,14 +20,14 @@ const SelectTrigger = React.forwardRef<
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
-      "flex h-11 w-full items-center justify-between gap-2 rounded-lg border border-input bg-background px-4 py-3 text-start text-base text-foreground shadow-sm shadow-black/5 focus:border-ring focus:outline-none focus:ring-[3px] focus:ring-ring/20 disabled:cursor-not-allowed disabled:opacity-50 data-[placeholder]:text-muted-foreground/70 [&>span]:min-w-0",
-      className,
+      "border-input bg-background text-foreground focus:border-ring focus:ring-ring/20 data-[placeholder]:text-muted-foreground/70 flex h-11 w-full items-center justify-between gap-2 rounded-lg border px-4 py-3 text-start text-base shadow-sm shadow-black/5 focus:ring-[3px] focus:outline-none disabled:cursor-not-allowed disabled:opacity-50 [&>span]:min-w-0",
+      className
     )}
     {...props}
   >
     {children}
     <SelectPrimitive.Icon asChild>
-      <ChevronDownIcon className="shrink-0 text-muted-foreground/80 h-4 w-4" />
+      <ChevronDownIcon className="text-muted-foreground/80 h-4 w-4 shrink-0" />
     </SelectPrimitive.Icon>
   </SelectPrimitive.Trigger>
 ));
@@ -69,10 +69,10 @@ const SelectContent = React.forwardRef<
     <SelectPrimitive.Content
       ref={ref}
       className={cn(
-        "relative z-50 max-h-[min(24rem,var(--radix-select-content-available-height))] min-w-[8rem] overflow-hidden rounded-lg border border-input bg-popover text-popover-foreground shadow-lg shadow-black/5 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 [&_[role=group]]:py-1",
+        "border-input bg-popover text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 relative z-50 max-h-[min(24rem,var(--radix-select-content-available-height))] min-w-[8rem] overflow-hidden rounded-lg border shadow-lg shadow-black/5 [&_[role=group]]:py-1",
         position === "popper" &&
           "w-full min-w-[var(--radix-select-trigger-width)] data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1",
-        className,
+        className
       )}
       position={position}
       {...props}
@@ -97,7 +97,7 @@ const SelectLabel = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.Label
     ref={ref}
-    className={cn("py-1.5 pe-2 ps-8 text-xs font-medium text-muted-foreground", className)}
+    className={cn("text-muted-foreground py-1.5 ps-8 pe-2 text-xs font-medium", className)}
     {...props}
   />
 ));
@@ -110,8 +110,8 @@ const SelectItem = React.forwardRef<
   <SelectPrimitive.Item
     ref={ref}
     className={cn(
-      "relative flex w-full cursor-default select-none items-center rounded-md py-1.5 pe-2 ps-8 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-      className,
+      "focus:bg-accent focus:text-accent-foreground relative flex w-full cursor-default items-center rounded-md py-1.5 ps-8 pe-2 text-sm outline-none select-none data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
+      className
     )}
     {...props}
   >
@@ -132,7 +132,7 @@ const SelectSeparator = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SelectPrimitive.Separator
     ref={ref}
-    className={cn("-mx-1 my-1 h-px bg-border", className)}
+    className={cn("bg-border -mx-1 my-1 h-px", className)}
     {...props}
   />
 ));
@@ -164,7 +164,7 @@ export interface SelectProps {
 }
 
 const selectVariants: Record<SelectVariant, string> = {
-  default: "focus:ring-[var(--color-info)]",
+  default: "focus:ring-[var(--color-tech-primary)]",
   legal: "focus:ring-[var(--color-legal-primary)]",
   tech: "focus:ring-[var(--color-tech-primary)]",
 };
@@ -213,18 +213,18 @@ export const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
     const selectId = React.useId();
 
     return (
-      <div className={cn("flex flex-col gap-1.5 relative", fullWidth && "w-full")}>
+      <div className={cn("relative flex flex-col gap-1.5", fullWidth && "w-full")}>
         {/* Label */}
         {label && (
           <label
             htmlFor={selectId}
             className={cn(
               "text-sm font-medium text-[var(--color-text-primary)]",
-              disabled && "opacity-50 cursor-not-allowed"
+              disabled && "cursor-not-allowed opacity-50"
             )}
           >
             {label}
-            {isRequired && <span className="text-[var(--color-tech-primary)] ml-1">*</span>}
+            {isRequired && <span className="ml-1 text-[var(--color-tech-primary)]">*</span>}
           </label>
         )}
 
@@ -248,11 +248,7 @@ export const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
             )}
             aria-invalid={hasError}
             aria-describedby={
-              hasError
-                ? `${selectId}-error`
-                : helperText
-                  ? `${selectId}-helper`
-                  : undefined
+              hasError ? `${selectId}-error` : helperText ? `${selectId}-helper` : undefined
             }
           >
             <SelectValue placeholder={placeholder} />
@@ -264,15 +260,10 @@ export const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
         {hasError && errorMessage && (
           <p
             id={`${selectId}-error`}
-            className="text-sm text-[var(--color-error)] flex items-center gap-1"
+            className="flex items-center gap-1 text-sm text-[var(--color-error)]"
             role="alert"
           >
-            <svg
-              className="w-4 h-4"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              aria-hidden="true"
-            >
+            <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
               <path
                 fillRule="evenodd"
                 d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"

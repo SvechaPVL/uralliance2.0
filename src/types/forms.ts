@@ -54,6 +54,13 @@ export const contactFormSchema = z.object({
     .refine((value) => !value, {
       message: "Spam detected",
     }),
+  /**
+   * Consent to personal data processing.
+   * Required for form submission.
+   */
+  consent: z.boolean().refine((value) => value === true, {
+    message: "Необходимо согласие на обработку персональных данных",
+  }),
 });
 
 /**

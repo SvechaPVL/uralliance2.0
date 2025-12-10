@@ -67,7 +67,7 @@ const inputSizes: Record<InputSize, string> = {
 };
 
 const inputVariants: Record<InputVariant, string> = {
-  default: "focus:ring-[var(--color-info)]",
+  default: "focus:ring-[var(--color-tech-primary)]",
   legal: "focus:ring-[var(--color-legal-primary)]",
   tech: "focus:ring-[var(--color-tech-primary)]",
 };
@@ -134,11 +134,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             htmlFor={inputId}
             className={cn(
               "text-sm font-medium text-[var(--color-text-primary)]",
-              disabled && "opacity-50 cursor-not-allowed"
+              disabled && "cursor-not-allowed opacity-50"
             )}
           >
             {label}
-            {isRequired && <span className="text-[var(--color-tech-primary)] ml-1">*</span>}
+            {isRequired && <span className="ml-1 text-[var(--color-tech-primary)]">*</span>}
           </label>
         )}
 
@@ -148,7 +148,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           {prefixIcon && (
             <div
               className={cn(
-                "absolute left-3 top-1/2 -translate-y-1/2",
+                "absolute top-1/2 left-3 -translate-y-1/2",
                 "text-[var(--color-text-muted)]",
                 "pointer-events-none"
               )}
@@ -165,11 +165,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             disabled={disabled}
             aria-invalid={hasError}
             aria-describedby={
-              hasError
-                ? `${inputId}-error`
-                : helperText
-                  ? `${inputId}-helper`
-                  : undefined
+              hasError ? `${inputId}-error` : helperText ? `${inputId}-helper` : undefined
             }
             className={cn(
               // Base styles
@@ -180,7 +176,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
               // Size
               inputSizes[inputSize],
               // Focus state
-              "focus:outline-none focus:ring-2 focus:ring-offset-2",
+              "focus:ring-2 focus:ring-offset-2 focus:ring-offset-[var(--color-background)] focus:outline-none",
               !hasError && inputVariants[variant],
               // Error state
               hasError
@@ -190,8 +186,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                   )
                 : "border-[var(--color-border)] hover:border-[var(--color-text-muted)]",
               // Disabled state
-              disabled &&
-                "opacity-50 cursor-not-allowed bg-[var(--color-background-secondary)]",
+              disabled && "cursor-not-allowed bg-[var(--color-background-secondary)] opacity-50",
               // Icon padding
               prefixIcon && "pl-10",
               suffixIcon && "pr-10",
@@ -205,7 +200,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           {suffixIcon && (
             <div
               className={cn(
-                "absolute right-3 top-1/2 -translate-y-1/2",
+                "absolute top-1/2 right-3 -translate-y-1/2",
                 "text-[var(--color-text-muted)]",
                 "pointer-events-none"
               )}
@@ -220,15 +215,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         {hasError && errorMessage && (
           <p
             id={`${inputId}-error`}
-            className="text-sm text-[var(--color-error)] flex items-center gap-1"
+            className="flex items-center gap-1 text-sm text-[var(--color-error)]"
             role="alert"
           >
-            <svg
-              className="w-4 h-4"
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              aria-hidden="true"
-            >
+            <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
               <path
                 fillRule="evenodd"
                 d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z"
@@ -241,10 +231,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 
         {/* Helper text */}
         {!hasError && helperText && (
-          <p
-            id={`${inputId}-helper`}
-            className="text-sm text-[var(--color-text-secondary)]"
-          >
+          <p id={`${inputId}-helper`} className="text-sm text-[var(--color-text-secondary)]">
             {helperText}
           </p>
         )}
