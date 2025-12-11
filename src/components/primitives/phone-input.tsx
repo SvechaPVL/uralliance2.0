@@ -254,7 +254,7 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
           ...e,
           target: { ...e.target, value: "+7", name: name || "" },
         } as unknown as React.ChangeEvent<HTMLInputElement>;
-        onChange(syntheticEvent);
+        onChange?.(syntheticEvent);
       }
     };
 
@@ -265,7 +265,7 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
           ...e,
           target: { ...e.target, value: "", name: name || "" },
         } as unknown as React.ChangeEvent<HTMLInputElement>;
-        onChange(syntheticEvent);
+        onChange?.(syntheticEvent);
       }
       if (onBlur) {
         onBlur(e);
