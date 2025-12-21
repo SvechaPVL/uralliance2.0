@@ -265,7 +265,7 @@ export default function LiquidationPage() {
               </div>
 
               {/* Quick stats */}
-              <div className="flex flex-wrap gap-6 pt-4">
+              <div className="flex flex-wrap justify-center gap-6 pt-4 lg:justify-start">
                 {[
                   { value: "от 10 000 ₽", label: "упрощённая" },
                   { value: "3-4 мес.", label: "срок" },
