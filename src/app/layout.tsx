@@ -175,7 +175,7 @@ export default function RootLayout({
     <html lang="ru" suppressHydrationWarning>
       <head>
         {/* Яндекс.Вебмастер верификация */}
-        <meta name="yandex-verification" content="d33a8b0da9bdd7ed" />
+        <meta name="yandex-verification" content="ba62be64a99c59e9" />
 
         {/* Региональная привязка для Яндекса */}
         <meta name="geo.region" content="RU-PRI" />
