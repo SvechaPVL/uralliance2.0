@@ -13,12 +13,18 @@ const ORGANIZATION_NAME = contacts.company.name;
 const LOGO_URL = `${DEFAULT_SITE_URL}/images/logo.svg`;
 
 /**
+ * OG image version for cache busting
+ * Увеличивай при изменении og-image.png чтобы сбросить кэш соцсетей
+ */
+const OG_IMAGE_VERSION = "v2";
+
+/**
  * Default OG image configuration for all pages
  * ВАЖНО: Добавляй это в openGraph каждой страницы,
  * иначе Next.js НЕ унаследует images из layout.tsx
  */
 export const defaultOgImage = {
-  url: "/og-image.png",
+  url: `/og-image.png?${OG_IMAGE_VERSION}`,
   width: 1200,
   height: 630,
   alt: "Uralliance - Юридические услуги и IT-решения",

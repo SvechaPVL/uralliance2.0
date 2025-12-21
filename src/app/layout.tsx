@@ -16,6 +16,7 @@ import {
   LocalBusinessJsonLd,
   SiteNavigationJsonLd,
 } from "@/components/seo/JsonLd";
+import { defaultOgImage } from "@/lib/seo";
 import { FaqJsonLd } from "@/components/seo/FaqJsonLd";
 import { HeroProgressProvider } from "@/context/HeroProgressContext";
 import { CustomCursor } from "@/components/effects/CustomCursor";
@@ -126,21 +127,13 @@ export const metadata: Metadata = {
     title: pagesConfig.home.title,
     description: pagesConfig.home.description,
     siteName: "Uralliance",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Uralliance - Юридические услуги и IT-решения",
-        type: "image/png",
-      },
-    ],
+    images: [defaultOgImage],
   },
   twitter: {
     card: "summary_large_image",
     title: pagesConfig.home.title,
     description: pagesConfig.home.description,
-    images: ["/og-image.png"],
+    images: [defaultOgImage.url],
     creator: "@uralliance",
     site: "@uralliance",
   },
