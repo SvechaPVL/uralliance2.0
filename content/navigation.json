@@ -30,6 +30,12 @@
             "icon": "FileText"
           },
           {
+            "label": "Федресурс",
+            "description": "Публикации о ликвидации и банкротстве",
+            "href": "/fedresurs",
+            "icon": "Globe"
+          },
+          {
             "label": "Ликвидация организаций",
             "description": "Добровольная и упрощённая ликвидация",
             "href": "/services/legal/liquidation",
@@ -73,6 +79,12 @@
             "description": "Telegram, WhatsApp, автоматизация",
             "href": "/services/tech/bots",
             "icon": "MessageSquare"
+          },
+          {
+            "label": "Боты для MAX",
+            "description": "Российский мессенджер, Mini Apps",
+            "href": "/max",
+            "icon": "Bot"
           },
           {
             "label": "Интеграции с 1С",
@@ -150,8 +162,8 @@
             "href": "/services/legal/accounting"
           },
           {
-            "label": "Сообщение в Федресурс",
-            "href": "/services/legal/fedresurs"
+            "label": "Федресурс",
+            "href": "/fedresurs"
           }
         ]
       },
@@ -166,6 +178,10 @@
           {
             "label": "Чат-боты",
             "href": "/services/tech/bots"
+          },
+          {
+            "label": "Боты для MAX",
+            "href": "/max"
           },
           {
             "label": "Интеграции с 1С",

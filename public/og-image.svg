@@ -1,88 +1,44 @@
 <svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <!-- Background gradient -->
     <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#030712;stop-opacity:1" />
-      <stop offset="50%" style="stop-color:#0c1220;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#030712;stop-opacity:1" />
+      <stop offset="0%" stop-color="#030712"/>
+      <stop offset="100%" stop-color="#0B1120"/>
     </linearGradient>
-
-    <!-- Text gradient -->
-    <linearGradient id="textGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" style="stop-color:#D4AF37;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#06B6D4;stop-opacity:1" />
-    </linearGradient>
-
-    <!-- Glow effect -->
-    <filter id="glow">
-      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
-      <feMerge>
-        <feMergeNode in="coloredBlur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
   </defs>
 
   <!-- Background -->
   <rect width="1200" height="630" fill="url(#bgGradient)"/>
 
-  <!-- Grid pattern overlay -->
-  <g opacity="0.05">
-    <path d="M0 0 L1200 0 L1200 630 L0 630 Z" fill="none" stroke="#ffffff" stroke-width="1"/>
-    <line x1="300" y1="0" x2="300" y2="630" stroke="#ffffff" stroke-width="1"/>
-    <line x1="600" y1="0" x2="600" y2="630" stroke="#ffffff" stroke-width="1"/>
-    <line x1="900" y1="0" x2="900" y2="630" stroke="#ffffff" stroke-width="1"/>
-    <line x1="0" y1="157.5" x2="1200" y2="157.5" stroke="#ffffff" stroke-width="1"/>
-    <line x1="0" y1="315" x2="1200" y2="315" stroke="#ffffff" stroke-width="1"/>
-    <line x1="0" y1="472.5" x2="1200" y2="472.5" stroke="#ffffff" stroke-width="1"/>
-  </g>
+  <!-- Subtle accent line -->
+  <rect x="0" y="0" width="1200" height="4" fill="#06B6D4" opacity="0.6"/>
 
-  <!-- Decorative circles -->
-  <circle cx="100" cy="100" r="120" fill="url(#textGradient)" opacity="0.1" filter="url(#glow)"/>
-  <circle cx="1100" cy="530" r="150" fill="url(#textGradient)" opacity="0.1" filter="url(#glow)"/>
+  <!-- Main logo text -->
+  <text x="600" y="280" text-anchor="middle" font-family="Poppins, Inter, sans-serif" font-size="96" font-weight="700">
+    <tspan fill="#06B6D4">U</tspan><tspan fill="#D4AF37">r</tspan><tspan fill="#F5F7FB">alliance</tspan>
+  </text>
 
-  <!-- Content -->
-  <g>
-    <!-- Company name -->
-    <text x="600" y="240" font-family="Poppins, sans-serif" font-size="96" font-weight="800" text-anchor="middle" fill="url(#textGradient)" filter="url(#glow)">
-      UrAlliance
-    </text>
+  <!-- Tagline -->
+  <text x="600" y="350" text-anchor="middle" font-family="Inter, sans-serif" font-size="32" font-weight="500" fill="#9CA3AF">
+    Legal + Tech решения для бизнеса
+  </text>
 
-    <!-- Tagline -->
-    <text x="600" y="320" font-family="Inter, sans-serif" font-size="38" font-weight="600" text-anchor="middle" fill="#9ca3af">
-      Legal + Tech решения для бизнеса
-    </text>
+  <!-- Divider -->
+  <rect x="500" y="390" width="200" height="2" rx="1" fill="#374151"/>
 
-    <!-- Separator line -->
-    <line x1="400" y1="360" x2="800" y2="360" stroke="url(#textGradient)" stroke-width="2" opacity="0.5"/>
+  <!-- Services row -->
+  <text x="600" y="450" text-anchor="middle" font-family="Inter, sans-serif" font-size="24" font-weight="400" fill="#6B7280">
+    Юридические услуги • IT-разработка • Автоматизация
+  </text>
 
-    <!-- Services -->
-    <g>
-      <!-- Left service -->
-      <g>
-        <circle cx="380" cy="450" r="8" fill="#D4AF37" opacity="0.6"/>
-        <text x="400" y="458" font-family="Inter, sans-serif" font-size="24" font-weight="500" fill="#d1d5db">
-          Арбитраж • Договоры • ЭЦП
-        </text>
-      </g>
+  <!-- Bottom info -->
+  <text x="600" y="550" text-anchor="middle" font-family="Inter, sans-serif" font-size="28" font-weight="500" fill="#D1D5DB">
+    uralliance.ru
+  </text>
 
-      <!-- Right service -->
-      <g>
-        <circle cx="380" cy="490" r="8" fill="#06B6D4" opacity="0.6"/>
-        <text x="400" y="498" font-family="Inter, sans-serif" font-size="24" font-weight="500" fill="#d1d5db">
-          CRM • Сайты • Автоматизация
-        </text>
-      </g>
-    </g>
+  <!-- Decorative corner accents -->
+  <rect x="40" y="40" width="60" height="3" rx="1.5" fill="#06B6D4" opacity="0.4"/>
+  <rect x="40" y="40" width="3" height="60" rx="1.5" fill="#06B6D4" opacity="0.4"/>
 
-    <!-- Location -->
-    <g>
-      <text x="600" y="550" font-family="Inter, sans-serif" font-size="22" font-weight="500" text-anchor="middle" fill="#d1d5db" opacity="0.9">
-        Владивосток
-      </text>
-      <text x="600" y="585" font-family="Inter, sans-serif" font-size="20" font-weight="400" text-anchor="middle" fill="#9ca3af" opacity="0.7">
-        uralliance.ru
-      </text>
-    </g>
-  </g>
+  <rect x="1100" y="587" width="60" height="3" rx="1.5" fill="#D4AF37" opacity="0.4"/>
+  <rect x="1157" y="530" width="3" height="60" rx="1.5" fill="#D4AF37" opacity="0.4"/>
 </svg>

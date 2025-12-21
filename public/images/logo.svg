@@ -1,21 +1,10 @@
-<svg width="180" height="48" viewBox="0 0 180 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="180" height="48" rx="12" fill="#050B16"/>
-  <rect x="2" y="2" width="176" height="44" rx="10" fill="url(#paint0_linear)" opacity="0.15"/>
-  <path
-    d="M32 14H38V28.6C38 32.6 35.3 35 31.1 35H30.9C26.7 35 24 32.6 24 28.6V14H30V28.1C30 29.2 30.5 29.8 31.5 29.8C32.5 29.8 33 29.1 33 28V14H32Z"
-    fill="#D4AF37"
-  />
-  <path
-    d="M54.9 14C60 14 63 16.7 63 21.2V35H57V31.6C55.8 33.8 53.7 35 50.9 35C46.3 35 43 32.2 43 28.5C43 24.8 46.1 22.2 51.9 22.2H57C57 20 55.5 18.9 53.1 18.9C50.7 18.9 48.8 19.7 46.9 21L44 16.7C46.7 15 50.4 14 54.9 14ZM52.4 30.2C54.4 30.2 56 29 56 27.2V26.5H51.4C49.9 26.5 49.2 27 49.2 28.1C49.2 29.3 50.4 30.2 52.4 30.2Z"
-    fill="#06B6D4"
-  />
-  <text x="74" y="31" fill="#F5F7FB" font-size="18" font-family="Sora, 'Inter', sans-serif" font-weight="600">
-    URALLIANCE
+<svg width="180" height="40" viewBox="0 0 180 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&amp;display=swap');
+    .logo-text { font-family: 'Poppins', 'Inter', sans-serif; font-weight: 600; font-size: 24px; }
+  </style>
+
+  <text x="0" y="28" class="logo-text">
+    <tspan fill="#06B6D4">U</tspan><tspan fill="#D4AF37">r</tspan><tspan fill="#F5F7FB">alliance</tspan>
   </text>
-  <defs>
-    <linearGradient id="paint0_linear" x1="14" y1="2" x2="166" y2="46" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#D4AF37"/>
-      <stop offset="1" stop-color="#06B6D4"/>
-    </linearGradient>
-  </defs>
 </svg>
