@@ -181,15 +181,6 @@ export default function RootLayout({
   return (
     <html lang="ru" suppressHydrationWarning>
       <head>
-        {/* OG Video for animated preview in messengers */}
-        <meta property="og:video" content="https://uralliance.ru/og-video.mp4" />
-        <meta property="og:video:type" content="video/mp4" />
-        <meta property="og:video:width" content="1200" />
-        <meta property="og:video:height" content="630" />
-        <meta name="twitter:player" content="https://uralliance.ru/og-video.mp4" />
-        <meta name="twitter:player:width" content="1200" />
-        <meta name="twitter:player:height" content="630" />
-
         {/* Яндекс.Вебмастер верификация */}
         <meta name="yandex-verification" content="d33a8b0da9bdd7ed" />
 
@@ -206,6 +197,15 @@ export default function RootLayout({
         <link rel="preconnect" href="https://mc.yandex.ru" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         <link rel="dns-prefetch" href="https://mc.yandex.ru" />
+
+        {/* OG Video for Telegram (after og:image from metadata) */}
+        <meta property="og:video" content="https://uralliance.ru/og-video.mp4" />
+        <meta property="og:video:type" content="video/mp4" />
+        <meta property="og:video:width" content="1200" />
+        <meta property="og:video:height" content="630" />
+        <meta name="twitter:player" content="https://uralliance.ru/og-video.mp4" />
+        <meta name="twitter:player:width" content="1200" />
+        <meta name="twitter:player:height" content="630" />
       </head>
       <body
         className={`${inter.variable} ${poppins.variable} antialiased`}

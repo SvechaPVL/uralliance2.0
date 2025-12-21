@@ -40,6 +40,7 @@ export function CustomCursor() {
   const textRef = useRef<HTMLDivElement>(null);
   const variantRef = useRef<CursorVariant>("default");
   const rafRef = useRef<number>(0);
+  const isVisibleRef = useRef(true);
 
   // Apply variant styles directly to DOM
   const applyVariant = useCallback((variant: CursorVariant) => {
@@ -148,13 +149,33 @@ export function CustomCursor() {
       }
     };
 
+    // Hide cursor when mouse leaves the window
+    const handleMouseLeave = () => {
+      if (cursorRef.current && isVisibleRef.current) {
+        isVisibleRef.current = false;
+        cursorRef.current.style.opacity = "0";
+      }
+    };
+
+    // Show cursor when mouse enters the window
+    const handleMouseEnter = () => {
+      if (cursorRef.current && !isVisibleRef.current) {
+        isVisibleRef.current = true;
+        cursorRef.current.style.opacity = "1";
+      }
+    };
+
     // Single event listener - pointermove covers mouse
     document.addEventListener("pointermove", handleMove, { passive: true });
     document.addEventListener("mouseover", handleMouseOver, { passive: true });
+    document.documentElement.addEventListener("mouseleave", handleMouseLeave);
+    document.documentElement.addEventListener("mouseenter", handleMouseEnter);
 
     return () => {
       document.removeEventListener("pointermove", handleMove);
       document.removeEventListener("mouseover", handleMouseOver);
+      document.documentElement.removeEventListener("mouseleave", handleMouseLeave);
+      document.documentElement.removeEventListener("mouseenter", handleMouseEnter);
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
   }, [mounted, applyVariant]);
