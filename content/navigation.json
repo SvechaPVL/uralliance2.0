@@ -38,7 +38,7 @@
           {
             "label": "Ликвидация организаций",
             "description": "Добровольная и упрощённая ликвидация",
-            "href": "/services/legal/liquidation",
+            "href": "/liquidation",
             "icon": "FileX"
           },
           {
@@ -147,7 +147,7 @@
           },
           {
             "label": "Ликвидация организаций",
-            "href": "/services/legal/liquidation"
+            "href": "/liquidation"
           },
           {
             "label": "Реорганизация",
