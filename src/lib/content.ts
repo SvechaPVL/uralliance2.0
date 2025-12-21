@@ -26,6 +26,7 @@ async function parseMarkdownFile(filePath: string, options?: MarkdownOptions) {
   const processor = remark().use(remarkRehype).use(rehypeSlug);
 
   if (options?.highlight) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     processor.use(rehypeHighlight as any, { ignoreMissing: true });
   }
 
@@ -72,7 +73,9 @@ export async function getBlogPostBySlug(slug: string): Promise<BlogPost> {
  */
 export async function getAllBlogPosts(): Promise<BlogPost[]> {
   const blogFiles = await listMarkdownFiles(BLOG_DIR);
-  const posts = await Promise.all(blogFiles.map(async (file) => getBlogPostBySlug(file.replace(/\.md$/, ""))));
+  const posts = await Promise.all(
+    blogFiles.map(async (file) => getBlogPostBySlug(file.replace(/\.md$/, "")))
+  );
 
   return posts.sort(
     (a, b) => new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime()
@@ -105,10 +108,7 @@ export async function getRelatedPosts(slugs: string[] = []): Promise<BlogPost[]>
 /**
  * Get service by category and slug
  */
-export async function getServiceBySlug(
-  category: "legal" | "tech",
-  slug: string
-): Promise<Service> {
+export async function getServiceBySlug(category: "legal" | "tech", slug: string): Promise<Service> {
   const categoryDir = path.join(SERVICES_DIR, category);
   const filePath = path.join(categoryDir, `${slug}.md`);
   const { data, content, htmlContent } = await parseMarkdownFile(filePath);
@@ -124,21 +124,15 @@ export async function getServiceBySlug(
 /**
  * Get all services by category sorted by order
  */
-export async function getServicesByCategory(
-  category: "legal" | "tech"
-): Promise<Service[]> {
+export async function getServicesByCategory(category: "legal" | "tech"): Promise<Service[]> {
   const categoryDir = path.join(SERVICES_DIR, category);
   const serviceFiles = await listMarkdownFiles(categoryDir);
 
   const services = await Promise.all(
-    serviceFiles.map(async (file) =>
-      getServiceBySlug(category, file.replace(/\.md$/, ""))
-    )
+    serviceFiles.map(async (file) => getServiceBySlug(category, file.replace(/\.md$/, "")))
   );
 
-  return services.sort(
-    (a, b) => a.frontmatter.order - b.frontmatter.order
-  );
+  return services.sort((a, b) => a.frontmatter.order - b.frontmatter.order);
 }
 
 /**
@@ -175,6 +169,16 @@ export async function getAllServices(): Promise<Service[]> {
   return [...legal, ...tech];
 }
 
+// Custom URL mapping for services with dedicated pages
+const CUSTOM_URL_MAP: Record<string, string> = {
+  ecp: "/ecp",
+  edo: "/edo",
+  fedresurs: "/fedresurs",
+  liquidation: "/liquidation",
+  max: "/max",
+  vestnik: "/services/legal/vestnik",
+};
+
 /**
  * Transform services into PriceItem format for price page
  * This is the SINGLE SOURCE OF TRUTH for pricing data
@@ -197,5 +201,6 @@ export async function getServicesForPricePage() {
     icon: service.frontmatter.icon,
     slug: service.slug,
     order: service.frontmatter.order,
+    customUrl: CUSTOM_URL_MAP[service.slug],
   }));
 }

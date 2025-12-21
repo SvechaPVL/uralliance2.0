@@ -375,7 +375,12 @@ export function PriceExperience({ prices }: PriceExperienceProps) {
                     size="sm"
                     className="w-full sm:w-auto"
                   >
-                    <Link href={price.practice === "legal" ? "/services/legal" : "/services/tech"}>
+                    <Link
+                      href={
+                        (price as unknown as { customUrl?: string }).customUrl ||
+                        `/services/${price.practice}/${(price as unknown as { slug?: string }).slug}`
+                      }
+                    >
                       Подробнее
                     </Link>
                   </Button>

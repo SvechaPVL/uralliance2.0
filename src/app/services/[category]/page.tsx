@@ -14,6 +14,16 @@ import { Text } from "@/components/primitives/text";
 import { List } from "@/components/primitives/list";
 import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 
+// Custom URL mapping for services with dedicated pages
+const CUSTOM_URL_MAP: Record<string, string> = {
+  ecp: "/ecp",
+  edo: "/edo",
+  fedresurs: "/fedresurs",
+  liquidation: "/liquidation",
+  max: "/max",
+  vestnik: "/services/legal/vestnik",
+};
+
 /**
  * Services Category Page
  *
@@ -284,7 +294,7 @@ export default async function ServicesCategoryPage({ params }: ServicesCategoryP
                 </div>
                 <div className="mt-auto flex items-center justify-between pt-2">
                   <Link
-                    href={`/services/${category}/${service.slug}`}
+                    href={CUSTOM_URL_MAP[service.slug] || `/services/${category}/${service.slug}`}
                     className="inline-flex items-center gap-2 text-sm font-semibold text-[var(--color-text-secondary)] transition-colors hover:text-white"
                   >
                     Подробнее о пакете

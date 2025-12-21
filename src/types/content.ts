@@ -185,6 +185,16 @@ export interface PriceItem {
    * Highlight card in UI
    */
   featured?: boolean;
+
+  /**
+   * URL slug for linking to service detail page
+   */
+  slug?: string;
+
+  /**
+   * Custom URL override (e.g., /ecp instead of /services/legal/ecp)
+   */
+  customUrl?: string;
 }
 
 /**
