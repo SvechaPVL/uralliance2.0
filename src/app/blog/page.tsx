@@ -1,3 +1,4 @@
+import { defaultOgImage } from "@/lib/seo";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -19,6 +20,7 @@ export const metadata: Metadata = {
     description: "Юридическая аналитика, IT-решения и практичные чек-листы для бизнеса.",
     url: "https://www.uralliance.ru/blog",
     type: "website",
+    images: [defaultOgImage],
   },
 };
 
@@ -28,15 +30,17 @@ export default async function BlogPage() {
   return (
     <Section spacing="xl">
       <Container className="space-y-16">
-        <header className="space-y-6 text-center max-w-3xl mx-auto">
-          <Label size="sm" spacing="wider" tone="muted">Insights</Label>
+        <header className="mx-auto max-w-3xl space-y-6 text-center">
+          <Label size="sm" spacing="wider" tone="muted">
+            Insights
+          </Label>
           <div className="space-y-4">
             <Heading as="h1" size="2xl" weight="semibold" display>
               Блог о Legal &amp; Tech
             </Heading>
             <Text size="lg" tone="secondary">
-              Делимся стратегиями, которые помогают клиентам выигрывать суды, запускать LegalTech и масштабировать
-              продукты без хаоса.
+              Делимся стратегиями, которые помогают клиентам выигрывать суды, запускать LegalTech и
+              масштабировать продукты без хаоса.
             </Text>
           </div>
         </header>
@@ -53,8 +57,8 @@ export default async function BlogPage() {
               <article
                 key={post.slug}
                 className={cn(
-                  "rounded-3xl border border-[var(--color-border-soft)] overflow-hidden",
-                  "bg-[var(--color-card-bg)]/80 backdrop-blur-2xl shadow-[0_18px_40px_rgba(0,0,0,0.25)]",
+                  "overflow-hidden rounded-3xl border border-[var(--color-border-soft)]",
+                  "bg-[var(--color-card-bg)]/80 shadow-[0_18px_40px_rgba(0,0,0,0.25)] backdrop-blur-2xl",
                   "transition-transform duration-300 hover:-translate-y-1 hover:border-white/20"
                 )}
               >
@@ -70,12 +74,17 @@ export default async function BlogPage() {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
                     <div className="absolute bottom-4 left-4">
-                      <Badge variant="neutral" badgeStyle="subtle" size="sm" className="bg-white/15 text-white">
+                      <Badge
+                        variant="neutral"
+                        badgeStyle="subtle"
+                        size="sm"
+                        className="bg-white/15 text-white"
+                      >
                         {post.frontmatter.category}
                       </Badge>
                     </div>
                   </div>
-                  <div className="p-6 space-y-4">
+                  <div className="space-y-4 p-6">
                     <div className="flex items-center gap-3">
                       <Label as="span" size="sm" spacing="wider" tone="muted">
                         {new Date(post.frontmatter.date).toLocaleDateString("ru-RU", {
@@ -85,7 +94,9 @@ export default async function BlogPage() {
                         })}
                       </Label>
                       <span className="h-1 w-1 rounded-full bg-[var(--color-border)]" />
-                      <Label as="span" size="sm" spacing="wider" tone="muted">{post.frontmatter.author}</Label>
+                      <Label as="span" size="sm" spacing="wider" tone="muted">
+                        {post.frontmatter.author}
+                      </Label>
                     </div>
                     <Heading as="h2" size="lg" weight="semibold">
                       {post.frontmatter.title}
@@ -93,7 +104,9 @@ export default async function BlogPage() {
                     <Text size="base" tone="secondary">
                       {post.frontmatter.excerpt}
                     </Text>
-                    <Text size="sm" weight="semibold" tone="tech">Читать статью →</Text>
+                    <Text size="sm" weight="semibold" tone="tech">
+                      Читать статью →
+                    </Text>
                   </div>
                 </Link>
               </article>

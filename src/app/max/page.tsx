@@ -1,3 +1,4 @@
+import { defaultOgImage } from "@/lib/seo";
 import { Container } from "@/components/layout/Container";
 import { Section } from "@/components/primitives/section";
 import { Heading } from "@/components/primitives/heading";
@@ -51,6 +52,7 @@ export const metadata: Metadata = {
     locale: "ru_RU",
     url: "/max",
     siteName: "Uralliance",
+    images: [defaultOgImage],
   },
 };
 

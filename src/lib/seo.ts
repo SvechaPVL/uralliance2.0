@@ -13,6 +13,19 @@ const ORGANIZATION_NAME = contacts.company.name;
 const LOGO_URL = `${DEFAULT_SITE_URL}/images/logo.svg`;
 
 /**
+ * Default OG image configuration for all pages
+ * ВАЖНО: Добавляй это в openGraph каждой страницы,
+ * иначе Next.js НЕ унаследует images из layout.tsx
+ */
+export const defaultOgImage = {
+  url: "/og-image.png",
+  width: 1200,
+  height: 630,
+  alt: "Uralliance - Юридические услуги и IT-решения",
+  type: "image/png" as const,
+};
+
+/**
  * Generate Schema.org Organization markup
  */
 export function generateOrganizationSchema(options?: { sameAs?: string[] }) {

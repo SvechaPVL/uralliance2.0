@@ -1,3 +1,4 @@
+import { defaultOgImage } from "@/lib/seo";
 import { getServiceBySlug, getAllServiceSlugs } from "@/lib/content";
 import { cn } from "@/lib/utils";
 import { Container } from "@/components/layout/Container";
@@ -396,13 +397,15 @@ export async function generateMetadata({ params }: ServiceDetailPageProps): Prom
                 alt: service.frontmatter.title,
               },
             ]
-          : [],
+          : [defaultOgImage],
       },
       twitter: {
         card: "summary_large_image",
         title: `${service.frontmatter.title} во Владивостоке`,
         description: service.frontmatter.description,
-        images: service.frontmatter.seo.ogImage ? [service.frontmatter.seo.ogImage] : [],
+        images: service.frontmatter.seo.ogImage
+          ? [service.frontmatter.seo.ogImage]
+          : ["/og-image.png"],
       },
       robots: {
         index: true,
