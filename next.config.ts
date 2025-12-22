@@ -167,6 +167,10 @@ const nextConfig: NextConfig = {
         source: "/services/tech/max",
         destination: "/max",
       },
+      {
+        source: "/services/tech/web",
+        destination: "/web",
+      },
     ];
   },
 
