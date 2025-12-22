@@ -16,7 +16,7 @@ const LOGO_URL = `${DEFAULT_SITE_URL}/images/logo.svg`;
  * OG image version for cache busting
  * Увеличивай при изменении og-image.png чтобы сбросить кэш соцсетей
  */
-const OG_IMAGE_VERSION = "v2";
+const OG_IMAGE_VERSION = "v3";
 
 /**
  * Default OG image configuration for all pages
