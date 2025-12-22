@@ -18,6 +18,10 @@ export interface BreadcrumbConfig {
  */
 export const BREADCRUMB_MAP: Record<string, BreadcrumbConfig> = {
   // Legal services
+  "/registration": {
+    label: "Регистрация юридических лиц",
+    parent: { label: "Юридические услуги", href: "/services/legal" },
+  },
   "/liquidation": {
     label: "Ликвидация организаций",
     parent: { label: "Юридические услуги", href: "/services/legal" },

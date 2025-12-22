@@ -147,6 +147,10 @@ const nextConfig: NextConfig = {
     return [
       // Legal custom pages
       {
+        source: "/services/legal/registration",
+        destination: "/registration",
+      },
+      {
         source: "/services/legal/liquidation",
         destination: "/liquidation",
       },
