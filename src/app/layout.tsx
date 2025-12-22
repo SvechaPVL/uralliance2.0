@@ -128,6 +128,14 @@ export const metadata: Metadata = {
     description: pagesConfig.home.description,
     siteName: "Uralliance",
     images: [defaultOgImage],
+    videos: [
+      {
+        url: "https://uralliance.ru/og-video.mp4",
+        width: 1200,
+        height: 630,
+        type: "video/mp4",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
@@ -190,15 +198,6 @@ export default function RootLayout({
         <link rel="preconnect" href="https://mc.yandex.ru" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
         <link rel="dns-prefetch" href="https://mc.yandex.ru" />
-
-        {/* OG Video for Telegram (after og:image from metadata) */}
-        <meta property="og:video" content="https://uralliance.ru/og-video.mp4" />
-        <meta property="og:video:type" content="video/mp4" />
-        <meta property="og:video:width" content="1200" />
-        <meta property="og:video:height" content="630" />
-        <meta name="twitter:player" content="https://uralliance.ru/og-video.mp4" />
-        <meta name="twitter:player:width" content="1200" />
-        <meta name="twitter:player:height" content="630" />
       </head>
       <body
         className={`${inter.variable} ${poppins.variable} antialiased`}
