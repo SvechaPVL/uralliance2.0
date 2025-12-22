@@ -12,6 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/about",
     "/contacts",
     "/blog",
+    "/corporate",
     "/ecp",
     "/edo",
     "/fedresurs",
@@ -28,8 +29,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // Страницы услуг
   const serviceRoutes = [
-    // Юридические услуги
-    "/services/legal/corporate",
+    // Юридические услуги (corporate теперь в основных страницах)
     "/services/legal/arbitrazh",
     "/services/legal/contracts",
     "/services/legal/vestnik",

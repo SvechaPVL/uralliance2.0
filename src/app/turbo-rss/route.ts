@@ -197,7 +197,7 @@ export async function GET() {
       `,
     },
     {
-      url: `${baseUrl}/services/legal/corporate-law`,
+      url: `${baseUrl}/corporate`,
       title: "Корпоративное право - Регистрация ООО, реорганизация | Uralliance",
       description:
         "Юридическое сопровождение бизнеса: регистрация ООО, ИП, изменения в ЕГРЮЛ, корпоративные споры.",

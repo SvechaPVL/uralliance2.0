@@ -171,6 +171,7 @@ export async function getAllServices(): Promise<Service[]> {
 
 // Custom URL mapping for services with dedicated pages
 const CUSTOM_URL_MAP: Record<string, string> = {
+  corporate: "/corporate",
   ecp: "/ecp",
   edo: "/edo",
   fedresurs: "/fedresurs",
