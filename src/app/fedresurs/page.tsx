@@ -1,5 +1,6 @@
 import { defaultOgImage } from "@/lib/seo";
 import { Container } from "@/components/layout/Container";
+import { Breadcrumb } from "@/components/navigation/Breadcrumb";
 import { Section } from "@/components/primitives/section";
 import { Heading } from "@/components/primitives/heading";
 import { Text } from "@/components/primitives/text";
@@ -215,6 +216,8 @@ export default function FedresursPage() {
         <div className="pointer-events-none absolute -bottom-40 -left-40 h-[400px] w-[400px] rounded-full bg-[var(--color-legal-primary)]/5 blur-3xl" />
 
         <Container className="relative max-w-6xl">
+          <Breadcrumb className="mb-6" />
+
           <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
             {/* Left side - Content */}
             <div className="space-y-6">
@@ -254,7 +257,7 @@ export default function FedresursPage() {
               </div>
 
               {/* Quick stats */}
-              <div className="flex flex-wrap gap-6 pt-4">
+              <div className="flex flex-wrap justify-center gap-6 pt-4 lg:justify-start">
                 {[
                   { value: "от 3 000 ₽", label: "публикация" },
                   { value: "1-2 дня", label: "срок размещения" },

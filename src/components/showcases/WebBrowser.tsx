@@ -106,7 +106,8 @@ export function WebBrowserShowcase() {
                 key={i}
                 className="rounded-lg bg-white/5 p-2"
                 animate={{
-                  borderColor: activeCard === i ? "rgba(74, 222, 128, 0.5)" : "transparent",
+                  borderColor:
+                    activeCard === i ? "rgba(74, 222, 128, 0.5)" : "rgba(74, 222, 128, 0)",
                   scale: activeCard === i ? 1.02 : 1,
                 }}
                 style={{ borderWidth: 1 }}
@@ -126,7 +127,7 @@ export function WebBrowserShowcase() {
           </div>
 
           {/* Bottom bar with features */}
-          <div className="flex items-center justify-between rounded-lg bg-white/5 px-3 py-2">
+          <div className="flex items-center rounded-lg bg-white/5 px-3 py-2">
             <div className="flex gap-3">
               {features.map((f) => (
                 <motion.div
@@ -141,11 +142,6 @@ export function WebBrowserShowcase() {
                 </motion.div>
               ))}
             </div>
-            <motion.div
-              className="h-5 w-5 rounded-full bg-[var(--color-tech-primary)]"
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            />
           </div>
         </div>
       </motion.div>
@@ -177,18 +173,6 @@ export function WebBrowserShowcase() {
           </motion.div>
         ))}
       </div>
-
-      {/* Decorative elements */}
-      <motion.div
-        className="absolute -top-3 -left-3 h-6 w-6 rounded-full border border-[var(--color-tech-primary)]/30 bg-[var(--color-tech-primary)]/10"
-        animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }}
-        transition={{ duration: 3, repeat: Infinity }}
-      />
-      <motion.div
-        className="absolute -top-1 right-8 h-2 w-2 rounded-full bg-[var(--color-tech-primary)]"
-        animate={{ y: [0, -5, 0] }}
-        transition={{ duration: 2, repeat: Infinity }}
-      />
     </div>
   );
 }

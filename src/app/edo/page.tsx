@@ -1,5 +1,6 @@
 import { defaultOgImage } from "@/lib/seo";
 import { Container } from "@/components/layout/Container";
+import { Breadcrumb } from "@/components/navigation/Breadcrumb";
 import { Section } from "@/components/primitives/section";
 import { Heading } from "@/components/primitives/heading";
 import { Text } from "@/components/primitives/text";
@@ -160,6 +161,8 @@ export default function EdoPage() {
         className="pt-[calc(6rem+var(--promo-banner-height))] pb-16 sm:pt-[calc(7rem+var(--promo-banner-height))] sm:pb-20 lg:pt-[calc(8rem+var(--promo-banner-height))] lg:pb-24"
       >
         <Container className="max-w-6xl">
+          <Breadcrumb className="mb-6" />
+
           <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
             <div className="space-y-6">
               <div className="flex flex-wrap items-center gap-3">
@@ -172,7 +175,7 @@ export default function EdoPage() {
               </div>
 
               <Heading as="h1" size="3xl" weight="bold">
-                Такском — электронная отчётность и документооборот
+                Такском — ЭДО и отчётность
               </Heading>
 
               <Text size="lg" tone="secondary">

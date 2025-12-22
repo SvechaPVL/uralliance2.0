@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { WebPageContent } from "./WebPageContent";
 
 export const metadata: Metadata = {
-  title: "Разработка сайтов во Владивостоке | Создание сайтов под ключ | Uralliance",
+  title: "Разработка сайтов во Владивостоке | Создание сайтов под ключ | Юральянс",
   description:
     "Создание современных сайтов на React и Next.js во Владивостоке. Лендинги, корпоративные сайты, интернет-магазины, веб-приложения. Быстро, красиво, с SEO. От 50 000 ₽.",
   keywords:
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "ru_RU",
     url: "/web",
-    siteName: "Uralliance",
+    siteName: "Юральянс",
     images: [defaultOgImage],
   },
 };

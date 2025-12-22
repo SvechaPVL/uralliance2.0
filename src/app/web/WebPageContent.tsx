@@ -1,6 +1,7 @@
 "use client";
 
 import { Container } from "@/components/layout/Container";
+import { Breadcrumb } from "@/components/navigation/Breadcrumb";
 import { Section } from "@/components/primitives/section";
 import { Heading } from "@/components/primitives/heading";
 import { Text } from "@/components/primitives/text";
@@ -274,6 +275,8 @@ export function WebPageContent() {
         <div className="pointer-events-none absolute -bottom-40 -left-40 h-[400px] w-[400px] rounded-full bg-[var(--color-tech-primary)]/5 blur-3xl" />
 
         <Container className="relative max-w-6xl">
+          <Breadcrumb className="mb-6" />
+
           <div className="grid items-center gap-8 lg:grid-cols-2 lg:gap-12">
             {/* Left side - Content */}
             <div className="space-y-6">
@@ -298,7 +301,8 @@ export function WebPageContent() {
                 transition={{ duration: 0.5, delay: 0.1 }}
               >
                 <Heading as="h1" size="3xl" weight="bold" className="leading-tight">
-                  <span className="text-[var(--color-tech-primary)]">Сайты</span>, которые продают
+                  <span className="text-[var(--color-tech-primary)]">Сайты</span> для бизнеса во
+                  Владивостоке
                 </Heading>
               </motion.div>
 
