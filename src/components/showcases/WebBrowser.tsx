@@ -1,89 +1,82 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { Gauge, Smartphone, Search, Zap } from "lucide-react";
 
-const cards = [
-  { label: "Каталоги авто", description: "Автоматически подгружаем остатки из 1С." },
-  { label: "A/B тесты", description: "Запускаем варианты hero и коммерческих блоков." },
-  { label: "Онлайн-чаты", description: "Telegram, WhatsApp, web-виджет с пушами." },
+const metrics = [
+  { icon: Gauge, label: "Lighthouse", value: "95+", color: "#22c55e" },
+  { icon: Smartphone, label: "Мобильная версия", value: "100%", color: "#3b82f6" },
+  { icon: Search, label: "SEO Ready", value: "Да", color: "#a855f7" },
+  { icon: Zap, label: "Загрузка", value: "<2с", color: "#f59e0b" },
 ];
 
 export function WebBrowserShowcase() {
-  const [active, setActive] = useState(0);
-
-  useEffect(() => {
-    const timer = window.setInterval(() => {
-      setActive((prev) => (prev + 1) % cards.length);
-    }, 2500);
-    return () => window.clearInterval(timer);
-  }, []);
-
   return (
-    <div className="relative flex min-h-[200px] w-full flex-col rounded-3xl border border-white/5 bg-[#05070c] p-3 text-white sm:min-h-[360px] lg:min-h-[420px] lg:p-6">
-      <div className="flex flex-wrap items-center gap-2 rounded-2xl border border-white/5 bg-[#070a11] px-3 py-2 text-xs text-white/60 sm:gap-3 sm:px-4">
-        <div className="flex gap-1">
-          <span className="h-2 w-2 rounded-full bg-[#ef4444]" />
-          <span className="h-2 w-2 rounded-full bg-[#f59e0b]" />
-          <span className="h-2 w-2 rounded-full bg-[#10b981]" />
-        </div>
-        <div className="min-w-[160px] flex-1 rounded-full bg-white/5 px-3 py-1 text-center text-[11px] tracking-wide text-white/70">
-          autoservices.uralliance.ru
-        </div>
-      </div>
-
-      <div className="mt-4 flex flex-1 flex-col gap-4 md:flex-row md:gap-6">
-        <div className="flex-1 rounded-2xl border border-white/5 bg-gradient-to-b from-white/15 via-transparent to-transparent p-3 sm:p-4 lg:p-6">
-          <motion.div
-            key={active}
-            className="h-24 rounded-2xl bg-gradient-to-br from-[#0f172a] to-[#140c19] sm:h-32 sm:rounded-3xl lg:h-48"
-            initial={{ opacity: 0.3, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6 }}
-          />
-          <div className="mt-3 text-sm sm:mt-4 lg:mt-6">
-            <div className="text-xs text-white/80 sm:text-sm">Что делаем</div>
-            <motion.ul
-              className="mt-2 space-y-2 text-white/70 sm:mt-3 sm:space-y-3"
-              key={`list-${active}`}
-            >
-              {cards.slice(0, 2).map((card, idx) => (
-                <motion.li
-                  key={card.label}
-                  className="rounded-xl border border-white/10 px-2 py-1.5 sm:rounded-2xl sm:px-3 sm:py-2"
-                  animate={{ opacity: idx === active ? 1 : 0.4, scale: idx === active ? 1.02 : 1 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <div className="text-xs font-semibold text-white sm:text-sm">{card.label}</div>
-                  <p className="text-[10px] sm:text-xs">{card.description}</p>
-                </motion.li>
-              ))}
-            </motion.ul>
+    <div className="relative w-full max-w-md">
+      {/* Browser window */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="rounded-2xl border border-[var(--color-tech-border)]/30 bg-[#0a0f1a] p-3 shadow-2xl"
+      >
+        {/* Browser header */}
+        <div className="flex items-center gap-2 rounded-xl bg-[#050810] px-3 py-2">
+          <div className="flex gap-1.5">
+            <span className="h-2.5 w-2.5 rounded-full bg-[#ef4444]" />
+            <span className="h-2.5 w-2.5 rounded-full bg-[#f59e0b]" />
+            <span className="h-2.5 w-2.5 rounded-full bg-[#22c55e]" />
+          </div>
+          <div className="flex-1 rounded-md bg-white/5 px-3 py-1 text-center text-xs text-white/50">
+            yoursite.ru
           </div>
         </div>
 
-        <div className="hidden w-full space-y-3 md:block md:w-64">
-          {["Калькулятор стоимости", "Онлайн-чат", "SEO-аудит"].map((title, idx) => (
-            <motion.div
-              key={title}
-              className="rounded-2xl border border-white/5 bg-[#070a11]/80 px-4 py-4 text-sm"
-              animate={{ opacity: idx === active ? 1 : 0.4 }}
-            >
-              <div className="text-xs tracking-[0.3em] text-white/60 uppercase">{title}</div>
-              <div className="mt-2 text-lg font-semibold text-white/90">
-                {idx === 0 ? "Авто-каталог" : idx === 1 ? "Ответ 2 мин" : "95/100"}
+        {/* Website preview */}
+        <div className="mt-3 space-y-3">
+          {/* Hero section mockup */}
+          <div className="rounded-xl bg-gradient-to-br from-[var(--color-tech-primary)]/20 to-[var(--color-tech-primary)]/5 p-4">
+            <div className="h-3 w-24 rounded bg-white/20" />
+            <div className="mt-2 h-2 w-32 rounded bg-white/10" />
+            <div className="mt-3 h-6 w-20 rounded-md bg-[var(--color-tech-primary)]/50" />
+          </div>
+
+          {/* Content blocks */}
+          <div className="grid grid-cols-3 gap-2">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="rounded-lg bg-white/5 p-2">
+                <div className="h-8 rounded bg-white/10" />
+                <div className="mt-2 h-1.5 w-full rounded bg-white/5" />
+                <div className="mt-1 h-1.5 w-2/3 rounded bg-white/5" />
               </div>
-              <div className="mt-2 h-1 rounded-full bg-white/10" />
-            </motion.div>
-          ))}
-          <motion.div
-            className="rounded-2xl border border-white/5 bg-[#070a11]/80 px-4 py-4 text-sm"
-            animate={{ opacity: 0.6 }}
-          >
-            <div className="text-white/80">Личный кабинет</div>
-            <p className="text-xs text-white/50">Документы, статусы и платежи для клиента.</p>
-          </motion.div>
+            ))}
+          </div>
+
+          {/* Footer mockup */}
+          <div className="flex justify-between rounded-lg bg-white/5 px-3 py-2">
+            <div className="h-2 w-16 rounded bg-white/10" />
+            <div className="h-2 w-12 rounded bg-white/10" />
+          </div>
         </div>
+      </motion.div>
+
+      {/* Metrics cards - floating around the browser */}
+      <div className="absolute -right-4 -bottom-4 grid grid-cols-2 gap-2 sm:-right-8 sm:-bottom-8">
+        {metrics.map((metric, idx) => (
+          <motion.div
+            key={metric.label}
+            initial={{ opacity: 0, scale: 0.8, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.3 + idx * 0.1 }}
+            className="flex items-center gap-2 rounded-xl border border-white/10 bg-[#0a0f1a]/95 px-3 py-2 shadow-lg backdrop-blur-sm"
+          >
+            <metric.icon className="h-4 w-4 shrink-0" style={{ color: metric.color }} />
+            <div className="min-w-0">
+              <div className="text-xs font-bold text-white">{metric.value}</div>
+              <div className="truncate text-[10px] text-white/50">{metric.label}</div>
+            </div>
+          </motion.div>
+        ))}
       </div>
     </div>
   );

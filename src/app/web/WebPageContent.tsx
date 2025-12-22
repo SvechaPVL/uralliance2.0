@@ -99,12 +99,13 @@ const TECH_STACK = [
   {
     category: "CMS",
     icon: Layers,
-    items: ["WordPress", "Bitrix", "Headless CMS", "Strapi"],
+    items: ["WordPress", "1С-Битрикс", "Tilda", "Strapi"],
   },
   {
-    category: "Деплой",
+    category: "Хостинг",
     icon: Rocket,
-    items: ["Vercel", "AWS", "Docker", "CI/CD"],
+    items: ["REG.RU", "Timeweb", "VPS", "Docker"],
+    link: "https://www.reg.ru/hosting/?utm_source=uralliance&utm_medium=partner&utm_campaign=web",
   },
 ];
 
@@ -366,7 +367,7 @@ export function WebPageContent() {
                   будущее вашего бизнеса.
                 </Text>
                 <div className="mt-4 flex flex-wrap gap-2">
-                  {["⚡ Скорость", "🔒 Безопасность", "📈 SEO", "🎨 Уникальность"].map((tag) => (
+                  {["Скорость", "Безопасность", "SEO", "Уникальность"].map((tag) => (
                     <Badge key={tag} variant="tech" badgeStyle="subtle" size="sm">
                       {tag}
                     </Badge>
@@ -393,7 +394,7 @@ export function WebPageContent() {
             </Text>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-6 sm:grid-cols-2">
             {SITE_TYPES.map((type) => (
               <Card
                 key={type.title}
@@ -499,6 +500,17 @@ export function WebPageContent() {
                     </Badge>
                   ))}
                 </div>
+                {"link" in stack && stack.link && (
+                  <a
+                    href={stack.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="mt-3 inline-flex items-center gap-1 text-xs text-[var(--color-tech-primary)] hover:underline"
+                  >
+                    Тарифы хостинга
+                    <ArrowRight className="h-3 w-3" />
+                  </a>
+                )}
               </Card>
             ))}
           </div>

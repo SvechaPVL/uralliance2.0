@@ -31,6 +31,11 @@ export type MetrikaGoal =
   | "price_filter_change"
   | "price_sort_change"
   | "price_card_click"
+  // Lead Capture Popup
+  | "lead_popup_variant_assigned"
+  | "lead_popup_shown"
+  | "lead_popup_dismissed"
+  | "lead_popup_submit"
   // A/B Tests
   | `ab_test_hero_cta_variant_${"A" | "B" | "C"}`
   | `ab_test_form_position_variant_${"A" | "B" | "C"}`

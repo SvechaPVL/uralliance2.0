@@ -11,6 +11,7 @@ import { Textarea } from "@/components/primitives/textarea";
 import { Checkbox } from "@/components/primitives/checkbox";
 import { cn } from "@/lib/utils";
 import { reachGoal } from "@/lib/analytics";
+import { useToast } from "@/components/system/Toast";
 import type {
   ContactFormErrorResponse,
   ContactFormSuccessResponse,
@@ -41,6 +42,7 @@ export function ContactForm() {
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [serverMessage, setServerMessage] = useState<string | null>(null);
   const formStartTracked = useRef(false);
+  const toast = useToast();
 
   const {
     register,
@@ -78,9 +80,12 @@ export function ContactForm() {
 
       if (!response.ok || !result.success) {
         setStatus("error");
-        setServerMessage(
-          "error" in result && result.error ? result.error : formConfig.contact.messages.error
-        );
+        const errorMsg =
+          "error" in result && result.error ? result.error : formConfig.contact.messages.error;
+        setServerMessage(errorMsg);
+
+        // Show error toast
+        toast.error("Ошибка отправки", errorMsg);
 
         // Track form error
         reachGoal("contact_form_error", {
@@ -92,6 +97,9 @@ export function ContactForm() {
 
       setStatus("success");
       setServerMessage(formConfig.contact.messages.success);
+
+      // Show success toast
+      toast.success("Заявка отправлена!", "Мы свяжемся с вами в течение рабочего дня");
 
       // Track successful form submission
       reachGoal("contact_form_submit", {
@@ -105,6 +113,9 @@ export function ContactForm() {
     } catch {
       setStatus("error");
       setServerMessage(formConfig.contact.messages.networkError);
+
+      // Show network error toast
+      toast.error("Ошибка сети", formConfig.contact.messages.networkError);
 
       // Track network error
       reachGoal("contact_form_error", {
