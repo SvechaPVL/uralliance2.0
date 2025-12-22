@@ -253,7 +253,7 @@ export default function MaxPage() {
               </div>
 
               {/* Quick stats */}
-              <div className="flex flex-wrap gap-6 pt-4">
+              <div className="flex flex-wrap justify-center gap-6 pt-4 sm:justify-start">
                 {[
                   { value: "REST API", label: "открытый" },
                   { value: "Mini Apps", label: "веб-приложения" },

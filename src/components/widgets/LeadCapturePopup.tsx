@@ -303,10 +303,10 @@ export function LeadCapturePopup({ triggers = {} }: LeadCapturePopupProps) {
           >
             <div
               className={cn(
-                "relative overflow-hidden rounded-2xl border shadow-2xl",
+                "relative overflow-hidden rounded-2xl border shadow-2xl backdrop-blur-xl",
                 isLegal
-                  ? "border-[var(--color-legal-primary)]/30 bg-[var(--color-card-bg)] bg-gradient-to-br from-[var(--color-card-bg)] to-[var(--color-legal-surface)]/80"
-                  : "border-[var(--color-tech-primary)]/30 bg-[var(--color-card-bg)] bg-gradient-to-br from-[var(--color-card-bg)] to-[var(--color-tech-surface)]/80"
+                  ? "border-[var(--color-legal-primary)]/30 bg-[#0d1117]/95 bg-gradient-to-br from-[#0d1117]/95 to-[var(--color-legal-surface)]"
+                  : "border-[var(--color-tech-primary)]/30 bg-[#0d1117]/95 bg-gradient-to-br from-[#0d1117]/95 to-[var(--color-tech-surface)]"
               )}
             >
               {/* Decorative glow */}
