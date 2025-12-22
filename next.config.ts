@@ -140,6 +140,36 @@ const nextConfig: NextConfig = {
     return config;
   },
 
+  // Rewrites для кастомных страниц
+  // Позволяет /services/legal/liquidation показывать контент /liquidation
+  // URL остаётся прежним (важно для рекламных кампаний)
+  async rewrites() {
+    return [
+      // Legal custom pages
+      {
+        source: "/services/legal/liquidation",
+        destination: "/liquidation",
+      },
+      {
+        source: "/services/legal/fedresurs",
+        destination: "/fedresurs",
+      },
+      {
+        source: "/services/legal/edo",
+        destination: "/edo",
+      },
+      {
+        source: "/services/legal/ecp",
+        destination: "/ecp",
+      },
+      // Tech custom pages
+      {
+        source: "/services/tech/max",
+        destination: "/max",
+      },
+    ];
+  },
+
   // Experimental features для производительности
   experimental: {
     optimizePackageImports: ["lucide-react", "framer-motion"],
