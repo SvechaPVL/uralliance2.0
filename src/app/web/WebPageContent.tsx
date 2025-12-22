@@ -40,6 +40,10 @@ import {
   Gauge,
   Lock,
   Wrench,
+  CreditCard,
+  Truck,
+  Package,
+  Database,
 } from "lucide-react";
 
 const SITE_TYPES = [
@@ -106,6 +110,45 @@ const TECH_STACK = [
     icon: Rocket,
     items: ["REG.RU", "Timeweb", "VPS", "Docker"],
     link: "https://www.reg.ru/hosting/?utm_source=uralliance&utm_medium=partner&utm_campaign=web",
+  },
+];
+
+const INTEGRATIONS = [
+  {
+    icon: Database,
+    title: "1С:Предприятие",
+    description: "Синхронизация товаров, цен, остатков и заказов в реальном времени",
+    items: ["Каталог товаров", "Цены и остатки", "Заказы и клиенты"],
+  },
+  {
+    icon: Users,
+    title: "CRM-системы",
+    description: "Автоматическая передача заявок и отслеживание воронки продаж",
+    items: ["Битрикс24", "AmoCRM", "RetailCRM"],
+  },
+  {
+    icon: Package,
+    title: "Маркетплейсы",
+    description: "Единый каталог для сайта и площадок. Автообновление остатков",
+    items: ["Wildberries", "Ozon", "Яндекс Маркет"],
+  },
+  {
+    icon: CreditCard,
+    title: "Оплата",
+    description: "Приём платежей картами, СБП и электронными кошельками",
+    items: ["ЮKassa", "Тинькофф", "СБП"],
+  },
+  {
+    icon: Truck,
+    title: "Доставка",
+    description: "Расчёт стоимости и отслеживание посылок прямо на сайте",
+    items: ["СДЭК", "Boxberry", "Почта России"],
+  },
+  {
+    icon: BarChart3,
+    title: "Аналитика",
+    description: "Отслеживание посетителей, конверсий и эффективности рекламы",
+    items: ["Яндекс Метрика", "Google Analytics", "Коллтрекинг"],
   },
 ];
 
@@ -177,27 +220,6 @@ const FEATURES = [
     icon: Wrench,
     title: "Гарантия 6 мес",
     description: "Бесплатное исправление ошибок",
-  },
-];
-
-const PORTFOLIO = [
-  {
-    title: "Автосервис",
-    type: "Корпоративный сайт",
-    result: "+120% трафика за 3 месяца",
-    tags: ["Next.js", "1С интеграция", "SEO"],
-  },
-  {
-    title: "Интернет-магазин запчастей",
-    type: "E-commerce",
-    result: "500+ заказов в месяц",
-    tags: ["React", "PostgreSQL", "Эквайринг"],
-  },
-  {
-    title: "SaaS-платформа",
-    type: "Веб-приложение",
-    result: "200+ активных пользователей",
-    tags: ["TypeScript", "API", "Личные кабинеты"],
   },
 ];
 
@@ -343,39 +365,140 @@ export function WebPageContent() {
         </Container>
       </Section>
 
-      {/* Why modern sites */}
+      {/* Why not constructors */}
       <Section spacing="md">
-        <Container className="max-w-5xl">
-          <Card
-            variant="tech"
-            padding="lg"
-            className="relative overflow-hidden border-2 border-[var(--color-tech-primary)]/30 bg-gradient-to-br from-[var(--color-tech-primary)]/5 to-transparent"
-          >
-            <div className="absolute -top-10 -right-10 h-32 w-32 rounded-full bg-[var(--color-tech-primary)]/10 blur-2xl" />
+        <Container className="max-w-5xl space-y-6">
+          <div className="text-center">
+            <Label size="sm" spacing="wider" tone="muted">
+              Сравнение
+            </Label>
+            <Heading as="h2" size="xl" weight="semibold" className="mt-2">
+              Почему не Tilda или WordPress?
+            </Heading>
+            <Text size="lg" tone="secondary" className="mt-3">
+              Конструкторы подходят для тестов, но не для серьёзного бизнеса
+            </Text>
+          </div>
 
-            <div className="relative flex items-start gap-4">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[var(--color-tech-primary)]/10">
-                <Zap className="h-6 w-6 text-[var(--color-tech-primary)]" />
-              </div>
-              <div className="flex-1">
-                <Heading as="h2" size="lg" weight="semibold">
-                  Почему не WordPress?
+          <div className="grid gap-4 md:grid-cols-3">
+            {/* Tilda */}
+            <Card variant="tech" padding="md" className="border-red-500/20">
+              <div className="mb-3 flex items-center justify-between">
+                <Heading as="h3" size="sm" weight="semibold">
+                  Tilda
                 </Heading>
-                <Text tone="secondary" className="mt-2 max-w-3xl">
-                  Сайты на React и Next.js загружаются в 3-5 раз быстрее, лучше индексируются
-                  поисковиками и не требуют постоянных обновлений безопасности. Это инвестиция в
-                  будущее вашего бизнеса.
-                </Text>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {["Скорость", "Безопасность", "SEO", "Уникальность"].map((tag) => (
-                    <Badge key={tag} variant="tech" badgeStyle="subtle" size="sm">
-                      {tag}
-                    </Badge>
-                  ))}
+                <Badge variant="tech" badgeStyle="subtle" size="sm" className="text-red-400">
+                  Ограничения
+                </Badge>
+              </div>
+              <div className="space-y-2 text-sm">
+                <div className="flex items-start gap-2">
+                  <span className="mt-0.5 text-red-400">-</span>
+                  <Text size="sm" tone="secondary">
+                    Лимит 1 ГБ на сайт
+                  </Text>
+                </div>
+                <div className="flex items-start gap-2">
+                  <span className="mt-0.5 text-red-400">-</span>
+                  <Text size="sm" tone="secondary">
+                    Слабое SEO-продвижение
+                  </Text>
+                </div>
+                <div className="flex items-start gap-2">
+                  <span className="mt-0.5 text-red-400">-</span>
+                  <Text size="sm" tone="secondary">
+                    Нет интеграции с 1С
+                  </Text>
+                </div>
+                <div className="flex items-start gap-2">
+                  <span className="mt-0.5 text-red-400">-</span>
+                  <Text size="sm" tone="secondary">
+                    Ежемесячная подписка навсегда
+                  </Text>
                 </div>
               </div>
-            </div>
-          </Card>
+            </Card>
+
+            {/* WordPress */}
+            <Card variant="tech" padding="md" className="border-yellow-500/20">
+              <div className="mb-3 flex items-center justify-between">
+                <Heading as="h3" size="sm" weight="semibold">
+                  WordPress
+                </Heading>
+                <Badge variant="tech" badgeStyle="subtle" size="sm" className="text-yellow-400">
+                  Риски
+                </Badge>
+              </div>
+              <div className="space-y-2 text-sm">
+                <div className="flex items-start gap-2">
+                  <span className="mt-0.5 text-yellow-400">-</span>
+                  <Text size="sm" tone="secondary">
+                    Частые взломы без обновлений
+                  </Text>
+                </div>
+                <div className="flex items-start gap-2">
+                  <span className="mt-0.5 text-yellow-400">-</span>
+                  <Text size="sm" tone="secondary">
+                    Медленная загрузка страниц
+                  </Text>
+                </div>
+                <div className="flex items-start gap-2">
+                  <span className="mt-0.5 text-yellow-400">-</span>
+                  <Text size="sm" tone="secondary">
+                    Плагины ломаются при обновлениях
+                  </Text>
+                </div>
+                <div className="flex items-start gap-2">
+                  <span className="mt-0.5 text-yellow-400">-</span>
+                  <Text size="sm" tone="secondary">
+                    Шаблонный вид сайтов
+                  </Text>
+                </div>
+              </div>
+            </Card>
+
+            {/* Our approach */}
+            <Card
+              variant="tech"
+              padding="md"
+              className="border-2 border-[var(--color-tech-primary)]/40"
+            >
+              <div className="mb-3 flex items-center justify-between">
+                <Heading as="h3" size="sm" weight="semibold">
+                  React + Next.js
+                </Heading>
+                <Badge variant="tech" badgeStyle="filled" size="sm">
+                  Наш подход
+                </Badge>
+              </div>
+              <div className="space-y-2 text-sm">
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-tech-primary)]" />
+                  <Text size="sm" tone="secondary">
+                    Загрузка менее 2 секунд
+                  </Text>
+                </div>
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-tech-primary)]" />
+                  <Text size="sm" tone="secondary">
+                    Интеграция с 1С и CRM
+                  </Text>
+                </div>
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-tech-primary)]" />
+                  <Text size="sm" tone="secondary">
+                    Топ Яндекса и Google
+                  </Text>
+                </div>
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[var(--color-tech-primary)]" />
+                  <Text size="sm" tone="secondary">
+                    Сайт — ваша собственность
+                  </Text>
+                </div>
+              </div>
+            </Card>
+          </div>
         </Container>
       </Section>
 
@@ -517,8 +640,52 @@ export function WebPageContent() {
         </Container>
       </Section>
 
-      {/* Process Steps */}
+      {/* Integrations */}
       <Section spacing="md" background="secondary">
+        <Container className="max-w-6xl space-y-10">
+          <div className="text-center">
+            <Label size="sm" spacing="wider" tone="muted">
+              Интеграции
+            </Label>
+            <Heading as="h2" size="xl" weight="semibold" className="mt-2">
+              Подключаем к вашим системам
+            </Heading>
+            <Text size="lg" tone="secondary" className="mt-3">
+              Сайт работает вместе с 1С, CRM и маркетплейсами
+            </Text>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {INTEGRATIONS.map((integration) => (
+              <Card key={integration.title} variant="tech" padding="md">
+                <div className="flex items-start gap-4">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-[var(--color-tech-primary)] bg-[var(--color-tech-primary)]/10">
+                    <integration.icon className="h-5 w-5 text-[var(--color-tech-primary)]" />
+                  </div>
+                  <div className="flex-1">
+                    <Heading as="h3" size="sm" weight="semibold">
+                      {integration.title}
+                    </Heading>
+                    <Text size="sm" tone="secondary" className="mt-1">
+                      {integration.description}
+                    </Text>
+                    <div className="mt-3 flex flex-wrap gap-1.5">
+                      {integration.items.map((item) => (
+                        <Badge key={item} variant="tech" badgeStyle="outline" size="sm">
+                          {item}
+                        </Badge>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </Container>
+      </Section>
+
+      {/* Process Steps */}
+      <Section spacing="md">
         <Container className="max-w-6xl space-y-10">
           <div className="text-center">
             <Label size="sm" spacing="wider" tone="muted">
@@ -612,58 +779,6 @@ export function WebPageContent() {
                     <Text size="sm" tone="secondary" className="mt-1">
                       {feature.description}
                     </Text>
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
-        </Container>
-      </Section>
-
-      {/* Portfolio */}
-      <Section spacing="md" background="secondary">
-        <Container className="max-w-6xl space-y-10">
-          <div className="text-center">
-            <Label size="sm" spacing="wider" tone="muted">
-              Портфолио
-            </Label>
-            <Heading as="h2" size="xl" weight="semibold" className="mt-2">
-              Наши работы
-            </Heading>
-          </div>
-
-          <div className="grid gap-6 lg:grid-cols-3">
-            {PORTFOLIO.map((project) => (
-              <Card key={project.title} variant="tech" padding="lg">
-                <div className="space-y-4">
-                  <div>
-                    <Badge variant="tech" badgeStyle="subtle" size="sm" className="mb-2">
-                      {project.type}
-                    </Badge>
-                    <Heading as="h3" size="md" weight="semibold">
-                      {project.title}
-                    </Heading>
-                  </div>
-
-                  <div className="rounded-lg border border-[var(--color-tech-primary)]/30 bg-[var(--color-tech-surface)]/50 p-3">
-                    <div className="flex items-center gap-2">
-                      <TrendingUp className="h-4 w-4 text-[var(--color-tech-primary)]" />
-                      <Text
-                        size="sm"
-                        weight="semibold"
-                        className="text-[var(--color-tech-primary)]"
-                      >
-                        {project.result}
-                      </Text>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-wrap gap-2">
-                    {project.tags.map((tag) => (
-                      <Badge key={tag} variant="tech" badgeStyle="outline" size="sm">
-                        {tag}
-                      </Badge>
-                    ))}
                   </div>
                 </div>
               </Card>

@@ -6,6 +6,7 @@ import { X, Gift, Sparkles, Zap, MessageSquare } from "lucide-react";
 import { Button } from "@/components/primitives/button";
 import { Input } from "@/components/primitives/input";
 import { PhoneInput } from "@/components/primitives/phone-input";
+import { Checkbox } from "@/components/primitives/checkbox";
 import { reachGoal } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 
@@ -80,6 +81,7 @@ export function LeadCapturePopup({ triggers = {} }: LeadCapturePopupProps) {
   const [variant, setVariant] = useState<(typeof VARIANTS)[number] | null>(null);
   const [phone, setPhone] = useState("");
   const [name, setName] = useState("");
+  const [consent, setConsent] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 
@@ -234,7 +236,7 @@ export function LeadCapturePopup({ triggers = {} }: LeadCapturePopupProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!phone || isSubmitting) return;
+    if (!phone || !consent || isSubmitting) return;
 
     setIsSubmitting(true);
 
@@ -297,14 +299,14 @@ export function LeadCapturePopup({ triggers = {} }: LeadCapturePopupProps) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="fixed top-1/2 left-1/2 z-[9999] w-[85vw] max-w-sm -translate-x-1/2 -translate-y-1/2"
+            className="fixed top-1/2 left-1/2 z-[9999] w-[85vw] max-w-xs -translate-x-1/2 -translate-y-1/2"
           >
             <div
               className={cn(
                 "relative overflow-hidden rounded-2xl border shadow-2xl",
                 isLegal
-                  ? "border-[var(--color-legal-primary)]/30 bg-gradient-to-br from-[var(--color-card-bg)] to-[var(--color-legal-surface)]/50"
-                  : "border-[var(--color-tech-primary)]/30 bg-gradient-to-br from-[var(--color-card-bg)] to-[var(--color-tech-surface)]/50"
+                  ? "border-[var(--color-legal-primary)]/30 bg-[var(--color-card-bg)] bg-gradient-to-br from-[var(--color-card-bg)] to-[var(--color-legal-surface)]/80"
+                  : "border-[var(--color-tech-primary)]/30 bg-[var(--color-card-bg)] bg-gradient-to-br from-[var(--color-card-bg)] to-[var(--color-tech-surface)]/80"
               )}
             >
               {/* Decorative glow */}
@@ -410,23 +412,35 @@ export function LeadCapturePopup({ triggers = {} }: LeadCapturePopupProps) {
                         fullWidth
                         required
                       />
+                      <Checkbox
+                        label={
+                          <>
+                            Даю согласие на обработку{" "}
+                            <a
+                              href="/privacy"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="underline hover:no-underline"
+                            >
+                              персональных данных
+                            </a>
+                          </>
+                        }
+                        variant={isLegal ? "legal" : "tech"}
+                        checked={consent}
+                        onChange={(e) => setConsent(e.target.checked)}
+                        required
+                      />
                       <Button
                         type="submit"
                         variant={isLegal ? "primary-legal" : "primary-tech"}
                         fullWidth
                         isLoading={isSubmitting}
+                        disabled={!consent}
                       >
                         {variant.buttonText}
                       </Button>
                     </form>
-
-                    {/* Privacy note */}
-                    <p className="mt-4 text-center text-xs text-[var(--color-text-muted)]">
-                      Нажимая кнопку, вы соглашаетесь с{" "}
-                      <a href="/privacy" className="underline hover:no-underline">
-                        политикой конфиденциальности
-                      </a>
-                    </p>
                   </>
                 )}
               </div>
