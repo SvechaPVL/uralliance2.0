@@ -22,7 +22,7 @@ export default function robots(): MetadataRoute.Robots {
         // crawlDelay не поддерживается в MetadataRoute.Robots
       },
     ],
-    sitemap: [`${baseUrl}/sitemap.xml`, `${baseUrl}/turbo-rss`, `${baseUrl}/yml-feed`],
+    sitemap: `${baseUrl}/sitemap.xml`,
     host: baseUrl,
   };
 }
