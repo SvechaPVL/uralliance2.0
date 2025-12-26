@@ -3,6 +3,7 @@ import { getAllBlogPosts, getAllServiceSlugs } from "@/lib/content";
 
 // Кастомные URL для услуг с выделенными страницами
 const CUSTOM_URL_MAP: Record<string, string> = {
+  "ai-training": "/ai-training",
   corporate: "/corporate",
   ecp: "/ecp",
   edo: "/edo",
