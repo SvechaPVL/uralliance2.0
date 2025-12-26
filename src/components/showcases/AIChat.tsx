@@ -142,7 +142,7 @@ export function AIChatShowcase() {
           </div>
           <div className="ml-auto flex items-center gap-1 rounded-full bg-[var(--color-tech-primary)]/10 px-2 py-1 text-xs text-[var(--color-tech-primary)]">
             <Zap className="h-3 w-3" />
-            GPT-4o
+            GPT-5
           </div>
         </div>
 

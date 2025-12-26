@@ -116,7 +116,7 @@ const COURSES = [
 
 const AI_TOOLS = [
   {
-    name: "ChatGPT / GPT-4o",
+    name: "ChatGPT / GPT-5",
     description: "Универсальный помощник OpenAI",
     color: "from-green-400 to-emerald-500",
   },
