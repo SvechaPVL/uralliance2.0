@@ -403,7 +403,7 @@ export default function AICheatsheetPage() {
               <span>•</span>
               <span>uralliance.ru</span>
               <span>•</span>
-              <span>+7 (423) 205-60-10</span>
+              <span>+7 (423) 202-88-78</span>
             </div>
           </div>
 
@@ -485,7 +485,7 @@ export default function AICheatsheetPage() {
             <div className="flex flex-wrap items-center justify-center gap-4 text-sm">
               <span className="text-[var(--color-text-primary)]">uralliance.ru/ai-training</span>
               <span className="text-[var(--color-text-secondary)]">•</span>
-              <span className="text-[var(--color-text-primary)]">+7 (423) 205-60-10</span>
+              <span className="text-[var(--color-text-primary)]">+7 (423) 202-88-78</span>
               <span className="text-[var(--color-text-secondary)]">•</span>
               <span className="text-[var(--color-text-primary)]">info@uralliance.ru</span>
             </div>

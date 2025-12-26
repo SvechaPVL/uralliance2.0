@@ -1,16 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
-import { Header } from "@/components/layout/Header";
-import { Footer } from "@/components/layout/Footer";
-import { OverlayScrollbar } from "@/components/system/OverlayScrollbar";
 import { YandexMetrika } from "@/components/system/YandexMetrika";
 import { GoogleAnalytics } from "@next/third-parties/google";
-import { CookieConsent } from "@/components/system/CookieConsent";
-import { FloatingContactButton } from "@/components/widgets/FloatingContactButton";
-import { LeadCapturePopup } from "@/components/widgets/LeadCapturePopup";
-import { PromoBanner } from "@/components/system/PromoBanner";
-import { IntroLoaderWrapper } from "@/components/system/IntroLoaderWrapper";
 import {
   OrganizationJsonLd,
   WebSiteJsonLd,
@@ -19,10 +11,7 @@ import {
 } from "@/components/seo/JsonLd";
 import { defaultOgImage } from "@/lib/seo";
 import { FaqJsonLd } from "@/components/seo/FaqJsonLd";
-import { HeroProgressProvider } from "@/context/HeroProgressContext";
-import { ToastProvider } from "@/components/system/Toast";
-import { CustomCursor } from "@/components/effects/CustomCursor";
-import { IntroOverlay } from "@/components/system/IntroOverlay";
+import { LayoutWrapper } from "@/components/layout/LayoutWrapper";
 import pagesConfig from "@/content/pages.json";
 
 const inter = Inter({
@@ -205,15 +194,6 @@ export default function RootLayout({
         className={`${inter.variable} ${poppins.variable} antialiased`}
         suppressHydrationWarning
       >
-        {/* SSR overlay - hides content until intro loader is ready */}
-        <IntroOverlay />
-
-        {/* Intro Loader - particle text effect */}
-        <IntroLoaderWrapper minDisplayTime={5500} />
-
-        {/* Custom Cursor */}
-        <CustomCursor />
-
         {/* Structured Data for SEO */}
         <OrganizationJsonLd />
         <WebSiteJsonLd />
@@ -221,35 +201,8 @@ export default function RootLayout({
         <SiteNavigationJsonLd />
         <FaqJsonLd />
 
-        <ToastProvider>
-          <HeroProgressProvider>
-            <PromoBanner
-              id="pensioner-discount"
-              badge="Акция"
-              message="Скидки для пенсионеров на все услуги!"
-              link={{
-                href: "/#contact",
-                label: "Узнать подробности",
-              }}
-              variant="legal"
-              hideForDays={7}
-            />
-            <Header />
-            <main className="min-h-screen">{children}</main>
-            <Footer />
-            <OverlayScrollbar />
-            <CookieConsent />
-            <FloatingContactButton />
-            <LeadCapturePopup
-              triggers={{
-                timeOnSite: 30,
-                scrollDepth: 50,
-                pageViews: 2,
-                exitIntent: true,
-              }}
-            />
-          </HeroProgressProvider>
-        </ToastProvider>
+        {/* Layout wrapper handles conditional rendering of header/footer */}
+        <LayoutWrapper>{children}</LayoutWrapper>
 
         {/* Analytics */}
         {yandexMetrikaId && <YandexMetrika counterId={yandexMetrikaId} />}
