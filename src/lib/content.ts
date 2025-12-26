@@ -6,7 +6,7 @@ import remarkRehype from "remark-rehype";
 import rehypeHighlight from "rehype-highlight";
 import rehypeStringify from "rehype-stringify";
 import rehypeSlug from "rehype-slug";
-import type { BlogPost, Service } from "@/types/content";
+import type { BlogPost, Service, PriceItem } from "@/types/content";
 
 const ROOT_DIR = process.cwd();
 const BLOG_DIR = path.join(ROOT_DIR, "content/blog");
@@ -184,7 +184,7 @@ const CUSTOM_URL_MAP: Record<string, string> = {
  * Transform services into PriceItem format for price page
  * This is the SINGLE SOURCE OF TRUTH for pricing data
  */
-export async function getServicesForPricePage() {
+export async function getServicesForPricePage(): Promise<PriceItem[]> {
   const services = await getAllServices();
 
   return services.map((service) => ({

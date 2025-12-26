@@ -10,6 +10,7 @@ import { ContactForm } from "@/components/forms/ContactForm";
 import { Spotlight } from "@/components/animations/Spotlight";
 import { MapWrapper } from "@/components/animations/MapWrapper";
 import { generateLocalBusinessSchema, generateOrganizationSchema } from "@/lib/seo";
+import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 import { generateTelegramLink, generateWhatsAppLink } from "@/lib/messenger";
 import { trackPhoneClick, trackEmailClick, trackMessengerClick } from "@/lib/analytics";
 import { MapPin, Phone, Mail, Clock, MessageSquare, Navigation } from "lucide-react";
@@ -91,6 +92,9 @@ export default function ContactsPage() {
         type="application/ld+json"
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(LOCAL_BUSINESS_SCHEMA) }}
+      />
+      <BreadcrumbJsonLd
+        items={[{ name: "Главная", url: "https://uralliance.ru" }, { name: "Контакты" }]}
       />
 
       <div className="bg-[var(--color-background)] text-[var(--color-text-primary)]">

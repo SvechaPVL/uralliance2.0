@@ -7,6 +7,7 @@ import { Badge } from "@/components/primitives/badge";
 import { Button } from "@/components/primitives/button";
 import { ArrowUpRight, Cpu, Layers, Scale } from "lucide-react";
 import { generateOrganizationSchema } from "@/lib/seo";
+import { BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 import { Section } from "@/components/primitives/section";
 import { Heading } from "@/components/primitives/heading";
 import { Label } from "@/components/primitives/label";
@@ -36,6 +37,9 @@ export default function AboutPage() {
         type="application/ld+json"
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
+      />
+      <BreadcrumbJsonLd
+        items={[{ name: "Главная", url: "https://uralliance.ru" }, { name: "О компании" }]}
       />
 
       <div className="bg-[var(--color-background)] text-[var(--color-text-primary)]">
