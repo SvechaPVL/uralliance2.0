@@ -168,6 +168,10 @@ const nextConfig: NextConfig = {
       },
       // Tech custom pages
       {
+        source: "/services/tech/ai-training",
+        destination: "/ai-training",
+      },
+      {
         source: "/services/tech/max",
         destination: "/max",
       },
