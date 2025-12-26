@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import { Download, Printer, Sparkles } from "lucide-react";
 
@@ -282,9 +284,22 @@ const TIPS = [
 ];
 
 export default function AICheatsheetPage() {
+  const searchParams = useSearchParams();
+
   const handlePrint = () => {
     window.print();
   };
+
+  // Auto-trigger print dialog if ?download=true
+  useEffect(() => {
+    if (searchParams.get("download") === "true") {
+      // Small delay to ensure page is fully rendered
+      const timer = setTimeout(() => {
+        window.print();
+      }, 500);
+      return () => clearTimeout(timer);
+    }
+  }, [searchParams]);
 
   return (
     <>

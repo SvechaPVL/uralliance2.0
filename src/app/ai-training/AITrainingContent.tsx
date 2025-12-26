@@ -480,7 +480,7 @@ export function AITrainingContent() {
                   </div>
 
                   <Button asChild variant="primary-tech" size="lg" className="w-full gap-2">
-                    <Link href="/ai-cheatsheet">
+                    <Link href="/ai-cheatsheet?download=true" target="_blank">
                       <Download className="h-4 w-4" />
                       <span className="sm:hidden">Скачать PDF</span>
                       <span className="hidden sm:inline">Получить бесплатно</span>
