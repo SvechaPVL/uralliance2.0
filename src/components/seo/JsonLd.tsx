@@ -532,10 +532,14 @@ export function ProductJsonLd({
  * Helps Yandex and Google understand site structure for sitelinks
  */
 export function SiteNavigationJsonLd() {
+  // Основные разделы сайта для Яндекс Sitelinks
+  // Яндекс использует эту разметку как подсказку для быстрых ссылок
   const navigationItems = [
     { name: "Главная", url: "/" },
     { name: "ЭЦП и Рутокен", url: "/ecp" },
     { name: "Такском ЭДО", url: "/edo" },
+    { name: "Федресурс", url: "/fedresurs" },
+    { name: "Ликвидация организаций", url: "/liquidation" },
     { name: "Юридические услуги", url: "/services/legal" },
     { name: "IT-решения", url: "/services/tech" },
     { name: "Прайс", url: "/price" },
