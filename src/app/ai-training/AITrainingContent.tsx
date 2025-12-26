@@ -475,7 +475,7 @@ export function AITrainingContent() {
                     </div>
                     <div>
                       <div className="font-semibold">PDF-шпаргалка</div>
-                      <div className="text-sm text-[var(--color-text-secondary)]">12 страниц</div>
+                      <div className="text-sm text-[var(--color-text-secondary)]">35 промптов</div>
                     </div>
                   </div>
 
