@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/primitives/button";
 import { Download, Printer, Sparkles, Loader2 } from "lucide-react";
 
 const PROMPT_CATEGORIES = [
@@ -370,13 +370,13 @@ export default function AICheatsheetPage() {
               </div>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" size="default" onClick={handlePrint} className="gap-2">
+              <Button variant="outline" size="md" onClick={handlePrint} className="gap-2">
                 <Printer className="h-4 w-4" />
                 <span className="hidden sm:inline">Печать</span>
               </Button>
               <Button
-                variant="tech"
-                size="default"
+                variant="primary-tech"
+                size="md"
                 onClick={handleDownloadPDF}
                 disabled={isGenerating}
                 className="gap-2"
