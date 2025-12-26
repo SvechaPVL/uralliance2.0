@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/Button";
-import { Download, Printer, Sparkles } from "lucide-react";
+import { Download, Printer, Sparkles, Loader2 } from "lucide-react";
 
 const PROMPT_CATEGORIES = [
   {
@@ -285,18 +285,47 @@ const TIPS = [
 
 export default function AICheatsheetPage() {
   const searchParams = useSearchParams();
+  const contentRef = useRef<HTMLDivElement>(null);
+  const [isGenerating, setIsGenerating] = useState(false);
 
   const handlePrint = () => {
     window.print();
   };
 
-  // Auto-trigger print dialog if ?download=true
+  const handleDownloadPDF = async () => {
+    if (!contentRef.current || isGenerating) return;
+
+    setIsGenerating(true);
+
+    try {
+      // Dynamic import to avoid SSR issues
+      const html2pdf = (await import("html2pdf.js")).default;
+
+      const opt = {
+        margin: [10, 10, 10, 10],
+        filename: "Шпаргалка_по_AI_Uralliance.pdf",
+        image: { type: "jpeg", quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true },
+        jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+        pagebreak: { mode: ["avoid-all", "css", "legacy"] },
+      };
+
+      await html2pdf().set(opt).from(contentRef.current).save();
+    } catch (error) {
+      console.error("PDF generation failed:", error);
+      // Fallback to print
+      window.print();
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  // Auto-trigger PDF download if ?download=true
   useEffect(() => {
     if (searchParams.get("download") === "true") {
-      // Small delay to ensure page is fully rendered
       const timer = setTimeout(() => {
-        window.print();
-      }, 500);
+        handleDownloadPDF();
+      }, 1000);
       return () => clearTimeout(timer);
     }
   }, [searchParams]);
@@ -345,16 +374,28 @@ export default function AICheatsheetPage() {
                 <Printer className="h-4 w-4" />
                 <span className="hidden sm:inline">Печать</span>
               </Button>
-              <Button variant="tech" size="default" onClick={handlePrint} className="gap-2">
-                <Download className="h-4 w-4" />
-                <span className="hidden sm:inline">Скачать PDF</span>
+              <Button
+                variant="tech"
+                size="default"
+                onClick={handleDownloadPDF}
+                disabled={isGenerating}
+                className="gap-2"
+              >
+                {isGenerating ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <Download className="h-4 w-4" />
+                )}
+                <span className="hidden sm:inline">
+                  {isGenerating ? "Генерация..." : "Скачать PDF"}
+                </span>
               </Button>
             </div>
           </div>
         </div>
 
         {/* Content */}
-        <div className="container mx-auto px-4 py-8">
+        <div ref={contentRef} className="container mx-auto px-4 py-8">
           {/* Title page for print */}
           <div className="mb-12 text-center">
             <div className="mb-6 flex justify-center">
