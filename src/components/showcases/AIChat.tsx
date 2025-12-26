@@ -147,7 +147,7 @@ export function AIChatShowcase() {
         </div>
 
         {/* Messages */}
-        <div className="h-[280px] space-y-3 overflow-y-auto p-4">
+        <div className="h-[280px] space-y-3 overflow-y-auto p-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           <AnimatePresence mode="popLayout">
             {messages.map((message, index) => (
               <motion.div
@@ -219,7 +219,7 @@ export function AIChatShowcase() {
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.8 }}
-        className="absolute top-8 -left-4 rounded-lg border border-[var(--color-tech-primary)]/30 bg-[var(--color-card-bg)] px-3 py-1.5 text-xs font-medium shadow-lg"
+        className="absolute -top-4 -left-8 rounded-lg border border-[var(--color-tech-primary)]/30 bg-[var(--color-card-bg)] px-3 py-1.5 text-xs font-medium shadow-lg"
       >
         <span className="text-[var(--color-tech-primary)]">5 сек</span>
         <span className="text-[var(--color-text-secondary)]"> — время ответа</span>
@@ -229,7 +229,7 @@ export function AIChatShowcase() {
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 1 }}
-        className="absolute -right-4 bottom-20 rounded-lg border border-green-500/30 bg-[var(--color-card-bg)] px-3 py-1.5 text-xs font-medium shadow-lg"
+        className="absolute -right-8 -bottom-4 rounded-lg border border-green-500/30 bg-[var(--color-card-bg)] px-3 py-1.5 text-xs font-medium shadow-lg"
       >
         <span className="text-green-400">80%</span>
         <span className="text-[var(--color-text-secondary)]"> рутины автоматизировано</span>
