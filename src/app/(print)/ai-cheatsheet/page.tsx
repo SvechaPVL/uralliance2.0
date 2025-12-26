@@ -313,18 +313,13 @@ export default function AICheatsheetPage() {
         {/* Header with download button - hidden when printing */}
         <div className="no-print sticky top-0 z-50 border-b border-[var(--color-border)] bg-[var(--color-background)]/95 backdrop-blur">
           <div className="container mx-auto flex items-center justify-between px-4 py-4">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-[var(--color-tech-primary)] to-purple-500">
-                <Sparkles className="h-5 w-5 text-white" />
-              </div>
-              <div>
-                <h1 className="font-bold text-[var(--color-text-primary)]">
-                  Шпаргалка по работе с AI
-                </h1>
-                <p className="text-sm text-[var(--color-text-secondary)]">
-                  35 промптов для бизнеса от Uralliance
-                </p>
-              </div>
+            <div>
+              <h1 className="font-bold text-[var(--color-text-primary)]">
+                Шпаргалка по работе с AI
+              </h1>
+              <p className="text-sm text-[var(--color-text-secondary)]">
+                35 промптов для бизнеса от Uralliance
+              </p>
             </div>
             <div className="flex gap-2">
               <Button variant="outline" size="md" onClick={handlePrint} className="gap-2">
