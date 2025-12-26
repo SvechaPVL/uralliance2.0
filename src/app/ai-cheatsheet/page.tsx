@@ -1,7 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRef, useState } from "react";
 import { Button } from "@/components/primitives/button";
 import { Download, Printer, Sparkles, Loader2 } from "lucide-react";
 
@@ -284,7 +283,6 @@ const TIPS = [
 ];
 
 export default function AICheatsheetPage() {
-  const searchParams = useSearchParams();
   const contentRef = useRef<HTMLDivElement>(null);
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -319,16 +317,6 @@ export default function AICheatsheetPage() {
       setIsGenerating(false);
     }
   };
-
-  // Auto-trigger PDF download if ?download=true
-  useEffect(() => {
-    if (searchParams.get("download") === "true") {
-      const timer = setTimeout(() => {
-        handleDownloadPDF();
-      }, 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [searchParams]);
 
   return (
     <>
