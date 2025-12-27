@@ -372,8 +372,8 @@ export async function generateMetadata({ params }: ServiceDetailPageProps): Prom
     const categoryName = isLegal ? "Юридические услуги" : "IT-решения";
 
     return {
-      title: `${service.frontmatter.title} во Владивостоке | ${categoryName} | Uralliance`,
-      description: `${service.frontmatter.description}. ${service.frontmatter.price}. Uralliance - ${categoryName.toLowerCase()} во Владивостоке.`,
+      title: `${service.frontmatter.title} во Владивостоке — ${service.frontmatter.price} | Юральянс`,
+      description: `${service.frontmatter.description}. Юральянс — ${categoryName.toLowerCase()} во Владивостоке. ${service.frontmatter.price}.`,
       keywords: service.frontmatter.seo.keywords,
       authors: [{ name: "Uralliance" }],
       creator: "Uralliance",
@@ -382,8 +382,8 @@ export async function generateMetadata({ params }: ServiceDetailPageProps): Prom
         canonical: `/services/${category}/${slug}`,
       },
       openGraph: {
-        title: `${service.frontmatter.title} во Владивостоке | Uralliance`,
-        description: service.frontmatter.description,
+        title: `${service.frontmatter.title} во Владивостоке | Юральянс`,
+        description: `${service.frontmatter.description}. Юральянс — профессиональные услуги во Владивостоке.`,
         type: "website",
         locale: "ru_RU",
         url: `/services/${category}/${slug}`,

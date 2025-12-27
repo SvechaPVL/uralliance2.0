@@ -3,9 +3,9 @@ import { Container } from "@/components/layout/Container";
 import { Section } from "@/components/primitives/section";
 
 export const metadata: Metadata = {
-  title: "Политика конфиденциальности | Uralliance",
+  title: "Политика конфиденциальности | Юральянс (Uralliance)",
   description:
-    "Политика конфиденциальности ООО 'Юральянс'. Узнайте, как мы собираем, используем и защищаем ваши персональные данные.",
+    "Политика конфиденциальности ООО «Юральянс». Узнайте, как мы собираем, используем и защищаем ваши персональные данные.",
 };
 
 export default function PrivacyPage() {

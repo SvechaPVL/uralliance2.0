@@ -75,8 +75,8 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
     const { frontmatter } = post;
 
     return {
-      title: `${frontmatter.title} — блог Uralliance`,
-      description: frontmatter.excerpt,
+      title: `${frontmatter.title} | Блог Юральянс`,
+      description: `${frontmatter.excerpt} Читайте в блоге Юральянс.`,
       openGraph: {
         title: frontmatter.title,
         description: frontmatter.excerpt,

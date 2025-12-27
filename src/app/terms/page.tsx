@@ -3,9 +3,9 @@ import { Container } from "@/components/layout/Container";
 import { Section } from "@/components/primitives/section";
 
 export const metadata: Metadata = {
-  title: "Условия использования | Uralliance",
+  title: "Условия использования | Юральянс (Uralliance)",
   description:
-    "Условия использования сайта ООО 'Юральянс'. Правила и условия предоставления юридических и IT-услуг.",
+    "Условия использования сайта ООО «Юральянс». Правила и условия предоставления юридических и IT-услуг во Владивостоке.",
 };
 
 export default function TermsPage() {
