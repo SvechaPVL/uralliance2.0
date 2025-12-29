@@ -67,3 +67,6 @@ favicon-*.zip
 # Hookify local rules
 .claude/*.local.md
 .playwright-mcp/
+
+# Autoresponder local state
+scripts/.processed_emails.json
