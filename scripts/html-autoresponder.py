@@ -64,27 +64,71 @@ IGNORE_PATTERNS = [
     'noreply@', 'no-reply@', 'mailer-daemon@', 'postmaster@',
     'notification@', 'notifications@', 'alert@', 'alerts@',
     'info@uralliance.ru',  # не отвечаем сами себе
+    'uralliance.ru',  # не отвечаем на письма с нашего домена
 ]
 
+# Анти-спам: не отвечаем одному и тому же человеку чаще чем раз в N часов
+RESPONSE_COOLDOWN_HOURS = int(os.getenv('RESPONSE_COOLDOWN_HOURS', '24'))
 
-def load_processed_emails() -> set:
-    """Загружает список обработанных email ID."""
+
+def load_processed_data() -> dict:
+    """Загружает данные: обработанные email ID и историю ответов."""
     if CONFIG['processed_file'].exists():
         try:
             with open(CONFIG['processed_file'], 'r') as f:
                 data = json.load(f)
-                return set(data.get('processed', []))
+                return {
+                    'processed': set(data.get('processed', [])),
+                    'responded_to': data.get('responded_to', {})  # {email: timestamp}
+                }
         except Exception as e:
-            logger.error(f"Ошибка загрузки processed emails: {e}")
-    return set()
+            logger.error(f"Ошибка загрузки данных: {e}")
+    return {'processed': set(), 'responded_to': {}}
+
+
+def save_processed_data(processed: set, responded_to: dict):
+    """Сохраняет данные: обработанные email ID и историю ответов."""
+    # Храним только последние 1000 записей ID
+    processed_list = list(processed)[-1000:]
+
+    # Очищаем старые записи responded_to (старше 7 дней)
+    cutoff = datetime.now().timestamp() - (7 * 24 * 3600)
+    responded_to_clean = {
+        email: ts for email, ts in responded_to.items()
+        if ts > cutoff
+    }
+
+    with open(CONFIG['processed_file'], 'w') as f:
+        json.dump({
+            'processed': processed_list,
+            'responded_to': responded_to_clean,
+            'updated': datetime.now().isoformat()
+        }, f)
+
+
+def can_respond_to_sender(email_addr: str, responded_to: dict) -> bool:
+    """Проверяет, можно ли отвечать этому отправителю (анти-спам)."""
+    email_lower = email_addr.lower()
+    if email_lower in responded_to:
+        last_response = responded_to[email_lower]
+        cooldown_seconds = RESPONSE_COOLDOWN_HOURS * 3600
+        if datetime.now().timestamp() - last_response < cooldown_seconds:
+            hours_ago = (datetime.now().timestamp() - last_response) / 3600
+            logger.info(f"⏳ Пропускаем {email_addr} - уже отвечали {hours_ago:.1f}ч назад (cooldown {RESPONSE_COOLDOWN_HOURS}ч)")
+            return False
+    return True
+
+
+# Обратная совместимость
+def load_processed_emails() -> set:
+    """Загружает список обработанных email ID (deprecated, use load_processed_data)."""
+    return load_processed_data()['processed']
 
 
 def save_processed_emails(processed: set):
-    """Сохраняет список обработанных email ID."""
-    # Храним только последние 1000 записей
-    processed_list = list(processed)[-1000:]
-    with open(CONFIG['processed_file'], 'w') as f:
-        json.dump({'processed': processed_list, 'updated': datetime.now().isoformat()}, f)
+    """Сохраняет список обработанных email ID (deprecated)."""
+    data = load_processed_data()
+    save_processed_data(processed, data.get('responded_to', {}))
 
 
 def decode_email_header(header: str) -> str:
@@ -174,7 +218,9 @@ def check_new_emails(start_time: datetime):
     Args:
         start_time: Время запуска скрипта. Отвечаем только на письма после этого времени.
     """
-    processed = load_processed_emails()
+    data = load_processed_data()
+    processed = data['processed']
+    responded_to = data['responded_to']
     new_processed = set()
 
     # Формат даты для IMAP SINCE (DD-Mon-YYYY)
@@ -238,20 +284,26 @@ def check_new_emails(start_time: datetime):
 
                 # Проверяем, нужно ли отвечать
                 if should_respond(from_email_addr):
-                    if send_html_response(from_email_addr, subject):
-                        new_processed.add(email_id_str)
+                    # Анти-спам: проверяем cooldown для этого отправителя
+                    if can_respond_to_sender(from_email_addr, responded_to):
+                        if send_html_response(from_email_addr, subject):
+                            new_processed.add(email_id_str)
+                            # Записываем время ответа для анти-спама
+                            responded_to[from_email_addr.lower()] = datetime.now().timestamp()
+                    else:
+                        new_processed.add(email_id_str)  # Cooldown - не отвечаем, но помечаем
                 else:
-                    new_processed.add(email_id_str)  # Помечаем как обработанное
+                    new_processed.add(email_id_str)  # Игнорируем (no-reply и т.д.)
 
     except imaplib.IMAP4.error as e:
         logger.error(f"IMAP ошибка: {e}")
     except Exception as e:
         logger.error(f"Ошибка: {e}")
 
-    # Сохраняем обработанные
-    if new_processed:
+    # Сохраняем обработанные и историю ответов
+    if new_processed or responded_to:
         processed.update(new_processed)
-        save_processed_emails(processed)
+        save_processed_data(processed, responded_to)
 
 
 def mark_all_as_processed():

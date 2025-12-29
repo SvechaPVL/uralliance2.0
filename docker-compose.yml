@@ -32,8 +32,6 @@ services:
     image: ghcr.io/svechapvl/uralliance-autoresponder:latest
     container_name: uralliance-autoresponder
     restart: unless-stopped
-    # Используем host network для доступа к внешним SMTP/IMAP серверам
-    network_mode: host
     environment:
       # Пароль приложения Яндекс - ТОЛЬКО из .env, НЕ коммитить!
       - YANDEX_APP_PASSWORD=${YANDEX_APP_PASSWORD}
@@ -44,6 +42,8 @@ services:
       - ./email-templates:/app/templates:ro
       # Персистентное хранение обработанных писем
       - autoresponder-data:/app/data
+    networks:
+      - uralliance-network
     logging:
       driver: "json-file"
       options:
@@ -57,4 +57,4 @@ networks:
   uralliance-network:
     driver: bridge
     driver_opts:
-      com.docker.network.driver.mtu: 1450
+      com.docker.network.driver.mtu: 1350
