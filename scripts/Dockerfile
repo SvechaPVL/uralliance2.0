@@ -5,9 +5,6 @@ LABEL description="HTML Email Autoresponder for info@uralliance.ru"
 
 WORKDIR /app
 
-# Устанавливаем resend для отправки email через API
-RUN pip install --no-cache-dir resend
-
 # Копируем скрипт
 COPY html-autoresponder.py .
 
