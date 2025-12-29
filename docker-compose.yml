@@ -33,8 +33,10 @@ services:
     container_name: uralliance-autoresponder
     restart: unless-stopped
     environment:
-      # Пароль приложения Яндекс - ТОЛЬКО из .env, НЕ коммитить!
+      # Пароль Яндекс для IMAP (чтение писем)
       - YANDEX_APP_PASSWORD=${YANDEX_APP_PASSWORD}
+      # API ключ Resend для отправки (обходит блокировку SMTP)
+      - RESEND_API_KEY=${RESEND_API_KEY}
       - EMAIL_ADDRESS=info@uralliance.ru
       - CHECK_INTERVAL=60
     volumes:

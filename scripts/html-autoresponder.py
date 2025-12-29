@@ -7,18 +7,17 @@ HTML Autoresponder для info@uralliance.ru
 """
 
 import imaplib
-import smtplib
 import email
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from email.header import decode_header, make_header
-from email.utils import parseaddr, formataddr
+from email.header import decode_header
+from email.utils import parseaddr
 import time
 import json
 import os
 from pathlib import Path
-from datetime import datetime, timezone
+from datetime import datetime
 import logging
+
+import resend
 
 # Настройка логирования
 logging.basicConfig(
@@ -48,10 +47,11 @@ def get_config():
 
     return {
         'imap_server': 'imap.yandex.ru',
-        'smtp_server': 'smtp.yandex.ru',
         'email': os.getenv('EMAIL_ADDRESS', 'info@uralliance.ru'),
-        # Пароль приложения ТОЛЬКО из переменной окружения (безопасность!)
-        'password': os.getenv('YANDEX_APP_PASSWORD', ''),
+        # Пароль приложения Яндекс для IMAP
+        'imap_password': os.getenv('YANDEX_APP_PASSWORD', ''),
+        # API ключ Resend для отправки писем
+        'resend_api_key': os.getenv('RESEND_API_KEY', ''),
         'check_interval': int(os.getenv('CHECK_INTERVAL', '60')),
         'processed_file': processed_path,
         'html_template': template_path,
@@ -161,21 +161,13 @@ def load_html_template() -> str:
 
 
 def send_html_response(to_email: str, original_subject: str):
-    """Отправляет HTML-ответ."""
+    """Отправляет HTML-ответ через Resend API."""
     try:
-        # Создаём письмо
-        msg = MIMEMultipart('alternative')
-        # Правильное кодирование кириллицы в заголовке From
-        from_name = 'ООО ЮрАльянс'
-        msg['From'] = formataddr((from_name, CONFIG['email']))
-        msg['To'] = to_email
-        # Кодируем тему письма с кириллицей
-        subject_text = f'Re: {original_subject}' if original_subject else 'Заявка получена — ЮрАльянс'
-        msg['Subject'] = subject_text
+        # Тема письма
+        subject = f'Re: {original_subject}' if original_subject else 'Заявка получена — ЮрАльянс'
 
         # Текстовая версия (fallback)
-        text_content = """
-Благодарим за обращение в ЮрАльянс!
+        text_content = """Благодарим за обращение в ЮрАльянс!
 
 Ваше письмо получено и будет обработано в ближайшие часы.
 
@@ -190,21 +182,22 @@ def send_html_response(to_email: str, original_subject: str):
 
 С уважением,
 ООО "ЮрАльянс"
-        """
+"""
 
         # HTML версия
         html_content = load_html_template()
 
-        # Добавляем обе версии
-        msg.attach(MIMEText(text_content, 'plain', 'utf-8'))
-        msg.attach(MIMEText(html_content, 'html', 'utf-8'))
+        # Отправляем через Resend API
+        resend.api_key = CONFIG['resend_api_key']
+        result = resend.Emails.send({
+            "from": f"ООО ЮрАльянс <{CONFIG['email']}>",
+            "to": [to_email],
+            "subject": subject,
+            "html": html_content,
+            "text": text_content,
+        })
 
-        # Отправляем через SMTP
-        with smtplib.SMTP_SSL(CONFIG['smtp_server'], 465) as smtp:
-            smtp.login(CONFIG['email'], CONFIG['password'])
-            smtp.send_message(msg)
-
-        logger.info(f"✅ HTML-ответ отправлен на {to_email}")
+        logger.info(f"✅ HTML-ответ отправлен на {to_email} (id: {result.get('id', 'unknown')})")
         return True
 
     except Exception as e:
@@ -229,7 +222,7 @@ def check_new_emails(start_time: datetime):
     try:
         # Подключаемся к IMAP
         with imaplib.IMAP4_SSL(CONFIG['imap_server']) as imap:
-            imap.login(CONFIG['email'], CONFIG['password'])
+            imap.login(CONFIG['email'], CONFIG['imap_password'])
             imap.select('INBOX')
 
             # Ищем непрочитанные письма ТОЛЬКО с даты запуска скрипта
@@ -312,7 +305,7 @@ def mark_all_as_processed():
 
     try:
         with imaplib.IMAP4_SSL(CONFIG['imap_server']) as imap:
-            imap.login(CONFIG['email'], CONFIG['password'])
+            imap.login(CONFIG['email'], CONFIG['imap_password'])
             imap.select('INBOX')
 
             # Получаем ВСЕ письма
@@ -335,9 +328,14 @@ def main():
     """Основной цикл."""
     import sys
 
-    if not CONFIG['password']:
+    if not CONFIG['imap_password']:
         logger.error("❌ Установите переменную YANDEX_APP_PASSWORD с паролем приложения!")
         logger.info("   export YANDEX_APP_PASSWORD='ваш_пароль_приложения'")
+        return
+
+    if not CONFIG['resend_api_key']:
+        logger.error("❌ Установите переменную RESEND_API_KEY с ключом Resend!")
+        logger.info("   export RESEND_API_KEY='re_xxxxx'")
         return
 
     if not CONFIG['html_template'].exists():
