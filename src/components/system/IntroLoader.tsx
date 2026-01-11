@@ -158,18 +158,12 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
     setIsMounted(true);
 
     // Detect initial performance tier based on device capabilities
+    // FPS monitoring will automatically adjust if needed
     const detectInitialTier = (): PerformanceTier => {
-      // Check for touchscreen devices (Surface, touchscreen laptops) - they often have weaker GPUs
-      const hasTouchscreen = navigator.maxTouchPoints > 0 || "ontouchstart" in window;
       const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
       if (prefersReducedMotion) {
         return "minimal";
-      }
-
-      // Touchscreen devices (Surface, etc.) - start low
-      if (hasTouchscreen) {
-        return "low";
       }
 
       // Check hardware capabilities
@@ -177,21 +171,22 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
       const dpr = window.devicePixelRatio || 1;
       const isMobile = window.innerWidth < 768;
 
-      // High DPR on mobile = lots of pixels to render
-      if (isMobile && dpr >= 2) {
+      // Mobile devices - start at medium, FPS will adjust if needed
+      if (isMobile) {
         return "medium";
       }
 
-      // Low-end device detection
+      // Very low-end device (2 cores or less)
       if (cores <= 2) {
-        return "low";
+        return "medium";
       }
 
-      // High DPR desktop needs more power
+      // High DPR (3x+) needs more GPU power - start medium
       if (dpr >= 3) {
         return "medium";
       }
 
+      // Default: start high, FPS monitoring will downgrade if laggy
       return "high";
     };
 
