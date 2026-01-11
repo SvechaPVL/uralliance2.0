@@ -230,14 +230,13 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
   // Responsive settings based on screen size and performance tier
   const getResponsiveSettings = useCallback(() => {
     const { width } = getCanvasDimensions();
-    const rawDpr = typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1;
+    const dpr = typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1;
     const isMobile = width < 768;
     const isTablet = width >= 768 && width < 1024;
-
-    // Apply performance tier settings
-    const config = PERFORMANCE_CONFIG[performanceTierRef.current];
-    const dpr = Math.min(rawDpr, config.dprCap);
     const isRetina = dpr >= 2;
+
+    // Apply performance tier settings for particle count only
+    const config = PERFORMANCE_CONFIG[performanceTierRef.current];
 
     // Base pixel steps - higher = fewer particles
     let basePixelSteps = isMobile ? 6 : isTablet ? 6 : isRetina ? 8 : 6;
@@ -259,8 +258,6 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
       // Color blend rate - SLOWER so we can see multicolor effect
       colorBlendRateMin: 0.005,
       colorBlendRateMax: 0.015,
-      // Effective DPR capped by performance tier
-      effectiveDpr: dpr,
     };
   }, [getCanvasDimensions]);
 
@@ -514,8 +511,7 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
 
     const ctx = canvas.getContext("2d")!;
     const particles = particlesRef.current;
-    const settings = settingsRef.current;
-    const dpr = settings.effectiveDpr;
+    const dpr = window.devicePixelRatio || 1;
 
     // Logical dimensions (CSS pixels) - ctx is already scaled by dpr
     const logicalWidth = canvas.width / dpr;
@@ -597,9 +593,8 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
 
       // Update responsive settings on resize
       settingsRef.current = getResponsiveSettings();
-      const settings = settingsRef.current;
 
-      const dpr = settings.effectiveDpr;
+      const dpr = window.devicePixelRatio || 1;
       const { width: logicalWidth, height: logicalHeight } = getCanvasDimensions();
 
       canvas.width = logicalWidth * dpr;
@@ -672,10 +667,9 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
         return { width: expectedWidth, height: expectedHeight };
       };
 
-      // Get settings with performance-capped DPR
+      // Get settings for particle optimization
       settingsRef.current = getResponsiveSettings();
-      const settings = settingsRef.current;
-      const dpr = settings.effectiveDpr;
+      const dpr = window.devicePixelRatio || 1;
       const { width: logicalWidth, height: logicalHeight } = await waitForContainer();
 
       canvas.width = logicalWidth * dpr;
