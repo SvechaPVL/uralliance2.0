@@ -233,8 +233,8 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
     // Apply performance tier settings for particle count only
     const config = PERFORMANCE_CONFIG[performanceTierRef.current];
 
-    // Base pixel steps - higher = fewer particles
-    let basePixelSteps = isMobile ? 6 : isTablet ? 6 : isRetina ? 8 : 6;
+    // Base pixel steps - higher = fewer particles, lower = more particles (better text readability)
+    let basePixelSteps = isMobile ? 5 : isTablet ? 5 : isRetina ? 6 : 4;
     // Apply performance multiplier
     const pixelSteps = Math.round(basePixelSteps * config.pixelStepsMultiplier);
 
