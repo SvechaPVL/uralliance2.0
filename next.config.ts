@@ -145,6 +145,11 @@ const nextConfig: NextConfig = {
   // URL остаётся прежним (важно для рекламных кампаний)
   async rewrites() {
     return [
+      // Short URLs for marketing
+      {
+        source: "/vestnik",
+        destination: "/services/legal/vestnik",
+      },
       // Legal custom pages
       {
         source: "/services/legal/corporate",

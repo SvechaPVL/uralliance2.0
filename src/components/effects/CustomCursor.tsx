@@ -72,12 +72,14 @@ export function CustomCursor() {
   useEffect(() => {
     if (!mounted) return;
 
-    // Skip on touch devices
-    if (
-      window.matchMedia("(pointer: coarse)").matches ||
-      "ontouchstart" in window ||
-      navigator.maxTouchPoints > 0
-    ) {
+    // Skip on touch-only devices (no mouse/trackpad)
+    // Surface and similar devices have both touch AND mouse - we want cursor there
+    const hasFinePointer = window.matchMedia("(pointer: fine)").matches;
+    const hasHover = window.matchMedia("(hover: hover)").matches;
+
+    // If device has fine pointer (mouse/trackpad) and can hover - show cursor
+    // This allows cursor on Surface/touchscreen laptops while hiding on phones/tablets
+    if (!hasFinePointer || !hasHover) {
       return;
     }
 
