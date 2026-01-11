@@ -121,25 +121,58 @@ export const MacbookScroll = ({
     offset: ["start start", "end start"],
   });
 
-  const [isMobile] = useState(() => {
-    if (typeof window !== "undefined") {
-      return window.innerWidth < 768;
-    }
-    return false;
+  // Detect device type for responsive behavior
+  const [deviceType] = useState<"mobile" | "tablet" | "desktop">(() => {
+    if (typeof window === "undefined") return "desktop";
+
+    const width = window.innerWidth;
+    const hasTouchscreen = navigator.maxTouchPoints > 0 || "ontouchstart" in window;
+
+    // Mobile: small screens
+    if (width < 768) return "mobile";
+
+    // Tablet: touchscreen device with medium-sized screen (Surface, iPad, etc.)
+    // Surface Pro typical viewport: ~1024-1400px
+    if (hasTouchscreen && width < 1400) return "tablet";
+
+    return "desktop";
   });
 
-  const scaleX = useTransform(scrollYProgress, [0, 0.3], [1.2, isMobile ? 1 : 1.5]);
-  const scaleY = useTransform(scrollYProgress, [0, 0.3], [0.6, isMobile ? 1 : 1.5]);
-  const translate = useTransform(scrollYProgress, [0, 1], [0, 1500]);
+  const isMobile = deviceType === "mobile";
+  const isTablet = deviceType === "tablet";
+
+  // Smaller scale and translate values for tablets to reduce scroll travel
+  const scaleX = useTransform(
+    scrollYProgress,
+    [0, 0.3],
+    [1.2, isMobile ? 1 : isTablet ? 1.2 : 1.5]
+  );
+  const scaleY = useTransform(
+    scrollYProgress,
+    [0, 0.3],
+    [0.6, isMobile ? 1 : isTablet ? 1.2 : 1.5]
+  );
+  // Significantly reduce translate distance for tablets (1500 -> 800)
+  const translate = useTransform(scrollYProgress, [0, 1], [0, isTablet ? 800 : 1500]);
   const rotate = useTransform(scrollYProgress, [0.1, 0.12, 0.3], [-28, -28, 0]);
-  const textTransform = useTransform(scrollYProgress, [0, 0.3], [0, 100]);
+  const textTransform = useTransform(scrollYProgress, [0, 0.3], [0, isTablet ? 60 : 100]);
   const textOpacity = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
 
+  // Dynamic min-height class based on device type
+  const containerClass = cn(
+    "flex shrink-0 transform flex-col items-center justify-start [perspective:800px]",
+    // Mobile
+    "min-h-[120vh] scale-[0.5] py-0",
+    // Small tablets (sm breakpoint)
+    "sm:min-h-[150vh] sm:scale-[0.65]",
+    // Tablet with touchscreen - use shorter scroll height
+    isTablet && "md:min-h-[140vh] md:scale-[0.85] md:py-40",
+    // Desktop - full experience
+    !isTablet && "md:min-h-[200vh] md:scale-100 md:py-80"
+  );
+
   return (
-    <div
-      ref={ref}
-      className="flex min-h-[120vh] shrink-0 scale-[0.5] transform flex-col items-center justify-start py-0 [perspective:800px] sm:min-h-[150vh] sm:scale-[0.65] md:min-h-[200vh] md:scale-100 md:py-80"
-    >
+    <div ref={ref} className={containerClass}>
       <motion.h2
         style={{
           translateY: textTransform,
