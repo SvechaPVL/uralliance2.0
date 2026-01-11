@@ -85,39 +85,37 @@ textarea,
   }
 }
 
-/* Custom cursor - hide default on desktop */
-@media (pointer: fine) and (min-width: 768px) {
-  html,
-  html *,
-  html *::before,
-  html *::after {
-    cursor: none !important;
-  }
+/* Custom cursor - hide default only when custom cursor is enabled via JS */
+html.custom-cursor-enabled,
+html.custom-cursor-enabled *,
+html.custom-cursor-enabled *::before,
+html.custom-cursor-enabled *::after {
+  cursor: none !important;
+}
 
-  /* Force hide for common interactive elements */
-  a,
-  button,
-  input,
-  textarea,
-  select,
-  [role="button"],
-  [tabindex],
-  label,
-  summary {
-    cursor: none !important;
-  }
+/* Force hide for common interactive elements when custom cursor enabled */
+html.custom-cursor-enabled a,
+html.custom-cursor-enabled button,
+html.custom-cursor-enabled input,
+html.custom-cursor-enabled textarea,
+html.custom-cursor-enabled select,
+html.custom-cursor-enabled [role="button"],
+html.custom-cursor-enabled [tabindex],
+html.custom-cursor-enabled label,
+html.custom-cursor-enabled summary {
+  cursor: none !important;
+}
 
-  /* Override Leaflet and other library cursors */
-  .leaflet-container,
-  .leaflet-container *,
-  .leaflet-interactive,
-  .leaflet-grab,
-  .leaflet-dragging,
-  .leaflet-dragging .leaflet-grab,
-  .leaflet-clickable,
-  [class*="leaflet-"] {
-    cursor: none !important;
-  }
+/* Override Leaflet and other library cursors when custom cursor enabled */
+html.custom-cursor-enabled .leaflet-container,
+html.custom-cursor-enabled .leaflet-container *,
+html.custom-cursor-enabled .leaflet-interactive,
+html.custom-cursor-enabled .leaflet-grab,
+html.custom-cursor-enabled .leaflet-dragging,
+html.custom-cursor-enabled .leaflet-dragging .leaflet-grab,
+html.custom-cursor-enabled .leaflet-clickable,
+html.custom-cursor-enabled [class*="leaflet-"] {
+  cursor: none !important;
 }
 
 /* Autofill styles - override browser defaults */

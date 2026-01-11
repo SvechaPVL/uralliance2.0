@@ -20,6 +20,19 @@ const COLORS = {
   white: { r: 226, g: 232, b: 240 }, // #e2e8f0 - text-primary
 };
 
+// Performance tiers for adaptive quality
+type PerformanceTier = "high" | "medium" | "low" | "minimal";
+
+const PERFORMANCE_CONFIG: Record<
+  PerformanceTier,
+  { pixelStepsMultiplier: number; skipFrames: number; dprCap: number }
+> = {
+  high: { pixelStepsMultiplier: 1.0, skipFrames: 0, dprCap: 3 },
+  medium: { pixelStepsMultiplier: 1.5, skipFrames: 0, dprCap: 2 },
+  low: { pixelStepsMultiplier: 2.5, skipFrames: 1, dprCap: 1.5 },
+  minimal: { pixelStepsMultiplier: 4.0, skipFrames: 2, dprCap: 1 },
+};
+
 class Particle {
   pos: Vector2D = { x: 0, y: 0 };
   vel: Vector2D = { x: 0, y: 0 };
@@ -128,6 +141,13 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
   const startTimeRef = useRef<number>(0);
   const isExitingRef = useRef(false);
 
+  // Performance monitoring refs
+  const performanceTierRef = useRef<PerformanceTier>("high");
+  const skipFrameCounterRef = useRef(0);
+  const fpsHistoryRef = useRef<number[]>([]);
+  const lastFrameTimeRef = useRef(0);
+  const fpsCheckIntervalRef = useRef(0);
+
   const [isMounted, setIsMounted] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [isFadingOut, setIsFadingOut] = useState(false);
@@ -136,6 +156,46 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
   useEffect(() => {
     startTimeRef.current = Date.now();
     setIsMounted(true);
+
+    // Detect initial performance tier based on device capabilities
+    const detectInitialTier = (): PerformanceTier => {
+      // Check for touchscreen devices (Surface, touchscreen laptops) - they often have weaker GPUs
+      const hasTouchscreen = navigator.maxTouchPoints > 0 || "ontouchstart" in window;
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      if (prefersReducedMotion) {
+        return "minimal";
+      }
+
+      // Touchscreen devices (Surface, etc.) - start low
+      if (hasTouchscreen) {
+        return "low";
+      }
+
+      // Check hardware capabilities
+      const cores = navigator.hardwareConcurrency || 4;
+      const dpr = window.devicePixelRatio || 1;
+      const isMobile = window.innerWidth < 768;
+
+      // High DPR on mobile = lots of pixels to render
+      if (isMobile && dpr >= 2) {
+        return "medium";
+      }
+
+      // Low-end device detection
+      if (cores <= 2) {
+        return "low";
+      }
+
+      // High DPR desktop needs more power
+      if (dpr >= 3) {
+        return "medium";
+      }
+
+      return "high";
+    };
+
+    performanceTierRef.current = detectInitialTier();
   }, []);
 
   // Get dimensions for canvas
@@ -167,24 +227,26 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
     return { width, height };
   }, []);
 
-  // Responsive settings based on screen size
+  // Responsive settings based on screen size and performance tier
   const getResponsiveSettings = useCallback(() => {
     const { width } = getCanvasDimensions();
-    const dpr = typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1;
+    const rawDpr = typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1;
     const isMobile = width < 768;
     const isTablet = width >= 768 && width < 1024;
+
+    // Apply performance tier settings
+    const config = PERFORMANCE_CONFIG[performanceTierRef.current];
+    const dpr = Math.min(rawDpr, config.dprCap);
     const isRetina = dpr >= 2;
 
-    // On Retina displays, we render 4x more pixels, so we need MUCH fewer particles
-    // pixelSteps: higher = fewer particles
-    let desktopPixelSteps = 6;
-    if (isRetina) {
-      desktopPixelSteps = 8; // Significantly fewer particles on Retina
-    }
+    // Base pixel steps - higher = fewer particles
+    let basePixelSteps = isMobile ? 6 : isTablet ? 6 : isRetina ? 8 : 6;
+    // Apply performance multiplier
+    const pixelSteps = Math.round(basePixelSteps * config.pixelStepsMultiplier);
 
     return {
       // More pixel steps = fewer particles (better performance)
-      pixelSteps: isMobile ? 6 : isTablet ? 6 : desktopPixelSteps,
+      pixelSteps,
       // Larger particles compensate for fewer of them
       particleSizeMin: isMobile ? 1.5 : isRetina ? 2.5 : 2,
       particleSizeMax: isMobile ? 2.5 : isRetina ? 4 : 3,
@@ -197,6 +259,8 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
       // Color blend rate - SLOWER so we can see multicolor effect
       colorBlendRateMin: 0.005,
       colorBlendRateMax: 0.015,
+      // Effective DPR capped by performance tier
+      effectiveDpr: dpr,
     };
   }, [getCanvasDimensions]);
 
@@ -392,9 +456,66 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
     const canvas = canvasRef.current;
     if (!canvas) return;
 
+    const now = performance.now();
+    const config = PERFORMANCE_CONFIG[performanceTierRef.current];
+
+    // FPS monitoring
+    if (lastFrameTimeRef.current > 0) {
+      const delta = now - lastFrameTimeRef.current;
+      const fps = 1000 / delta;
+      fpsHistoryRef.current.push(fps);
+
+      // Keep only last 60 frames (1 second at 60fps)
+      if (fpsHistoryRef.current.length > 60) {
+        fpsHistoryRef.current.shift();
+      }
+
+      // Check FPS every 30 frames and adjust tier if needed
+      fpsCheckIntervalRef.current++;
+      if (fpsCheckIntervalRef.current >= 30 && fpsHistoryRef.current.length >= 30) {
+        fpsCheckIntervalRef.current = 0;
+        const avgFps =
+          fpsHistoryRef.current.reduce((a, b) => a + b, 0) / fpsHistoryRef.current.length;
+
+        const currentTier = performanceTierRef.current;
+        let newTier = currentTier;
+
+        // Downgrade if FPS is too low
+        if (avgFps < 25 && currentTier !== "minimal") {
+          const tiers: PerformanceTier[] = ["high", "medium", "low", "minimal"];
+          const currentIndex = tiers.indexOf(currentTier);
+          newTier = tiers[Math.min(currentIndex + 1, tiers.length - 1)];
+        }
+        // Upgrade if FPS is good (only if not already high)
+        else if (avgFps > 55 && currentTier !== "high") {
+          const tiers: PerformanceTier[] = ["high", "medium", "low", "minimal"];
+          const currentIndex = tiers.indexOf(currentTier);
+          newTier = tiers[Math.max(currentIndex - 1, 0)];
+        }
+
+        if (newTier !== currentTier) {
+          performanceTierRef.current = newTier;
+          settingsRef.current = getResponsiveSettings();
+          fpsHistoryRef.current = []; // Reset history after tier change
+        }
+      }
+    }
+    lastFrameTimeRef.current = now;
+
+    // Frame skipping for low-end devices
+    if (config.skipFrames > 0) {
+      skipFrameCounterRef.current++;
+      if (skipFrameCounterRef.current <= config.skipFrames) {
+        animationRef.current = requestAnimationFrame(animate);
+        return;
+      }
+      skipFrameCounterRef.current = 0;
+    }
+
     const ctx = canvas.getContext("2d")!;
     const particles = particlesRef.current;
-    const dpr = window.devicePixelRatio || 1;
+    const settings = settingsRef.current;
+    const dpr = settings.effectiveDpr;
 
     // Logical dimensions (CSS pixels) - ctx is already scaled by dpr
     const logicalWidth = canvas.width / dpr;
@@ -466,7 +587,7 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
     }
 
     animationRef.current = requestAnimationFrame(animate);
-  }, [nextWord]);
+  }, [nextWord, getResponsiveSettings]);
 
   // Handle resize
   useEffect(() => {
@@ -476,8 +597,9 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
 
       // Update responsive settings on resize
       settingsRef.current = getResponsiveSettings();
+      const settings = settingsRef.current;
 
-      const dpr = window.devicePixelRatio || 1;
+      const dpr = settings.effectiveDpr;
       const { width: logicalWidth, height: logicalHeight } = getCanvasDimensions();
 
       canvas.width = logicalWidth * dpr;
@@ -550,7 +672,10 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
         return { width: expectedWidth, height: expectedHeight };
       };
 
-      const dpr = window.devicePixelRatio || 1;
+      // Get settings with performance-capped DPR
+      settingsRef.current = getResponsiveSettings();
+      const settings = settingsRef.current;
+      const dpr = settings.effectiveDpr;
       const { width: logicalWidth, height: logicalHeight } = await waitForContainer();
 
       canvas.width = logicalWidth * dpr;
@@ -601,7 +726,7 @@ export function IntroLoader({ onComplete, minDisplayTime = 2500 }: IntroLoaderPr
       clearTimeout(exitTimeout);
       clearTimeout(maxTimeout);
     };
-  }, [isMounted, animate, nextWord, minDisplayTime, handleExit, getCanvasDimensions]);
+  }, [isMounted, animate, nextWord, minDisplayTime, handleExit, getCanvasDimensions, getResponsiveSettings]);
 
   // Don't render on server or after hiding
   if (!isMounted || !isVisible) return null;

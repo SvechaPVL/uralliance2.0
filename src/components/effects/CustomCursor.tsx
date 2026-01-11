@@ -84,6 +84,9 @@ export function CustomCursor() {
       return;
     }
 
+    // Enable custom cursor styles (hides native cursor via CSS)
+    document.documentElement.classList.add("custom-cursor-enabled");
+
     // Direct DOM position update - no React re-render
     const handleMove = (e: PointerEvent) => {
       if (!rafRef.current) {
@@ -175,6 +178,7 @@ export function CustomCursor() {
     document.documentElement.addEventListener("mouseenter", handleMouseEnter);
 
     return () => {
+      document.documentElement.classList.remove("custom-cursor-enabled");
       document.removeEventListener("pointermove", handleMove);
       document.removeEventListener("mouseover", handleMouseOver);
       document.documentElement.removeEventListener("mouseleave", handleMouseLeave);
