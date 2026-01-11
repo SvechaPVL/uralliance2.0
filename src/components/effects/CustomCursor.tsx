@@ -72,16 +72,15 @@ export function CustomCursor() {
   useEffect(() => {
     if (!mounted) return;
 
-    // Skip on touch-only devices (no mouse/trackpad)
-    // Surface and similar devices have both touch AND mouse - we want cursor there
+    // Skip custom cursor on devices with touchscreen (Surface, touchscreen laptops)
+    // These devices often have weaker GPUs and the custom cursor causes lag
+    const hasTouchscreen = navigator.maxTouchPoints > 0 || "ontouchstart" in window;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const hasFinePointer = window.matchMedia("(pointer: fine)").matches;
     const hasHover = window.matchMedia("(hover: hover)").matches;
-    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    // If device has fine pointer (mouse/trackpad) and can hover - show cursor
-    // This allows cursor on Surface/touchscreen laptops while hiding on phones/tablets
-    // Also skip if user prefers reduced motion
-    if (!hasFinePointer || !hasHover || prefersReducedMotion) {
+    // Skip if: touchscreen device, prefers reduced motion, or no mouse/trackpad
+    if (hasTouchscreen || prefersReducedMotion || !hasFinePointer || !hasHover) {
       return;
     }
 
