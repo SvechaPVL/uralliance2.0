@@ -17,6 +17,23 @@ import sectionsConfig from "@/content/sections.json";
 import Link from "next/link";
 import { Newspaper, FileKey, FileText, ArrowRight, Globe } from "lucide-react";
 
+// Tag to URL mapping for legal services
+const LEGAL_TAG_LINKS: Record<string, string> = {
+  "Ликвидация": "/services/legal/liquidation",
+  "Реорганизация": "/services/legal/reorganization",
+  "Судебные споры": "/services/legal/arbitrazh",
+  "Бухгалтерия": "/services/legal/accounting",
+  "Договоры": "/services/legal/contracts",
+};
+
+// Tag to URL mapping for tech services
+const TECH_TAG_LINKS: Record<string, string> = {
+  "Чат-боты для клиентов": "/services/tech/bots",
+  "Сайты и приложения": "/services/tech/web",
+  "Связь с вашими программами": "/services/tech/crm",
+  "Связь с 1С": "/services/tech/1c",
+};
+
 // Quick links for hero section
 const QUICK_LINKS = [
   {
@@ -261,12 +278,24 @@ export function HeroSection() {
 
                 {/* Tags */}
                 <div className="mb-6 grid grid-cols-2 gap-2 text-sm text-[var(--color-text-secondary)] sm:mb-7 sm:gap-3 lg:mb-8">
-                  {legalTags.map((tag) => (
-                    <div key={tag} className="flex items-center gap-2">
-                      <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-legal-primary)] shadow-[0_0_12px_rgba(212,175,55,0.6)]" />
-                      {tag}
-                    </div>
-                  ))}
+                  {legalTags.map((tag) => {
+                    const href = LEGAL_TAG_LINKS[tag];
+                    return href ? (
+                      <Link
+                        key={tag}
+                        href={href}
+                        className="group flex items-center gap-2 transition-colors hover:text-[var(--color-legal-primary)]"
+                      >
+                        <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-legal-primary)] shadow-[0_0_12px_rgba(212,175,55,0.6)] transition-shadow group-hover:shadow-[0_0_16px_rgba(212,175,55,0.8)]" />
+                        {tag}
+                      </Link>
+                    ) : (
+                      <div key={tag} className="flex items-center gap-2">
+                        <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-legal-primary)] shadow-[0_0_12px_rgba(212,175,55,0.6)]" />
+                        {tag}
+                      </div>
+                    );
+                  })}
                 </div>
 
                 {/* CTA */}
@@ -325,12 +354,24 @@ export function HeroSection() {
 
                 {/* Feature list */}
                 <div className="mb-6 grid grid-cols-2 gap-2 text-sm text-[var(--color-text-secondary)] sm:mb-7 sm:gap-3 lg:mb-8">
-                  {techFeatures.map((feature) => (
-                    <div key={feature} className="flex items-center gap-2">
-                      <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-tech-primary)] shadow-[0_0_12px_rgba(6,182,212,0.6)]" />
-                      {feature}
-                    </div>
-                  ))}
+                  {techFeatures.map((feature) => {
+                    const href = TECH_TAG_LINKS[feature];
+                    return href ? (
+                      <Link
+                        key={feature}
+                        href={href}
+                        className="group flex items-center gap-2 transition-colors hover:text-[var(--color-tech-primary)]"
+                      >
+                        <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-tech-primary)] shadow-[0_0_12px_rgba(6,182,212,0.6)] transition-shadow group-hover:shadow-[0_0_16px_rgba(6,182,212,0.8)]" />
+                        {feature}
+                      </Link>
+                    ) : (
+                      <div key={feature} className="flex items-center gap-2">
+                        <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-tech-primary)] shadow-[0_0_12px_rgba(6,182,212,0.6)]" />
+                        {feature}
+                      </div>
+                    );
+                  })}
                 </div>
 
                 {/* CTA */}
