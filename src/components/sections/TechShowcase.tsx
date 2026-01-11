@@ -129,7 +129,7 @@ const bentoItems: BentoGridItem[] = [
   {
     id: "web",
     colSpan: 3,
-    rowSpan: 1,
+    rowSpan: 2,
     className: "border-0 bg-transparent p-0 select-none",
     content: (
       <Card3D className="h-full rounded-3xl p-0">
@@ -150,7 +150,7 @@ const bentoItems: BentoGridItem[] = [
               </span>
             ))}
           </div>
-          <div className="showcase-container flex-1 pt-4">
+          <div className="showcase-container flex-1 pt-6 sm:pt-8">
             <WebBrowserShowcase />
           </div>
         </div>
