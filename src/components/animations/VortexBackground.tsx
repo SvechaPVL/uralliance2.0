@@ -45,6 +45,19 @@ interface VortexBackgroundProps {
   mouseRadius?: number;
 }
 
+// Performance tier based on FPS monitoring
+type PerformanceTier = "high" | "medium" | "low" | "minimal";
+
+const PERFORMANCE_CONFIG: Record<
+  PerformanceTier,
+  { particleRatio: number; skipFrames: number; dprCap: number }
+> = {
+  high: { particleRatio: 1.0, skipFrames: 0, dprCap: 3 },
+  medium: { particleRatio: 0.6, skipFrames: 0, dprCap: 2 },
+  low: { particleRatio: 0.35, skipFrames: 1, dprCap: 1.5 },
+  minimal: { particleRatio: 0.2, skipFrames: 2, dprCap: 1 },
+};
+
 export function VortexBackground({
   className,
   containerClassName,
@@ -64,13 +77,45 @@ export function VortexBackground({
   >(null);
   const prefersReducedMotion = useReducedMotion();
 
+  // FPS monitoring for adaptive performance
+  const fpsRef = useRef({
+    lastTime: 0,
+    frameCount: 0,
+    fps: 60,
+    fpsHistory: [] as number[],
+    tier: "high" as PerformanceTier,
+    skipCounter: 0,
+  });
+
   // Mobile detection for adaptive rendering
   const [isMobile, setIsMobile] = useState(false);
+  const [performanceTier, setPerformanceTier] = useState<PerformanceTier>("high");
+
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Initial performance detection based on hardware hints
+  useEffect(() => {
+    const detectInitialPerformance = () => {
+      const cores = navigator.hardwareConcurrency || 4;
+      const dpr = window.devicePixelRatio || 1;
+      const isTouchDevice = "ontouchstart" in window && navigator.maxTouchPoints > 0;
+      const isHighDpr = dpr > 2;
+
+      // Start with lower tier on weak devices
+      if (cores <= 2 || (isTouchDevice && isHighDpr)) {
+        setPerformanceTier("low");
+        fpsRef.current.tier = "low";
+      } else if (cores <= 4 || isHighDpr) {
+        setPerformanceTier("medium");
+        fpsRef.current.tier = "medium";
+      }
+    };
+    detectInitialPerformance();
   }, []);
 
   // Particle system constants - adaptive for mobile
@@ -288,6 +333,19 @@ export function VortexBackground({
     ctx.restore();
   };
 
+  // Adaptive particle drawing based on performance tier
+  const drawParticlesAdaptive = useCallback(
+    (ctx: CanvasRenderingContext2D) => {
+      const config = PERFORMANCE_CONFIG[fpsRef.current.tier];
+      const activeParticles = Math.floor(particlePropsLength * config.particleRatio);
+
+      for (let i = 0; i < activeParticles; i += particlePropCount) {
+        updateParticle(i, ctx);
+      }
+    },
+    [particlePropsLength, updateParticle]
+  );
+
   const draw = useCallback(
     (canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) => {
       if (prefersReducedMotion) return;
@@ -295,6 +353,62 @@ export function VortexBackground({
       // Skip animation when not visible (performance optimization)
       if (!isVisibleRef.current) {
         return;
+      }
+
+      const now = performance.now();
+      const fps = fpsRef.current;
+
+      // FPS calculation
+      fps.frameCount++;
+      if (now - fps.lastTime >= 1000) {
+        fps.fps = fps.frameCount;
+        fps.fpsHistory.push(fps.fps);
+        if (fps.fpsHistory.length > 5) fps.fpsHistory.shift();
+
+        // Calculate average FPS over last 5 seconds
+        const avgFps = fps.fpsHistory.reduce((a, b) => a + b, 0) / fps.fpsHistory.length;
+
+        // Adaptive tier adjustment based on FPS
+        const currentTier = fps.tier;
+        let newTier: PerformanceTier = currentTier;
+
+        if (avgFps < 20 && currentTier !== "minimal") {
+          newTier = "minimal";
+        } else if (avgFps < 30 && currentTier !== "low" && currentTier !== "minimal") {
+          newTier = "low";
+        } else if (avgFps < 45 && currentTier === "high") {
+          newTier = "medium";
+        } else if (avgFps >= 55 && currentTier !== "high" && fps.fpsHistory.length >= 5) {
+          // Only upgrade after stable performance
+          const tiers: PerformanceTier[] = ["minimal", "low", "medium", "high"];
+          const currentIndex = tiers.indexOf(currentTier);
+          if (currentIndex < tiers.length - 1) {
+            newTier = tiers[currentIndex + 1];
+          }
+        }
+
+        if (newTier !== currentTier) {
+          fps.tier = newTier;
+          setPerformanceTier(newTier);
+          // eslint-disable-next-line no-console
+          console.log(`[VortexBackground] Performance tier: ${newTier} (avg FPS: ${avgFps.toFixed(1)})`);
+        }
+
+        fps.frameCount = 0;
+        fps.lastTime = now;
+      }
+
+      // Frame skipping for low performance
+      const config = PERFORMANCE_CONFIG[fps.tier];
+      if (config.skipFrames > 0) {
+        fps.skipCounter++;
+        if (fps.skipCounter <= config.skipFrames) {
+          animationRef.current = window.requestAnimationFrame(() => {
+            drawRef.current?.(canvas, ctx);
+          });
+          return;
+        }
+        fps.skipCounter = 0;
       }
 
       tickRef.current++;
@@ -309,7 +423,7 @@ export function VortexBackground({
         ctx.fillRect(0, 0, width, height);
       }
 
-      drawParticles(ctx);
+      drawParticlesAdaptive(ctx);
       renderGlow(canvas, ctx);
       renderToScreen(canvas, ctx);
 
@@ -317,7 +431,7 @@ export function VortexBackground({
         drawRef.current?.(canvas, ctx);
       });
     },
-    [prefersReducedMotion, backgroundOpacity, drawParticles]
+    [prefersReducedMotion, backgroundOpacity, drawParticlesAdaptive]
   );
 
   // Keep drawRef in sync
@@ -333,10 +447,12 @@ export function VortexBackground({
       const height = container?.clientHeight || window.innerHeight;
 
       // Use devicePixelRatio for sharp rendering on retina displays
-      // On mobile, cap at 2 to save GPU resources
+      // Cap DPR based on performance tier to reduce GPU load on weak devices
+      const config = PERFORMANCE_CONFIG[fpsRef.current.tier];
+      const baseDpr = window.devicePixelRatio || 1;
       const dpr = isMobile
-        ? Math.min(window.devicePixelRatio || 1, 2)
-        : window.devicePixelRatio || 1;
+        ? Math.min(baseDpr, 2, config.dprCap)
+        : Math.min(baseDpr, config.dprCap);
 
       canvas.width = width * dpr;
       canvas.height = height * dpr;

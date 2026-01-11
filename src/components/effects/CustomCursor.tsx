@@ -76,10 +76,12 @@ export function CustomCursor() {
     // Surface and similar devices have both touch AND mouse - we want cursor there
     const hasFinePointer = window.matchMedia("(pointer: fine)").matches;
     const hasHover = window.matchMedia("(hover: hover)").matches;
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     // If device has fine pointer (mouse/trackpad) and can hover - show cursor
     // This allows cursor on Surface/touchscreen laptops while hiding on phones/tablets
-    if (!hasFinePointer || !hasHover) {
+    // Also skip if user prefers reduced motion
+    if (!hasFinePointer || !hasHover || prefersReducedMotion) {
       return;
     }
 
