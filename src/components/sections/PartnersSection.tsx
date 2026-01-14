@@ -190,7 +190,7 @@ export function PartnersSection() {
                       href={partner.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group relative block overflow-hidden rounded-2xl border-2 p-1 shadow-lg transition-all hover:shadow-2xl"
+                      className="group relative block rounded-2xl border-2 p-1 shadow-lg transition-all hover:shadow-2xl"
                       style={{ borderColor: `${partner.color}30` }}
                     >
                       <div className="relative overflow-hidden rounded-xl">

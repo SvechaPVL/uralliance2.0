@@ -13,7 +13,7 @@ export function SberbankBanner({ referralLink }: SberbankBannerProps) {
       href={referralLink}
       target="_blank"
       rel="noopener noreferrer"
-      className="group relative block overflow-hidden rounded-2xl border-2 border-[#21a038]/30 bg-gradient-to-br from-[#21a038]/5 to-transparent p-1 shadow-xl transition-all hover:border-[#21a038]/50 hover:shadow-2xl"
+      className="group relative block rounded-2xl border-2 border-[#21a038]/30 bg-gradient-to-br from-[#21a038]/5 to-transparent p-1 shadow-xl transition-all hover:border-[#21a038]/50 hover:shadow-2xl"
     >
       {/* Баннер Деловой среды */}
       <div className="relative overflow-hidden rounded-xl">
