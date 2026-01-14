@@ -30,11 +30,11 @@ const nextConfig: NextConfig = {
             key: "Content-Security-Policy",
             value:
               "default-src 'self'; " +
-              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://mc.yandex.ru https://mc.yandex.com https://yandex.ru https://yastatic.net https://www.googletagmanager.com https://www.google-analytics.com; " +
+              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://mc.yandex.ru https://mc.yandex.com https://yandex.ru https://yastatic.net https://www.googletagmanager.com https://www.google-analytics.com https://partners.dasreda.ru https://ad.adriver.ru; " +
               "style-src 'self' 'unsafe-inline'; " +
               "img-src 'self' data: blob: https: https://mc.yandex.ru https://mc.yandex.com https://www.google-analytics.com https://www.googletagmanager.com; " +
               "font-src 'self' data:; " +
-              "connect-src 'self' https://mc.yandex.ru https://mc.yandex.com https://yandex.ru https://mc.webvisor.org wss://mc.webvisor.org wss://mc.yandex.ru https://www.google-analytics.com https://analytics.google.com https://region1.google-analytics.com https://stats.g.doubleclick.net; " +
+              "connect-src 'self' https://mc.yandex.ru https://mc.yandex.com https://yandex.ru https://mc.webvisor.org wss://mc.webvisor.org wss://mc.yandex.ru https://www.google-analytics.com https://analytics.google.com https://region1.google-analytics.com https://stats.g.doubleclick.net https://partners.dasreda.ru https://ad.adriver.ru; " +
               "frame-src 'self'; " +
               "object-src 'none'; " +
               "base-uri 'self'; " +

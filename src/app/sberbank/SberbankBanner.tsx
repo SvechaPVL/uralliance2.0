@@ -28,7 +28,7 @@ export function SberbankBanner({ referralLink }: SberbankBannerProps) {
       </div>
 
       {/* Floating badge */}
-      <div className="absolute -top-3 -right-3 rounded-full border border-[#21a038] bg-[var(--color-background-primary)] px-3 py-1.5 text-xs font-semibold text-[#21a038] shadow-lg">
+      <div className="absolute -top-3 -right-3 z-10 rounded-full border border-[#21a038] bg-[var(--color-background-primary)] px-3 py-1.5 text-xs font-semibold text-[#21a038] shadow-lg">
         Партнёр
       </div>
 

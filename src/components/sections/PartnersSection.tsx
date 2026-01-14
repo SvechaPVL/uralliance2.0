@@ -205,7 +205,7 @@ export function PartnersSection() {
 
                       {/* Floating badge */}
                       <div
-                        className="absolute -top-3 -right-3 rounded-full border bg-[var(--color-background-primary)] px-3 py-1.5 text-xs font-semibold shadow-lg"
+                        className="absolute -top-3 -right-3 z-10 rounded-full border bg-[var(--color-background-primary)] px-3 py-1.5 text-xs font-semibold shadow-lg"
                         style={{
                           borderColor: partner.color,
                           color: partner.color,
