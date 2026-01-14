@@ -199,7 +199,7 @@ export function PartnersSection() {
                           alt={`${partner.name} — ${partner.subtitle}`}
                           width={350}
                           height={350}
-                          className="h-auto w-full max-w-[350px] transition-transform duration-300 group-hover:scale-105"
+                          className="h-auto w-full max-w-[350px]"
                         />
                       </div>
 

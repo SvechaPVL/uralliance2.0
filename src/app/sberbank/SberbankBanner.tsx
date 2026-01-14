@@ -22,7 +22,7 @@ export function SberbankBanner({ referralLink }: SberbankBannerProps) {
           alt="Кредиты для бизнеса от Сбербанка — Деловая среда"
           width={400}
           height={400}
-          className="h-auto w-full max-w-[400px] transition-transform duration-300 group-hover:scale-105"
+          className="h-auto w-full max-w-[400px]"
           priority
         />
       </div>
