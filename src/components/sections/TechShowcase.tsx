@@ -133,7 +133,7 @@ const bentoItems: BentoGridItem[] = [
     className: "border-0 bg-transparent p-0 select-none",
     content: (
       <Card3D className="h-full rounded-3xl p-0">
-        <div className="flex h-full flex-col justify-between gap-2 p-6 pb-14 sm:gap-4 sm:pb-16">
+        <div className="flex h-full flex-col justify-between gap-2 p-6 pr-10 pb-14 sm:gap-4 sm:pr-14 sm:pb-16">
           <Label as="div" size="sm" spacing="widest" tone="muted">
             {sectionsConfig.tech_showcase.cards.web.additionalBadge}
           </Label>
