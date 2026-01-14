@@ -7,6 +7,7 @@ import { MobileApps } from "@/components/sections/MobileApps";
 import { Integration } from "@/components/sections/Integration";
 import { ProcessTimeline } from "@/components/sections/ProcessTimeline";
 import { PricePreview } from "@/components/sections/PricePreview";
+import { PartnersSection } from "@/components/sections/PartnersSection";
 import { ContactCTA } from "@/components/sections/ContactCTA";
 
 /**
@@ -41,6 +42,9 @@ export default function Home() {
 
       {/* Process Timeline - US2 */}
       <ProcessTimeline />
+
+      {/* Partners Section */}
+      <PartnersSection />
 
       {/* Price Preview - US2 */}
       <PricePreview />

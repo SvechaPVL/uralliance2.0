@@ -3,6 +3,7 @@ import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
 import { YandexMetrika } from "@/components/system/YandexMetrika";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import { DelovayaSredaPixel } from "@/components/system/DelovayaSredaPixel";
 import {
   OrganizationJsonLd,
   WebSiteJsonLd,
@@ -209,6 +210,9 @@ export default function RootLayout({
         {/* Analytics */}
         {yandexMetrikaId && <YandexMetrika counterId={yandexMetrikaId} />}
         <GoogleAnalytics gaId={googleAnalyticsId} />
+
+        {/* Деловая среда (Сбербанк) партнёрский пиксель */}
+        <DelovayaSredaPixel partnerId="61dfc7384e62472725c2" />
       </body>
     </html>
   );
