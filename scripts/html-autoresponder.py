@@ -247,8 +247,8 @@ def check_new_emails(start_time: datetime):
                 if email_id_str in processed:
                     continue
 
-                # Получаем письмо
-                status, msg_data = imap.fetch(email_id, '(RFC822)')
+                # Получаем письмо (BODY.PEEK[] не помечает как прочитанное)
+                status, msg_data = imap.fetch(email_id, '(BODY.PEEK[])')
                 if status != 'OK':
                     continue
 
