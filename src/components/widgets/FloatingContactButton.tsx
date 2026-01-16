@@ -4,13 +4,35 @@ import { useState, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import { contacts, getWhatsAppLink, getTelegramLink } from "@/lib/contacts";
 import { reachGoal } from "@/lib/analytics";
-import { Phone, MessageCircle, Send, X } from "lucide-react";
+import { Phone, MessageCircle, Send, X, FileText, Shield, Monitor } from "lucide-react";
+
+// Телефоны с категориями
+const PHONE_OPTIONS = [
+  {
+    label: "Вестник | Федресурс",
+    phone: contacts.phone.main,
+    icon: FileText,
+    color: "#7c3aed", // violet
+  },
+  {
+    label: "ЭЦП | Юр. консультация",
+    phone: contacts.phone.legal,
+    icon: Shield,
+    color: "#0891b2", // cyan
+  },
+  {
+    label: "ЭЦП | IT-консультация",
+    phone: contacts.phone.tech,
+    icon: Monitor,
+    color: "#059669", // emerald
+  },
+];
 
 /**
  * Floating Action Button for Quick Contact
  *
  * Shows a circular button that expands UPWARD to reveal
- * phone, WhatsApp, and Telegram contact options.
+ * phone options by category, WhatsApp, and Telegram contact options.
  */
 export function FloatingContactButton() {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,8 +41,8 @@ export function FloatingContactButton() {
     setIsOpen((prev) => !prev);
   }, []);
 
-  const handlePhoneClick = useCallback(() => {
-    reachGoal("phone_click", { location: "fab" });
+  const handlePhoneClick = useCallback((label: string) => {
+    reachGoal("phone_click", { location: "fab", category: label });
     setIsOpen(false);
   }, []);
 
@@ -51,65 +73,78 @@ export function FloatingContactButton() {
         <div
           className={cn(
             "absolute bottom-16 left-1/2 -translate-x-1/2",
-            "flex flex-col items-center gap-3",
+            "flex flex-col items-center gap-2",
             "transition-all duration-300",
             isOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
           )}
         >
-          {/* Telegram - top (appears last) */}
+          {/* Telegram - top */}
           <a
             href={getTelegramLink()}
             target="_blank"
             rel="noopener noreferrer"
             onClick={handleTelegramClick}
             className={cn(
-              "flex h-12 w-12 items-center justify-center rounded-full",
+              "flex h-11 items-center gap-2 rounded-full px-4",
               "border border-[#0088cc]/40 bg-[#0088cc]/15 text-[#0088cc]",
               "shadow-lg backdrop-blur-sm transition-all duration-300",
-              "hover:scale-110 hover:border-[#0088cc]/60 hover:bg-[#0088cc]/25",
+              "hover:scale-105 hover:border-[#0088cc]/60 hover:bg-[#0088cc]/25",
               isOpen ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
             )}
-            style={{ transitionDelay: isOpen ? "100ms" : "0ms" }}
+            style={{ transitionDelay: isOpen ? "150ms" : "0ms" }}
             aria-label="Написать в Telegram"
           >
-            <Send className="h-5 w-5" />
+            <Send className="h-4 w-4" />
+            <span className="text-sm font-medium whitespace-nowrap">Telegram</span>
           </a>
 
-          {/* WhatsApp - middle */}
+          {/* WhatsApp */}
           <a
             href={getWhatsAppLink()}
             target="_blank"
             rel="noopener noreferrer"
             onClick={handleWhatsAppClick}
             className={cn(
-              "flex h-12 w-12 items-center justify-center rounded-full",
+              "flex h-11 items-center gap-2 rounded-full px-4",
               "border border-[#25D366]/40 bg-[#25D366]/15 text-[#25D366]",
               "shadow-lg backdrop-blur-sm transition-all duration-300",
-              "hover:scale-110 hover:border-[#25D366]/60 hover:bg-[#25D366]/25",
+              "hover:scale-105 hover:border-[#25D366]/60 hover:bg-[#25D366]/25",
               isOpen ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
             )}
-            style={{ transitionDelay: isOpen ? "50ms" : "0ms" }}
+            style={{ transitionDelay: isOpen ? "100ms" : "0ms" }}
             aria-label="Написать в WhatsApp"
           >
-            <MessageCircle className="h-5 w-5" />
+            <MessageCircle className="h-4 w-4" />
+            <span className="text-sm font-medium whitespace-nowrap">WhatsApp</span>
           </a>
 
-          {/* Phone - bottom (appears first) */}
-          <a
-            href={contacts.phone.main.link}
-            onClick={handlePhoneClick}
-            className={cn(
-              "flex h-12 w-12 items-center justify-center rounded-full",
-              "border border-[#22c55e]/40 bg-[#22c55e]/15 text-[#22c55e]",
-              "shadow-lg backdrop-blur-sm transition-all duration-300",
-              "hover:scale-110 hover:border-[#22c55e]/60 hover:bg-[#22c55e]/25",
-              isOpen ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
-            )}
-            style={{ transitionDelay: isOpen ? "0ms" : "0ms" }}
-            aria-label="Позвонить"
-          >
-            <Phone className="h-5 w-5" />
-          </a>
+          {/* Phone options with categories */}
+          {PHONE_OPTIONS.map((option, index) => {
+            const Icon = option.icon;
+            return (
+              <a
+                key={option.label}
+                href={option.phone.link}
+                onClick={() => handlePhoneClick(option.label)}
+                className={cn(
+                  "flex h-11 items-center gap-2 rounded-full px-4",
+                  "shadow-lg backdrop-blur-sm transition-all duration-300",
+                  "hover:scale-105",
+                  isOpen ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
+                )}
+                style={{
+                  transitionDelay: isOpen ? `${50 - index * 25}ms` : "0ms",
+                  borderColor: `${option.color}66`,
+                  backgroundColor: `${option.color}26`,
+                  color: option.color,
+                }}
+                aria-label={`Позвонить: ${option.label}`}
+              >
+                <Icon className="h-4 w-4 shrink-0" />
+                <span className="text-sm font-medium whitespace-nowrap">{option.label}</span>
+              </a>
+            );
+          })}
         </div>
 
         {/* Main FAB button */}
@@ -138,7 +173,7 @@ export function FloatingContactButton() {
               isOpen ? "rotate-45" : "rotate-0"
             )}
           >
-            {isOpen ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}
+            {isOpen ? <X className="h-6 w-6" /> : <Phone className="h-6 w-6" />}
           </span>
         </button>
       </div>

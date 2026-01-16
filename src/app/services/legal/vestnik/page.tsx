@@ -94,78 +94,77 @@ const PROCESS_STEPS = [
   },
 ];
 
-// График выхода журнала на 2025 год
-const SCHEDULE_2025 = {
+// График выхода журнала на 2026 год
+const SCHEDULE_2026 = {
   q1: {
     name: "I квартал",
     issues: [
-      { issue: "1 (1024)", releaseDate: "09 января", deadline: "25 декабря" },
-      { issue: "2 (1025)", releaseDate: "15 января", deadline: "28 декабря" },
-      { issue: "3 (1026)", releaseDate: "22 января", deadline: "15 января" },
-      { issue: "4 (1027)", releaseDate: "29 января", deadline: "22 января" },
-      { issue: "5 (1028)", releaseDate: "05 февраля", deadline: "29 января" },
-      { issue: "6 (1029)", releaseDate: "12 февраля", deadline: "05 февраля" },
-      { issue: "7 (1030)", releaseDate: "19 февраля", deadline: "12 февраля" },
-      { issue: "8 (1031)", releaseDate: "26 февраля", deadline: "19 февраля" },
-      { issue: "9 (1032)", releaseDate: "05 марта", deadline: "26 февраля" },
-      { issue: "10 (1033)", releaseDate: "12 марта", deadline: "05 марта" },
-      { issue: "11 (1034)", releaseDate: "19 марта", deadline: "12 марта" },
-      { issue: "12 (1035)", releaseDate: "26 марта", deadline: "19 марта" },
+      { issue: "1 (1076)", releaseDate: "14 января", deadline: "26 декабря" },
+      { issue: "2 (1077)", releaseDate: "21 января", deadline: "14 января" },
+      { issue: "3 (1078)", releaseDate: "28 января", deadline: "21 января" },
+      { issue: "4 (1079)", releaseDate: "04 февраля", deadline: "28 января" },
+      { issue: "5 (1080)", releaseDate: "11 февраля", deadline: "04 февраля" },
+      { issue: "6 (1081)", releaseDate: "18 февраля", deadline: "11 февраля" },
+      { issue: "7 (1082)", releaseDate: "25 февраля", deadline: "18 февраля" },
+      { issue: "8 (1083)", releaseDate: "04 марта", deadline: "25 февраля" },
+      { issue: "9 (1084)", releaseDate: "11 марта", deadline: "04 марта" },
+      { issue: "10 (1085)", releaseDate: "18 марта", deadline: "11 марта" },
+      { issue: "11 (1086)", releaseDate: "25 марта", deadline: "18 марта" },
     ],
   },
   q2: {
     name: "II квартал",
     issues: [
-      { issue: "13 (1036)", releaseDate: "02 апреля", deadline: "26 марта" },
-      { issue: "14 (1037)", releaseDate: "09 апреля", deadline: "02 апреля" },
-      { issue: "15 (1038)", releaseDate: "16 апреля", deadline: "09 апреля" },
-      { issue: "16 (1039)", releaseDate: "23 апреля", deadline: "16 апреля" },
-      { issue: "17 (1040)", releaseDate: "30 апреля", deadline: "23 апреля" },
-      { issue: "18 (1041)", releaseDate: "07 мая", deadline: "28 апреля" },
-      { issue: "19 (1042)", releaseDate: "14 мая", deadline: "05 мая" },
-      { issue: "20 (1043)", releaseDate: "21 мая", deadline: "14 мая" },
-      { issue: "21 (1044)", releaseDate: "28 мая", deadline: "21 мая" },
-      { issue: "22 (1045)", releaseDate: "04 июня", deadline: "28 мая" },
-      { issue: "23 (1046)", releaseDate: "11 июня", deadline: "04 июня" },
-      { issue: "24 (1047)", releaseDate: "18 июня", deadline: "09 июня" },
-      { issue: "25 (1048)", releaseDate: "25 июня", deadline: "18 июня" },
+      { issue: "12 (1087)", releaseDate: "01 апреля", deadline: "25 марта" },
+      { issue: "13 (1088)", releaseDate: "08 апреля", deadline: "01 апреля" },
+      { issue: "14 (1089)", releaseDate: "15 апреля", deadline: "08 апреля" },
+      { issue: "15 (1090)", releaseDate: "22 апреля", deadline: "15 апреля" },
+      { issue: "16 (1091)", releaseDate: "29 апреля", deadline: "22 апреля" },
+      { issue: "17 (1092)", releaseDate: "06 мая", deadline: "28 апреля" },
+      { issue: "18 (1093)", releaseDate: "13 мая", deadline: "06 мая" },
+      { issue: "19 (1094)", releaseDate: "20 мая", deadline: "13 мая" },
+      { issue: "20 (1095)", releaseDate: "27 мая", deadline: "20 мая" },
+      { issue: "21 (1096)", releaseDate: "03 июня", deadline: "27 мая" },
+      { issue: "22 (1097)", releaseDate: "10 июня", deadline: "03 июня" },
+      { issue: "23 (1098)", releaseDate: "17 июня", deadline: "09 июня" },
+      { issue: "24 (1099)", releaseDate: "24 июня", deadline: "17 июня" },
     ],
   },
   q3: {
     name: "III квартал",
     issues: [
-      { issue: "26 (1049)", releaseDate: "02 июля", deadline: "25 июня" },
-      { issue: "27 (1050)", releaseDate: "09 июля", deadline: "02 июля" },
-      { issue: "28 (1051)", releaseDate: "16 июля", deadline: "09 июля" },
-      { issue: "29 (1052)", releaseDate: "23 июля", deadline: "16 июля" },
-      { issue: "30 (1053)", releaseDate: "30 июля", deadline: "23 июля" },
-      { issue: "31 (1054)", releaseDate: "06 августа", deadline: "30 июля" },
-      { issue: "32 (1055)", releaseDate: "13 августа", deadline: "06 августа" },
-      { issue: "33 (1056)", releaseDate: "20 августа", deadline: "13 августа" },
-      { issue: "34 (1057)", releaseDate: "27 августа", deadline: "20 августа" },
-      { issue: "35 (1058)", releaseDate: "03 сентября", deadline: "27 августа" },
-      { issue: "36 (1059)", releaseDate: "10 сентября", deadline: "03 сентября" },
-      { issue: "37 (1060)", releaseDate: "17 сентября", deadline: "10 сентября" },
-      { issue: "38 (1061)", releaseDate: "24 сентября", deadline: "17 сентября" },
+      { issue: "25 (1100)", releaseDate: "01 июля", deadline: "24 июня" },
+      { issue: "26 (1101)", releaseDate: "08 июля", deadline: "01 июля" },
+      { issue: "27 (1102)", releaseDate: "15 июля", deadline: "08 июля" },
+      { issue: "28 (1103)", releaseDate: "22 июля", deadline: "15 июля" },
+      { issue: "29 (1104)", releaseDate: "29 июля", deadline: "22 июля" },
+      { issue: "30 (1105)", releaseDate: "05 августа", deadline: "29 июля" },
+      { issue: "31 (1106)", releaseDate: "12 августа", deadline: "05 августа" },
+      { issue: "32 (1107)", releaseDate: "19 августа", deadline: "12 августа" },
+      { issue: "33 (1108)", releaseDate: "26 августа", deadline: "19 августа" },
+      { issue: "34 (1109)", releaseDate: "02 сентября", deadline: "26 августа" },
+      { issue: "35 (1110)", releaseDate: "09 сентября", deadline: "02 сентября" },
+      { issue: "36 (1111)", releaseDate: "16 сентября", deadline: "09 сентября" },
+      { issue: "37 (1112)", releaseDate: "23 сентября", deadline: "16 сентября" },
+      { issue: "38 (1113)", releaseDate: "30 сентября", deadline: "23 сентября" },
     ],
   },
   q4: {
     name: "IV квартал",
     issues: [
-      { issue: "39 (1062)", releaseDate: "01 октября", deadline: "24 сентября" },
-      { issue: "40 (1063)", releaseDate: "08 октября", deadline: "01 октября" },
-      { issue: "41 (1064)", releaseDate: "15 октября", deadline: "08 октября" },
-      { issue: "42 (1065)", releaseDate: "22 октября", deadline: "15 октября" },
-      { issue: "43 (1066)", releaseDate: "29 октября", deadline: "22 октября" },
-      { issue: "44 (1067)", releaseDate: "05 ноября", deadline: "29 октября" },
-      { issue: "45 (1068)", releaseDate: "12 ноября", deadline: "05 ноября" },
-      { issue: "46 (1069)", releaseDate: "19 ноября", deadline: "12 ноября" },
-      { issue: "47 (1070)", releaseDate: "26 ноября", deadline: "19 ноября" },
-      { issue: "48 (1071)", releaseDate: "03 декабря", deadline: "26 ноября" },
-      { issue: "49 (1072)", releaseDate: "10 декабря", deadline: "03 декабря" },
-      { issue: "50 (1073)", releaseDate: "17 декабря", deadline: "10 декабря" },
-      { issue: "51 (1074)", releaseDate: "24 декабря", deadline: "17 декабря" },
-      { issue: "52 (1075)", releaseDate: "30 декабря", deadline: "24 декабря" },
+      { issue: "39 (1114)", releaseDate: "07 октября", deadline: "30 сентября" },
+      { issue: "40 (1115)", releaseDate: "14 октября", deadline: "07 октября" },
+      { issue: "41 (1116)", releaseDate: "21 октября", deadline: "14 октября" },
+      { issue: "42 (1117)", releaseDate: "28 октября", deadline: "21 октября" },
+      { issue: "43 (1118)", releaseDate: "05 ноября", deadline: "28 октября" },
+      { issue: "44 (1119)", releaseDate: "11 ноября", deadline: "03 ноября" },
+      { issue: "45 (1120)", releaseDate: "18 ноября", deadline: "11 ноября" },
+      { issue: "46 (1121)", releaseDate: "25 ноября", deadline: "18 ноября" },
+      { issue: "47 (1122)", releaseDate: "02 декабря", deadline: "25 ноября" },
+      { issue: "48 (1123)", releaseDate: "09 декабря", deadline: "02 декабря" },
+      { issue: "49 (1124)", releaseDate: "16 декабря", deadline: "09 декабря" },
+      { issue: "50 (1125)", releaseDate: "23 декабря", deadline: "16 декабря" },
+      { issue: "51 (1126)", releaseDate: "30 декабря", deadline: "23 декабря" },
     ],
   },
 };
@@ -276,7 +275,7 @@ export default function VestnikPage() {
             {/* Visual Showcase */}
             <div className="flex flex-col items-center justify-center gap-6">
               {/* Timer */}
-              <DeadlineCountdown schedule={SCHEDULE_2025} />
+              <DeadlineCountdown schedule={SCHEDULE_2026} />
 
               {/* Magazine + Form */}
               <VestnikShowcase />
@@ -447,14 +446,14 @@ export default function VestnikPage() {
               График выхода
             </Label>
             <Heading as="h2" size="xl" weight="semibold" className="mt-2">
-              Расписание выпусков на 2025 год
+              Расписание выпусков на 2026 год
             </Heading>
             <Text size="lg" tone="secondary" className="mt-3">
               Журнал выходит еженедельно. Материалы принимаются за неделю до выхода номера
             </Text>
           </div>
 
-          <ScheduleTabs schedule={SCHEDULE_2025} />
+          <ScheduleTabs schedule={SCHEDULE_2026} />
         </Container>
       </Section>
 

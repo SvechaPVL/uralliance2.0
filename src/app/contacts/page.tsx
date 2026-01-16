@@ -34,13 +34,25 @@ const CONTACT_DETAILS = [
   },
   {
     icon: Phone,
-    label: pagesConfig.contacts.details.labels.phone,
+    label: contactsConfig.phone.main.label,
     value: contactsConfig.phone.main.display,
     href: contactsConfig.phone.main.link,
   },
   {
     icon: Phone,
-    label: pagesConfig.contacts.details.labels.phone,
+    label: contactsConfig.phone.legal.label,
+    value: contactsConfig.phone.legal.display,
+    href: contactsConfig.phone.legal.link,
+  },
+  {
+    icon: Phone,
+    label: contactsConfig.phone.tech.label,
+    value: contactsConfig.phone.tech.display,
+    href: contactsConfig.phone.tech.link,
+  },
+  {
+    icon: Phone,
+    label: contactsConfig.phone.secondary.label,
     value: contactsConfig.phone.secondary.display,
     href: contactsConfig.phone.secondary.link,
   },

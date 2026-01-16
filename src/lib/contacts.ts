@@ -26,6 +26,7 @@ export interface PhoneNumber {
   display: string;
   raw: string;
   link: string;
+  label?: string;
 }
 
 export interface EmailAddress {
@@ -112,6 +113,8 @@ export interface ContactsData {
   phone: {
     main: PhoneNumber;
     secondary: PhoneNumber;
+    legal: PhoneNumber;
+    tech: PhoneNumber;
   };
   email: EmailAddress;
   messengers: {
@@ -151,21 +154,21 @@ export const contacts = contactsData as ContactsData;
 /**
  * Get phone link with tel: protocol
  */
-export function getPhoneLink(type: "main" | "secondary" = "main"): string {
+export function getPhoneLink(type: "main" | "secondary" | "legal" | "tech" = "main"): string {
   return contacts.phone[type].link;
 }
 
 /**
  * Get display-formatted phone number
  */
-export function getPhoneDisplay(type: "main" | "secondary" = "main"): string {
+export function getPhoneDisplay(type: "main" | "secondary" | "legal" | "tech" = "main"): string {
   return contacts.phone[type].display;
 }
 
 /**
  * Get raw phone number (for APIs, analytics, etc.)
  */
-export function getPhoneRaw(type: "main" | "secondary" = "main"): string {
+export function getPhoneRaw(type: "main" | "secondary" | "legal" | "tech" = "main"): string {
   return contacts.phone[type].raw;
 }
 
