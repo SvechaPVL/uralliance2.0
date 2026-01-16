@@ -72,8 +72,8 @@ export function FloatingContactButton() {
         {/* Contact options - expand UPWARD from main button */}
         <div
           className={cn(
-            "absolute bottom-16 left-1/2 -translate-x-1/2",
-            "flex flex-col items-center gap-2",
+            "absolute bottom-16 right-0",
+            "flex flex-col items-end gap-2",
             "transition-all duration-300",
             isOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
           )}
