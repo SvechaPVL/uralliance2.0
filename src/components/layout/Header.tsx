@@ -130,7 +130,7 @@ export function Header() {
         className={cn(
           "fixed top-0 right-0 left-0 z-50",
           "transition-all duration-[var(--transition-base)]",
-          "border-b select-none",
+          "border-b select-none print:hidden",
           shouldShowGlass
             ? cn(
                 "shadow-[0_6px_24px_rgba(0,0,0,0.4)] backdrop-blur-[var(--blur-lg)]",

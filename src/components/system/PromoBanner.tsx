@@ -91,7 +91,7 @@ export function PromoBanner({
   return (
     <div
       ref={bannerRef}
-      className="animate-in slide-in-from-top fixed top-20 right-0 left-0 z-[45] duration-500"
+      className="animate-in slide-in-from-top fixed top-20 right-0 left-0 z-[45] duration-500 print:hidden"
       role="banner"
       aria-label="Промо-акция"
     >
