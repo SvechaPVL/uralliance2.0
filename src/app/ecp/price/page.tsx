@@ -242,18 +242,18 @@ const ECP_CATEGORIES = [
 const ACCESSORIES = [
   {
     name: "Рутокен ЭЦП 3.0",
-    price: 2700,
+    price: 2800,
     description: "Усиленная криптография, сертификат ФСБ. Топ продаж.",
     recommended: true,
   },
   {
-    name: "Рутокен ЭЦП 3.0 с NFC",
-    price: 2900,
-    description: "Для работы в мобильных приложениях.",
+    name: "Рутокен ЭЦП",
+    price: 2500,
+    description: "Криптографический носитель с аппаратной поддержкой ГОСТ.",
   },
   {
     name: "Рутокен Lite",
-    price: 2100,
+    price: 2300,
     description: "Базовый носитель для хранения сертификатов.",
   },
 ];
@@ -305,8 +305,10 @@ export default function EcpPricePage() {
       {/* Print Styles */}
       <style jsx global>{`
         @media print {
-          /* Hide navigation, footer, buttons */
-          nav, footer, .no-print, button {
+          /* Hide navigation, header, footer, promo banner, buttons */
+          nav, header, footer, .no-print, button,
+          [class*="promo-banner"], [class*="PromoBanner"],
+          [data-promo-banner], .promo-banner {
             display: none !important;
           }
 
