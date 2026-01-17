@@ -1,13 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Section } from "@/components/primitives/section";
 import { Container } from "@/components/layout/Container";
 import { Heading } from "@/components/primitives/heading";
 import { Text } from "@/components/primitives/text";
 import { Label } from "@/components/primitives/label";
 import { Card } from "@/components/primitives/card";
-import { FileKey, ChevronDown } from "lucide-react";
+import { Button } from "@/components/primitives/button";
+import { FileKey, ChevronDown, FileText } from "lucide-react";
 
 // Основные ЭЦП (всегда видны)
 const ECP_PRICES_MAIN = [
@@ -96,8 +98,8 @@ export function EcpPricesSection() {
           ))}
         </div>
 
-        {/* Toggle button */}
-        <div className="text-center">
+        {/* Toggle button + Full price link */}
+        <div className="flex flex-wrap items-center justify-center gap-3">
           <button
             onClick={() => setShowAll(!showAll)}
             className="inline-flex items-center gap-2 rounded-lg border border-[var(--color-legal-primary)]/30 bg-[var(--color-legal-surface)]/40 px-4 py-2 text-sm font-medium text-[var(--color-text-primary)] transition-all hover:border-[var(--color-legal-primary)] hover:bg-[var(--color-legal-surface)]"
@@ -107,6 +109,12 @@ export function EcpPricesSection() {
               className={`h-4 w-4 transition-transform ${showAll ? "rotate-180" : ""}`}
             />
           </button>
+          <Button asChild variant="outline" size="sm">
+            <Link href="/ecp/price">
+              <FileText className="mr-2 h-4 w-4" />
+              Полный прайс с описаниями
+            </Link>
+          </Button>
         </div>
       </Container>
     </Section>

@@ -13,7 +13,7 @@ import { ServiceJsonLd, BreadcrumbJsonLd } from "@/components/seo/JsonLd";
 import { contacts } from "@/lib/contacts";
 import Link from "next/link";
 import type { Metadata } from "next";
-import { FileKey, Shield, CheckCircle2, Clock, HeadphonesIcon, Percent, Usb } from "lucide-react";
+import { FileKey, Shield, CheckCircle2, Clock, HeadphonesIcon, Percent, Usb, FileText } from "lucide-react";
 import { CryptoProSection } from "@/components/ecp/CryptoProSection";
 import { EcpPricesSection } from "@/components/ecp/EcpPricesSection";
 
@@ -149,6 +149,12 @@ export default function EcpPage() {
                 </Button>
                 <Button asChild variant="outline" size="lg">
                   <Link href="#prices">Смотреть цены</Link>
+                </Button>
+                <Button asChild variant="ghost" size="lg" className="border border-[var(--color-border)]">
+                  <Link href="/ecp/price">
+                    <FileText className="mr-2 h-5 w-5" />
+                    Полный прайс
+                  </Link>
                 </Button>
               </div>
 
