@@ -159,14 +159,14 @@ const PROCESS_STEPS = [
 const PRICING = [
   {
     name: "Простой бот",
-    price: "от 40 000",
+    price: "от 25 000",
     period: "₽",
     description: "FAQ, меню, базовые команды",
     features: ["До 10 команд", "Inline-кнопки", "Базовая аналитика", "1 месяц поддержки"],
   },
   {
     name: "Бизнес-бот",
-    price: "от 80 000",
+    price: "от 50 000",
     period: "₽",
     description: "Заказы, интеграции, CRM",
     badge: "Популярный",
@@ -174,7 +174,7 @@ const PRICING = [
   },
   {
     name: "Mini App",
-    price: "от 150 000",
+    price: "от 100 000",
     period: "₽",
     description: "Полноценное приложение",
     features: ["React + MAX UI", "Личный кабинет", "Платёжный модуль", "6 месяцев поддержки"],
@@ -536,7 +536,7 @@ export default function MaxPage() {
 
           <div className="text-center">
             <Text size="sm" tone="secondary">
-              Точная стоимость зависит от сложности проекта. Оставьте заявку — подготовим
+              Консультация бесплатно. Точная стоимость зависит от сложности проекта — подготовим
               индивидуальное предложение.
             </Text>
           </div>
@@ -566,7 +566,7 @@ export default function MaxPage() {
               </Heading>
 
               <Text size="lg" tone="secondary" className="mx-auto mt-3 max-w-lg">
-                Расскажите о вашей задаче — подготовим техническое задание и оценку проекта за 2
+                Консультация бесплатно — подготовим техническое задание и оценку проекта за 2
                 рабочих дня
               </Text>
 
