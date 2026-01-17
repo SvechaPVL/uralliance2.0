@@ -88,7 +88,7 @@ export const featuredSnippets = {
       },
     ],
     totalDuration: "от 2 недель до 2 месяцев",
-    price: "от 35,000₽",
+    price: "от 15,000₽",
   },
 
   crmImplementation: {
@@ -134,7 +134,7 @@ export const featuredSnippets = {
       },
     ],
     totalDuration: "2-4 недели",
-    price: "от 50,000₽",
+    price: "от 25,000₽",
   },
 
   // === ТАБЛИЦЫ СРАВНЕНИЙ ===
@@ -202,7 +202,7 @@ export const featuredSnippets = {
     table: [
       {
         type: "Лендинг",
-        price: "От 35,000₽",
+        price: "От 15,000₽",
         duration: "2 недели",
         pages: "1 страница",
         forWhom: "Продвижение услуги, товара, акции",
@@ -210,7 +210,7 @@ export const featuredSnippets = {
       },
       {
         type: "Корпоративный сайт",
-        price: "От 70,000₽",
+        price: "От 35,000₽",
         duration: "1-2 месяца",
         pages: "5-15 страниц",
         forWhom: "Представительство компании в интернете",
@@ -218,7 +218,7 @@ export const featuredSnippets = {
       },
       {
         type: "Интернет-магазин",
-        price: "От 150,000₽",
+        price: "От 70,000₽",
         duration: "2-3 месяца",
         pages: "Каталог товаров",
         forWhom: "Продажа товаров онлайн",
@@ -226,7 +226,7 @@ export const featuredSnippets = {
       },
       {
         type: "Веб-приложение",
-        price: "От 200,000₽",
+        price: "От 100,000₽",
         duration: "2-3 месяца",
         pages: "SaaS / Портал",
         forWhom: "Сложные системы, сервисы",

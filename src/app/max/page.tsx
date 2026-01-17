@@ -159,14 +159,14 @@ const PROCESS_STEPS = [
 const PRICING = [
   {
     name: "Простой бот",
-    price: "от 25 000",
+    price: "от 5 000",
     period: "₽",
     description: "FAQ, меню, базовые команды",
     features: ["До 10 команд", "Inline-кнопки", "Базовая аналитика", "1 месяц поддержки"],
   },
   {
     name: "Бизнес-бот",
-    price: "от 50 000",
+    price: "от 15 000",
     period: "₽",
     description: "Заказы, интеграции, CRM",
     badge: "Популярный",
@@ -174,7 +174,7 @@ const PRICING = [
   },
   {
     name: "Mini App",
-    price: "от 100 000",
+    price: "от 40 000",
     period: "₽",
     description: "Полноценное приложение",
     features: ["React + MAX UI", "Личный кабинет", "Платёжный модуль", "6 месяцев поддержки"],

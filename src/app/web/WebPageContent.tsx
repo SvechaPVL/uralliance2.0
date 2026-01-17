@@ -52,7 +52,7 @@ const SITE_TYPES = [
     icon: MousePointerClick,
     title: "Лендинг",
     subtitle: "Одностраничный сайт",
-    price: "от 35 000 ₽",
+    price: "от 15 000 ₽",
     duration: "1-2 недели",
     description: "Идеален для продвижения одного продукта или услуги. Максимальная конверсия.",
     features: ["Продающий дизайн", "Адаптив под мобильные", "SEO из коробки"],
@@ -62,7 +62,7 @@ const SITE_TYPES = [
     icon: Building2,
     title: "Корпоративный",
     subtitle: "Сайт компании",
-    price: "от 70 000 ₽",
+    price: "от 35 000 ₽",
     duration: "3-4 недели",
     description: "Полноценное представительство компании в интернете с каталогом услуг.",
     features: ["Каталог услуг", "Блог и новости", "Интеграция с CRM"],
@@ -72,7 +72,7 @@ const SITE_TYPES = [
     icon: ShoppingCart,
     title: "Интернет-магазин",
     subtitle: "E-commerce",
-    price: "от 150 000 ₽",
+    price: "от 70 000 ₽",
     duration: "1-2 месяца",
     description: "Продажи онлайн с приёмом платежей, корзиной и личным кабинетом.",
     features: ["Каталог товаров", "Онлайн-оплата", "Интеграция с 1С"],
@@ -82,7 +82,7 @@ const SITE_TYPES = [
     icon: Layers,
     title: "Веб-приложение",
     subtitle: "SaaS / Портал",
-    price: "от 200 000 ₽",
+    price: "от 100 000 ₽",
     duration: "2-3 месяца",
     description: "Сложные сервисы с личными кабинетами, API и бизнес-логикой.",
     features: ["Личные кабинеты", "API интеграции", "Масштабируемость"],
@@ -342,7 +342,7 @@ export function WebPageContent() {
                 className="flex flex-wrap justify-center gap-6 pt-4 lg:justify-start"
               >
                 {[
-                  { value: "от 35 000 ₽", label: "лендинг" },
+                  { value: "от 15 000 ₽", label: "лендинг" },
                   { value: "1-2 нед.", label: "срок" },
                   { value: "50+", label: "проектов" },
                 ].map((stat) => (
