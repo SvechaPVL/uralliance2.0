@@ -191,9 +191,6 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizePackageImports: ["lucide-react", "framer-motion"],
   },
-
-  // Use webpack instead of turbopack for production builds
-  bundler: "webpack",
 };
 
 export default nextConfig;
