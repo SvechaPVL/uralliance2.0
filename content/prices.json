@@ -431,7 +431,7 @@
     "category": "Консалтинг",
     "title": "IT-консультация",
     "description": "Помогаем выбрать технологии и составляем план автоматизации.",
-    "price": 7000,
+    "price": 0,
     "priceFrom": false,
     "unit": "консультация",
     "featured": false,
