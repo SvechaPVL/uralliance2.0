@@ -308,8 +308,12 @@ export default function EcpPricePage() {
           /* Hide navigation, header, footer, promo banner, buttons */
           nav, header, footer, .no-print, button,
           [class*="promo-banner"], [class*="PromoBanner"],
-          [data-promo-banner], .promo-banner {
+          [data-promo-banner], .promo-banner,
+          [role="banner"][aria-label="Промо-акция"],
+          .fixed[class*="z-[45]"] {
             display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
           }
 
           /* Reset backgrounds and shadows */

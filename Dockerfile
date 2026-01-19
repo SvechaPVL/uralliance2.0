@@ -27,6 +27,8 @@ COPY . .
 # Set environment variables for build
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
+# Disable Turbopack for production build (has bugs in Next.js 16)
+ENV TURBOPACK=0
 
 # Build-time args for NEXT_PUBLIC_* variables (required at build time)
 ARG NEXT_PUBLIC_SITE_URL=https://uralliance.ru
